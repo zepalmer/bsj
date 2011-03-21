@@ -17,6 +17,7 @@ import edu.jhu.cs.bsj.compiler.ast.node.AnnotationMemberNode;
 import edu.jhu.cs.bsj.compiler.ast.node.Node;
 import edu.jhu.cs.bsj.compiler.ast.node.list.AnnotationMemberListNode;
 import edu.jhu.cs.bsj.compiler.impl.ast.BsjNodeManager;
+import edu.jhu.cs.bsj.compiler.impl.ast.BsjNodeProxyFactory;
 
 @Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
 public class AnnotationMemberListNodeImpl extends ListNodeImpl<AnnotationMemberNode> implements AnnotationMemberListNode
@@ -30,6 +31,18 @@ public class AnnotationMemberListNodeImpl extends ListNodeImpl<AnnotationMemberN
             boolean binary)
     {
         super(children, startLocation, stopLocation, manager, binary);
+    }
+    
+    /** Proxy constructor. */
+    public AnnotationMemberListNodeImpl(BsjNodeManager manager, BsjNodeProxyFactory proxyFactory, AnnotationMemberListNode backingNode)
+    {
+        super(manager, proxyFactory, backingNode);
+    }
+    
+    /** Retrieves this node's backing node (if one exists). */
+    protected AnnotationMemberListNode getBackingNode()
+    {
+        return (AnnotationMemberListNode)super.getBackingNode();
     }
     
     /**
@@ -136,6 +149,8 @@ public class AnnotationMemberListNodeImpl extends ListNodeImpl<AnnotationMemberN
     {
         StringBuilder sb = new StringBuilder();
         sb.append(this.getClass().getSimpleName());
+        sb.append('#');
+        sb.append(this.getUid());
         sb.append('[');
         sb.append("children=");
         sb.append(this.getUnionForChildren() == null? "null" : this.getUnionForChildren().getClass().getSimpleName());
@@ -227,6 +242,14 @@ public class AnnotationMemberListNodeImpl extends ListNodeImpl<AnnotationMemberN
     public Class<AnnotationMemberNode> getElementType()
     {
         return AnnotationMemberNode.class;
+    }
+    
+    /**
+     * Wraps an element of this list's type.
+     */
+    protected AnnotationMemberNode wrapElement(AnnotationMemberNode element)
+    {
+        return getProxyFactory().makeAnnotationMemberNode(element);
     }
     
 }

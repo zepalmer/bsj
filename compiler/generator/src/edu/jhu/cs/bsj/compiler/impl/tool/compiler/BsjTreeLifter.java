@@ -4608,6 +4608,10 @@ public class BsjTreeLifter implements BsjNodeOperation<ExpressionNode,Expression
                 node.getUnionForAnnotationType().getType() == NodeUnion.Type.SPLICE ? 
                         expressionizeSpliceNodeUnion(node.getUnionForAnnotationType().getSpliceNode(), factoryNode, "UnparameterizedTypeNode") :
                 expressionizeNormalNodeUnion(node.getAnnotationType(), factoryNode, "UnparameterizedTypeNode");
+        ExpressionNode liftMetaprogramAnchor = 
+                node.getMetaprogramAnchor() != null ?
+                        node.getMetaprogramAnchor().executeOperation(this,factoryNode) :
+                        factory.makeNullLiteralNode();
         BsjSourceLocation liftStartLocationValue = 
                 node.getStartLocation();
         BsjSourceLocation liftStopLocationValue = 
@@ -4620,6 +4624,7 @@ public class BsjTreeLifter implements BsjNodeOperation<ExpressionNode,Expression
                         factory.makeExpressionListNode(
                                 liftArguments,
                                 liftAnnotationType,
+                                liftMetaprogramAnchor,
                                 expressionizeBsjSourceLocation(liftStartLocationValue),
                                 expressionizeBsjSourceLocation(liftStopLocationValue)),
                         factory.makeReferenceTypeListNode());
@@ -5074,6 +5079,10 @@ public class BsjTreeLifter implements BsjNodeOperation<ExpressionNode,Expression
                 node.getUnionForAnnotationType().getType() == NodeUnion.Type.SPLICE ? 
                         expressionizeSpliceNodeUnion(node.getUnionForAnnotationType().getSpliceNode(), factoryNode, "UnparameterizedTypeNode") :
                 expressionizeNormalNodeUnion(node.getAnnotationType(), factoryNode, "UnparameterizedTypeNode");
+        ExpressionNode liftMetaprogramAnchor = 
+                node.getMetaprogramAnchor() != null ?
+                        node.getMetaprogramAnchor().executeOperation(this,factoryNode) :
+                        factory.makeNullLiteralNode();
         BsjSourceLocation liftStartLocationValue = 
                 node.getStartLocation();
         BsjSourceLocation liftStopLocationValue = 
@@ -5086,6 +5095,7 @@ public class BsjTreeLifter implements BsjNodeOperation<ExpressionNode,Expression
                         factory.makeExpressionListNode(
                                 liftValue,
                                 liftAnnotationType,
+                                liftMetaprogramAnchor,
                                 expressionizeBsjSourceLocation(liftStartLocationValue),
                                 expressionizeBsjSourceLocation(liftStopLocationValue)),
                         factory.makeReferenceTypeListNode());

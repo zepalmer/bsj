@@ -11,6 +11,7 @@ import edu.jhu.cs.bsj.compiler.ast.BsjTypedNodeVisitor;
 import edu.jhu.cs.bsj.compiler.ast.node.Node;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramAnchorNode;
 import edu.jhu.cs.bsj.compiler.impl.ast.BsjNodeManager;
+import edu.jhu.cs.bsj.compiler.impl.ast.BsjNodeProxyFactory;
 import edu.jhu.cs.bsj.compiler.impl.ast.node.NodeImpl;
 
 @Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
@@ -24,6 +25,22 @@ public abstract class MetaprogramAnchorNodeImpl<T extends Node> extends NodeImpl
             boolean binary)
     {
         super(startLocation, stopLocation, manager, binary);
+    }
+    
+    /** Proxy constructor. */
+    protected MetaprogramAnchorNodeImpl(BsjNodeManager manager, BsjNodeProxyFactory proxyFactory, MetaprogramAnchorNode<T> backingNode)
+    {
+        super(manager, proxyFactory, backingNode);
+    }
+    
+    /** Retrieves this node's backing node (if one exists). */
+    // This SuppressWarnings is always safe because backingNode is set by the node
+    // constructor and never changed.  This is equivalent to a read-only value
+    // defined by a type parameter without complicating the type reference site.
+    @SuppressWarnings("unchecked")
+    protected MetaprogramAnchorNode<T> getBackingNode()
+    {
+        return (MetaprogramAnchorNode<T>)super.getBackingNode();
     }
     
     /**
@@ -108,6 +125,8 @@ public abstract class MetaprogramAnchorNodeImpl<T extends Node> extends NodeImpl
     {
         StringBuilder sb = new StringBuilder();
         sb.append(this.getClass().getSimpleName());
+        sb.append('#');
+        sb.append(this.getUid());
         sb.append('[');
         sb.append("startLocation=");
         sb.append(String.valueOf(this.getStartLocation()) + ":" + (this.getStartLocation() != null ? this.getStartLocation().getClass().getSimpleName() : "null"));

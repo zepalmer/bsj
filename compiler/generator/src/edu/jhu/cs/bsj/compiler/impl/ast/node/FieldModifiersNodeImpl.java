@@ -1,10 +1,10 @@
 package edu.jhu.cs.bsj.compiler.impl.ast.node;
 
 import java.util.Arrays;
-import java.util.EnumMap;
+import java.util.EnumSet;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
+import java.util.Set;
 
 import javax.annotation.Generated;
 
@@ -21,8 +21,13 @@ import edu.jhu.cs.bsj.compiler.ast.node.Node;
 import edu.jhu.cs.bsj.compiler.ast.node.list.AnnotationListNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaAnnotationListNode;
 import edu.jhu.cs.bsj.compiler.impl.ast.BsjNodeManager;
-import edu.jhu.cs.bsj.compiler.impl.ast.attribute.AttributeName;
-import edu.jhu.cs.bsj.compiler.impl.ast.attribute.ReadWriteAttribute;
+import edu.jhu.cs.bsj.compiler.impl.ast.BsjNodeProxyFactory;
+import edu.jhu.cs.bsj.compiler.impl.ast.delta.property.FieldModifiersNodeSetAccessPropertyEditScriptElementImpl;
+import edu.jhu.cs.bsj.compiler.impl.ast.delta.property.FieldModifiersNodeSetFinalFlagPropertyEditScriptElementImpl;
+import edu.jhu.cs.bsj.compiler.impl.ast.delta.property.FieldModifiersNodeSetStaticFlagPropertyEditScriptElementImpl;
+import edu.jhu.cs.bsj.compiler.impl.ast.delta.property.FieldModifiersNodeSetTransientFlagPropertyEditScriptElementImpl;
+import edu.jhu.cs.bsj.compiler.impl.ast.delta.property.FieldModifiersNodeSetVolatileFlagPropertyEditScriptElementImpl;
+import edu.jhu.cs.bsj.compiler.impl.ast.properties.FieldModifiersNodeProperties;
 
 @Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
 public class FieldModifiersNodeImpl extends ModifiersNodeImpl implements FieldModifiersNode
@@ -42,30 +47,11 @@ public class FieldModifiersNodeImpl extends ModifiersNodeImpl implements FieldMo
     /** Whether or not the associated field is volatile. */
     private boolean volatileFlag;
     
-    private Map<LocalAttribute,ReadWriteAttribute> localAttributes = new EnumMap<LocalAttribute,ReadWriteAttribute>(LocalAttribute.class);
-    private ReadWriteAttribute getAttribute(LocalAttribute attributeName)
-    {
-        ReadWriteAttribute attribute = localAttributes.get(attributeName);
-        if (attribute == null)
-        {
-            attribute = new ReadWriteAttribute(FieldModifiersNodeImpl.this, attributeName);
-            localAttributes.put(attributeName, attribute);
-        }
-        return attribute;
-    }
-    private static enum LocalAttribute implements AttributeName
-    {
-        /** Attribute identifier for the access property. */
-        ACCESS,
-        /** Attribute identifier for the staticFlag property. */
-        STATIC_FLAG,
-        /** Attribute identifier for the finalFlag property. */
-        FINAL_FLAG,
-        /** Attribute identifier for the transientFlag property. */
-        TRANSIENT_FLAG,
-        /** Attribute identifier for the volatileFlag property. */
-        VOLATILE_FLAG,
-    }
+    /**
+     * A set of those properties which have been populated from the backing node.
+     * This field is <code>null</code> if <tt>backingNode</tt> is <code>null</code>.
+     */
+    private Set<FieldModifiersNodeProperties> populatedProperties;
     
     /** General constructor. */
     public FieldModifiersNodeImpl(
@@ -82,11 +68,95 @@ public class FieldModifiersNodeImpl extends ModifiersNodeImpl implements FieldMo
             boolean binary)
     {
         super(metaAnnotations, annotations, startLocation, stopLocation, manager, binary);
-        this.access = access;
-        this.staticFlag = staticFlag;
-        this.finalFlag = finalFlag;
-        this.transientFlag = transientFlag;
-        this.volatileFlag = volatileFlag;
+        this.populatedProperties = null;
+        doSetAccess(access);
+        doSetStaticFlag(staticFlag);
+        doSetFinalFlag(finalFlag);
+        doSetTransientFlag(transientFlag);
+        doSetVolatileFlag(volatileFlag);
+    }
+    
+    /** Proxy constructor. */
+    public FieldModifiersNodeImpl(BsjNodeManager manager, BsjNodeProxyFactory proxyFactory, FieldModifiersNode backingNode)
+    {
+        super(manager, proxyFactory, backingNode);
+        this.populatedProperties = EnumSet.noneOf(FieldModifiersNodeProperties.class);
+    }
+    
+    /** Retrieves this node's backing node (if one exists). */
+    protected FieldModifiersNode getBackingNode()
+    {
+        return (FieldModifiersNode)super.getBackingNode();
+    }
+    
+    /**
+     * Ensures that the access value has been populated from proxy.
+     * If this node is not backed by a proxy or if the value has already been
+     * populated, this method does nothing.
+     */
+    private void checkAccessWrapped()
+    {
+        if (this.populatedProperties == null || this.populatedProperties.contains(
+                FieldModifiersNodeProperties.ACCESS))
+            return;
+        this.populatedProperties.add(FieldModifiersNodeProperties.ACCESS);
+        this.access = this.getBackingNode().getAccess();
+    }
+    
+    /**
+     * Ensures that the staticFlag value has been populated from proxy.
+     * If this node is not backed by a proxy or if the value has already been
+     * populated, this method does nothing.
+     */
+    private void checkStaticFlagWrapped()
+    {
+        if (this.populatedProperties == null || this.populatedProperties.contains(
+                FieldModifiersNodeProperties.STATIC_FLAG))
+            return;
+        this.populatedProperties.add(FieldModifiersNodeProperties.STATIC_FLAG);
+        this.staticFlag = this.getBackingNode().getStaticFlag();
+    }
+    
+    /**
+     * Ensures that the finalFlag value has been populated from proxy.
+     * If this node is not backed by a proxy or if the value has already been
+     * populated, this method does nothing.
+     */
+    private void checkFinalFlagWrapped()
+    {
+        if (this.populatedProperties == null || this.populatedProperties.contains(
+                FieldModifiersNodeProperties.FINAL_FLAG))
+            return;
+        this.populatedProperties.add(FieldModifiersNodeProperties.FINAL_FLAG);
+        this.finalFlag = this.getBackingNode().getFinalFlag();
+    }
+    
+    /**
+     * Ensures that the transientFlag value has been populated from proxy.
+     * If this node is not backed by a proxy or if the value has already been
+     * populated, this method does nothing.
+     */
+    private void checkTransientFlagWrapped()
+    {
+        if (this.populatedProperties == null || this.populatedProperties.contains(
+                FieldModifiersNodeProperties.TRANSIENT_FLAG))
+            return;
+        this.populatedProperties.add(FieldModifiersNodeProperties.TRANSIENT_FLAG);
+        this.transientFlag = this.getBackingNode().getTransientFlag();
+    }
+    
+    /**
+     * Ensures that the volatileFlag value has been populated from proxy.
+     * If this node is not backed by a proxy or if the value has already been
+     * populated, this method does nothing.
+     */
+    private void checkVolatileFlagWrapped()
+    {
+        if (this.populatedProperties == null || this.populatedProperties.contains(
+                FieldModifiersNodeProperties.VOLATILE_FLAG))
+            return;
+        this.populatedProperties.add(FieldModifiersNodeProperties.VOLATILE_FLAG);
+        this.volatileFlag = this.getBackingNode().getVolatileFlag();
     }
     
     /**
@@ -95,7 +165,7 @@ public class FieldModifiersNodeImpl extends ModifiersNodeImpl implements FieldMo
      */
     public AccessModifier getAccess()
     {
-        getAttribute(LocalAttribute.ACCESS).recordAccess(ReadWriteAttribute.AccessType.READ);
+        checkAccessWrapped();
         return this.access;
     }
     
@@ -105,18 +175,15 @@ public class FieldModifiersNodeImpl extends ModifiersNodeImpl implements FieldMo
      */
     public void setAccess(AccessModifier access)
     {
-            setAccess(access, true);
-            getManager().notifyChange(this);
+        checkAccessWrapped();
+        this.getManager().assertMutatable(this);
+        this.doSetAccess(access);
+        if (this.getManager().isRecordingEdits())
+            super.recordEdit(new FieldModifiersNodeSetAccessPropertyEditScriptElementImpl(this.getManager().getCurrentMetaprogramId(), this.getUid(), access));
     }
     
-    private void setAccess(AccessModifier access, boolean checkPermissions)
+    private void doSetAccess(AccessModifier access)
     {
-        if (checkPermissions)
-        {
-            getManager().assertMutatable(this);
-            getAttribute(LocalAttribute.ACCESS).recordAccess(ReadWriteAttribute.AccessType.WRITE);
-        }
-        
         this.access = access;
     }
     
@@ -126,7 +193,7 @@ public class FieldModifiersNodeImpl extends ModifiersNodeImpl implements FieldMo
      */
     public boolean getStaticFlag()
     {
-        getAttribute(LocalAttribute.STATIC_FLAG).recordAccess(ReadWriteAttribute.AccessType.READ);
+        checkStaticFlagWrapped();
         return this.staticFlag;
     }
     
@@ -136,18 +203,15 @@ public class FieldModifiersNodeImpl extends ModifiersNodeImpl implements FieldMo
      */
     public void setStaticFlag(boolean staticFlag)
     {
-            setStaticFlag(staticFlag, true);
-            getManager().notifyChange(this);
+        checkStaticFlagWrapped();
+        this.getManager().assertMutatable(this);
+        this.doSetStaticFlag(staticFlag);
+        if (this.getManager().isRecordingEdits())
+            super.recordEdit(new FieldModifiersNodeSetStaticFlagPropertyEditScriptElementImpl(this.getManager().getCurrentMetaprogramId(), this.getUid(), staticFlag));
     }
     
-    private void setStaticFlag(boolean staticFlag, boolean checkPermissions)
+    private void doSetStaticFlag(boolean staticFlag)
     {
-        if (checkPermissions)
-        {
-            getManager().assertMutatable(this);
-            getAttribute(LocalAttribute.STATIC_FLAG).recordAccess(ReadWriteAttribute.AccessType.WRITE);
-        }
-        
         this.staticFlag = staticFlag;
     }
     
@@ -157,7 +221,7 @@ public class FieldModifiersNodeImpl extends ModifiersNodeImpl implements FieldMo
      */
     public boolean getFinalFlag()
     {
-        getAttribute(LocalAttribute.FINAL_FLAG).recordAccess(ReadWriteAttribute.AccessType.READ);
+        checkFinalFlagWrapped();
         return this.finalFlag;
     }
     
@@ -167,18 +231,15 @@ public class FieldModifiersNodeImpl extends ModifiersNodeImpl implements FieldMo
      */
     public void setFinalFlag(boolean finalFlag)
     {
-            setFinalFlag(finalFlag, true);
-            getManager().notifyChange(this);
+        checkFinalFlagWrapped();
+        this.getManager().assertMutatable(this);
+        this.doSetFinalFlag(finalFlag);
+        if (this.getManager().isRecordingEdits())
+            super.recordEdit(new FieldModifiersNodeSetFinalFlagPropertyEditScriptElementImpl(this.getManager().getCurrentMetaprogramId(), this.getUid(), finalFlag));
     }
     
-    private void setFinalFlag(boolean finalFlag, boolean checkPermissions)
+    private void doSetFinalFlag(boolean finalFlag)
     {
-        if (checkPermissions)
-        {
-            getManager().assertMutatable(this);
-            getAttribute(LocalAttribute.FINAL_FLAG).recordAccess(ReadWriteAttribute.AccessType.WRITE);
-        }
-        
         this.finalFlag = finalFlag;
     }
     
@@ -188,7 +249,7 @@ public class FieldModifiersNodeImpl extends ModifiersNodeImpl implements FieldMo
      */
     public boolean getTransientFlag()
     {
-        getAttribute(LocalAttribute.TRANSIENT_FLAG).recordAccess(ReadWriteAttribute.AccessType.READ);
+        checkTransientFlagWrapped();
         return this.transientFlag;
     }
     
@@ -198,18 +259,15 @@ public class FieldModifiersNodeImpl extends ModifiersNodeImpl implements FieldMo
      */
     public void setTransientFlag(boolean transientFlag)
     {
-            setTransientFlag(transientFlag, true);
-            getManager().notifyChange(this);
+        checkTransientFlagWrapped();
+        this.getManager().assertMutatable(this);
+        this.doSetTransientFlag(transientFlag);
+        if (this.getManager().isRecordingEdits())
+            super.recordEdit(new FieldModifiersNodeSetTransientFlagPropertyEditScriptElementImpl(this.getManager().getCurrentMetaprogramId(), this.getUid(), transientFlag));
     }
     
-    private void setTransientFlag(boolean transientFlag, boolean checkPermissions)
+    private void doSetTransientFlag(boolean transientFlag)
     {
-        if (checkPermissions)
-        {
-            getManager().assertMutatable(this);
-            getAttribute(LocalAttribute.TRANSIENT_FLAG).recordAccess(ReadWriteAttribute.AccessType.WRITE);
-        }
-        
         this.transientFlag = transientFlag;
     }
     
@@ -219,7 +277,7 @@ public class FieldModifiersNodeImpl extends ModifiersNodeImpl implements FieldMo
      */
     public boolean getVolatileFlag()
     {
-        getAttribute(LocalAttribute.VOLATILE_FLAG).recordAccess(ReadWriteAttribute.AccessType.READ);
+        checkVolatileFlagWrapped();
         return this.volatileFlag;
     }
     
@@ -229,18 +287,15 @@ public class FieldModifiersNodeImpl extends ModifiersNodeImpl implements FieldMo
      */
     public void setVolatileFlag(boolean volatileFlag)
     {
-            setVolatileFlag(volatileFlag, true);
-            getManager().notifyChange(this);
+        checkVolatileFlagWrapped();
+        this.getManager().assertMutatable(this);
+        this.doSetVolatileFlag(volatileFlag);
+        if (this.getManager().isRecordingEdits())
+            super.recordEdit(new FieldModifiersNodeSetVolatileFlagPropertyEditScriptElementImpl(this.getManager().getCurrentMetaprogramId(), this.getUid(), volatileFlag));
     }
     
-    private void setVolatileFlag(boolean volatileFlag, boolean checkPermissions)
+    private void doSetVolatileFlag(boolean volatileFlag)
     {
-        if (checkPermissions)
-        {
-            getManager().assertMutatable(this);
-            getAttribute(LocalAttribute.VOLATILE_FLAG).recordAccess(ReadWriteAttribute.AccessType.WRITE);
-        }
-        
         this.volatileFlag = volatileFlag;
     }
     
@@ -337,6 +392,8 @@ public class FieldModifiersNodeImpl extends ModifiersNodeImpl implements FieldMo
     {
         StringBuilder sb = new StringBuilder();
         sb.append(this.getClass().getSimpleName());
+        sb.append('#');
+        sb.append(this.getUid());
         sb.append('[');
         sb.append("access=");
         sb.append(String.valueOf(this.getAccess()) + ":" + (this.getAccess() != null ? this.getAccess().getClass().getSimpleName() : "null"));

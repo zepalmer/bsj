@@ -1,10 +1,10 @@
 package edu.jhu.cs.bsj.compiler.impl.ast.node;
 
 import java.util.Arrays;
-import java.util.EnumMap;
+import java.util.EnumSet;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
+import java.util.Set;
 
 import javax.annotation.Generated;
 
@@ -26,9 +26,17 @@ import edu.jhu.cs.bsj.compiler.ast.node.list.TypeParameterListNode;
 import edu.jhu.cs.bsj.compiler.ast.node.list.UnparameterizedTypeListNode;
 import edu.jhu.cs.bsj.compiler.ast.node.list.VariableListNode;
 import edu.jhu.cs.bsj.compiler.impl.ast.BsjNodeManager;
+import edu.jhu.cs.bsj.compiler.impl.ast.BsjNodeProxyFactory;
 import edu.jhu.cs.bsj.compiler.impl.ast.NormalNodeUnion;
-import edu.jhu.cs.bsj.compiler.impl.ast.attribute.AttributeName;
-import edu.jhu.cs.bsj.compiler.impl.ast.attribute.ReadWriteAttribute;
+import edu.jhu.cs.bsj.compiler.impl.ast.delta.property.ConstructorDeclarationNodeSetBodyPropertyEditScriptElementImpl;
+import edu.jhu.cs.bsj.compiler.impl.ast.delta.property.ConstructorDeclarationNodeSetIdentifierPropertyEditScriptElementImpl;
+import edu.jhu.cs.bsj.compiler.impl.ast.delta.property.ConstructorDeclarationNodeSetJavadocPropertyEditScriptElementImpl;
+import edu.jhu.cs.bsj.compiler.impl.ast.delta.property.ConstructorDeclarationNodeSetModifiersPropertyEditScriptElementImpl;
+import edu.jhu.cs.bsj.compiler.impl.ast.delta.property.ConstructorDeclarationNodeSetParametersPropertyEditScriptElementImpl;
+import edu.jhu.cs.bsj.compiler.impl.ast.delta.property.ConstructorDeclarationNodeSetThrowTypesPropertyEditScriptElementImpl;
+import edu.jhu.cs.bsj.compiler.impl.ast.delta.property.ConstructorDeclarationNodeSetTypeParametersPropertyEditScriptElementImpl;
+import edu.jhu.cs.bsj.compiler.impl.ast.delta.property.ConstructorDeclarationNodeSetVarargParameterPropertyEditScriptElementImpl;
+import edu.jhu.cs.bsj.compiler.impl.ast.properties.ConstructorDeclarationNodeProperties;
 
 @Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
 public class ConstructorDeclarationNodeImpl extends NodeImpl implements ConstructorDeclarationNode
@@ -57,36 +65,11 @@ public class ConstructorDeclarationNodeImpl extends NodeImpl implements Construc
     /** The associated javadoc comment for this node. */
     private NodeUnion<? extends JavadocNode> javadoc;
     
-    private Map<LocalAttribute,ReadWriteAttribute> localAttributes = new EnumMap<LocalAttribute,ReadWriteAttribute>(LocalAttribute.class);
-    private ReadWriteAttribute getAttribute(LocalAttribute attributeName)
-    {
-        ReadWriteAttribute attribute = localAttributes.get(attributeName);
-        if (attribute == null)
-        {
-            attribute = new ReadWriteAttribute(ConstructorDeclarationNodeImpl.this, attributeName);
-            localAttributes.put(attributeName, attribute);
-        }
-        return attribute;
-    }
-    private static enum LocalAttribute implements AttributeName
-    {
-        /** Attribute identifier for the identifier property. */
-        IDENTIFIER,
-        /** Attribute identifier for the body property. */
-        BODY,
-        /** Attribute identifier for the modifiers property. */
-        MODIFIERS,
-        /** Attribute identifier for the parameters property. */
-        PARAMETERS,
-        /** Attribute identifier for the varargParameter property. */
-        VARARG_PARAMETER,
-        /** Attribute identifier for the throwTypes property. */
-        THROW_TYPES,
-        /** Attribute identifier for the typeParameters property. */
-        TYPE_PARAMETERS,
-        /** Attribute identifier for the javadoc property. */
-        JAVADOC,
-    }
+    /**
+     * A set of those properties which have been populated from the backing node.
+     * This field is <code>null</code> if <tt>backingNode</tt> is <code>null</code>.
+     */
+    private Set<ConstructorDeclarationNodeProperties> populatedProperties;
     
     /** General constructor. */
     public ConstructorDeclarationNodeImpl(
@@ -104,14 +87,252 @@ public class ConstructorDeclarationNodeImpl extends NodeImpl implements Construc
             boolean binary)
     {
         super(startLocation, stopLocation, manager, binary);
-        setUnionForIdentifier(identifier, false);
-        setUnionForBody(body, false);
-        setUnionForModifiers(modifiers, false);
-        setUnionForParameters(parameters, false);
-        setUnionForVarargParameter(varargParameter, false);
-        setUnionForThrowTypes(throwTypes, false);
-        setUnionForTypeParameters(typeParameters, false);
-        setUnionForJavadoc(javadoc, false);
+        this.populatedProperties = null;
+        doSetIdentifier(identifier);
+        doSetBody(body);
+        doSetModifiers(modifiers);
+        doSetParameters(parameters);
+        doSetVarargParameter(varargParameter);
+        doSetThrowTypes(throwTypes);
+        doSetTypeParameters(typeParameters);
+        doSetJavadoc(javadoc);
+    }
+    
+    /** Proxy constructor. */
+    public ConstructorDeclarationNodeImpl(BsjNodeManager manager, BsjNodeProxyFactory proxyFactory, ConstructorDeclarationNode backingNode)
+    {
+        super(manager, proxyFactory, backingNode);
+        this.populatedProperties = EnumSet.noneOf(ConstructorDeclarationNodeProperties.class);
+    }
+    
+    /** Retrieves this node's backing node (if one exists). */
+    protected ConstructorDeclarationNode getBackingNode()
+    {
+        return (ConstructorDeclarationNode)super.getBackingNode();
+    }
+    
+    /**
+     * Ensures that the identifier value has been populated from proxy.
+     * If this node is not backed by a proxy or if the value has already been
+     * populated, this method does nothing.
+     */
+    private void checkIdentifierWrapped()
+    {
+        if (this.populatedProperties == null || this.populatedProperties.contains(
+                ConstructorDeclarationNodeProperties.IDENTIFIER))
+            return;
+        this.populatedProperties.add(ConstructorDeclarationNodeProperties.IDENTIFIER);
+        NodeUnion<? extends IdentifierNode> union = this.getBackingNode().getUnionForIdentifier();
+        switch (union.getType())
+        {
+            case NORMAL:
+                union = this.getProxyFactory().makeNormalNodeUnion(
+                        this.getProxyFactory().makeIdentifierNode(union.getNormalNode()));
+                break;
+            case SPLICE:
+                union = this.getProxyFactory().makeSpliceNodeUnion(
+                        this.getProxyFactory().makeSpliceNode(union.getSpliceNode()));
+                break;
+            default:
+                throw new IllegalStateException("Unrecognized union type: " + union.getType());
+        }
+        this.identifier = union;
+    }
+    
+    /**
+     * Ensures that the body value has been populated from proxy.
+     * If this node is not backed by a proxy or if the value has already been
+     * populated, this method does nothing.
+     */
+    private void checkBodyWrapped()
+    {
+        if (this.populatedProperties == null || this.populatedProperties.contains(
+                ConstructorDeclarationNodeProperties.BODY))
+            return;
+        this.populatedProperties.add(ConstructorDeclarationNodeProperties.BODY);
+        NodeUnion<? extends ConstructorBodyNode> union = this.getBackingNode().getUnionForBody();
+        switch (union.getType())
+        {
+            case NORMAL:
+                union = this.getProxyFactory().makeNormalNodeUnion(
+                        this.getProxyFactory().makeConstructorBodyNode(union.getNormalNode()));
+                break;
+            case SPLICE:
+                union = this.getProxyFactory().makeSpliceNodeUnion(
+                        this.getProxyFactory().makeSpliceNode(union.getSpliceNode()));
+                break;
+            default:
+                throw new IllegalStateException("Unrecognized union type: " + union.getType());
+        }
+        this.body = union;
+    }
+    
+    /**
+     * Ensures that the modifiers value has been populated from proxy.
+     * If this node is not backed by a proxy or if the value has already been
+     * populated, this method does nothing.
+     */
+    private void checkModifiersWrapped()
+    {
+        if (this.populatedProperties == null || this.populatedProperties.contains(
+                ConstructorDeclarationNodeProperties.MODIFIERS))
+            return;
+        this.populatedProperties.add(ConstructorDeclarationNodeProperties.MODIFIERS);
+        NodeUnion<? extends ConstructorModifiersNode> union = this.getBackingNode().getUnionForModifiers();
+        switch (union.getType())
+        {
+            case NORMAL:
+                union = this.getProxyFactory().makeNormalNodeUnion(
+                        this.getProxyFactory().makeConstructorModifiersNode(union.getNormalNode()));
+                break;
+            case SPLICE:
+                union = this.getProxyFactory().makeSpliceNodeUnion(
+                        this.getProxyFactory().makeSpliceNode(union.getSpliceNode()));
+                break;
+            default:
+                throw new IllegalStateException("Unrecognized union type: " + union.getType());
+        }
+        this.modifiers = union;
+    }
+    
+    /**
+     * Ensures that the parameters value has been populated from proxy.
+     * If this node is not backed by a proxy or if the value has already been
+     * populated, this method does nothing.
+     */
+    private void checkParametersWrapped()
+    {
+        if (this.populatedProperties == null || this.populatedProperties.contains(
+                ConstructorDeclarationNodeProperties.PARAMETERS))
+            return;
+        this.populatedProperties.add(ConstructorDeclarationNodeProperties.PARAMETERS);
+        NodeUnion<? extends VariableListNode> union = this.getBackingNode().getUnionForParameters();
+        switch (union.getType())
+        {
+            case NORMAL:
+                union = this.getProxyFactory().makeNormalNodeUnion(
+                        this.getProxyFactory().makeVariableListNode(union.getNormalNode()));
+                break;
+            case SPLICE:
+                union = this.getProxyFactory().makeSpliceNodeUnion(
+                        this.getProxyFactory().makeSpliceNode(union.getSpliceNode()));
+                break;
+            default:
+                throw new IllegalStateException("Unrecognized union type: " + union.getType());
+        }
+        this.parameters = union;
+    }
+    
+    /**
+     * Ensures that the varargParameter value has been populated from proxy.
+     * If this node is not backed by a proxy or if the value has already been
+     * populated, this method does nothing.
+     */
+    private void checkVarargParameterWrapped()
+    {
+        if (this.populatedProperties == null || this.populatedProperties.contains(
+                ConstructorDeclarationNodeProperties.VARARG_PARAMETER))
+            return;
+        this.populatedProperties.add(ConstructorDeclarationNodeProperties.VARARG_PARAMETER);
+        NodeUnion<? extends VariableNode> union = this.getBackingNode().getUnionForVarargParameter();
+        switch (union.getType())
+        {
+            case NORMAL:
+                union = this.getProxyFactory().makeNormalNodeUnion(
+                        this.getProxyFactory().makeVariableNode(union.getNormalNode()));
+                break;
+            case SPLICE:
+                union = this.getProxyFactory().makeSpliceNodeUnion(
+                        this.getProxyFactory().makeSpliceNode(union.getSpliceNode()));
+                break;
+            default:
+                throw new IllegalStateException("Unrecognized union type: " + union.getType());
+        }
+        this.varargParameter = union;
+    }
+    
+    /**
+     * Ensures that the throwTypes value has been populated from proxy.
+     * If this node is not backed by a proxy or if the value has already been
+     * populated, this method does nothing.
+     */
+    private void checkThrowTypesWrapped()
+    {
+        if (this.populatedProperties == null || this.populatedProperties.contains(
+                ConstructorDeclarationNodeProperties.THROW_TYPES))
+            return;
+        this.populatedProperties.add(ConstructorDeclarationNodeProperties.THROW_TYPES);
+        NodeUnion<? extends UnparameterizedTypeListNode> union = this.getBackingNode().getUnionForThrowTypes();
+        switch (union.getType())
+        {
+            case NORMAL:
+                union = this.getProxyFactory().makeNormalNodeUnion(
+                        this.getProxyFactory().makeUnparameterizedTypeListNode(union.getNormalNode()));
+                break;
+            case SPLICE:
+                union = this.getProxyFactory().makeSpliceNodeUnion(
+                        this.getProxyFactory().makeSpliceNode(union.getSpliceNode()));
+                break;
+            default:
+                throw new IllegalStateException("Unrecognized union type: " + union.getType());
+        }
+        this.throwTypes = union;
+    }
+    
+    /**
+     * Ensures that the typeParameters value has been populated from proxy.
+     * If this node is not backed by a proxy or if the value has already been
+     * populated, this method does nothing.
+     */
+    private void checkTypeParametersWrapped()
+    {
+        if (this.populatedProperties == null || this.populatedProperties.contains(
+                ConstructorDeclarationNodeProperties.TYPE_PARAMETERS))
+            return;
+        this.populatedProperties.add(ConstructorDeclarationNodeProperties.TYPE_PARAMETERS);
+        NodeUnion<? extends TypeParameterListNode> union = this.getBackingNode().getUnionForTypeParameters();
+        switch (union.getType())
+        {
+            case NORMAL:
+                union = this.getProxyFactory().makeNormalNodeUnion(
+                        this.getProxyFactory().makeTypeParameterListNode(union.getNormalNode()));
+                break;
+            case SPLICE:
+                union = this.getProxyFactory().makeSpliceNodeUnion(
+                        this.getProxyFactory().makeSpliceNode(union.getSpliceNode()));
+                break;
+            default:
+                throw new IllegalStateException("Unrecognized union type: " + union.getType());
+        }
+        this.typeParameters = union;
+    }
+    
+    /**
+     * Ensures that the javadoc value has been populated from proxy.
+     * If this node is not backed by a proxy or if the value has already been
+     * populated, this method does nothing.
+     */
+    private void checkJavadocWrapped()
+    {
+        if (this.populatedProperties == null || this.populatedProperties.contains(
+                ConstructorDeclarationNodeProperties.JAVADOC))
+            return;
+        this.populatedProperties.add(ConstructorDeclarationNodeProperties.JAVADOC);
+        NodeUnion<? extends JavadocNode> union = this.getBackingNode().getUnionForJavadoc();
+        switch (union.getType())
+        {
+            case NORMAL:
+                union = this.getProxyFactory().makeNormalNodeUnion(
+                        this.getProxyFactory().makeJavadocNode(union.getNormalNode()));
+                break;
+            case SPLICE:
+                union = this.getProxyFactory().makeSpliceNodeUnion(
+                        this.getProxyFactory().makeSpliceNode(union.getSpliceNode()));
+                break;
+            default:
+                throw new IllegalStateException("Unrecognized union type: " + union.getType());
+        }
+        this.javadoc = union;
     }
     
     /**
@@ -121,7 +342,7 @@ public class ConstructorDeclarationNodeImpl extends NodeImpl implements Construc
      */
     public IdentifierNode getIdentifier()
     {
-        getAttribute(LocalAttribute.IDENTIFIER).recordAccess(ReadWriteAttribute.AccessType.READ);
+        checkIdentifierWrapped();
         if (this.identifier == null)
         {
             return null;
@@ -137,7 +358,7 @@ public class ConstructorDeclarationNodeImpl extends NodeImpl implements Construc
      */
     public NodeUnion<? extends IdentifierNode> getUnionForIdentifier()
     {
-        getAttribute(LocalAttribute.IDENTIFIER).recordAccess(ReadWriteAttribute.AccessType.READ);
+        checkIdentifierWrapped();
         if (this.identifier == null)
         {
             this.identifier = new NormalNodeUnion<IdentifierNode>(null);
@@ -151,24 +372,8 @@ public class ConstructorDeclarationNodeImpl extends NodeImpl implements Construc
      */
     public void setIdentifier(IdentifierNode identifier)
     {
-            setIdentifier(identifier, true);
-            getManager().notifyChange(this);
-    }
-    
-    private void setIdentifier(IdentifierNode identifier, boolean checkPermissions)
-    {
-        if (checkPermissions)
-        {
-            getManager().assertMutatable(this);
-            getAttribute(LocalAttribute.IDENTIFIER).recordAccess(ReadWriteAttribute.AccessType.WRITE);
-        }
-        
-        if (this.identifier != null)
-        {
-            setAsChild(this.identifier.getNodeValue(), false);
-        }
-        this.identifier = new NormalNodeUnion<IdentifierNode>(identifier);
-        setAsChild(identifier, true);
+        checkIdentifierWrapped();
+        this.setUnionForIdentifier(new NormalNodeUnion<IdentifierNode>(identifier));
     }
     
     /**
@@ -177,18 +382,15 @@ public class ConstructorDeclarationNodeImpl extends NodeImpl implements Construc
      */
     public void setUnionForIdentifier(NodeUnion<? extends IdentifierNode> identifier)
     {
-            setUnionForIdentifier(identifier, true);
-            getManager().notifyChange(this);
+        checkIdentifierWrapped();
+        this.getManager().assertMutatable(this);
+        this.doSetIdentifier(identifier);
+        if (this.getManager().isRecordingEdits())
+            super.recordEdit(new ConstructorDeclarationNodeSetIdentifierPropertyEditScriptElementImpl(this.getManager().getCurrentMetaprogramId(), this.getUid(), identifier.getNodeValue() == null ? null : identifier.getNodeValue().getUid()));
     }
     
-    private void setUnionForIdentifier(NodeUnion<? extends IdentifierNode> identifier, boolean checkPermissions)
+    private void doSetIdentifier(NodeUnion<? extends IdentifierNode> identifier)
     {
-        if (checkPermissions)
-        {
-            getManager().assertMutatable(this);
-            getAttribute(LocalAttribute.IDENTIFIER).recordAccess(ReadWriteAttribute.AccessType.WRITE);
-        }
-        
         if (identifier == null)
         {
             identifier = new NormalNodeUnion<IdentifierNode>(null);
@@ -208,7 +410,7 @@ public class ConstructorDeclarationNodeImpl extends NodeImpl implements Construc
      */
     public ConstructorBodyNode getBody()
     {
-        getAttribute(LocalAttribute.BODY).recordAccess(ReadWriteAttribute.AccessType.READ);
+        checkBodyWrapped();
         if (this.body == null)
         {
             return null;
@@ -224,7 +426,7 @@ public class ConstructorDeclarationNodeImpl extends NodeImpl implements Construc
      */
     public NodeUnion<? extends ConstructorBodyNode> getUnionForBody()
     {
-        getAttribute(LocalAttribute.BODY).recordAccess(ReadWriteAttribute.AccessType.READ);
+        checkBodyWrapped();
         if (this.body == null)
         {
             this.body = new NormalNodeUnion<ConstructorBodyNode>(null);
@@ -238,24 +440,8 @@ public class ConstructorDeclarationNodeImpl extends NodeImpl implements Construc
      */
     public void setBody(ConstructorBodyNode body)
     {
-            setBody(body, true);
-            getManager().notifyChange(this);
-    }
-    
-    private void setBody(ConstructorBodyNode body, boolean checkPermissions)
-    {
-        if (checkPermissions)
-        {
-            getManager().assertMutatable(this);
-            getAttribute(LocalAttribute.BODY).recordAccess(ReadWriteAttribute.AccessType.WRITE);
-        }
-        
-        if (this.body != null)
-        {
-            setAsChild(this.body.getNodeValue(), false);
-        }
-        this.body = new NormalNodeUnion<ConstructorBodyNode>(body);
-        setAsChild(body, true);
+        checkBodyWrapped();
+        this.setUnionForBody(new NormalNodeUnion<ConstructorBodyNode>(body));
     }
     
     /**
@@ -264,18 +450,15 @@ public class ConstructorDeclarationNodeImpl extends NodeImpl implements Construc
      */
     public void setUnionForBody(NodeUnion<? extends ConstructorBodyNode> body)
     {
-            setUnionForBody(body, true);
-            getManager().notifyChange(this);
+        checkBodyWrapped();
+        this.getManager().assertMutatable(this);
+        this.doSetBody(body);
+        if (this.getManager().isRecordingEdits())
+            super.recordEdit(new ConstructorDeclarationNodeSetBodyPropertyEditScriptElementImpl(this.getManager().getCurrentMetaprogramId(), this.getUid(), body.getNodeValue() == null ? null : body.getNodeValue().getUid()));
     }
     
-    private void setUnionForBody(NodeUnion<? extends ConstructorBodyNode> body, boolean checkPermissions)
+    private void doSetBody(NodeUnion<? extends ConstructorBodyNode> body)
     {
-        if (checkPermissions)
-        {
-            getManager().assertMutatable(this);
-            getAttribute(LocalAttribute.BODY).recordAccess(ReadWriteAttribute.AccessType.WRITE);
-        }
-        
         if (body == null)
         {
             body = new NormalNodeUnion<ConstructorBodyNode>(null);
@@ -295,7 +478,7 @@ public class ConstructorDeclarationNodeImpl extends NodeImpl implements Construc
      */
     public ConstructorModifiersNode getModifiers()
     {
-        getAttribute(LocalAttribute.MODIFIERS).recordAccess(ReadWriteAttribute.AccessType.READ);
+        checkModifiersWrapped();
         if (this.modifiers == null)
         {
             return null;
@@ -311,7 +494,7 @@ public class ConstructorDeclarationNodeImpl extends NodeImpl implements Construc
      */
     public NodeUnion<? extends ConstructorModifiersNode> getUnionForModifiers()
     {
-        getAttribute(LocalAttribute.MODIFIERS).recordAccess(ReadWriteAttribute.AccessType.READ);
+        checkModifiersWrapped();
         if (this.modifiers == null)
         {
             this.modifiers = new NormalNodeUnion<ConstructorModifiersNode>(null);
@@ -325,24 +508,8 @@ public class ConstructorDeclarationNodeImpl extends NodeImpl implements Construc
      */
     public void setModifiers(ConstructorModifiersNode modifiers)
     {
-            setModifiers(modifiers, true);
-            getManager().notifyChange(this);
-    }
-    
-    private void setModifiers(ConstructorModifiersNode modifiers, boolean checkPermissions)
-    {
-        if (checkPermissions)
-        {
-            getManager().assertMutatable(this);
-            getAttribute(LocalAttribute.MODIFIERS).recordAccess(ReadWriteAttribute.AccessType.WRITE);
-        }
-        
-        if (this.modifiers != null)
-        {
-            setAsChild(this.modifiers.getNodeValue(), false);
-        }
-        this.modifiers = new NormalNodeUnion<ConstructorModifiersNode>(modifiers);
-        setAsChild(modifiers, true);
+        checkModifiersWrapped();
+        this.setUnionForModifiers(new NormalNodeUnion<ConstructorModifiersNode>(modifiers));
     }
     
     /**
@@ -351,18 +518,15 @@ public class ConstructorDeclarationNodeImpl extends NodeImpl implements Construc
      */
     public void setUnionForModifiers(NodeUnion<? extends ConstructorModifiersNode> modifiers)
     {
-            setUnionForModifiers(modifiers, true);
-            getManager().notifyChange(this);
+        checkModifiersWrapped();
+        this.getManager().assertMutatable(this);
+        this.doSetModifiers(modifiers);
+        if (this.getManager().isRecordingEdits())
+            super.recordEdit(new ConstructorDeclarationNodeSetModifiersPropertyEditScriptElementImpl(this.getManager().getCurrentMetaprogramId(), this.getUid(), modifiers.getNodeValue() == null ? null : modifiers.getNodeValue().getUid()));
     }
     
-    private void setUnionForModifiers(NodeUnion<? extends ConstructorModifiersNode> modifiers, boolean checkPermissions)
+    private void doSetModifiers(NodeUnion<? extends ConstructorModifiersNode> modifiers)
     {
-        if (checkPermissions)
-        {
-            getManager().assertMutatable(this);
-            getAttribute(LocalAttribute.MODIFIERS).recordAccess(ReadWriteAttribute.AccessType.WRITE);
-        }
-        
         if (modifiers == null)
         {
             modifiers = new NormalNodeUnion<ConstructorModifiersNode>(null);
@@ -382,7 +546,7 @@ public class ConstructorDeclarationNodeImpl extends NodeImpl implements Construc
      */
     public VariableListNode getParameters()
     {
-        getAttribute(LocalAttribute.PARAMETERS).recordAccess(ReadWriteAttribute.AccessType.READ);
+        checkParametersWrapped();
         if (this.parameters == null)
         {
             return null;
@@ -398,7 +562,7 @@ public class ConstructorDeclarationNodeImpl extends NodeImpl implements Construc
      */
     public NodeUnion<? extends VariableListNode> getUnionForParameters()
     {
-        getAttribute(LocalAttribute.PARAMETERS).recordAccess(ReadWriteAttribute.AccessType.READ);
+        checkParametersWrapped();
         if (this.parameters == null)
         {
             this.parameters = new NormalNodeUnion<VariableListNode>(null);
@@ -412,24 +576,8 @@ public class ConstructorDeclarationNodeImpl extends NodeImpl implements Construc
      */
     public void setParameters(VariableListNode parameters)
     {
-            setParameters(parameters, true);
-            getManager().notifyChange(this);
-    }
-    
-    private void setParameters(VariableListNode parameters, boolean checkPermissions)
-    {
-        if (checkPermissions)
-        {
-            getManager().assertMutatable(this);
-            getAttribute(LocalAttribute.PARAMETERS).recordAccess(ReadWriteAttribute.AccessType.WRITE);
-        }
-        
-        if (this.parameters != null)
-        {
-            setAsChild(this.parameters.getNodeValue(), false);
-        }
-        this.parameters = new NormalNodeUnion<VariableListNode>(parameters);
-        setAsChild(parameters, true);
+        checkParametersWrapped();
+        this.setUnionForParameters(new NormalNodeUnion<VariableListNode>(parameters));
     }
     
     /**
@@ -438,18 +586,15 @@ public class ConstructorDeclarationNodeImpl extends NodeImpl implements Construc
      */
     public void setUnionForParameters(NodeUnion<? extends VariableListNode> parameters)
     {
-            setUnionForParameters(parameters, true);
-            getManager().notifyChange(this);
+        checkParametersWrapped();
+        this.getManager().assertMutatable(this);
+        this.doSetParameters(parameters);
+        if (this.getManager().isRecordingEdits())
+            super.recordEdit(new ConstructorDeclarationNodeSetParametersPropertyEditScriptElementImpl(this.getManager().getCurrentMetaprogramId(), this.getUid(), parameters.getNodeValue() == null ? null : parameters.getNodeValue().getUid()));
     }
     
-    private void setUnionForParameters(NodeUnion<? extends VariableListNode> parameters, boolean checkPermissions)
+    private void doSetParameters(NodeUnion<? extends VariableListNode> parameters)
     {
-        if (checkPermissions)
-        {
-            getManager().assertMutatable(this);
-            getAttribute(LocalAttribute.PARAMETERS).recordAccess(ReadWriteAttribute.AccessType.WRITE);
-        }
-        
         if (parameters == null)
         {
             parameters = new NormalNodeUnion<VariableListNode>(null);
@@ -469,7 +614,7 @@ public class ConstructorDeclarationNodeImpl extends NodeImpl implements Construc
      */
     public VariableNode getVarargParameter()
     {
-        getAttribute(LocalAttribute.VARARG_PARAMETER).recordAccess(ReadWriteAttribute.AccessType.READ);
+        checkVarargParameterWrapped();
         if (this.varargParameter == null)
         {
             return null;
@@ -485,7 +630,7 @@ public class ConstructorDeclarationNodeImpl extends NodeImpl implements Construc
      */
     public NodeUnion<? extends VariableNode> getUnionForVarargParameter()
     {
-        getAttribute(LocalAttribute.VARARG_PARAMETER).recordAccess(ReadWriteAttribute.AccessType.READ);
+        checkVarargParameterWrapped();
         if (this.varargParameter == null)
         {
             this.varargParameter = new NormalNodeUnion<VariableNode>(null);
@@ -499,24 +644,8 @@ public class ConstructorDeclarationNodeImpl extends NodeImpl implements Construc
      */
     public void setVarargParameter(VariableNode varargParameter)
     {
-            setVarargParameter(varargParameter, true);
-            getManager().notifyChange(this);
-    }
-    
-    private void setVarargParameter(VariableNode varargParameter, boolean checkPermissions)
-    {
-        if (checkPermissions)
-        {
-            getManager().assertMutatable(this);
-            getAttribute(LocalAttribute.VARARG_PARAMETER).recordAccess(ReadWriteAttribute.AccessType.WRITE);
-        }
-        
-        if (this.varargParameter != null)
-        {
-            setAsChild(this.varargParameter.getNodeValue(), false);
-        }
-        this.varargParameter = new NormalNodeUnion<VariableNode>(varargParameter);
-        setAsChild(varargParameter, true);
+        checkVarargParameterWrapped();
+        this.setUnionForVarargParameter(new NormalNodeUnion<VariableNode>(varargParameter));
     }
     
     /**
@@ -525,18 +654,15 @@ public class ConstructorDeclarationNodeImpl extends NodeImpl implements Construc
      */
     public void setUnionForVarargParameter(NodeUnion<? extends VariableNode> varargParameter)
     {
-            setUnionForVarargParameter(varargParameter, true);
-            getManager().notifyChange(this);
+        checkVarargParameterWrapped();
+        this.getManager().assertMutatable(this);
+        this.doSetVarargParameter(varargParameter);
+        if (this.getManager().isRecordingEdits())
+            super.recordEdit(new ConstructorDeclarationNodeSetVarargParameterPropertyEditScriptElementImpl(this.getManager().getCurrentMetaprogramId(), this.getUid(), varargParameter.getNodeValue() == null ? null : varargParameter.getNodeValue().getUid()));
     }
     
-    private void setUnionForVarargParameter(NodeUnion<? extends VariableNode> varargParameter, boolean checkPermissions)
+    private void doSetVarargParameter(NodeUnion<? extends VariableNode> varargParameter)
     {
-        if (checkPermissions)
-        {
-            getManager().assertMutatable(this);
-            getAttribute(LocalAttribute.VARARG_PARAMETER).recordAccess(ReadWriteAttribute.AccessType.WRITE);
-        }
-        
         if (varargParameter == null)
         {
             varargParameter = new NormalNodeUnion<VariableNode>(null);
@@ -556,7 +682,7 @@ public class ConstructorDeclarationNodeImpl extends NodeImpl implements Construc
      */
     public UnparameterizedTypeListNode getThrowTypes()
     {
-        getAttribute(LocalAttribute.THROW_TYPES).recordAccess(ReadWriteAttribute.AccessType.READ);
+        checkThrowTypesWrapped();
         if (this.throwTypes == null)
         {
             return null;
@@ -572,7 +698,7 @@ public class ConstructorDeclarationNodeImpl extends NodeImpl implements Construc
      */
     public NodeUnion<? extends UnparameterizedTypeListNode> getUnionForThrowTypes()
     {
-        getAttribute(LocalAttribute.THROW_TYPES).recordAccess(ReadWriteAttribute.AccessType.READ);
+        checkThrowTypesWrapped();
         if (this.throwTypes == null)
         {
             this.throwTypes = new NormalNodeUnion<UnparameterizedTypeListNode>(null);
@@ -586,24 +712,8 @@ public class ConstructorDeclarationNodeImpl extends NodeImpl implements Construc
      */
     public void setThrowTypes(UnparameterizedTypeListNode throwTypes)
     {
-            setThrowTypes(throwTypes, true);
-            getManager().notifyChange(this);
-    }
-    
-    private void setThrowTypes(UnparameterizedTypeListNode throwTypes, boolean checkPermissions)
-    {
-        if (checkPermissions)
-        {
-            getManager().assertMutatable(this);
-            getAttribute(LocalAttribute.THROW_TYPES).recordAccess(ReadWriteAttribute.AccessType.WRITE);
-        }
-        
-        if (this.throwTypes != null)
-        {
-            setAsChild(this.throwTypes.getNodeValue(), false);
-        }
-        this.throwTypes = new NormalNodeUnion<UnparameterizedTypeListNode>(throwTypes);
-        setAsChild(throwTypes, true);
+        checkThrowTypesWrapped();
+        this.setUnionForThrowTypes(new NormalNodeUnion<UnparameterizedTypeListNode>(throwTypes));
     }
     
     /**
@@ -612,18 +722,15 @@ public class ConstructorDeclarationNodeImpl extends NodeImpl implements Construc
      */
     public void setUnionForThrowTypes(NodeUnion<? extends UnparameterizedTypeListNode> throwTypes)
     {
-            setUnionForThrowTypes(throwTypes, true);
-            getManager().notifyChange(this);
+        checkThrowTypesWrapped();
+        this.getManager().assertMutatable(this);
+        this.doSetThrowTypes(throwTypes);
+        if (this.getManager().isRecordingEdits())
+            super.recordEdit(new ConstructorDeclarationNodeSetThrowTypesPropertyEditScriptElementImpl(this.getManager().getCurrentMetaprogramId(), this.getUid(), throwTypes.getNodeValue() == null ? null : throwTypes.getNodeValue().getUid()));
     }
     
-    private void setUnionForThrowTypes(NodeUnion<? extends UnparameterizedTypeListNode> throwTypes, boolean checkPermissions)
+    private void doSetThrowTypes(NodeUnion<? extends UnparameterizedTypeListNode> throwTypes)
     {
-        if (checkPermissions)
-        {
-            getManager().assertMutatable(this);
-            getAttribute(LocalAttribute.THROW_TYPES).recordAccess(ReadWriteAttribute.AccessType.WRITE);
-        }
-        
         if (throwTypes == null)
         {
             throwTypes = new NormalNodeUnion<UnparameterizedTypeListNode>(null);
@@ -643,7 +750,7 @@ public class ConstructorDeclarationNodeImpl extends NodeImpl implements Construc
      */
     public TypeParameterListNode getTypeParameters()
     {
-        getAttribute(LocalAttribute.TYPE_PARAMETERS).recordAccess(ReadWriteAttribute.AccessType.READ);
+        checkTypeParametersWrapped();
         if (this.typeParameters == null)
         {
             return null;
@@ -659,7 +766,7 @@ public class ConstructorDeclarationNodeImpl extends NodeImpl implements Construc
      */
     public NodeUnion<? extends TypeParameterListNode> getUnionForTypeParameters()
     {
-        getAttribute(LocalAttribute.TYPE_PARAMETERS).recordAccess(ReadWriteAttribute.AccessType.READ);
+        checkTypeParametersWrapped();
         if (this.typeParameters == null)
         {
             this.typeParameters = new NormalNodeUnion<TypeParameterListNode>(null);
@@ -673,24 +780,8 @@ public class ConstructorDeclarationNodeImpl extends NodeImpl implements Construc
      */
     public void setTypeParameters(TypeParameterListNode typeParameters)
     {
-            setTypeParameters(typeParameters, true);
-            getManager().notifyChange(this);
-    }
-    
-    private void setTypeParameters(TypeParameterListNode typeParameters, boolean checkPermissions)
-    {
-        if (checkPermissions)
-        {
-            getManager().assertMutatable(this);
-            getAttribute(LocalAttribute.TYPE_PARAMETERS).recordAccess(ReadWriteAttribute.AccessType.WRITE);
-        }
-        
-        if (this.typeParameters != null)
-        {
-            setAsChild(this.typeParameters.getNodeValue(), false);
-        }
-        this.typeParameters = new NormalNodeUnion<TypeParameterListNode>(typeParameters);
-        setAsChild(typeParameters, true);
+        checkTypeParametersWrapped();
+        this.setUnionForTypeParameters(new NormalNodeUnion<TypeParameterListNode>(typeParameters));
     }
     
     /**
@@ -699,18 +790,15 @@ public class ConstructorDeclarationNodeImpl extends NodeImpl implements Construc
      */
     public void setUnionForTypeParameters(NodeUnion<? extends TypeParameterListNode> typeParameters)
     {
-            setUnionForTypeParameters(typeParameters, true);
-            getManager().notifyChange(this);
+        checkTypeParametersWrapped();
+        this.getManager().assertMutatable(this);
+        this.doSetTypeParameters(typeParameters);
+        if (this.getManager().isRecordingEdits())
+            super.recordEdit(new ConstructorDeclarationNodeSetTypeParametersPropertyEditScriptElementImpl(this.getManager().getCurrentMetaprogramId(), this.getUid(), typeParameters.getNodeValue() == null ? null : typeParameters.getNodeValue().getUid()));
     }
     
-    private void setUnionForTypeParameters(NodeUnion<? extends TypeParameterListNode> typeParameters, boolean checkPermissions)
+    private void doSetTypeParameters(NodeUnion<? extends TypeParameterListNode> typeParameters)
     {
-        if (checkPermissions)
-        {
-            getManager().assertMutatable(this);
-            getAttribute(LocalAttribute.TYPE_PARAMETERS).recordAccess(ReadWriteAttribute.AccessType.WRITE);
-        }
-        
         if (typeParameters == null)
         {
             typeParameters = new NormalNodeUnion<TypeParameterListNode>(null);
@@ -730,7 +818,7 @@ public class ConstructorDeclarationNodeImpl extends NodeImpl implements Construc
      */
     public JavadocNode getJavadoc()
     {
-        getAttribute(LocalAttribute.JAVADOC).recordAccess(ReadWriteAttribute.AccessType.READ);
+        checkJavadocWrapped();
         if (this.javadoc == null)
         {
             return null;
@@ -746,7 +834,7 @@ public class ConstructorDeclarationNodeImpl extends NodeImpl implements Construc
      */
     public NodeUnion<? extends JavadocNode> getUnionForJavadoc()
     {
-        getAttribute(LocalAttribute.JAVADOC).recordAccess(ReadWriteAttribute.AccessType.READ);
+        checkJavadocWrapped();
         if (this.javadoc == null)
         {
             this.javadoc = new NormalNodeUnion<JavadocNode>(null);
@@ -760,24 +848,8 @@ public class ConstructorDeclarationNodeImpl extends NodeImpl implements Construc
      */
     public void setJavadoc(JavadocNode javadoc)
     {
-            setJavadoc(javadoc, true);
-            getManager().notifyChange(this);
-    }
-    
-    private void setJavadoc(JavadocNode javadoc, boolean checkPermissions)
-    {
-        if (checkPermissions)
-        {
-            getManager().assertMutatable(this);
-            getAttribute(LocalAttribute.JAVADOC).recordAccess(ReadWriteAttribute.AccessType.WRITE);
-        }
-        
-        if (this.javadoc != null)
-        {
-            setAsChild(this.javadoc.getNodeValue(), false);
-        }
-        this.javadoc = new NormalNodeUnion<JavadocNode>(javadoc);
-        setAsChild(javadoc, true);
+        checkJavadocWrapped();
+        this.setUnionForJavadoc(new NormalNodeUnion<JavadocNode>(javadoc));
     }
     
     /**
@@ -786,18 +858,15 @@ public class ConstructorDeclarationNodeImpl extends NodeImpl implements Construc
      */
     public void setUnionForJavadoc(NodeUnion<? extends JavadocNode> javadoc)
     {
-            setUnionForJavadoc(javadoc, true);
-            getManager().notifyChange(this);
+        checkJavadocWrapped();
+        this.getManager().assertMutatable(this);
+        this.doSetJavadoc(javadoc);
+        if (this.getManager().isRecordingEdits())
+            super.recordEdit(new ConstructorDeclarationNodeSetJavadocPropertyEditScriptElementImpl(this.getManager().getCurrentMetaprogramId(), this.getUid(), javadoc.getNodeValue() == null ? null : javadoc.getNodeValue().getUid()));
     }
     
-    private void setUnionForJavadoc(NodeUnion<? extends JavadocNode> javadoc, boolean checkPermissions)
+    private void doSetJavadoc(NodeUnion<? extends JavadocNode> javadoc)
     {
-        if (checkPermissions)
-        {
-            getManager().assertMutatable(this);
-            getAttribute(LocalAttribute.JAVADOC).recordAccess(ReadWriteAttribute.AccessType.WRITE);
-        }
-        
         if (javadoc == null)
         {
             javadoc = new NormalNodeUnion<JavadocNode>(null);
@@ -821,37 +890,37 @@ public class ConstructorDeclarationNodeImpl extends NodeImpl implements Construc
     protected void receiveToChildren(BsjNodeVisitor visitor)
     {
         super.receiveToChildren(visitor);
-        if (this.identifier.getNodeValue() != null)
+        if (this.getUnionForIdentifier().getNodeValue() != null)
         {
-            this.identifier.getNodeValue().receive(visitor);
+            this.getUnionForIdentifier().getNodeValue().receive(visitor);
         }
-        if (this.body.getNodeValue() != null)
+        if (this.getUnionForBody().getNodeValue() != null)
         {
-            this.body.getNodeValue().receive(visitor);
+            this.getUnionForBody().getNodeValue().receive(visitor);
         }
-        if (this.modifiers.getNodeValue() != null)
+        if (this.getUnionForModifiers().getNodeValue() != null)
         {
-            this.modifiers.getNodeValue().receive(visitor);
+            this.getUnionForModifiers().getNodeValue().receive(visitor);
         }
-        if (this.parameters.getNodeValue() != null)
+        if (this.getUnionForParameters().getNodeValue() != null)
         {
-            this.parameters.getNodeValue().receive(visitor);
+            this.getUnionForParameters().getNodeValue().receive(visitor);
         }
-        if (this.varargParameter.getNodeValue() != null)
+        if (this.getUnionForVarargParameter().getNodeValue() != null)
         {
-            this.varargParameter.getNodeValue().receive(visitor);
+            this.getUnionForVarargParameter().getNodeValue().receive(visitor);
         }
-        if (this.throwTypes.getNodeValue() != null)
+        if (this.getUnionForThrowTypes().getNodeValue() != null)
         {
-            this.throwTypes.getNodeValue().receive(visitor);
+            this.getUnionForThrowTypes().getNodeValue().receive(visitor);
         }
-        if (this.typeParameters.getNodeValue() != null)
+        if (this.getUnionForTypeParameters().getNodeValue() != null)
         {
-            this.typeParameters.getNodeValue().receive(visitor);
+            this.getUnionForTypeParameters().getNodeValue().receive(visitor);
         }
-        if (this.javadoc.getNodeValue() != null)
+        if (this.getUnionForJavadoc().getNodeValue() != null)
         {
-            this.javadoc.getNodeValue().receive(visitor);
+            this.getUnionForJavadoc().getNodeValue().receive(visitor);
         }
         Iterator<? extends Node> extras = getHiddenVisitorChildren();
         if (extras != null)
@@ -874,37 +943,37 @@ public class ConstructorDeclarationNodeImpl extends NodeImpl implements Construc
     protected void receiveTypedToChildren(BsjTypedNodeVisitor visitor)
     {
         super.receiveTypedToChildren(visitor);
-        if (this.identifier.getNodeValue() != null)
+        if (this.getUnionForIdentifier().getNodeValue() != null)
         {
-            this.identifier.getNodeValue().receiveTyped(visitor);
+            this.getUnionForIdentifier().getNodeValue().receiveTyped(visitor);
         }
-        if (this.body.getNodeValue() != null)
+        if (this.getUnionForBody().getNodeValue() != null)
         {
-            this.body.getNodeValue().receiveTyped(visitor);
+            this.getUnionForBody().getNodeValue().receiveTyped(visitor);
         }
-        if (this.modifiers.getNodeValue() != null)
+        if (this.getUnionForModifiers().getNodeValue() != null)
         {
-            this.modifiers.getNodeValue().receiveTyped(visitor);
+            this.getUnionForModifiers().getNodeValue().receiveTyped(visitor);
         }
-        if (this.parameters.getNodeValue() != null)
+        if (this.getUnionForParameters().getNodeValue() != null)
         {
-            this.parameters.getNodeValue().receiveTyped(visitor);
+            this.getUnionForParameters().getNodeValue().receiveTyped(visitor);
         }
-        if (this.varargParameter.getNodeValue() != null)
+        if (this.getUnionForVarargParameter().getNodeValue() != null)
         {
-            this.varargParameter.getNodeValue().receiveTyped(visitor);
+            this.getUnionForVarargParameter().getNodeValue().receiveTyped(visitor);
         }
-        if (this.throwTypes.getNodeValue() != null)
+        if (this.getUnionForThrowTypes().getNodeValue() != null)
         {
-            this.throwTypes.getNodeValue().receiveTyped(visitor);
+            this.getUnionForThrowTypes().getNodeValue().receiveTyped(visitor);
         }
-        if (this.typeParameters.getNodeValue() != null)
+        if (this.getUnionForTypeParameters().getNodeValue() != null)
         {
-            this.typeParameters.getNodeValue().receiveTyped(visitor);
+            this.getUnionForTypeParameters().getNodeValue().receiveTyped(visitor);
         }
-        if (this.javadoc.getNodeValue() != null)
+        if (this.getUnionForJavadoc().getNodeValue() != null)
         {
-            this.javadoc.getNodeValue().receiveTyped(visitor);
+            this.getUnionForJavadoc().getNodeValue().receiveTyped(visitor);
         }
         Iterator<? extends Node> extras = getHiddenVisitorChildren();
         if (extras != null)
@@ -970,6 +1039,8 @@ public class ConstructorDeclarationNodeImpl extends NodeImpl implements Construc
     {
         StringBuilder sb = new StringBuilder();
         sb.append(this.getClass().getSimpleName());
+        sb.append('#');
+        sb.append(this.getUid());
         sb.append('[');
         sb.append("identifier=");
         sb.append(this.getUnionForIdentifier().getNodeValue() == null? "null" : this.getUnionForIdentifier().getNodeValue().getClass().getSimpleName());

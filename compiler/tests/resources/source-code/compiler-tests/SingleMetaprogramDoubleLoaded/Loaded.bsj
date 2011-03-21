@@ -1,0 +1,22 @@
+public class Loaded
+{
+	[:
+		context.getAnchor().getNearestAncestorOfType(ClassBodyNode.class).getMembers().add(
+				context.getFactory().makeFieldDeclarationNode(
+						context.getFactory().makeFieldModifiersNode(
+								AccessModifier.PUBLIC,
+								true,
+								false,
+								false,
+								false,
+								context.getFactory().makeMetaAnnotationListNode(),
+								context.getFactory().makeAnnotationListNode()
+								),
+						context.getFactory().makePrimitiveTypeNode(PrimitiveType.INT),
+						context.getFactory().makeVariableDeclaratorListNode(
+								context.getFactory().makeVariableDeclaratorNode(
+										context.getFactory().makeIdentifierNode("x"),
+										null)),
+						null));
+	:]
+}

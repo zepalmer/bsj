@@ -1,5 +1,7 @@
 package edu.jhu.cs.bsj.compiler.ast.node;
 
+import java.util.List;
+
 import javax.annotation.Generated;
 
 import edu.jhu.cs.bsj.compiler.ast.BsjNodeFactory;
@@ -74,4 +76,11 @@ public interface NameNode extends Node
      * @return The qualified representation of this name.
      */
     public String getNameString();
+ 
+    /**
+     * Retrieves a list of name components for this name.  The first element in the list is the root of the name; that
+     * is, <tt>edu.jhu.bsj</tt> would produce <tt>["edu", "jhu", "bsj"]</tt>.
+     * @return The name components for this name.
+     */
+    public List<String> getNameComponents();
 }

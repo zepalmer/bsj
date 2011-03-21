@@ -1,10 +1,10 @@
 package edu.jhu.cs.bsj.compiler.impl.ast.node;
 
 import java.util.Arrays;
-import java.util.EnumMap;
+import java.util.EnumSet;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
+import java.util.Set;
 
 import javax.annotation.Generated;
 
@@ -21,9 +21,10 @@ import edu.jhu.cs.bsj.compiler.ast.node.SuperclassConstructorInvocationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.list.ExpressionListNode;
 import edu.jhu.cs.bsj.compiler.ast.node.list.ReferenceTypeListNode;
 import edu.jhu.cs.bsj.compiler.impl.ast.BsjNodeManager;
+import edu.jhu.cs.bsj.compiler.impl.ast.BsjNodeProxyFactory;
 import edu.jhu.cs.bsj.compiler.impl.ast.NormalNodeUnion;
-import edu.jhu.cs.bsj.compiler.impl.ast.attribute.AttributeName;
-import edu.jhu.cs.bsj.compiler.impl.ast.attribute.ReadWriteAttribute;
+import edu.jhu.cs.bsj.compiler.impl.ast.delta.property.SuperclassConstructorInvocationNodeSetQualifyingExpressionPropertyEditScriptElementImpl;
+import edu.jhu.cs.bsj.compiler.impl.ast.properties.SuperclassConstructorInvocationNodeProperties;
 
 @Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
 public class SuperclassConstructorInvocationNodeImpl extends ConstructorInvocationNodeImpl implements SuperclassConstructorInvocationNode
@@ -31,22 +32,11 @@ public class SuperclassConstructorInvocationNodeImpl extends ConstructorInvocati
     /** The qualifying expression for the enclosing object. */
     private NodeUnion<? extends PrimaryExpressionNode> qualifyingExpression;
     
-    private Map<LocalAttribute,ReadWriteAttribute> localAttributes = new EnumMap<LocalAttribute,ReadWriteAttribute>(LocalAttribute.class);
-    private ReadWriteAttribute getAttribute(LocalAttribute attributeName)
-    {
-        ReadWriteAttribute attribute = localAttributes.get(attributeName);
-        if (attribute == null)
-        {
-            attribute = new ReadWriteAttribute(SuperclassConstructorInvocationNodeImpl.this, attributeName);
-            localAttributes.put(attributeName, attribute);
-        }
-        return attribute;
-    }
-    private static enum LocalAttribute implements AttributeName
-    {
-        /** Attribute identifier for the qualifyingExpression property. */
-        QUALIFYING_EXPRESSION,
-    }
+    /**
+     * A set of those properties which have been populated from the backing node.
+     * This field is <code>null</code> if <tt>backingNode</tt> is <code>null</code>.
+     */
+    private Set<SuperclassConstructorInvocationNodeProperties> populatedProperties;
     
     /** General constructor. */
     public SuperclassConstructorInvocationNodeImpl(
@@ -59,7 +49,49 @@ public class SuperclassConstructorInvocationNodeImpl extends ConstructorInvocati
             boolean binary)
     {
         super(arguments, typeArguments, startLocation, stopLocation, manager, binary);
-        setUnionForQualifyingExpression(qualifyingExpression, false);
+        this.populatedProperties = null;
+        doSetQualifyingExpression(qualifyingExpression);
+    }
+    
+    /** Proxy constructor. */
+    public SuperclassConstructorInvocationNodeImpl(BsjNodeManager manager, BsjNodeProxyFactory proxyFactory, SuperclassConstructorInvocationNode backingNode)
+    {
+        super(manager, proxyFactory, backingNode);
+        this.populatedProperties = EnumSet.noneOf(SuperclassConstructorInvocationNodeProperties.class);
+    }
+    
+    /** Retrieves this node's backing node (if one exists). */
+    protected SuperclassConstructorInvocationNode getBackingNode()
+    {
+        return (SuperclassConstructorInvocationNode)super.getBackingNode();
+    }
+    
+    /**
+     * Ensures that the qualifyingExpression value has been populated from proxy.
+     * If this node is not backed by a proxy or if the value has already been
+     * populated, this method does nothing.
+     */
+    private void checkQualifyingExpressionWrapped()
+    {
+        if (this.populatedProperties == null || this.populatedProperties.contains(
+                SuperclassConstructorInvocationNodeProperties.QUALIFYING_EXPRESSION))
+            return;
+        this.populatedProperties.add(SuperclassConstructorInvocationNodeProperties.QUALIFYING_EXPRESSION);
+        NodeUnion<? extends PrimaryExpressionNode> union = this.getBackingNode().getUnionForQualifyingExpression();
+        switch (union.getType())
+        {
+            case NORMAL:
+                union = this.getProxyFactory().makeNormalNodeUnion(
+                        this.getProxyFactory().makePrimaryExpressionNode(union.getNormalNode()));
+                break;
+            case SPLICE:
+                union = this.getProxyFactory().makeSpliceNodeUnion(
+                        this.getProxyFactory().makeSpliceNode(union.getSpliceNode()));
+                break;
+            default:
+                throw new IllegalStateException("Unrecognized union type: " + union.getType());
+        }
+        this.qualifyingExpression = union;
     }
     
     /**
@@ -69,7 +101,7 @@ public class SuperclassConstructorInvocationNodeImpl extends ConstructorInvocati
      */
     public PrimaryExpressionNode getQualifyingExpression()
     {
-        getAttribute(LocalAttribute.QUALIFYING_EXPRESSION).recordAccess(ReadWriteAttribute.AccessType.READ);
+        checkQualifyingExpressionWrapped();
         if (this.qualifyingExpression == null)
         {
             return null;
@@ -85,7 +117,7 @@ public class SuperclassConstructorInvocationNodeImpl extends ConstructorInvocati
      */
     public NodeUnion<? extends PrimaryExpressionNode> getUnionForQualifyingExpression()
     {
-        getAttribute(LocalAttribute.QUALIFYING_EXPRESSION).recordAccess(ReadWriteAttribute.AccessType.READ);
+        checkQualifyingExpressionWrapped();
         if (this.qualifyingExpression == null)
         {
             this.qualifyingExpression = new NormalNodeUnion<PrimaryExpressionNode>(null);
@@ -99,24 +131,8 @@ public class SuperclassConstructorInvocationNodeImpl extends ConstructorInvocati
      */
     public void setQualifyingExpression(PrimaryExpressionNode qualifyingExpression)
     {
-            setQualifyingExpression(qualifyingExpression, true);
-            getManager().notifyChange(this);
-    }
-    
-    private void setQualifyingExpression(PrimaryExpressionNode qualifyingExpression, boolean checkPermissions)
-    {
-        if (checkPermissions)
-        {
-            getManager().assertMutatable(this);
-            getAttribute(LocalAttribute.QUALIFYING_EXPRESSION).recordAccess(ReadWriteAttribute.AccessType.WRITE);
-        }
-        
-        if (this.qualifyingExpression != null)
-        {
-            setAsChild(this.qualifyingExpression.getNodeValue(), false);
-        }
-        this.qualifyingExpression = new NormalNodeUnion<PrimaryExpressionNode>(qualifyingExpression);
-        setAsChild(qualifyingExpression, true);
+        checkQualifyingExpressionWrapped();
+        this.setUnionForQualifyingExpression(new NormalNodeUnion<PrimaryExpressionNode>(qualifyingExpression));
     }
     
     /**
@@ -125,18 +141,15 @@ public class SuperclassConstructorInvocationNodeImpl extends ConstructorInvocati
      */
     public void setUnionForQualifyingExpression(NodeUnion<? extends PrimaryExpressionNode> qualifyingExpression)
     {
-            setUnionForQualifyingExpression(qualifyingExpression, true);
-            getManager().notifyChange(this);
+        checkQualifyingExpressionWrapped();
+        this.getManager().assertMutatable(this);
+        this.doSetQualifyingExpression(qualifyingExpression);
+        if (this.getManager().isRecordingEdits())
+            super.recordEdit(new SuperclassConstructorInvocationNodeSetQualifyingExpressionPropertyEditScriptElementImpl(this.getManager().getCurrentMetaprogramId(), this.getUid(), qualifyingExpression.getNodeValue() == null ? null : qualifyingExpression.getNodeValue().getUid()));
     }
     
-    private void setUnionForQualifyingExpression(NodeUnion<? extends PrimaryExpressionNode> qualifyingExpression, boolean checkPermissions)
+    private void doSetQualifyingExpression(NodeUnion<? extends PrimaryExpressionNode> qualifyingExpression)
     {
-        if (checkPermissions)
-        {
-            getManager().assertMutatable(this);
-            getAttribute(LocalAttribute.QUALIFYING_EXPRESSION).recordAccess(ReadWriteAttribute.AccessType.WRITE);
-        }
-        
         if (qualifyingExpression == null)
         {
             qualifyingExpression = new NormalNodeUnion<PrimaryExpressionNode>(null);
@@ -160,9 +173,9 @@ public class SuperclassConstructorInvocationNodeImpl extends ConstructorInvocati
     protected void receiveToChildren(BsjNodeVisitor visitor)
     {
         super.receiveToChildren(visitor);
-        if (this.qualifyingExpression.getNodeValue() != null)
+        if (this.getUnionForQualifyingExpression().getNodeValue() != null)
         {
-            this.qualifyingExpression.getNodeValue().receive(visitor);
+            this.getUnionForQualifyingExpression().getNodeValue().receive(visitor);
         }
         Iterator<? extends Node> extras = getHiddenVisitorChildren();
         if (extras != null)
@@ -185,9 +198,9 @@ public class SuperclassConstructorInvocationNodeImpl extends ConstructorInvocati
     protected void receiveTypedToChildren(BsjTypedNodeVisitor visitor)
     {
         super.receiveTypedToChildren(visitor);
-        if (this.qualifyingExpression.getNodeValue() != null)
+        if (this.getUnionForQualifyingExpression().getNodeValue() != null)
         {
-            this.qualifyingExpression.getNodeValue().receiveTyped(visitor);
+            this.getUnionForQualifyingExpression().getNodeValue().receiveTyped(visitor);
         }
         Iterator<? extends Node> extras = getHiddenVisitorChildren();
         if (extras != null)
@@ -246,6 +259,8 @@ public class SuperclassConstructorInvocationNodeImpl extends ConstructorInvocati
     {
         StringBuilder sb = new StringBuilder();
         sb.append(this.getClass().getSimpleName());
+        sb.append('#');
+        sb.append(this.getUid());
         sb.append('[');
         sb.append("qualifyingExpression=");
         sb.append(this.getUnionForQualifyingExpression().getNodeValue() == null? "null" : this.getUnionForQualifyingExpression().getNodeValue().getClass().getSimpleName());

@@ -1,10 +1,10 @@
 package edu.jhu.cs.bsj.compiler.impl.ast.node;
 
 import java.util.Arrays;
-import java.util.EnumMap;
+import java.util.EnumSet;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
+import java.util.Set;
 
 import javax.annotation.Generated;
 
@@ -19,9 +19,10 @@ import edu.jhu.cs.bsj.compiler.ast.node.AnnotationExpressionValueNode;
 import edu.jhu.cs.bsj.compiler.ast.node.Node;
 import edu.jhu.cs.bsj.compiler.ast.node.NonAssignmentExpressionNode;
 import edu.jhu.cs.bsj.compiler.impl.ast.BsjNodeManager;
+import edu.jhu.cs.bsj.compiler.impl.ast.BsjNodeProxyFactory;
 import edu.jhu.cs.bsj.compiler.impl.ast.NormalNodeUnion;
-import edu.jhu.cs.bsj.compiler.impl.ast.attribute.AttributeName;
-import edu.jhu.cs.bsj.compiler.impl.ast.attribute.ReadWriteAttribute;
+import edu.jhu.cs.bsj.compiler.impl.ast.delta.property.AnnotationExpressionValueNodeSetExpressionPropertyEditScriptElementImpl;
+import edu.jhu.cs.bsj.compiler.impl.ast.properties.AnnotationExpressionValueNodeProperties;
 
 @Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
 public class AnnotationExpressionValueNodeImpl extends NodeImpl implements AnnotationExpressionValueNode
@@ -29,22 +30,11 @@ public class AnnotationExpressionValueNodeImpl extends NodeImpl implements Annot
     /** The expression. */
     private NodeUnion<? extends NonAssignmentExpressionNode> expression;
     
-    private Map<LocalAttribute,ReadWriteAttribute> localAttributes = new EnumMap<LocalAttribute,ReadWriteAttribute>(LocalAttribute.class);
-    private ReadWriteAttribute getAttribute(LocalAttribute attributeName)
-    {
-        ReadWriteAttribute attribute = localAttributes.get(attributeName);
-        if (attribute == null)
-        {
-            attribute = new ReadWriteAttribute(AnnotationExpressionValueNodeImpl.this, attributeName);
-            localAttributes.put(attributeName, attribute);
-        }
-        return attribute;
-    }
-    private static enum LocalAttribute implements AttributeName
-    {
-        /** Attribute identifier for the expression property. */
-        EXPRESSION,
-    }
+    /**
+     * A set of those properties which have been populated from the backing node.
+     * This field is <code>null</code> if <tt>backingNode</tt> is <code>null</code>.
+     */
+    private Set<AnnotationExpressionValueNodeProperties> populatedProperties;
     
     /** General constructor. */
     public AnnotationExpressionValueNodeImpl(
@@ -55,7 +45,49 @@ public class AnnotationExpressionValueNodeImpl extends NodeImpl implements Annot
             boolean binary)
     {
         super(startLocation, stopLocation, manager, binary);
-        setUnionForExpression(expression, false);
+        this.populatedProperties = null;
+        doSetExpression(expression);
+    }
+    
+    /** Proxy constructor. */
+    public AnnotationExpressionValueNodeImpl(BsjNodeManager manager, BsjNodeProxyFactory proxyFactory, AnnotationExpressionValueNode backingNode)
+    {
+        super(manager, proxyFactory, backingNode);
+        this.populatedProperties = EnumSet.noneOf(AnnotationExpressionValueNodeProperties.class);
+    }
+    
+    /** Retrieves this node's backing node (if one exists). */
+    protected AnnotationExpressionValueNode getBackingNode()
+    {
+        return (AnnotationExpressionValueNode)super.getBackingNode();
+    }
+    
+    /**
+     * Ensures that the expression value has been populated from proxy.
+     * If this node is not backed by a proxy or if the value has already been
+     * populated, this method does nothing.
+     */
+    private void checkExpressionWrapped()
+    {
+        if (this.populatedProperties == null || this.populatedProperties.contains(
+                AnnotationExpressionValueNodeProperties.EXPRESSION))
+            return;
+        this.populatedProperties.add(AnnotationExpressionValueNodeProperties.EXPRESSION);
+        NodeUnion<? extends NonAssignmentExpressionNode> union = this.getBackingNode().getUnionForExpression();
+        switch (union.getType())
+        {
+            case NORMAL:
+                union = this.getProxyFactory().makeNormalNodeUnion(
+                        this.getProxyFactory().makeNonAssignmentExpressionNode(union.getNormalNode()));
+                break;
+            case SPLICE:
+                union = this.getProxyFactory().makeSpliceNodeUnion(
+                        this.getProxyFactory().makeSpliceNode(union.getSpliceNode()));
+                break;
+            default:
+                throw new IllegalStateException("Unrecognized union type: " + union.getType());
+        }
+        this.expression = union;
     }
     
     /**
@@ -65,7 +97,7 @@ public class AnnotationExpressionValueNodeImpl extends NodeImpl implements Annot
      */
     public NonAssignmentExpressionNode getExpression()
     {
-        getAttribute(LocalAttribute.EXPRESSION).recordAccess(ReadWriteAttribute.AccessType.READ);
+        checkExpressionWrapped();
         if (this.expression == null)
         {
             return null;
@@ -81,7 +113,7 @@ public class AnnotationExpressionValueNodeImpl extends NodeImpl implements Annot
      */
     public NodeUnion<? extends NonAssignmentExpressionNode> getUnionForExpression()
     {
-        getAttribute(LocalAttribute.EXPRESSION).recordAccess(ReadWriteAttribute.AccessType.READ);
+        checkExpressionWrapped();
         if (this.expression == null)
         {
             this.expression = new NormalNodeUnion<NonAssignmentExpressionNode>(null);
@@ -95,24 +127,8 @@ public class AnnotationExpressionValueNodeImpl extends NodeImpl implements Annot
      */
     public void setExpression(NonAssignmentExpressionNode expression)
     {
-            setExpression(expression, true);
-            getManager().notifyChange(this);
-    }
-    
-    private void setExpression(NonAssignmentExpressionNode expression, boolean checkPermissions)
-    {
-        if (checkPermissions)
-        {
-            getManager().assertMutatable(this);
-            getAttribute(LocalAttribute.EXPRESSION).recordAccess(ReadWriteAttribute.AccessType.WRITE);
-        }
-        
-        if (this.expression != null)
-        {
-            setAsChild(this.expression.getNodeValue(), false);
-        }
-        this.expression = new NormalNodeUnion<NonAssignmentExpressionNode>(expression);
-        setAsChild(expression, true);
+        checkExpressionWrapped();
+        this.setUnionForExpression(new NormalNodeUnion<NonAssignmentExpressionNode>(expression));
     }
     
     /**
@@ -121,18 +137,15 @@ public class AnnotationExpressionValueNodeImpl extends NodeImpl implements Annot
      */
     public void setUnionForExpression(NodeUnion<? extends NonAssignmentExpressionNode> expression)
     {
-            setUnionForExpression(expression, true);
-            getManager().notifyChange(this);
+        checkExpressionWrapped();
+        this.getManager().assertMutatable(this);
+        this.doSetExpression(expression);
+        if (this.getManager().isRecordingEdits())
+            super.recordEdit(new AnnotationExpressionValueNodeSetExpressionPropertyEditScriptElementImpl(this.getManager().getCurrentMetaprogramId(), this.getUid(), expression.getNodeValue() == null ? null : expression.getNodeValue().getUid()));
     }
     
-    private void setUnionForExpression(NodeUnion<? extends NonAssignmentExpressionNode> expression, boolean checkPermissions)
+    private void doSetExpression(NodeUnion<? extends NonAssignmentExpressionNode> expression)
     {
-        if (checkPermissions)
-        {
-            getManager().assertMutatable(this);
-            getAttribute(LocalAttribute.EXPRESSION).recordAccess(ReadWriteAttribute.AccessType.WRITE);
-        }
-        
         if (expression == null)
         {
             expression = new NormalNodeUnion<NonAssignmentExpressionNode>(null);
@@ -156,9 +169,9 @@ public class AnnotationExpressionValueNodeImpl extends NodeImpl implements Annot
     protected void receiveToChildren(BsjNodeVisitor visitor)
     {
         super.receiveToChildren(visitor);
-        if (this.expression.getNodeValue() != null)
+        if (this.getUnionForExpression().getNodeValue() != null)
         {
-            this.expression.getNodeValue().receive(visitor);
+            this.getUnionForExpression().getNodeValue().receive(visitor);
         }
         Iterator<? extends Node> extras = getHiddenVisitorChildren();
         if (extras != null)
@@ -181,9 +194,9 @@ public class AnnotationExpressionValueNodeImpl extends NodeImpl implements Annot
     protected void receiveTypedToChildren(BsjTypedNodeVisitor visitor)
     {
         super.receiveTypedToChildren(visitor);
-        if (this.expression.getNodeValue() != null)
+        if (this.getUnionForExpression().getNodeValue() != null)
         {
-            this.expression.getNodeValue().receiveTyped(visitor);
+            this.getUnionForExpression().getNodeValue().receiveTyped(visitor);
         }
         Iterator<? extends Node> extras = getHiddenVisitorChildren();
         if (extras != null)
@@ -242,6 +255,8 @@ public class AnnotationExpressionValueNodeImpl extends NodeImpl implements Annot
     {
         StringBuilder sb = new StringBuilder();
         sb.append(this.getClass().getSimpleName());
+        sb.append('#');
+        sb.append(this.getUid());
         sb.append('[');
         sb.append("expression=");
         sb.append(this.getUnionForExpression().getNodeValue() == null? "null" : this.getUnionForExpression().getNodeValue().getClass().getSimpleName());

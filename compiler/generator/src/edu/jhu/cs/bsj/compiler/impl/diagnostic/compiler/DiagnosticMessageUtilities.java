@@ -9,7 +9,6 @@ import java.util.Map;
 import java.util.Set;
 
 import edu.jhu.cs.bsj.compiler.ast.BsjSourceLocation;
-import edu.jhu.cs.bsj.compiler.ast.conflict.knowledge.Knowledge;
 import edu.jhu.cs.bsj.compiler.ast.node.list.knowledge.ConflictKnowledge;
 import edu.jhu.cs.bsj.compiler.ast.node.list.knowledge.ListKnowledge;
 import edu.jhu.cs.bsj.compiler.ast.node.list.knowledge.source.OperationKnowledgeSource;
@@ -143,50 +142,6 @@ public class DiagnosticMessageUtilities
         {
             throw new IllegalStateException("Do not know how to handle knowledge source of type "
                     + knowledge.getKnowledgeSource().getClass());
-        }
-    }
-
-    public static String getDescriptionForConflicts(
-            Set<? extends edu.jhu.cs.bsj.compiler.ast.conflict.knowledge.ConflictKnowledge> conflicts, Locale locale)
-    {
-        ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        PrependablePrintStream ps = new PrependablePrintStream(baos, "    ", 0);
-        for (edu.jhu.cs.bsj.compiler.ast.conflict.knowledge.ConflictKnowledge conflict : conflicts)
-        {
-            generateDescriptionForKnowledge(conflict, ps, locale);
-        }
-        ps.close();
-        return baos.toString();
-    }
-
-    private static void generateDescriptionForKnowledge(Knowledge knowledge, PrependablePrintStream ps, Locale locale)
-    {
-        if (knowledge.getSource() instanceof edu.jhu.cs.bsj.compiler.ast.conflict.source.RuleKnowledgeSource)
-        {
-            edu.jhu.cs.bsj.compiler.ast.conflict.source.RuleKnowledgeSource<?> ruleKnowledgeSource = (edu.jhu.cs.bsj.compiler.ast.conflict.source.RuleKnowledgeSource<?>) knowledge.getSource();
-            ps.println(InternationalizationUtilities.MESSAGE_REPOSITORY.getFormattedMessage(locale,
-                    "bsj.string.part.metaprogram.failure.conflict.package.ruleKnowledgeSourceHeader",
-                    Arrays.<Object> asList(knowledge, ruleKnowledgeSource.getRule()),
-                    RULE_KNOWLEDGE_SOURCE_HEADER_POSITION_MAP));
-            ps.incPrependCount();
-            for (Knowledge precondition : ruleKnowledgeSource.getKnowledge())
-            {
-                generateDescriptionForKnowledge(precondition, ps, locale);
-            }
-            ps.decPrependCount();
-        } else if (knowledge.getSource() instanceof edu.jhu.cs.bsj.compiler.ast.conflict.source.OperationKnowledgeSource)
-        {
-            edu.jhu.cs.bsj.compiler.ast.conflict.source.OperationKnowledgeSource operationKnowledgeSource = (edu.jhu.cs.bsj.compiler.ast.conflict.source.OperationKnowledgeSource) knowledge.getSource();
-            ps.println(InternationalizationUtilities.MESSAGE_REPOSITORY.getFormattedMessage(locale,
-                    "bsj.string.part.metaprogram.failure.conflict.package.operationKnowledgeSourceHeader",
-                    Arrays.<Object> asList(knowledge), Collections.singletonMap("knowledge", 1)));
-            ps.incPrependCount();
-            ps.println(getIdentedStackTraceString(operationKnowledgeSource.getTrace(), locale));
-            ps.decPrependCount();
-        } else
-        {
-            throw new IllegalStateException("Do not know how to handle knowledge source of type "
-                    + knowledge.getSource().getClass());
         }
     }
 }

@@ -1,0 +1,21 @@
+public class ListAddRemove
+{    
+    public static void foo()
+    {
+    }
+
+    [:
+        #mode mutate;
+        BsjNodeFactory factory = context.getFactory();
+        MethodDeclarationNode foo = (MethodDeclarationNode)context.getAnchor().<ClassMemberListNode>getNearestAncestorOfType(
+                ClassMemberListNode.class).get(0);
+    
+        BlockStatementNode n1 = factory.makeNoOperationNode();
+        BlockStatementNode n2 = factory.makeNoOperationNode();
+        BlockStatementListNode list = factory.makeBlockStatementListNode(n1,n2);
+        foo.setBody(list);
+        
+        BlockStatementNode n3 = factory.makeNoOperationNode();
+        list.replace(n1,n3);
+    :]
+}

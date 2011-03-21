@@ -1,10 +1,10 @@
 package edu.jhu.cs.bsj.compiler.impl.ast.node;
 
 import java.util.Arrays;
-import java.util.EnumMap;
+import java.util.EnumSet;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
+import java.util.Set;
 
 import javax.annotation.Generated;
 
@@ -21,9 +21,13 @@ import edu.jhu.cs.bsj.compiler.ast.node.list.BlockStatementListNode;
 import edu.jhu.cs.bsj.compiler.ast.node.list.CatchListNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaAnnotationListNode;
 import edu.jhu.cs.bsj.compiler.impl.ast.BsjNodeManager;
+import edu.jhu.cs.bsj.compiler.impl.ast.BsjNodeProxyFactory;
 import edu.jhu.cs.bsj.compiler.impl.ast.NormalNodeUnion;
-import edu.jhu.cs.bsj.compiler.impl.ast.attribute.AttributeName;
-import edu.jhu.cs.bsj.compiler.impl.ast.attribute.ReadWriteAttribute;
+import edu.jhu.cs.bsj.compiler.impl.ast.delta.property.TryNodeSetBodyPropertyEditScriptElementImpl;
+import edu.jhu.cs.bsj.compiler.impl.ast.delta.property.TryNodeSetCatchesPropertyEditScriptElementImpl;
+import edu.jhu.cs.bsj.compiler.impl.ast.delta.property.TryNodeSetFinallyBlockPropertyEditScriptElementImpl;
+import edu.jhu.cs.bsj.compiler.impl.ast.delta.property.TryNodeSetMetaAnnotationsPropertyEditScriptElementImpl;
+import edu.jhu.cs.bsj.compiler.impl.ast.properties.TryNodeProperties;
 
 @Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
 public class TryNodeImpl extends NodeImpl implements TryNode
@@ -40,28 +44,11 @@ public class TryNodeImpl extends NodeImpl implements TryNode
     /** The meta-annotations associated with this node. */
     private NodeUnion<? extends MetaAnnotationListNode> metaAnnotations;
     
-    private Map<LocalAttribute,ReadWriteAttribute> localAttributes = new EnumMap<LocalAttribute,ReadWriteAttribute>(LocalAttribute.class);
-    private ReadWriteAttribute getAttribute(LocalAttribute attributeName)
-    {
-        ReadWriteAttribute attribute = localAttributes.get(attributeName);
-        if (attribute == null)
-        {
-            attribute = new ReadWriteAttribute(TryNodeImpl.this, attributeName);
-            localAttributes.put(attributeName, attribute);
-        }
-        return attribute;
-    }
-    private static enum LocalAttribute implements AttributeName
-    {
-        /** Attribute identifier for the body property. */
-        BODY,
-        /** Attribute identifier for the catches property. */
-        CATCHES,
-        /** Attribute identifier for the finallyBlock property. */
-        FINALLY_BLOCK,
-        /** Attribute identifier for the metaAnnotations property. */
-        META_ANNOTATIONS,
-    }
+    /**
+     * A set of those properties which have been populated from the backing node.
+     * This field is <code>null</code> if <tt>backingNode</tt> is <code>null</code>.
+     */
+    private Set<TryNodeProperties> populatedProperties;
     
     /** General constructor. */
     public TryNodeImpl(
@@ -75,10 +62,136 @@ public class TryNodeImpl extends NodeImpl implements TryNode
             boolean binary)
     {
         super(startLocation, stopLocation, manager, binary);
-        setUnionForBody(body, false);
-        setUnionForCatches(catches, false);
-        setUnionForFinallyBlock(finallyBlock, false);
-        setUnionForMetaAnnotations(metaAnnotations, false);
+        this.populatedProperties = null;
+        doSetBody(body);
+        doSetCatches(catches);
+        doSetFinallyBlock(finallyBlock);
+        doSetMetaAnnotations(metaAnnotations);
+    }
+    
+    /** Proxy constructor. */
+    public TryNodeImpl(BsjNodeManager manager, BsjNodeProxyFactory proxyFactory, TryNode backingNode)
+    {
+        super(manager, proxyFactory, backingNode);
+        this.populatedProperties = EnumSet.noneOf(TryNodeProperties.class);
+    }
+    
+    /** Retrieves this node's backing node (if one exists). */
+    protected TryNode getBackingNode()
+    {
+        return (TryNode)super.getBackingNode();
+    }
+    
+    /**
+     * Ensures that the body value has been populated from proxy.
+     * If this node is not backed by a proxy or if the value has already been
+     * populated, this method does nothing.
+     */
+    private void checkBodyWrapped()
+    {
+        if (this.populatedProperties == null || this.populatedProperties.contains(
+                TryNodeProperties.BODY))
+            return;
+        this.populatedProperties.add(TryNodeProperties.BODY);
+        NodeUnion<? extends BlockStatementListNode> union = this.getBackingNode().getUnionForBody();
+        switch (union.getType())
+        {
+            case NORMAL:
+                union = this.getProxyFactory().makeNormalNodeUnion(
+                        this.getProxyFactory().makeBlockStatementListNode(union.getNormalNode()));
+                break;
+            case SPLICE:
+                union = this.getProxyFactory().makeSpliceNodeUnion(
+                        this.getProxyFactory().makeSpliceNode(union.getSpliceNode()));
+                break;
+            default:
+                throw new IllegalStateException("Unrecognized union type: " + union.getType());
+        }
+        this.body = union;
+    }
+    
+    /**
+     * Ensures that the catches value has been populated from proxy.
+     * If this node is not backed by a proxy or if the value has already been
+     * populated, this method does nothing.
+     */
+    private void checkCatchesWrapped()
+    {
+        if (this.populatedProperties == null || this.populatedProperties.contains(
+                TryNodeProperties.CATCHES))
+            return;
+        this.populatedProperties.add(TryNodeProperties.CATCHES);
+        NodeUnion<? extends CatchListNode> union = this.getBackingNode().getUnionForCatches();
+        switch (union.getType())
+        {
+            case NORMAL:
+                union = this.getProxyFactory().makeNormalNodeUnion(
+                        this.getProxyFactory().makeCatchListNode(union.getNormalNode()));
+                break;
+            case SPLICE:
+                union = this.getProxyFactory().makeSpliceNodeUnion(
+                        this.getProxyFactory().makeSpliceNode(union.getSpliceNode()));
+                break;
+            default:
+                throw new IllegalStateException("Unrecognized union type: " + union.getType());
+        }
+        this.catches = union;
+    }
+    
+    /**
+     * Ensures that the finallyBlock value has been populated from proxy.
+     * If this node is not backed by a proxy or if the value has already been
+     * populated, this method does nothing.
+     */
+    private void checkFinallyBlockWrapped()
+    {
+        if (this.populatedProperties == null || this.populatedProperties.contains(
+                TryNodeProperties.FINALLY_BLOCK))
+            return;
+        this.populatedProperties.add(TryNodeProperties.FINALLY_BLOCK);
+        NodeUnion<? extends BlockStatementListNode> union = this.getBackingNode().getUnionForFinallyBlock();
+        switch (union.getType())
+        {
+            case NORMAL:
+                union = this.getProxyFactory().makeNormalNodeUnion(
+                        this.getProxyFactory().makeBlockStatementListNode(union.getNormalNode()));
+                break;
+            case SPLICE:
+                union = this.getProxyFactory().makeSpliceNodeUnion(
+                        this.getProxyFactory().makeSpliceNode(union.getSpliceNode()));
+                break;
+            default:
+                throw new IllegalStateException("Unrecognized union type: " + union.getType());
+        }
+        this.finallyBlock = union;
+    }
+    
+    /**
+     * Ensures that the metaAnnotations value has been populated from proxy.
+     * If this node is not backed by a proxy or if the value has already been
+     * populated, this method does nothing.
+     */
+    private void checkMetaAnnotationsWrapped()
+    {
+        if (this.populatedProperties == null || this.populatedProperties.contains(
+                TryNodeProperties.META_ANNOTATIONS))
+            return;
+        this.populatedProperties.add(TryNodeProperties.META_ANNOTATIONS);
+        NodeUnion<? extends MetaAnnotationListNode> union = this.getBackingNode().getUnionForMetaAnnotations();
+        switch (union.getType())
+        {
+            case NORMAL:
+                union = this.getProxyFactory().makeNormalNodeUnion(
+                        this.getProxyFactory().makeMetaAnnotationListNode(union.getNormalNode()));
+                break;
+            case SPLICE:
+                union = this.getProxyFactory().makeSpliceNodeUnion(
+                        this.getProxyFactory().makeSpliceNode(union.getSpliceNode()));
+                break;
+            default:
+                throw new IllegalStateException("Unrecognized union type: " + union.getType());
+        }
+        this.metaAnnotations = union;
     }
     
     /**
@@ -88,7 +201,7 @@ public class TryNodeImpl extends NodeImpl implements TryNode
      */
     public BlockStatementListNode getBody()
     {
-        getAttribute(LocalAttribute.BODY).recordAccess(ReadWriteAttribute.AccessType.READ);
+        checkBodyWrapped();
         if (this.body == null)
         {
             return null;
@@ -104,7 +217,7 @@ public class TryNodeImpl extends NodeImpl implements TryNode
      */
     public NodeUnion<? extends BlockStatementListNode> getUnionForBody()
     {
-        getAttribute(LocalAttribute.BODY).recordAccess(ReadWriteAttribute.AccessType.READ);
+        checkBodyWrapped();
         if (this.body == null)
         {
             this.body = new NormalNodeUnion<BlockStatementListNode>(null);
@@ -118,24 +231,8 @@ public class TryNodeImpl extends NodeImpl implements TryNode
      */
     public void setBody(BlockStatementListNode body)
     {
-            setBody(body, true);
-            getManager().notifyChange(this);
-    }
-    
-    private void setBody(BlockStatementListNode body, boolean checkPermissions)
-    {
-        if (checkPermissions)
-        {
-            getManager().assertMutatable(this);
-            getAttribute(LocalAttribute.BODY).recordAccess(ReadWriteAttribute.AccessType.WRITE);
-        }
-        
-        if (this.body != null)
-        {
-            setAsChild(this.body.getNodeValue(), false);
-        }
-        this.body = new NormalNodeUnion<BlockStatementListNode>(body);
-        setAsChild(body, true);
+        checkBodyWrapped();
+        this.setUnionForBody(new NormalNodeUnion<BlockStatementListNode>(body));
     }
     
     /**
@@ -144,18 +241,15 @@ public class TryNodeImpl extends NodeImpl implements TryNode
      */
     public void setUnionForBody(NodeUnion<? extends BlockStatementListNode> body)
     {
-            setUnionForBody(body, true);
-            getManager().notifyChange(this);
+        checkBodyWrapped();
+        this.getManager().assertMutatable(this);
+        this.doSetBody(body);
+        if (this.getManager().isRecordingEdits())
+            super.recordEdit(new TryNodeSetBodyPropertyEditScriptElementImpl(this.getManager().getCurrentMetaprogramId(), this.getUid(), body.getNodeValue() == null ? null : body.getNodeValue().getUid()));
     }
     
-    private void setUnionForBody(NodeUnion<? extends BlockStatementListNode> body, boolean checkPermissions)
+    private void doSetBody(NodeUnion<? extends BlockStatementListNode> body)
     {
-        if (checkPermissions)
-        {
-            getManager().assertMutatable(this);
-            getAttribute(LocalAttribute.BODY).recordAccess(ReadWriteAttribute.AccessType.WRITE);
-        }
-        
         if (body == null)
         {
             body = new NormalNodeUnion<BlockStatementListNode>(null);
@@ -175,7 +269,7 @@ public class TryNodeImpl extends NodeImpl implements TryNode
      */
     public CatchListNode getCatches()
     {
-        getAttribute(LocalAttribute.CATCHES).recordAccess(ReadWriteAttribute.AccessType.READ);
+        checkCatchesWrapped();
         if (this.catches == null)
         {
             return null;
@@ -191,7 +285,7 @@ public class TryNodeImpl extends NodeImpl implements TryNode
      */
     public NodeUnion<? extends CatchListNode> getUnionForCatches()
     {
-        getAttribute(LocalAttribute.CATCHES).recordAccess(ReadWriteAttribute.AccessType.READ);
+        checkCatchesWrapped();
         if (this.catches == null)
         {
             this.catches = new NormalNodeUnion<CatchListNode>(null);
@@ -205,24 +299,8 @@ public class TryNodeImpl extends NodeImpl implements TryNode
      */
     public void setCatches(CatchListNode catches)
     {
-            setCatches(catches, true);
-            getManager().notifyChange(this);
-    }
-    
-    private void setCatches(CatchListNode catches, boolean checkPermissions)
-    {
-        if (checkPermissions)
-        {
-            getManager().assertMutatable(this);
-            getAttribute(LocalAttribute.CATCHES).recordAccess(ReadWriteAttribute.AccessType.WRITE);
-        }
-        
-        if (this.catches != null)
-        {
-            setAsChild(this.catches.getNodeValue(), false);
-        }
-        this.catches = new NormalNodeUnion<CatchListNode>(catches);
-        setAsChild(catches, true);
+        checkCatchesWrapped();
+        this.setUnionForCatches(new NormalNodeUnion<CatchListNode>(catches));
     }
     
     /**
@@ -231,18 +309,15 @@ public class TryNodeImpl extends NodeImpl implements TryNode
      */
     public void setUnionForCatches(NodeUnion<? extends CatchListNode> catches)
     {
-            setUnionForCatches(catches, true);
-            getManager().notifyChange(this);
+        checkCatchesWrapped();
+        this.getManager().assertMutatable(this);
+        this.doSetCatches(catches);
+        if (this.getManager().isRecordingEdits())
+            super.recordEdit(new TryNodeSetCatchesPropertyEditScriptElementImpl(this.getManager().getCurrentMetaprogramId(), this.getUid(), catches.getNodeValue() == null ? null : catches.getNodeValue().getUid()));
     }
     
-    private void setUnionForCatches(NodeUnion<? extends CatchListNode> catches, boolean checkPermissions)
+    private void doSetCatches(NodeUnion<? extends CatchListNode> catches)
     {
-        if (checkPermissions)
-        {
-            getManager().assertMutatable(this);
-            getAttribute(LocalAttribute.CATCHES).recordAccess(ReadWriteAttribute.AccessType.WRITE);
-        }
-        
         if (catches == null)
         {
             catches = new NormalNodeUnion<CatchListNode>(null);
@@ -262,7 +337,7 @@ public class TryNodeImpl extends NodeImpl implements TryNode
      */
     public BlockStatementListNode getFinallyBlock()
     {
-        getAttribute(LocalAttribute.FINALLY_BLOCK).recordAccess(ReadWriteAttribute.AccessType.READ);
+        checkFinallyBlockWrapped();
         if (this.finallyBlock == null)
         {
             return null;
@@ -278,7 +353,7 @@ public class TryNodeImpl extends NodeImpl implements TryNode
      */
     public NodeUnion<? extends BlockStatementListNode> getUnionForFinallyBlock()
     {
-        getAttribute(LocalAttribute.FINALLY_BLOCK).recordAccess(ReadWriteAttribute.AccessType.READ);
+        checkFinallyBlockWrapped();
         if (this.finallyBlock == null)
         {
             this.finallyBlock = new NormalNodeUnion<BlockStatementListNode>(null);
@@ -292,24 +367,8 @@ public class TryNodeImpl extends NodeImpl implements TryNode
      */
     public void setFinallyBlock(BlockStatementListNode finallyBlock)
     {
-            setFinallyBlock(finallyBlock, true);
-            getManager().notifyChange(this);
-    }
-    
-    private void setFinallyBlock(BlockStatementListNode finallyBlock, boolean checkPermissions)
-    {
-        if (checkPermissions)
-        {
-            getManager().assertMutatable(this);
-            getAttribute(LocalAttribute.FINALLY_BLOCK).recordAccess(ReadWriteAttribute.AccessType.WRITE);
-        }
-        
-        if (this.finallyBlock != null)
-        {
-            setAsChild(this.finallyBlock.getNodeValue(), false);
-        }
-        this.finallyBlock = new NormalNodeUnion<BlockStatementListNode>(finallyBlock);
-        setAsChild(finallyBlock, true);
+        checkFinallyBlockWrapped();
+        this.setUnionForFinallyBlock(new NormalNodeUnion<BlockStatementListNode>(finallyBlock));
     }
     
     /**
@@ -318,18 +377,15 @@ public class TryNodeImpl extends NodeImpl implements TryNode
      */
     public void setUnionForFinallyBlock(NodeUnion<? extends BlockStatementListNode> finallyBlock)
     {
-            setUnionForFinallyBlock(finallyBlock, true);
-            getManager().notifyChange(this);
+        checkFinallyBlockWrapped();
+        this.getManager().assertMutatable(this);
+        this.doSetFinallyBlock(finallyBlock);
+        if (this.getManager().isRecordingEdits())
+            super.recordEdit(new TryNodeSetFinallyBlockPropertyEditScriptElementImpl(this.getManager().getCurrentMetaprogramId(), this.getUid(), finallyBlock.getNodeValue() == null ? null : finallyBlock.getNodeValue().getUid()));
     }
     
-    private void setUnionForFinallyBlock(NodeUnion<? extends BlockStatementListNode> finallyBlock, boolean checkPermissions)
+    private void doSetFinallyBlock(NodeUnion<? extends BlockStatementListNode> finallyBlock)
     {
-        if (checkPermissions)
-        {
-            getManager().assertMutatable(this);
-            getAttribute(LocalAttribute.FINALLY_BLOCK).recordAccess(ReadWriteAttribute.AccessType.WRITE);
-        }
-        
         if (finallyBlock == null)
         {
             finallyBlock = new NormalNodeUnion<BlockStatementListNode>(null);
@@ -349,7 +405,7 @@ public class TryNodeImpl extends NodeImpl implements TryNode
      */
     public MetaAnnotationListNode getMetaAnnotations()
     {
-        getAttribute(LocalAttribute.META_ANNOTATIONS).recordAccess(ReadWriteAttribute.AccessType.READ);
+        checkMetaAnnotationsWrapped();
         if (this.metaAnnotations == null)
         {
             return null;
@@ -365,7 +421,7 @@ public class TryNodeImpl extends NodeImpl implements TryNode
      */
     public NodeUnion<? extends MetaAnnotationListNode> getUnionForMetaAnnotations()
     {
-        getAttribute(LocalAttribute.META_ANNOTATIONS).recordAccess(ReadWriteAttribute.AccessType.READ);
+        checkMetaAnnotationsWrapped();
         if (this.metaAnnotations == null)
         {
             this.metaAnnotations = new NormalNodeUnion<MetaAnnotationListNode>(null);
@@ -379,24 +435,8 @@ public class TryNodeImpl extends NodeImpl implements TryNode
      */
     public void setMetaAnnotations(MetaAnnotationListNode metaAnnotations)
     {
-            setMetaAnnotations(metaAnnotations, true);
-            getManager().notifyChange(this);
-    }
-    
-    private void setMetaAnnotations(MetaAnnotationListNode metaAnnotations, boolean checkPermissions)
-    {
-        if (checkPermissions)
-        {
-            getManager().assertMutatable(this);
-            getAttribute(LocalAttribute.META_ANNOTATIONS).recordAccess(ReadWriteAttribute.AccessType.WRITE);
-        }
-        
-        if (this.metaAnnotations != null)
-        {
-            setAsChild(this.metaAnnotations.getNodeValue(), false);
-        }
-        this.metaAnnotations = new NormalNodeUnion<MetaAnnotationListNode>(metaAnnotations);
-        setAsChild(metaAnnotations, true);
+        checkMetaAnnotationsWrapped();
+        this.setUnionForMetaAnnotations(new NormalNodeUnion<MetaAnnotationListNode>(metaAnnotations));
     }
     
     /**
@@ -405,18 +445,15 @@ public class TryNodeImpl extends NodeImpl implements TryNode
      */
     public void setUnionForMetaAnnotations(NodeUnion<? extends MetaAnnotationListNode> metaAnnotations)
     {
-            setUnionForMetaAnnotations(metaAnnotations, true);
-            getManager().notifyChange(this);
+        checkMetaAnnotationsWrapped();
+        this.getManager().assertMutatable(this);
+        this.doSetMetaAnnotations(metaAnnotations);
+        if (this.getManager().isRecordingEdits())
+            super.recordEdit(new TryNodeSetMetaAnnotationsPropertyEditScriptElementImpl(this.getManager().getCurrentMetaprogramId(), this.getUid(), metaAnnotations.getNodeValue() == null ? null : metaAnnotations.getNodeValue().getUid()));
     }
     
-    private void setUnionForMetaAnnotations(NodeUnion<? extends MetaAnnotationListNode> metaAnnotations, boolean checkPermissions)
+    private void doSetMetaAnnotations(NodeUnion<? extends MetaAnnotationListNode> metaAnnotations)
     {
-        if (checkPermissions)
-        {
-            getManager().assertMutatable(this);
-            getAttribute(LocalAttribute.META_ANNOTATIONS).recordAccess(ReadWriteAttribute.AccessType.WRITE);
-        }
-        
         if (metaAnnotations == null)
         {
             metaAnnotations = new NormalNodeUnion<MetaAnnotationListNode>(null);
@@ -440,21 +477,21 @@ public class TryNodeImpl extends NodeImpl implements TryNode
     protected void receiveToChildren(BsjNodeVisitor visitor)
     {
         super.receiveToChildren(visitor);
-        if (this.body.getNodeValue() != null)
+        if (this.getUnionForBody().getNodeValue() != null)
         {
-            this.body.getNodeValue().receive(visitor);
+            this.getUnionForBody().getNodeValue().receive(visitor);
         }
-        if (this.catches.getNodeValue() != null)
+        if (this.getUnionForCatches().getNodeValue() != null)
         {
-            this.catches.getNodeValue().receive(visitor);
+            this.getUnionForCatches().getNodeValue().receive(visitor);
         }
-        if (this.finallyBlock.getNodeValue() != null)
+        if (this.getUnionForFinallyBlock().getNodeValue() != null)
         {
-            this.finallyBlock.getNodeValue().receive(visitor);
+            this.getUnionForFinallyBlock().getNodeValue().receive(visitor);
         }
-        if (this.metaAnnotations.getNodeValue() != null)
+        if (this.getUnionForMetaAnnotations().getNodeValue() != null)
         {
-            this.metaAnnotations.getNodeValue().receive(visitor);
+            this.getUnionForMetaAnnotations().getNodeValue().receive(visitor);
         }
         Iterator<? extends Node> extras = getHiddenVisitorChildren();
         if (extras != null)
@@ -477,21 +514,21 @@ public class TryNodeImpl extends NodeImpl implements TryNode
     protected void receiveTypedToChildren(BsjTypedNodeVisitor visitor)
     {
         super.receiveTypedToChildren(visitor);
-        if (this.body.getNodeValue() != null)
+        if (this.getUnionForBody().getNodeValue() != null)
         {
-            this.body.getNodeValue().receiveTyped(visitor);
+            this.getUnionForBody().getNodeValue().receiveTyped(visitor);
         }
-        if (this.catches.getNodeValue() != null)
+        if (this.getUnionForCatches().getNodeValue() != null)
         {
-            this.catches.getNodeValue().receiveTyped(visitor);
+            this.getUnionForCatches().getNodeValue().receiveTyped(visitor);
         }
-        if (this.finallyBlock.getNodeValue() != null)
+        if (this.getUnionForFinallyBlock().getNodeValue() != null)
         {
-            this.finallyBlock.getNodeValue().receiveTyped(visitor);
+            this.getUnionForFinallyBlock().getNodeValue().receiveTyped(visitor);
         }
-        if (this.metaAnnotations.getNodeValue() != null)
+        if (this.getUnionForMetaAnnotations().getNodeValue() != null)
         {
-            this.metaAnnotations.getNodeValue().receiveTyped(visitor);
+            this.getUnionForMetaAnnotations().getNodeValue().receiveTyped(visitor);
         }
         Iterator<? extends Node> extras = getHiddenVisitorChildren();
         if (extras != null)
@@ -553,6 +590,8 @@ public class TryNodeImpl extends NodeImpl implements TryNode
     {
         StringBuilder sb = new StringBuilder();
         sb.append(this.getClass().getSimpleName());
+        sb.append('#');
+        sb.append(this.getUid());
         sb.append('[');
         sb.append("body=");
         sb.append(this.getUnionForBody().getNodeValue() == null? "null" : this.getUnionForBody().getNodeValue().getClass().getSimpleName());

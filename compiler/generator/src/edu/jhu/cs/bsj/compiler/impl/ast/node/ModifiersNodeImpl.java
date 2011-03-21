@@ -1,9 +1,9 @@
 package edu.jhu.cs.bsj.compiler.impl.ast.node;
 
-import java.util.EnumMap;
+import java.util.EnumSet;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
+import java.util.Set;
 
 import javax.annotation.Generated;
 
@@ -16,9 +16,11 @@ import edu.jhu.cs.bsj.compiler.ast.node.Node;
 import edu.jhu.cs.bsj.compiler.ast.node.list.AnnotationListNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaAnnotationListNode;
 import edu.jhu.cs.bsj.compiler.impl.ast.BsjNodeManager;
+import edu.jhu.cs.bsj.compiler.impl.ast.BsjNodeProxyFactory;
 import edu.jhu.cs.bsj.compiler.impl.ast.NormalNodeUnion;
-import edu.jhu.cs.bsj.compiler.impl.ast.attribute.AttributeName;
-import edu.jhu.cs.bsj.compiler.impl.ast.attribute.ReadWriteAttribute;
+import edu.jhu.cs.bsj.compiler.impl.ast.delta.property.ModifiersNodeSetAnnotationsPropertyEditScriptElementImpl;
+import edu.jhu.cs.bsj.compiler.impl.ast.delta.property.ModifiersNodeSetMetaAnnotationsPropertyEditScriptElementImpl;
+import edu.jhu.cs.bsj.compiler.impl.ast.properties.ModifiersNodeProperties;
 
 @Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
 public abstract class ModifiersNodeImpl extends NodeImpl implements ModifiersNode
@@ -29,24 +31,11 @@ public abstract class ModifiersNodeImpl extends NodeImpl implements ModifiersNod
     /** The annotations modifying the subject. */
     private NodeUnion<? extends AnnotationListNode> annotations;
     
-    private Map<LocalAttribute,ReadWriteAttribute> localAttributes = new EnumMap<LocalAttribute,ReadWriteAttribute>(LocalAttribute.class);
-    private ReadWriteAttribute getAttribute(LocalAttribute attributeName)
-    {
-        ReadWriteAttribute attribute = localAttributes.get(attributeName);
-        if (attribute == null)
-        {
-            attribute = new ReadWriteAttribute(ModifiersNodeImpl.this, attributeName);
-            localAttributes.put(attributeName, attribute);
-        }
-        return attribute;
-    }
-    private static enum LocalAttribute implements AttributeName
-    {
-        /** Attribute identifier for the metaAnnotations property. */
-        META_ANNOTATIONS,
-        /** Attribute identifier for the annotations property. */
-        ANNOTATIONS,
-    }
+    /**
+     * A set of those properties which have been populated from the backing node.
+     * This field is <code>null</code> if <tt>backingNode</tt> is <code>null</code>.
+     */
+    private Set<ModifiersNodeProperties> populatedProperties;
     
     /** General constructor. */
     protected ModifiersNodeImpl(
@@ -58,8 +47,78 @@ public abstract class ModifiersNodeImpl extends NodeImpl implements ModifiersNod
             boolean binary)
     {
         super(startLocation, stopLocation, manager, binary);
-        setUnionForMetaAnnotations(metaAnnotations, false);
-        setUnionForAnnotations(annotations, false);
+        this.populatedProperties = null;
+        doSetMetaAnnotations(metaAnnotations);
+        doSetAnnotations(annotations);
+    }
+    
+    /** Proxy constructor. */
+    protected ModifiersNodeImpl(BsjNodeManager manager, BsjNodeProxyFactory proxyFactory, ModifiersNode backingNode)
+    {
+        super(manager, proxyFactory, backingNode);
+        this.populatedProperties = EnumSet.noneOf(ModifiersNodeProperties.class);
+    }
+    
+    /** Retrieves this node's backing node (if one exists). */
+    protected ModifiersNode getBackingNode()
+    {
+        return (ModifiersNode)super.getBackingNode();
+    }
+    
+    /**
+     * Ensures that the metaAnnotations value has been populated from proxy.
+     * If this node is not backed by a proxy or if the value has already been
+     * populated, this method does nothing.
+     */
+    private void checkMetaAnnotationsWrapped()
+    {
+        if (this.populatedProperties == null || this.populatedProperties.contains(
+                ModifiersNodeProperties.META_ANNOTATIONS))
+            return;
+        this.populatedProperties.add(ModifiersNodeProperties.META_ANNOTATIONS);
+        NodeUnion<? extends MetaAnnotationListNode> union = this.getBackingNode().getUnionForMetaAnnotations();
+        switch (union.getType())
+        {
+            case NORMAL:
+                union = this.getProxyFactory().makeNormalNodeUnion(
+                        this.getProxyFactory().makeMetaAnnotationListNode(union.getNormalNode()));
+                break;
+            case SPLICE:
+                union = this.getProxyFactory().makeSpliceNodeUnion(
+                        this.getProxyFactory().makeSpliceNode(union.getSpliceNode()));
+                break;
+            default:
+                throw new IllegalStateException("Unrecognized union type: " + union.getType());
+        }
+        this.metaAnnotations = union;
+    }
+    
+    /**
+     * Ensures that the annotations value has been populated from proxy.
+     * If this node is not backed by a proxy or if the value has already been
+     * populated, this method does nothing.
+     */
+    private void checkAnnotationsWrapped()
+    {
+        if (this.populatedProperties == null || this.populatedProperties.contains(
+                ModifiersNodeProperties.ANNOTATIONS))
+            return;
+        this.populatedProperties.add(ModifiersNodeProperties.ANNOTATIONS);
+        NodeUnion<? extends AnnotationListNode> union = this.getBackingNode().getUnionForAnnotations();
+        switch (union.getType())
+        {
+            case NORMAL:
+                union = this.getProxyFactory().makeNormalNodeUnion(
+                        this.getProxyFactory().makeAnnotationListNode(union.getNormalNode()));
+                break;
+            case SPLICE:
+                union = this.getProxyFactory().makeSpliceNodeUnion(
+                        this.getProxyFactory().makeSpliceNode(union.getSpliceNode()));
+                break;
+            default:
+                throw new IllegalStateException("Unrecognized union type: " + union.getType());
+        }
+        this.annotations = union;
     }
     
     /**
@@ -69,7 +128,7 @@ public abstract class ModifiersNodeImpl extends NodeImpl implements ModifiersNod
      */
     public MetaAnnotationListNode getMetaAnnotations()
     {
-        getAttribute(LocalAttribute.META_ANNOTATIONS).recordAccess(ReadWriteAttribute.AccessType.READ);
+        checkMetaAnnotationsWrapped();
         if (this.metaAnnotations == null)
         {
             return null;
@@ -85,7 +144,7 @@ public abstract class ModifiersNodeImpl extends NodeImpl implements ModifiersNod
      */
     public NodeUnion<? extends MetaAnnotationListNode> getUnionForMetaAnnotations()
     {
-        getAttribute(LocalAttribute.META_ANNOTATIONS).recordAccess(ReadWriteAttribute.AccessType.READ);
+        checkMetaAnnotationsWrapped();
         if (this.metaAnnotations == null)
         {
             this.metaAnnotations = new NormalNodeUnion<MetaAnnotationListNode>(null);
@@ -99,24 +158,8 @@ public abstract class ModifiersNodeImpl extends NodeImpl implements ModifiersNod
      */
     public void setMetaAnnotations(MetaAnnotationListNode metaAnnotations)
     {
-            setMetaAnnotations(metaAnnotations, true);
-            getManager().notifyChange(this);
-    }
-    
-    private void setMetaAnnotations(MetaAnnotationListNode metaAnnotations, boolean checkPermissions)
-    {
-        if (checkPermissions)
-        {
-            getManager().assertMutatable(this);
-            getAttribute(LocalAttribute.META_ANNOTATIONS).recordAccess(ReadWriteAttribute.AccessType.WRITE);
-        }
-        
-        if (this.metaAnnotations != null)
-        {
-            setAsChild(this.metaAnnotations.getNodeValue(), false);
-        }
-        this.metaAnnotations = new NormalNodeUnion<MetaAnnotationListNode>(metaAnnotations);
-        setAsChild(metaAnnotations, true);
+        checkMetaAnnotationsWrapped();
+        this.setUnionForMetaAnnotations(new NormalNodeUnion<MetaAnnotationListNode>(metaAnnotations));
     }
     
     /**
@@ -125,18 +168,15 @@ public abstract class ModifiersNodeImpl extends NodeImpl implements ModifiersNod
      */
     public void setUnionForMetaAnnotations(NodeUnion<? extends MetaAnnotationListNode> metaAnnotations)
     {
-            setUnionForMetaAnnotations(metaAnnotations, true);
-            getManager().notifyChange(this);
+        checkMetaAnnotationsWrapped();
+        this.getManager().assertMutatable(this);
+        this.doSetMetaAnnotations(metaAnnotations);
+        if (this.getManager().isRecordingEdits())
+            super.recordEdit(new ModifiersNodeSetMetaAnnotationsPropertyEditScriptElementImpl(this.getManager().getCurrentMetaprogramId(), this.getUid(), metaAnnotations.getNodeValue() == null ? null : metaAnnotations.getNodeValue().getUid()));
     }
     
-    private void setUnionForMetaAnnotations(NodeUnion<? extends MetaAnnotationListNode> metaAnnotations, boolean checkPermissions)
+    private void doSetMetaAnnotations(NodeUnion<? extends MetaAnnotationListNode> metaAnnotations)
     {
-        if (checkPermissions)
-        {
-            getManager().assertMutatable(this);
-            getAttribute(LocalAttribute.META_ANNOTATIONS).recordAccess(ReadWriteAttribute.AccessType.WRITE);
-        }
-        
         if (metaAnnotations == null)
         {
             metaAnnotations = new NormalNodeUnion<MetaAnnotationListNode>(null);
@@ -156,7 +196,7 @@ public abstract class ModifiersNodeImpl extends NodeImpl implements ModifiersNod
      */
     public AnnotationListNode getAnnotations()
     {
-        getAttribute(LocalAttribute.ANNOTATIONS).recordAccess(ReadWriteAttribute.AccessType.READ);
+        checkAnnotationsWrapped();
         if (this.annotations == null)
         {
             return null;
@@ -172,7 +212,7 @@ public abstract class ModifiersNodeImpl extends NodeImpl implements ModifiersNod
      */
     public NodeUnion<? extends AnnotationListNode> getUnionForAnnotations()
     {
-        getAttribute(LocalAttribute.ANNOTATIONS).recordAccess(ReadWriteAttribute.AccessType.READ);
+        checkAnnotationsWrapped();
         if (this.annotations == null)
         {
             this.annotations = new NormalNodeUnion<AnnotationListNode>(null);
@@ -186,24 +226,8 @@ public abstract class ModifiersNodeImpl extends NodeImpl implements ModifiersNod
      */
     public void setAnnotations(AnnotationListNode annotations)
     {
-            setAnnotations(annotations, true);
-            getManager().notifyChange(this);
-    }
-    
-    private void setAnnotations(AnnotationListNode annotations, boolean checkPermissions)
-    {
-        if (checkPermissions)
-        {
-            getManager().assertMutatable(this);
-            getAttribute(LocalAttribute.ANNOTATIONS).recordAccess(ReadWriteAttribute.AccessType.WRITE);
-        }
-        
-        if (this.annotations != null)
-        {
-            setAsChild(this.annotations.getNodeValue(), false);
-        }
-        this.annotations = new NormalNodeUnion<AnnotationListNode>(annotations);
-        setAsChild(annotations, true);
+        checkAnnotationsWrapped();
+        this.setUnionForAnnotations(new NormalNodeUnion<AnnotationListNode>(annotations));
     }
     
     /**
@@ -212,18 +236,15 @@ public abstract class ModifiersNodeImpl extends NodeImpl implements ModifiersNod
      */
     public void setUnionForAnnotations(NodeUnion<? extends AnnotationListNode> annotations)
     {
-            setUnionForAnnotations(annotations, true);
-            getManager().notifyChange(this);
+        checkAnnotationsWrapped();
+        this.getManager().assertMutatable(this);
+        this.doSetAnnotations(annotations);
+        if (this.getManager().isRecordingEdits())
+            super.recordEdit(new ModifiersNodeSetAnnotationsPropertyEditScriptElementImpl(this.getManager().getCurrentMetaprogramId(), this.getUid(), annotations.getNodeValue() == null ? null : annotations.getNodeValue().getUid()));
     }
     
-    private void setUnionForAnnotations(NodeUnion<? extends AnnotationListNode> annotations, boolean checkPermissions)
+    private void doSetAnnotations(NodeUnion<? extends AnnotationListNode> annotations)
     {
-        if (checkPermissions)
-        {
-            getManager().assertMutatable(this);
-            getAttribute(LocalAttribute.ANNOTATIONS).recordAccess(ReadWriteAttribute.AccessType.WRITE);
-        }
-        
         if (annotations == null)
         {
             annotations = new NormalNodeUnion<AnnotationListNode>(null);
@@ -247,13 +268,13 @@ public abstract class ModifiersNodeImpl extends NodeImpl implements ModifiersNod
     protected void receiveToChildren(BsjNodeVisitor visitor)
     {
         super.receiveToChildren(visitor);
-        if (this.metaAnnotations.getNodeValue() != null)
+        if (this.getUnionForMetaAnnotations().getNodeValue() != null)
         {
-            this.metaAnnotations.getNodeValue().receive(visitor);
+            this.getUnionForMetaAnnotations().getNodeValue().receive(visitor);
         }
-        if (this.annotations.getNodeValue() != null)
+        if (this.getUnionForAnnotations().getNodeValue() != null)
         {
-            this.annotations.getNodeValue().receive(visitor);
+            this.getUnionForAnnotations().getNodeValue().receive(visitor);
         }
         Iterator<? extends Node> extras = getHiddenVisitorChildren();
         if (extras != null)
@@ -276,13 +297,13 @@ public abstract class ModifiersNodeImpl extends NodeImpl implements ModifiersNod
     protected void receiveTypedToChildren(BsjTypedNodeVisitor visitor)
     {
         super.receiveTypedToChildren(visitor);
-        if (this.metaAnnotations.getNodeValue() != null)
+        if (this.getUnionForMetaAnnotations().getNodeValue() != null)
         {
-            this.metaAnnotations.getNodeValue().receiveTyped(visitor);
+            this.getUnionForMetaAnnotations().getNodeValue().receiveTyped(visitor);
         }
-        if (this.annotations.getNodeValue() != null)
+        if (this.getUnionForAnnotations().getNodeValue() != null)
         {
-            this.annotations.getNodeValue().receiveTyped(visitor);
+            this.getUnionForAnnotations().getNodeValue().receiveTyped(visitor);
         }
         Iterator<? extends Node> extras = getHiddenVisitorChildren();
         if (extras != null)
@@ -332,6 +353,8 @@ public abstract class ModifiersNodeImpl extends NodeImpl implements ModifiersNod
     {
         StringBuilder sb = new StringBuilder();
         sb.append(this.getClass().getSimpleName());
+        sb.append('#');
+        sb.append(this.getUid());
         sb.append('[');
         sb.append("metaAnnotations=");
         sb.append(this.getUnionForMetaAnnotations().getNodeValue() == null? "null" : this.getUnionForMetaAnnotations().getNodeValue().getClass().getSimpleName());

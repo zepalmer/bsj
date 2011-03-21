@@ -1,10 +1,10 @@
 package edu.jhu.cs.bsj.compiler.impl.ast.node;
 
 import java.util.Arrays;
-import java.util.EnumMap;
+import java.util.EnumSet;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
+import java.util.Set;
 
 import javax.annotation.Generated;
 
@@ -20,9 +20,11 @@ import edu.jhu.cs.bsj.compiler.ast.node.InstanceOfNode;
 import edu.jhu.cs.bsj.compiler.ast.node.Node;
 import edu.jhu.cs.bsj.compiler.ast.node.TypeNode;
 import edu.jhu.cs.bsj.compiler.impl.ast.BsjNodeManager;
+import edu.jhu.cs.bsj.compiler.impl.ast.BsjNodeProxyFactory;
 import edu.jhu.cs.bsj.compiler.impl.ast.NormalNodeUnion;
-import edu.jhu.cs.bsj.compiler.impl.ast.attribute.AttributeName;
-import edu.jhu.cs.bsj.compiler.impl.ast.attribute.ReadWriteAttribute;
+import edu.jhu.cs.bsj.compiler.impl.ast.delta.property.InstanceOfNodeSetExpressionPropertyEditScriptElementImpl;
+import edu.jhu.cs.bsj.compiler.impl.ast.delta.property.InstanceOfNodeSetTypePropertyEditScriptElementImpl;
+import edu.jhu.cs.bsj.compiler.impl.ast.properties.InstanceOfNodeProperties;
 
 @Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
 public class InstanceOfNodeImpl extends NodeImpl implements InstanceOfNode
@@ -33,24 +35,11 @@ public class InstanceOfNodeImpl extends NodeImpl implements InstanceOfNode
     /** The type being checked. */
     private NodeUnion<? extends TypeNode> type;
     
-    private Map<LocalAttribute,ReadWriteAttribute> localAttributes = new EnumMap<LocalAttribute,ReadWriteAttribute>(LocalAttribute.class);
-    private ReadWriteAttribute getAttribute(LocalAttribute attributeName)
-    {
-        ReadWriteAttribute attribute = localAttributes.get(attributeName);
-        if (attribute == null)
-        {
-            attribute = new ReadWriteAttribute(InstanceOfNodeImpl.this, attributeName);
-            localAttributes.put(attributeName, attribute);
-        }
-        return attribute;
-    }
-    private static enum LocalAttribute implements AttributeName
-    {
-        /** Attribute identifier for the expression property. */
-        EXPRESSION,
-        /** Attribute identifier for the type property. */
-        TYPE,
-    }
+    /**
+     * A set of those properties which have been populated from the backing node.
+     * This field is <code>null</code> if <tt>backingNode</tt> is <code>null</code>.
+     */
+    private Set<InstanceOfNodeProperties> populatedProperties;
     
     /** General constructor. */
     public InstanceOfNodeImpl(
@@ -62,8 +51,78 @@ public class InstanceOfNodeImpl extends NodeImpl implements InstanceOfNode
             boolean binary)
     {
         super(startLocation, stopLocation, manager, binary);
-        setUnionForExpression(expression, false);
-        setUnionForType(type, false);
+        this.populatedProperties = null;
+        doSetExpression(expression);
+        doSetType(type);
+    }
+    
+    /** Proxy constructor. */
+    public InstanceOfNodeImpl(BsjNodeManager manager, BsjNodeProxyFactory proxyFactory, InstanceOfNode backingNode)
+    {
+        super(manager, proxyFactory, backingNode);
+        this.populatedProperties = EnumSet.noneOf(InstanceOfNodeProperties.class);
+    }
+    
+    /** Retrieves this node's backing node (if one exists). */
+    protected InstanceOfNode getBackingNode()
+    {
+        return (InstanceOfNode)super.getBackingNode();
+    }
+    
+    /**
+     * Ensures that the expression value has been populated from proxy.
+     * If this node is not backed by a proxy or if the value has already been
+     * populated, this method does nothing.
+     */
+    private void checkExpressionWrapped()
+    {
+        if (this.populatedProperties == null || this.populatedProperties.contains(
+                InstanceOfNodeProperties.EXPRESSION))
+            return;
+        this.populatedProperties.add(InstanceOfNodeProperties.EXPRESSION);
+        NodeUnion<? extends ExpressionNode> union = this.getBackingNode().getUnionForExpression();
+        switch (union.getType())
+        {
+            case NORMAL:
+                union = this.getProxyFactory().makeNormalNodeUnion(
+                        this.getProxyFactory().makeExpressionNode(union.getNormalNode()));
+                break;
+            case SPLICE:
+                union = this.getProxyFactory().makeSpliceNodeUnion(
+                        this.getProxyFactory().makeSpliceNode(union.getSpliceNode()));
+                break;
+            default:
+                throw new IllegalStateException("Unrecognized union type: " + union.getType());
+        }
+        this.expression = union;
+    }
+    
+    /**
+     * Ensures that the type value has been populated from proxy.
+     * If this node is not backed by a proxy or if the value has already been
+     * populated, this method does nothing.
+     */
+    private void checkTypeWrapped()
+    {
+        if (this.populatedProperties == null || this.populatedProperties.contains(
+                InstanceOfNodeProperties.TYPE))
+            return;
+        this.populatedProperties.add(InstanceOfNodeProperties.TYPE);
+        NodeUnion<? extends TypeNode> union = this.getBackingNode().getUnionForType();
+        switch (union.getType())
+        {
+            case NORMAL:
+                union = this.getProxyFactory().makeNormalNodeUnion(
+                        this.getProxyFactory().makeTypeNode(union.getNormalNode()));
+                break;
+            case SPLICE:
+                union = this.getProxyFactory().makeSpliceNodeUnion(
+                        this.getProxyFactory().makeSpliceNode(union.getSpliceNode()));
+                break;
+            default:
+                throw new IllegalStateException("Unrecognized union type: " + union.getType());
+        }
+        this.type = union;
     }
     
     /**
@@ -73,7 +132,7 @@ public class InstanceOfNodeImpl extends NodeImpl implements InstanceOfNode
      */
     public ExpressionNode getExpression()
     {
-        getAttribute(LocalAttribute.EXPRESSION).recordAccess(ReadWriteAttribute.AccessType.READ);
+        checkExpressionWrapped();
         if (this.expression == null)
         {
             return null;
@@ -89,7 +148,7 @@ public class InstanceOfNodeImpl extends NodeImpl implements InstanceOfNode
      */
     public NodeUnion<? extends ExpressionNode> getUnionForExpression()
     {
-        getAttribute(LocalAttribute.EXPRESSION).recordAccess(ReadWriteAttribute.AccessType.READ);
+        checkExpressionWrapped();
         if (this.expression == null)
         {
             this.expression = new NormalNodeUnion<ExpressionNode>(null);
@@ -103,24 +162,8 @@ public class InstanceOfNodeImpl extends NodeImpl implements InstanceOfNode
      */
     public void setExpression(ExpressionNode expression)
     {
-            setExpression(expression, true);
-            getManager().notifyChange(this);
-    }
-    
-    private void setExpression(ExpressionNode expression, boolean checkPermissions)
-    {
-        if (checkPermissions)
-        {
-            getManager().assertMutatable(this);
-            getAttribute(LocalAttribute.EXPRESSION).recordAccess(ReadWriteAttribute.AccessType.WRITE);
-        }
-        
-        if (this.expression != null)
-        {
-            setAsChild(this.expression.getNodeValue(), false);
-        }
-        this.expression = new NormalNodeUnion<ExpressionNode>(expression);
-        setAsChild(expression, true);
+        checkExpressionWrapped();
+        this.setUnionForExpression(new NormalNodeUnion<ExpressionNode>(expression));
     }
     
     /**
@@ -129,18 +172,15 @@ public class InstanceOfNodeImpl extends NodeImpl implements InstanceOfNode
      */
     public void setUnionForExpression(NodeUnion<? extends ExpressionNode> expression)
     {
-            setUnionForExpression(expression, true);
-            getManager().notifyChange(this);
+        checkExpressionWrapped();
+        this.getManager().assertMutatable(this);
+        this.doSetExpression(expression);
+        if (this.getManager().isRecordingEdits())
+            super.recordEdit(new InstanceOfNodeSetExpressionPropertyEditScriptElementImpl(this.getManager().getCurrentMetaprogramId(), this.getUid(), expression.getNodeValue() == null ? null : expression.getNodeValue().getUid()));
     }
     
-    private void setUnionForExpression(NodeUnion<? extends ExpressionNode> expression, boolean checkPermissions)
+    private void doSetExpression(NodeUnion<? extends ExpressionNode> expression)
     {
-        if (checkPermissions)
-        {
-            getManager().assertMutatable(this);
-            getAttribute(LocalAttribute.EXPRESSION).recordAccess(ReadWriteAttribute.AccessType.WRITE);
-        }
-        
         if (expression == null)
         {
             expression = new NormalNodeUnion<ExpressionNode>(null);
@@ -160,7 +200,7 @@ public class InstanceOfNodeImpl extends NodeImpl implements InstanceOfNode
      */
     public TypeNode getType()
     {
-        getAttribute(LocalAttribute.TYPE).recordAccess(ReadWriteAttribute.AccessType.READ);
+        checkTypeWrapped();
         if (this.type == null)
         {
             return null;
@@ -176,7 +216,7 @@ public class InstanceOfNodeImpl extends NodeImpl implements InstanceOfNode
      */
     public NodeUnion<? extends TypeNode> getUnionForType()
     {
-        getAttribute(LocalAttribute.TYPE).recordAccess(ReadWriteAttribute.AccessType.READ);
+        checkTypeWrapped();
         if (this.type == null)
         {
             this.type = new NormalNodeUnion<TypeNode>(null);
@@ -190,24 +230,8 @@ public class InstanceOfNodeImpl extends NodeImpl implements InstanceOfNode
      */
     public void setType(TypeNode type)
     {
-            setType(type, true);
-            getManager().notifyChange(this);
-    }
-    
-    private void setType(TypeNode type, boolean checkPermissions)
-    {
-        if (checkPermissions)
-        {
-            getManager().assertMutatable(this);
-            getAttribute(LocalAttribute.TYPE).recordAccess(ReadWriteAttribute.AccessType.WRITE);
-        }
-        
-        if (this.type != null)
-        {
-            setAsChild(this.type.getNodeValue(), false);
-        }
-        this.type = new NormalNodeUnion<TypeNode>(type);
-        setAsChild(type, true);
+        checkTypeWrapped();
+        this.setUnionForType(new NormalNodeUnion<TypeNode>(type));
     }
     
     /**
@@ -216,18 +240,15 @@ public class InstanceOfNodeImpl extends NodeImpl implements InstanceOfNode
      */
     public void setUnionForType(NodeUnion<? extends TypeNode> type)
     {
-            setUnionForType(type, true);
-            getManager().notifyChange(this);
+        checkTypeWrapped();
+        this.getManager().assertMutatable(this);
+        this.doSetType(type);
+        if (this.getManager().isRecordingEdits())
+            super.recordEdit(new InstanceOfNodeSetTypePropertyEditScriptElementImpl(this.getManager().getCurrentMetaprogramId(), this.getUid(), type.getNodeValue() == null ? null : type.getNodeValue().getUid()));
     }
     
-    private void setUnionForType(NodeUnion<? extends TypeNode> type, boolean checkPermissions)
+    private void doSetType(NodeUnion<? extends TypeNode> type)
     {
-        if (checkPermissions)
-        {
-            getManager().assertMutatable(this);
-            getAttribute(LocalAttribute.TYPE).recordAccess(ReadWriteAttribute.AccessType.WRITE);
-        }
-        
         if (type == null)
         {
             type = new NormalNodeUnion<TypeNode>(null);
@@ -251,13 +272,13 @@ public class InstanceOfNodeImpl extends NodeImpl implements InstanceOfNode
     protected void receiveToChildren(BsjNodeVisitor visitor)
     {
         super.receiveToChildren(visitor);
-        if (this.expression.getNodeValue() != null)
+        if (this.getUnionForExpression().getNodeValue() != null)
         {
-            this.expression.getNodeValue().receive(visitor);
+            this.getUnionForExpression().getNodeValue().receive(visitor);
         }
-        if (this.type.getNodeValue() != null)
+        if (this.getUnionForType().getNodeValue() != null)
         {
-            this.type.getNodeValue().receive(visitor);
+            this.getUnionForType().getNodeValue().receive(visitor);
         }
         Iterator<? extends Node> extras = getHiddenVisitorChildren();
         if (extras != null)
@@ -280,13 +301,13 @@ public class InstanceOfNodeImpl extends NodeImpl implements InstanceOfNode
     protected void receiveTypedToChildren(BsjTypedNodeVisitor visitor)
     {
         super.receiveTypedToChildren(visitor);
-        if (this.expression.getNodeValue() != null)
+        if (this.getUnionForExpression().getNodeValue() != null)
         {
-            this.expression.getNodeValue().receiveTyped(visitor);
+            this.getUnionForExpression().getNodeValue().receiveTyped(visitor);
         }
-        if (this.type.getNodeValue() != null)
+        if (this.getUnionForType().getNodeValue() != null)
         {
-            this.type.getNodeValue().receiveTyped(visitor);
+            this.getUnionForType().getNodeValue().receiveTyped(visitor);
         }
         Iterator<? extends Node> extras = getHiddenVisitorChildren();
         if (extras != null)
@@ -346,6 +367,8 @@ public class InstanceOfNodeImpl extends NodeImpl implements InstanceOfNode
     {
         StringBuilder sb = new StringBuilder();
         sb.append(this.getClass().getSimpleName());
+        sb.append('#');
+        sb.append(this.getUid());
         sb.append('[');
         sb.append("expression=");
         sb.append(this.getUnionForExpression().getNodeValue() == null? "null" : this.getUnionForExpression().getNodeValue().getClass().getSimpleName());

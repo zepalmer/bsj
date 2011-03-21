@@ -1,0 +1,11 @@
+import java.io.*;
+
+public class PermissionRequest
+{
+	[:
+		#mode fullMutate;
+		CompilationUnitNode node = context.getAnchor().getNearestAncestorOfType(CompilationUnitNode.class);
+		ImportListNode importsNode = node.getImports();
+		importsNode.clear();
+	:]
+}

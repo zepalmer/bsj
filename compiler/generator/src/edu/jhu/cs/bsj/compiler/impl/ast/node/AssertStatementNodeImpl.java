@@ -1,10 +1,10 @@
 package edu.jhu.cs.bsj.compiler.impl.ast.node;
 
 import java.util.Arrays;
-import java.util.EnumMap;
+import java.util.EnumSet;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
+import java.util.Set;
 
 import javax.annotation.Generated;
 
@@ -20,9 +20,12 @@ import edu.jhu.cs.bsj.compiler.ast.node.ExpressionNode;
 import edu.jhu.cs.bsj.compiler.ast.node.Node;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaAnnotationListNode;
 import edu.jhu.cs.bsj.compiler.impl.ast.BsjNodeManager;
+import edu.jhu.cs.bsj.compiler.impl.ast.BsjNodeProxyFactory;
 import edu.jhu.cs.bsj.compiler.impl.ast.NormalNodeUnion;
-import edu.jhu.cs.bsj.compiler.impl.ast.attribute.AttributeName;
-import edu.jhu.cs.bsj.compiler.impl.ast.attribute.ReadWriteAttribute;
+import edu.jhu.cs.bsj.compiler.impl.ast.delta.property.AssertStatementNodeSetMessageExpressionPropertyEditScriptElementImpl;
+import edu.jhu.cs.bsj.compiler.impl.ast.delta.property.AssertStatementNodeSetMetaAnnotationsPropertyEditScriptElementImpl;
+import edu.jhu.cs.bsj.compiler.impl.ast.delta.property.AssertStatementNodeSetTestExpressionPropertyEditScriptElementImpl;
+import edu.jhu.cs.bsj.compiler.impl.ast.properties.AssertStatementNodeProperties;
 
 @Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
 public class AssertStatementNodeImpl extends NodeImpl implements AssertStatementNode
@@ -36,26 +39,11 @@ public class AssertStatementNodeImpl extends NodeImpl implements AssertStatement
     /** The meta-annotations associated with this node. */
     private NodeUnion<? extends MetaAnnotationListNode> metaAnnotations;
     
-    private Map<LocalAttribute,ReadWriteAttribute> localAttributes = new EnumMap<LocalAttribute,ReadWriteAttribute>(LocalAttribute.class);
-    private ReadWriteAttribute getAttribute(LocalAttribute attributeName)
-    {
-        ReadWriteAttribute attribute = localAttributes.get(attributeName);
-        if (attribute == null)
-        {
-            attribute = new ReadWriteAttribute(AssertStatementNodeImpl.this, attributeName);
-            localAttributes.put(attributeName, attribute);
-        }
-        return attribute;
-    }
-    private static enum LocalAttribute implements AttributeName
-    {
-        /** Attribute identifier for the testExpression property. */
-        TEST_EXPRESSION,
-        /** Attribute identifier for the messageExpression property. */
-        MESSAGE_EXPRESSION,
-        /** Attribute identifier for the metaAnnotations property. */
-        META_ANNOTATIONS,
-    }
+    /**
+     * A set of those properties which have been populated from the backing node.
+     * This field is <code>null</code> if <tt>backingNode</tt> is <code>null</code>.
+     */
+    private Set<AssertStatementNodeProperties> populatedProperties;
     
     /** General constructor. */
     public AssertStatementNodeImpl(
@@ -68,9 +56,107 @@ public class AssertStatementNodeImpl extends NodeImpl implements AssertStatement
             boolean binary)
     {
         super(startLocation, stopLocation, manager, binary);
-        setUnionForTestExpression(testExpression, false);
-        setUnionForMessageExpression(messageExpression, false);
-        setUnionForMetaAnnotations(metaAnnotations, false);
+        this.populatedProperties = null;
+        doSetTestExpression(testExpression);
+        doSetMessageExpression(messageExpression);
+        doSetMetaAnnotations(metaAnnotations);
+    }
+    
+    /** Proxy constructor. */
+    public AssertStatementNodeImpl(BsjNodeManager manager, BsjNodeProxyFactory proxyFactory, AssertStatementNode backingNode)
+    {
+        super(manager, proxyFactory, backingNode);
+        this.populatedProperties = EnumSet.noneOf(AssertStatementNodeProperties.class);
+    }
+    
+    /** Retrieves this node's backing node (if one exists). */
+    protected AssertStatementNode getBackingNode()
+    {
+        return (AssertStatementNode)super.getBackingNode();
+    }
+    
+    /**
+     * Ensures that the testExpression value has been populated from proxy.
+     * If this node is not backed by a proxy or if the value has already been
+     * populated, this method does nothing.
+     */
+    private void checkTestExpressionWrapped()
+    {
+        if (this.populatedProperties == null || this.populatedProperties.contains(
+                AssertStatementNodeProperties.TEST_EXPRESSION))
+            return;
+        this.populatedProperties.add(AssertStatementNodeProperties.TEST_EXPRESSION);
+        NodeUnion<? extends ExpressionNode> union = this.getBackingNode().getUnionForTestExpression();
+        switch (union.getType())
+        {
+            case NORMAL:
+                union = this.getProxyFactory().makeNormalNodeUnion(
+                        this.getProxyFactory().makeExpressionNode(union.getNormalNode()));
+                break;
+            case SPLICE:
+                union = this.getProxyFactory().makeSpliceNodeUnion(
+                        this.getProxyFactory().makeSpliceNode(union.getSpliceNode()));
+                break;
+            default:
+                throw new IllegalStateException("Unrecognized union type: " + union.getType());
+        }
+        this.testExpression = union;
+    }
+    
+    /**
+     * Ensures that the messageExpression value has been populated from proxy.
+     * If this node is not backed by a proxy or if the value has already been
+     * populated, this method does nothing.
+     */
+    private void checkMessageExpressionWrapped()
+    {
+        if (this.populatedProperties == null || this.populatedProperties.contains(
+                AssertStatementNodeProperties.MESSAGE_EXPRESSION))
+            return;
+        this.populatedProperties.add(AssertStatementNodeProperties.MESSAGE_EXPRESSION);
+        NodeUnion<? extends ExpressionNode> union = this.getBackingNode().getUnionForMessageExpression();
+        switch (union.getType())
+        {
+            case NORMAL:
+                union = this.getProxyFactory().makeNormalNodeUnion(
+                        this.getProxyFactory().makeExpressionNode(union.getNormalNode()));
+                break;
+            case SPLICE:
+                union = this.getProxyFactory().makeSpliceNodeUnion(
+                        this.getProxyFactory().makeSpliceNode(union.getSpliceNode()));
+                break;
+            default:
+                throw new IllegalStateException("Unrecognized union type: " + union.getType());
+        }
+        this.messageExpression = union;
+    }
+    
+    /**
+     * Ensures that the metaAnnotations value has been populated from proxy.
+     * If this node is not backed by a proxy or if the value has already been
+     * populated, this method does nothing.
+     */
+    private void checkMetaAnnotationsWrapped()
+    {
+        if (this.populatedProperties == null || this.populatedProperties.contains(
+                AssertStatementNodeProperties.META_ANNOTATIONS))
+            return;
+        this.populatedProperties.add(AssertStatementNodeProperties.META_ANNOTATIONS);
+        NodeUnion<? extends MetaAnnotationListNode> union = this.getBackingNode().getUnionForMetaAnnotations();
+        switch (union.getType())
+        {
+            case NORMAL:
+                union = this.getProxyFactory().makeNormalNodeUnion(
+                        this.getProxyFactory().makeMetaAnnotationListNode(union.getNormalNode()));
+                break;
+            case SPLICE:
+                union = this.getProxyFactory().makeSpliceNodeUnion(
+                        this.getProxyFactory().makeSpliceNode(union.getSpliceNode()));
+                break;
+            default:
+                throw new IllegalStateException("Unrecognized union type: " + union.getType());
+        }
+        this.metaAnnotations = union;
     }
     
     /**
@@ -80,7 +166,7 @@ public class AssertStatementNodeImpl extends NodeImpl implements AssertStatement
      */
     public ExpressionNode getTestExpression()
     {
-        getAttribute(LocalAttribute.TEST_EXPRESSION).recordAccess(ReadWriteAttribute.AccessType.READ);
+        checkTestExpressionWrapped();
         if (this.testExpression == null)
         {
             return null;
@@ -96,7 +182,7 @@ public class AssertStatementNodeImpl extends NodeImpl implements AssertStatement
      */
     public NodeUnion<? extends ExpressionNode> getUnionForTestExpression()
     {
-        getAttribute(LocalAttribute.TEST_EXPRESSION).recordAccess(ReadWriteAttribute.AccessType.READ);
+        checkTestExpressionWrapped();
         if (this.testExpression == null)
         {
             this.testExpression = new NormalNodeUnion<ExpressionNode>(null);
@@ -110,24 +196,8 @@ public class AssertStatementNodeImpl extends NodeImpl implements AssertStatement
      */
     public void setTestExpression(ExpressionNode testExpression)
     {
-            setTestExpression(testExpression, true);
-            getManager().notifyChange(this);
-    }
-    
-    private void setTestExpression(ExpressionNode testExpression, boolean checkPermissions)
-    {
-        if (checkPermissions)
-        {
-            getManager().assertMutatable(this);
-            getAttribute(LocalAttribute.TEST_EXPRESSION).recordAccess(ReadWriteAttribute.AccessType.WRITE);
-        }
-        
-        if (this.testExpression != null)
-        {
-            setAsChild(this.testExpression.getNodeValue(), false);
-        }
-        this.testExpression = new NormalNodeUnion<ExpressionNode>(testExpression);
-        setAsChild(testExpression, true);
+        checkTestExpressionWrapped();
+        this.setUnionForTestExpression(new NormalNodeUnion<ExpressionNode>(testExpression));
     }
     
     /**
@@ -136,18 +206,15 @@ public class AssertStatementNodeImpl extends NodeImpl implements AssertStatement
      */
     public void setUnionForTestExpression(NodeUnion<? extends ExpressionNode> testExpression)
     {
-            setUnionForTestExpression(testExpression, true);
-            getManager().notifyChange(this);
+        checkTestExpressionWrapped();
+        this.getManager().assertMutatable(this);
+        this.doSetTestExpression(testExpression);
+        if (this.getManager().isRecordingEdits())
+            super.recordEdit(new AssertStatementNodeSetTestExpressionPropertyEditScriptElementImpl(this.getManager().getCurrentMetaprogramId(), this.getUid(), testExpression.getNodeValue() == null ? null : testExpression.getNodeValue().getUid()));
     }
     
-    private void setUnionForTestExpression(NodeUnion<? extends ExpressionNode> testExpression, boolean checkPermissions)
+    private void doSetTestExpression(NodeUnion<? extends ExpressionNode> testExpression)
     {
-        if (checkPermissions)
-        {
-            getManager().assertMutatable(this);
-            getAttribute(LocalAttribute.TEST_EXPRESSION).recordAccess(ReadWriteAttribute.AccessType.WRITE);
-        }
-        
         if (testExpression == null)
         {
             testExpression = new NormalNodeUnion<ExpressionNode>(null);
@@ -167,7 +234,7 @@ public class AssertStatementNodeImpl extends NodeImpl implements AssertStatement
      */
     public ExpressionNode getMessageExpression()
     {
-        getAttribute(LocalAttribute.MESSAGE_EXPRESSION).recordAccess(ReadWriteAttribute.AccessType.READ);
+        checkMessageExpressionWrapped();
         if (this.messageExpression == null)
         {
             return null;
@@ -183,7 +250,7 @@ public class AssertStatementNodeImpl extends NodeImpl implements AssertStatement
      */
     public NodeUnion<? extends ExpressionNode> getUnionForMessageExpression()
     {
-        getAttribute(LocalAttribute.MESSAGE_EXPRESSION).recordAccess(ReadWriteAttribute.AccessType.READ);
+        checkMessageExpressionWrapped();
         if (this.messageExpression == null)
         {
             this.messageExpression = new NormalNodeUnion<ExpressionNode>(null);
@@ -197,24 +264,8 @@ public class AssertStatementNodeImpl extends NodeImpl implements AssertStatement
      */
     public void setMessageExpression(ExpressionNode messageExpression)
     {
-            setMessageExpression(messageExpression, true);
-            getManager().notifyChange(this);
-    }
-    
-    private void setMessageExpression(ExpressionNode messageExpression, boolean checkPermissions)
-    {
-        if (checkPermissions)
-        {
-            getManager().assertMutatable(this);
-            getAttribute(LocalAttribute.MESSAGE_EXPRESSION).recordAccess(ReadWriteAttribute.AccessType.WRITE);
-        }
-        
-        if (this.messageExpression != null)
-        {
-            setAsChild(this.messageExpression.getNodeValue(), false);
-        }
-        this.messageExpression = new NormalNodeUnion<ExpressionNode>(messageExpression);
-        setAsChild(messageExpression, true);
+        checkMessageExpressionWrapped();
+        this.setUnionForMessageExpression(new NormalNodeUnion<ExpressionNode>(messageExpression));
     }
     
     /**
@@ -223,18 +274,15 @@ public class AssertStatementNodeImpl extends NodeImpl implements AssertStatement
      */
     public void setUnionForMessageExpression(NodeUnion<? extends ExpressionNode> messageExpression)
     {
-            setUnionForMessageExpression(messageExpression, true);
-            getManager().notifyChange(this);
+        checkMessageExpressionWrapped();
+        this.getManager().assertMutatable(this);
+        this.doSetMessageExpression(messageExpression);
+        if (this.getManager().isRecordingEdits())
+            super.recordEdit(new AssertStatementNodeSetMessageExpressionPropertyEditScriptElementImpl(this.getManager().getCurrentMetaprogramId(), this.getUid(), messageExpression.getNodeValue() == null ? null : messageExpression.getNodeValue().getUid()));
     }
     
-    private void setUnionForMessageExpression(NodeUnion<? extends ExpressionNode> messageExpression, boolean checkPermissions)
+    private void doSetMessageExpression(NodeUnion<? extends ExpressionNode> messageExpression)
     {
-        if (checkPermissions)
-        {
-            getManager().assertMutatable(this);
-            getAttribute(LocalAttribute.MESSAGE_EXPRESSION).recordAccess(ReadWriteAttribute.AccessType.WRITE);
-        }
-        
         if (messageExpression == null)
         {
             messageExpression = new NormalNodeUnion<ExpressionNode>(null);
@@ -254,7 +302,7 @@ public class AssertStatementNodeImpl extends NodeImpl implements AssertStatement
      */
     public MetaAnnotationListNode getMetaAnnotations()
     {
-        getAttribute(LocalAttribute.META_ANNOTATIONS).recordAccess(ReadWriteAttribute.AccessType.READ);
+        checkMetaAnnotationsWrapped();
         if (this.metaAnnotations == null)
         {
             return null;
@@ -270,7 +318,7 @@ public class AssertStatementNodeImpl extends NodeImpl implements AssertStatement
      */
     public NodeUnion<? extends MetaAnnotationListNode> getUnionForMetaAnnotations()
     {
-        getAttribute(LocalAttribute.META_ANNOTATIONS).recordAccess(ReadWriteAttribute.AccessType.READ);
+        checkMetaAnnotationsWrapped();
         if (this.metaAnnotations == null)
         {
             this.metaAnnotations = new NormalNodeUnion<MetaAnnotationListNode>(null);
@@ -284,24 +332,8 @@ public class AssertStatementNodeImpl extends NodeImpl implements AssertStatement
      */
     public void setMetaAnnotations(MetaAnnotationListNode metaAnnotations)
     {
-            setMetaAnnotations(metaAnnotations, true);
-            getManager().notifyChange(this);
-    }
-    
-    private void setMetaAnnotations(MetaAnnotationListNode metaAnnotations, boolean checkPermissions)
-    {
-        if (checkPermissions)
-        {
-            getManager().assertMutatable(this);
-            getAttribute(LocalAttribute.META_ANNOTATIONS).recordAccess(ReadWriteAttribute.AccessType.WRITE);
-        }
-        
-        if (this.metaAnnotations != null)
-        {
-            setAsChild(this.metaAnnotations.getNodeValue(), false);
-        }
-        this.metaAnnotations = new NormalNodeUnion<MetaAnnotationListNode>(metaAnnotations);
-        setAsChild(metaAnnotations, true);
+        checkMetaAnnotationsWrapped();
+        this.setUnionForMetaAnnotations(new NormalNodeUnion<MetaAnnotationListNode>(metaAnnotations));
     }
     
     /**
@@ -310,18 +342,15 @@ public class AssertStatementNodeImpl extends NodeImpl implements AssertStatement
      */
     public void setUnionForMetaAnnotations(NodeUnion<? extends MetaAnnotationListNode> metaAnnotations)
     {
-            setUnionForMetaAnnotations(metaAnnotations, true);
-            getManager().notifyChange(this);
+        checkMetaAnnotationsWrapped();
+        this.getManager().assertMutatable(this);
+        this.doSetMetaAnnotations(metaAnnotations);
+        if (this.getManager().isRecordingEdits())
+            super.recordEdit(new AssertStatementNodeSetMetaAnnotationsPropertyEditScriptElementImpl(this.getManager().getCurrentMetaprogramId(), this.getUid(), metaAnnotations.getNodeValue() == null ? null : metaAnnotations.getNodeValue().getUid()));
     }
     
-    private void setUnionForMetaAnnotations(NodeUnion<? extends MetaAnnotationListNode> metaAnnotations, boolean checkPermissions)
+    private void doSetMetaAnnotations(NodeUnion<? extends MetaAnnotationListNode> metaAnnotations)
     {
-        if (checkPermissions)
-        {
-            getManager().assertMutatable(this);
-            getAttribute(LocalAttribute.META_ANNOTATIONS).recordAccess(ReadWriteAttribute.AccessType.WRITE);
-        }
-        
         if (metaAnnotations == null)
         {
             metaAnnotations = new NormalNodeUnion<MetaAnnotationListNode>(null);
@@ -345,17 +374,17 @@ public class AssertStatementNodeImpl extends NodeImpl implements AssertStatement
     protected void receiveToChildren(BsjNodeVisitor visitor)
     {
         super.receiveToChildren(visitor);
-        if (this.testExpression.getNodeValue() != null)
+        if (this.getUnionForTestExpression().getNodeValue() != null)
         {
-            this.testExpression.getNodeValue().receive(visitor);
+            this.getUnionForTestExpression().getNodeValue().receive(visitor);
         }
-        if (this.messageExpression.getNodeValue() != null)
+        if (this.getUnionForMessageExpression().getNodeValue() != null)
         {
-            this.messageExpression.getNodeValue().receive(visitor);
+            this.getUnionForMessageExpression().getNodeValue().receive(visitor);
         }
-        if (this.metaAnnotations.getNodeValue() != null)
+        if (this.getUnionForMetaAnnotations().getNodeValue() != null)
         {
-            this.metaAnnotations.getNodeValue().receive(visitor);
+            this.getUnionForMetaAnnotations().getNodeValue().receive(visitor);
         }
         Iterator<? extends Node> extras = getHiddenVisitorChildren();
         if (extras != null)
@@ -378,17 +407,17 @@ public class AssertStatementNodeImpl extends NodeImpl implements AssertStatement
     protected void receiveTypedToChildren(BsjTypedNodeVisitor visitor)
     {
         super.receiveTypedToChildren(visitor);
-        if (this.testExpression.getNodeValue() != null)
+        if (this.getUnionForTestExpression().getNodeValue() != null)
         {
-            this.testExpression.getNodeValue().receiveTyped(visitor);
+            this.getUnionForTestExpression().getNodeValue().receiveTyped(visitor);
         }
-        if (this.messageExpression.getNodeValue() != null)
+        if (this.getUnionForMessageExpression().getNodeValue() != null)
         {
-            this.messageExpression.getNodeValue().receiveTyped(visitor);
+            this.getUnionForMessageExpression().getNodeValue().receiveTyped(visitor);
         }
-        if (this.metaAnnotations.getNodeValue() != null)
+        if (this.getUnionForMetaAnnotations().getNodeValue() != null)
         {
-            this.metaAnnotations.getNodeValue().receiveTyped(visitor);
+            this.getUnionForMetaAnnotations().getNodeValue().receiveTyped(visitor);
         }
         Iterator<? extends Node> extras = getHiddenVisitorChildren();
         if (extras != null)
@@ -449,6 +478,8 @@ public class AssertStatementNodeImpl extends NodeImpl implements AssertStatement
     {
         StringBuilder sb = new StringBuilder();
         sb.append(this.getClass().getSimpleName());
+        sb.append('#');
+        sb.append(this.getUid());
         sb.append('[');
         sb.append("testExpression=");
         sb.append(this.getUnionForTestExpression().getNodeValue() == null? "null" : this.getUnionForTestExpression().getNodeValue().getClass().getSimpleName());

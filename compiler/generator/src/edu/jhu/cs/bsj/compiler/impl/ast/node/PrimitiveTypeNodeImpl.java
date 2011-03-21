@@ -1,10 +1,10 @@
 package edu.jhu.cs.bsj.compiler.impl.ast.node;
 
 import java.util.Arrays;
-import java.util.EnumMap;
+import java.util.EnumSet;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
+import java.util.Set;
 
 import javax.annotation.Generated;
 
@@ -18,8 +18,9 @@ import edu.jhu.cs.bsj.compiler.ast.PrimitiveType;
 import edu.jhu.cs.bsj.compiler.ast.node.Node;
 import edu.jhu.cs.bsj.compiler.ast.node.PrimitiveTypeNode;
 import edu.jhu.cs.bsj.compiler.impl.ast.BsjNodeManager;
-import edu.jhu.cs.bsj.compiler.impl.ast.attribute.AttributeName;
-import edu.jhu.cs.bsj.compiler.impl.ast.attribute.ReadWriteAttribute;
+import edu.jhu.cs.bsj.compiler.impl.ast.BsjNodeProxyFactory;
+import edu.jhu.cs.bsj.compiler.impl.ast.delta.property.PrimitiveTypeNodeSetPrimitiveTypePropertyEditScriptElementImpl;
+import edu.jhu.cs.bsj.compiler.impl.ast.properties.PrimitiveTypeNodeProperties;
 
 @Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
 public class PrimitiveTypeNodeImpl extends NodeImpl implements PrimitiveTypeNode
@@ -27,22 +28,11 @@ public class PrimitiveTypeNodeImpl extends NodeImpl implements PrimitiveTypeNode
     /** The primitive type being represented. */
     private PrimitiveType primitiveType;
     
-    private Map<LocalAttribute,ReadWriteAttribute> localAttributes = new EnumMap<LocalAttribute,ReadWriteAttribute>(LocalAttribute.class);
-    private ReadWriteAttribute getAttribute(LocalAttribute attributeName)
-    {
-        ReadWriteAttribute attribute = localAttributes.get(attributeName);
-        if (attribute == null)
-        {
-            attribute = new ReadWriteAttribute(PrimitiveTypeNodeImpl.this, attributeName);
-            localAttributes.put(attributeName, attribute);
-        }
-        return attribute;
-    }
-    private static enum LocalAttribute implements AttributeName
-    {
-        /** Attribute identifier for the primitiveType property. */
-        PRIMITIVE_TYPE,
-    }
+    /**
+     * A set of those properties which have been populated from the backing node.
+     * This field is <code>null</code> if <tt>backingNode</tt> is <code>null</code>.
+     */
+    private Set<PrimitiveTypeNodeProperties> populatedProperties;
     
     /** General constructor. */
     public PrimitiveTypeNodeImpl(
@@ -53,7 +43,35 @@ public class PrimitiveTypeNodeImpl extends NodeImpl implements PrimitiveTypeNode
             boolean binary)
     {
         super(startLocation, stopLocation, manager, binary);
-        this.primitiveType = primitiveType;
+        this.populatedProperties = null;
+        doSetPrimitiveType(primitiveType);
+    }
+    
+    /** Proxy constructor. */
+    public PrimitiveTypeNodeImpl(BsjNodeManager manager, BsjNodeProxyFactory proxyFactory, PrimitiveTypeNode backingNode)
+    {
+        super(manager, proxyFactory, backingNode);
+        this.populatedProperties = EnumSet.noneOf(PrimitiveTypeNodeProperties.class);
+    }
+    
+    /** Retrieves this node's backing node (if one exists). */
+    protected PrimitiveTypeNode getBackingNode()
+    {
+        return (PrimitiveTypeNode)super.getBackingNode();
+    }
+    
+    /**
+     * Ensures that the primitiveType value has been populated from proxy.
+     * If this node is not backed by a proxy or if the value has already been
+     * populated, this method does nothing.
+     */
+    private void checkPrimitiveTypeWrapped()
+    {
+        if (this.populatedProperties == null || this.populatedProperties.contains(
+                PrimitiveTypeNodeProperties.PRIMITIVE_TYPE))
+            return;
+        this.populatedProperties.add(PrimitiveTypeNodeProperties.PRIMITIVE_TYPE);
+        this.primitiveType = this.getBackingNode().getPrimitiveType();
     }
     
     /**
@@ -62,7 +80,7 @@ public class PrimitiveTypeNodeImpl extends NodeImpl implements PrimitiveTypeNode
      */
     public PrimitiveType getPrimitiveType()
     {
-        getAttribute(LocalAttribute.PRIMITIVE_TYPE).recordAccess(ReadWriteAttribute.AccessType.READ);
+        checkPrimitiveTypeWrapped();
         return this.primitiveType;
     }
     
@@ -72,18 +90,15 @@ public class PrimitiveTypeNodeImpl extends NodeImpl implements PrimitiveTypeNode
      */
     public void setPrimitiveType(PrimitiveType primitiveType)
     {
-            setPrimitiveType(primitiveType, true);
-            getManager().notifyChange(this);
+        checkPrimitiveTypeWrapped();
+        this.getManager().assertMutatable(this);
+        this.doSetPrimitiveType(primitiveType);
+        if (this.getManager().isRecordingEdits())
+            super.recordEdit(new PrimitiveTypeNodeSetPrimitiveTypePropertyEditScriptElementImpl(this.getManager().getCurrentMetaprogramId(), this.getUid(), primitiveType));
     }
     
-    private void setPrimitiveType(PrimitiveType primitiveType, boolean checkPermissions)
+    private void doSetPrimitiveType(PrimitiveType primitiveType)
     {
-        if (checkPermissions)
-        {
-            getManager().assertMutatable(this);
-            getAttribute(LocalAttribute.PRIMITIVE_TYPE).recordAccess(ReadWriteAttribute.AccessType.WRITE);
-        }
-        
         this.primitiveType = primitiveType;
     }
     
@@ -180,6 +195,8 @@ public class PrimitiveTypeNodeImpl extends NodeImpl implements PrimitiveTypeNode
     {
         StringBuilder sb = new StringBuilder();
         sb.append(this.getClass().getSimpleName());
+        sb.append('#');
+        sb.append(this.getUid());
         sb.append('[');
         sb.append("primitiveType=");
         sb.append(String.valueOf(this.getPrimitiveType()) + ":" + (this.getPrimitiveType() != null ? this.getPrimitiveType().getClass().getSimpleName() : "null"));

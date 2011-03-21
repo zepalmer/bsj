@@ -1,9 +1,9 @@
 package edu.jhu.cs.bsj.compiler.impl.ast.node.meta;
 
-import java.util.EnumMap;
+import java.util.EnumSet;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
+import java.util.Set;
 
 import javax.annotation.Generated;
 import javax.tools.DiagnosticListener;
@@ -18,12 +18,12 @@ import edu.jhu.cs.bsj.compiler.ast.node.UnparameterizedTypeNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaAnnotationMetaprogramAnchorNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaAnnotationNode;
 import edu.jhu.cs.bsj.compiler.impl.ast.BsjNodeManager;
+import edu.jhu.cs.bsj.compiler.impl.ast.BsjNodeProxyFactory;
 import edu.jhu.cs.bsj.compiler.impl.ast.NormalNodeUnion;
-import edu.jhu.cs.bsj.compiler.impl.ast.attribute.AttributeName;
-import edu.jhu.cs.bsj.compiler.impl.ast.attribute.ReadWriteAttribute;
+import edu.jhu.cs.bsj.compiler.impl.ast.delta.property.MetaAnnotationNodeSetAnnotationTypePropertyEditScriptElementImpl;
 import edu.jhu.cs.bsj.compiler.impl.ast.node.NodeImpl;
+import edu.jhu.cs.bsj.compiler.impl.ast.properties.MetaAnnotationNodeProperties;
 import edu.jhu.cs.bsj.compiler.metaannotation.BsjMetaAnnotation;
-import edu.jhu.cs.bsj.compiler.metaprogram.BsjMetaAnnotationMetaprogram;
 @Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
 public abstract class MetaAnnotationNodeImpl extends NodeImpl implements MetaAnnotationNode
 {
@@ -33,24 +33,11 @@ public abstract class MetaAnnotationNodeImpl extends NodeImpl implements MetaAnn
     /** The anchor of a metaprogram attached to this node. */
     private MetaAnnotationMetaprogramAnchorNode metaprogramAnchor;
     
-    private Map<LocalAttribute,ReadWriteAttribute> localAttributes = new EnumMap<LocalAttribute,ReadWriteAttribute>(LocalAttribute.class);
-    private ReadWriteAttribute getAttribute(LocalAttribute attributeName)
-    {
-        ReadWriteAttribute attribute = localAttributes.get(attributeName);
-        if (attribute == null)
-        {
-            attribute = new ReadWriteAttribute(MetaAnnotationNodeImpl.this, attributeName);
-            localAttributes.put(attributeName, attribute);
-        }
-        return attribute;
-    }
-    private static enum LocalAttribute implements AttributeName
-    {
-        /** Attribute identifier for the annotationType property. */
-        ANNOTATION_TYPE,
-        /** Attribute identifier for the metaprogramAnchor property. */
-        METAPROGRAM_ANCHOR,
-    }
+    /**
+     * A set of those properties which have been populated from the backing node.
+     * This field is <code>null</code> if <tt>backingNode</tt> is <code>null</code>.
+     */
+    private Set<MetaAnnotationNodeProperties> populatedProperties;
     
     /** General constructor. */
     protected MetaAnnotationNodeImpl(
@@ -62,8 +49,65 @@ public abstract class MetaAnnotationNodeImpl extends NodeImpl implements MetaAnn
             boolean binary)
     {
         super(startLocation, stopLocation, manager, binary);
-        setUnionForAnnotationType(annotationType, false);
-        this.metaprogramAnchor = metaprogramAnchor;
+        this.populatedProperties = null;
+        doSetAnnotationType(annotationType);
+        doSetMetaprogramAnchor(metaprogramAnchor);
+    }
+    
+    /** Proxy constructor. */
+    protected MetaAnnotationNodeImpl(BsjNodeManager manager, BsjNodeProxyFactory proxyFactory, MetaAnnotationNode backingNode)
+    {
+        super(manager, proxyFactory, backingNode);
+        this.populatedProperties = EnumSet.noneOf(MetaAnnotationNodeProperties.class);
+    }
+    
+    /** Retrieves this node's backing node (if one exists). */
+    protected MetaAnnotationNode getBackingNode()
+    {
+        return (MetaAnnotationNode)super.getBackingNode();
+    }
+    
+    /**
+     * Ensures that the annotationType value has been populated from proxy.
+     * If this node is not backed by a proxy or if the value has already been
+     * populated, this method does nothing.
+     */
+    private void checkAnnotationTypeWrapped()
+    {
+        if (this.populatedProperties == null || this.populatedProperties.contains(
+                MetaAnnotationNodeProperties.ANNOTATION_TYPE))
+            return;
+        this.populatedProperties.add(MetaAnnotationNodeProperties.ANNOTATION_TYPE);
+        NodeUnion<? extends UnparameterizedTypeNode> union = this.getBackingNode().getUnionForAnnotationType();
+        switch (union.getType())
+        {
+            case NORMAL:
+                union = this.getProxyFactory().makeNormalNodeUnion(
+                        this.getProxyFactory().makeUnparameterizedTypeNode(union.getNormalNode()));
+                break;
+            case SPLICE:
+                union = this.getProxyFactory().makeSpliceNodeUnion(
+                        this.getProxyFactory().makeSpliceNode(union.getSpliceNode()));
+                break;
+            default:
+                throw new IllegalStateException("Unrecognized union type: " + union.getType());
+        }
+        this.annotationType = union;
+    }
+    
+    /**
+     * Ensures that the metaprogramAnchor value has been populated from proxy.
+     * If this node is not backed by a proxy or if the value has already been
+     * populated, this method does nothing.
+     */
+    private void checkMetaprogramAnchorWrapped()
+    {
+        if (this.populatedProperties == null || this.populatedProperties.contains(
+                MetaAnnotationNodeProperties.METAPROGRAM_ANCHOR))
+            return;
+        this.populatedProperties.add(MetaAnnotationNodeProperties.METAPROGRAM_ANCHOR);
+        this.metaprogramAnchor = this.getProxyFactory().makeMetaAnnotationMetaprogramAnchorNode(
+                this.getBackingNode().getMetaprogramAnchor());
     }
     
     /**
@@ -73,7 +117,7 @@ public abstract class MetaAnnotationNodeImpl extends NodeImpl implements MetaAnn
      */
     public UnparameterizedTypeNode getAnnotationType()
     {
-        getAttribute(LocalAttribute.ANNOTATION_TYPE).recordAccess(ReadWriteAttribute.AccessType.READ);
+        checkAnnotationTypeWrapped();
         if (this.annotationType == null)
         {
             return null;
@@ -89,7 +133,7 @@ public abstract class MetaAnnotationNodeImpl extends NodeImpl implements MetaAnn
      */
     public NodeUnion<? extends UnparameterizedTypeNode> getUnionForAnnotationType()
     {
-        getAttribute(LocalAttribute.ANNOTATION_TYPE).recordAccess(ReadWriteAttribute.AccessType.READ);
+        checkAnnotationTypeWrapped();
         if (this.annotationType == null)
         {
             this.annotationType = new NormalNodeUnion<UnparameterizedTypeNode>(null);
@@ -103,24 +147,8 @@ public abstract class MetaAnnotationNodeImpl extends NodeImpl implements MetaAnn
      */
     public void setAnnotationType(UnparameterizedTypeNode annotationType)
     {
-            setAnnotationType(annotationType, true);
-            getManager().notifyChange(this);
-    }
-    
-    private void setAnnotationType(UnparameterizedTypeNode annotationType, boolean checkPermissions)
-    {
-        if (checkPermissions)
-        {
-            getManager().assertMutatable(this);
-            getAttribute(LocalAttribute.ANNOTATION_TYPE).recordAccess(ReadWriteAttribute.AccessType.WRITE);
-        }
-        
-        if (this.annotationType != null)
-        {
-            setAsChild(this.annotationType.getNodeValue(), false);
-        }
-        this.annotationType = new NormalNodeUnion<UnparameterizedTypeNode>(annotationType);
-        setAsChild(annotationType, true);
+        checkAnnotationTypeWrapped();
+        this.setUnionForAnnotationType(new NormalNodeUnion<UnparameterizedTypeNode>(annotationType));
     }
     
     /**
@@ -129,18 +157,15 @@ public abstract class MetaAnnotationNodeImpl extends NodeImpl implements MetaAnn
      */
     public void setUnionForAnnotationType(NodeUnion<? extends UnparameterizedTypeNode> annotationType)
     {
-            setUnionForAnnotationType(annotationType, true);
-            getManager().notifyChange(this);
+        checkAnnotationTypeWrapped();
+        this.getManager().assertMutatable(this);
+        this.doSetAnnotationType(annotationType);
+        if (this.getManager().isRecordingEdits())
+            super.recordEdit(new MetaAnnotationNodeSetAnnotationTypePropertyEditScriptElementImpl(this.getManager().getCurrentMetaprogramId(), this.getUid(), annotationType.getNodeValue() == null ? null : annotationType.getNodeValue().getUid()));
     }
     
-    private void setUnionForAnnotationType(NodeUnion<? extends UnparameterizedTypeNode> annotationType, boolean checkPermissions)
+    private void doSetAnnotationType(NodeUnion<? extends UnparameterizedTypeNode> annotationType)
     {
-        if (checkPermissions)
-        {
-            getManager().assertMutatable(this);
-            getAttribute(LocalAttribute.ANNOTATION_TYPE).recordAccess(ReadWriteAttribute.AccessType.WRITE);
-        }
-        
         if (annotationType == null)
         {
             annotationType = new NormalNodeUnion<UnparameterizedTypeNode>(null);
@@ -159,8 +184,17 @@ public abstract class MetaAnnotationNodeImpl extends NodeImpl implements MetaAnn
      */
     public MetaAnnotationMetaprogramAnchorNode getMetaprogramAnchor()
     {
-        getAttribute(LocalAttribute.METAPROGRAM_ANCHOR).recordAccess(ReadWriteAttribute.AccessType.READ);
+        checkMetaprogramAnchorWrapped();
         return this.metaprogramAnchor;
+    }
+    
+    private void doSetMetaprogramAnchor(MetaAnnotationMetaprogramAnchorNode metaprogramAnchor)
+    {
+        if (this.metaprogramAnchor != null)
+            setAsChild(this.metaprogramAnchor, false);
+        this.metaprogramAnchor = metaprogramAnchor;
+        if (this.metaprogramAnchor != null)
+            setAsChild(this.metaprogramAnchor, true);
     }
     
     /**
@@ -174,13 +208,13 @@ public abstract class MetaAnnotationNodeImpl extends NodeImpl implements MetaAnn
     protected void receiveToChildren(BsjNodeVisitor visitor)
     {
         super.receiveToChildren(visitor);
-        if (this.annotationType.getNodeValue() != null)
+        if (this.getUnionForAnnotationType().getNodeValue() != null)
         {
-            this.annotationType.getNodeValue().receive(visitor);
+            this.getUnionForAnnotationType().getNodeValue().receive(visitor);
         }
-        if (this.metaprogramAnchor != null)
+        if (this.getMetaprogramAnchor() != null)
         {
-            this.metaprogramAnchor.receive(visitor);
+            this.getMetaprogramAnchor().receive(visitor);
         }
         Iterator<? extends Node> extras = getHiddenVisitorChildren();
         if (extras != null)
@@ -203,13 +237,13 @@ public abstract class MetaAnnotationNodeImpl extends NodeImpl implements MetaAnn
     protected void receiveTypedToChildren(BsjTypedNodeVisitor visitor)
     {
         super.receiveTypedToChildren(visitor);
-        if (this.annotationType.getNodeValue() != null)
+        if (this.getUnionForAnnotationType().getNodeValue() != null)
         {
-            this.annotationType.getNodeValue().receiveTyped(visitor);
+            this.getUnionForAnnotationType().getNodeValue().receiveTyped(visitor);
         }
-        if (this.metaprogramAnchor != null)
+        if (this.getMetaprogramAnchor() != null)
         {
-            this.metaprogramAnchor.receiveTyped(visitor);
+            this.getMetaprogramAnchor().receiveTyped(visitor);
         }
         Iterator<? extends Node> extras = getHiddenVisitorChildren();
         if (extras != null)
@@ -257,6 +291,8 @@ public abstract class MetaAnnotationNodeImpl extends NodeImpl implements MetaAnn
     {
         StringBuilder sb = new StringBuilder();
         sb.append(this.getClass().getSimpleName());
+        sb.append('#');
+        sb.append(this.getUid());
         sb.append('[');
         sb.append("annotationType=");
         sb.append(this.getUnionForAnnotationType().getNodeValue() == null? "null" : this.getUnionForAnnotationType().getNodeValue().getClass().getSimpleName());
@@ -289,11 +325,6 @@ public abstract class MetaAnnotationNodeImpl extends NodeImpl implements MetaAnn
 		if (this.metaAnnotationObject == null)
 		{
 			this.metaAnnotationObject = getManager().instantiateMetaAnnotationObject(this, listener);
-			if (this.metaAnnotationObject instanceof BsjMetaAnnotationMetaprogram)
-			{
-				this.metaprogramAnchor = getManager().instantiateMetaAnnotationMetaprogramAnchor(this);
-				setAsChild(this.metaprogramAnchor, true);
-			}
 		}
 	}
 

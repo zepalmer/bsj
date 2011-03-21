@@ -15,6 +15,7 @@ import edu.jhu.cs.bsj.compiler.ast.BsjTypedNodeVisitor;
 import edu.jhu.cs.bsj.compiler.ast.node.Node;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaAnnotationMetaprogramAnchorNode;
 import edu.jhu.cs.bsj.compiler.impl.ast.BsjNodeManager;
+import edu.jhu.cs.bsj.compiler.impl.ast.BsjNodeProxyFactory;
 
 @Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
 public class MetaAnnotationMetaprogramAnchorNodeImpl extends MetaprogramAnchorNodeImpl<MetaAnnotationMetaprogramAnchorNode> implements MetaAnnotationMetaprogramAnchorNode
@@ -27,6 +28,18 @@ public class MetaAnnotationMetaprogramAnchorNodeImpl extends MetaprogramAnchorNo
             boolean binary)
     {
         super(startLocation, stopLocation, manager, binary);
+    }
+    
+    /** Proxy constructor. */
+    public MetaAnnotationMetaprogramAnchorNodeImpl(BsjNodeManager manager, BsjNodeProxyFactory proxyFactory, MetaAnnotationMetaprogramAnchorNode backingNode)
+    {
+        super(manager, proxyFactory, backingNode);
+    }
+    
+    /** Retrieves this node's backing node (if one exists). */
+    protected MetaAnnotationMetaprogramAnchorNode getBackingNode()
+    {
+        return (MetaAnnotationMetaprogramAnchorNode)super.getBackingNode();
     }
     
     /**
@@ -126,6 +139,8 @@ public class MetaAnnotationMetaprogramAnchorNodeImpl extends MetaprogramAnchorNo
     {
         StringBuilder sb = new StringBuilder();
         sb.append(this.getClass().getSimpleName());
+        sb.append('#');
+        sb.append(this.getUid());
         sb.append('[');
         sb.append("startLocation=");
         sb.append(String.valueOf(this.getStartLocation()) + ":" + (this.getStartLocation() != null ? this.getStartLocation().getClass().getSimpleName() : "null"));

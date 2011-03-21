@@ -1,10 +1,10 @@
 package edu.jhu.cs.bsj.compiler.impl.ast.node;
 
 import java.util.Arrays;
-import java.util.EnumMap;
+import java.util.EnumSet;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
+import java.util.Set;
 
 import javax.annotation.Generated;
 
@@ -20,8 +20,9 @@ import edu.jhu.cs.bsj.compiler.ast.node.VariableModifiersNode;
 import edu.jhu.cs.bsj.compiler.ast.node.list.AnnotationListNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaAnnotationListNode;
 import edu.jhu.cs.bsj.compiler.impl.ast.BsjNodeManager;
-import edu.jhu.cs.bsj.compiler.impl.ast.attribute.AttributeName;
-import edu.jhu.cs.bsj.compiler.impl.ast.attribute.ReadWriteAttribute;
+import edu.jhu.cs.bsj.compiler.impl.ast.BsjNodeProxyFactory;
+import edu.jhu.cs.bsj.compiler.impl.ast.delta.property.VariableModifiersNodeSetFinalFlagPropertyEditScriptElementImpl;
+import edu.jhu.cs.bsj.compiler.impl.ast.properties.VariableModifiersNodeProperties;
 
 @Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
 public class VariableModifiersNodeImpl extends ModifiersNodeImpl implements VariableModifiersNode
@@ -29,22 +30,11 @@ public class VariableModifiersNodeImpl extends ModifiersNodeImpl implements Vari
     /** Whether or not the associated variable is final. */
     private boolean finalFlag;
     
-    private Map<LocalAttribute,ReadWriteAttribute> localAttributes = new EnumMap<LocalAttribute,ReadWriteAttribute>(LocalAttribute.class);
-    private ReadWriteAttribute getAttribute(LocalAttribute attributeName)
-    {
-        ReadWriteAttribute attribute = localAttributes.get(attributeName);
-        if (attribute == null)
-        {
-            attribute = new ReadWriteAttribute(VariableModifiersNodeImpl.this, attributeName);
-            localAttributes.put(attributeName, attribute);
-        }
-        return attribute;
-    }
-    private static enum LocalAttribute implements AttributeName
-    {
-        /** Attribute identifier for the finalFlag property. */
-        FINAL_FLAG,
-    }
+    /**
+     * A set of those properties which have been populated from the backing node.
+     * This field is <code>null</code> if <tt>backingNode</tt> is <code>null</code>.
+     */
+    private Set<VariableModifiersNodeProperties> populatedProperties;
     
     /** General constructor. */
     public VariableModifiersNodeImpl(
@@ -57,7 +47,35 @@ public class VariableModifiersNodeImpl extends ModifiersNodeImpl implements Vari
             boolean binary)
     {
         super(metaAnnotations, annotations, startLocation, stopLocation, manager, binary);
-        this.finalFlag = finalFlag;
+        this.populatedProperties = null;
+        doSetFinalFlag(finalFlag);
+    }
+    
+    /** Proxy constructor. */
+    public VariableModifiersNodeImpl(BsjNodeManager manager, BsjNodeProxyFactory proxyFactory, VariableModifiersNode backingNode)
+    {
+        super(manager, proxyFactory, backingNode);
+        this.populatedProperties = EnumSet.noneOf(VariableModifiersNodeProperties.class);
+    }
+    
+    /** Retrieves this node's backing node (if one exists). */
+    protected VariableModifiersNode getBackingNode()
+    {
+        return (VariableModifiersNode)super.getBackingNode();
+    }
+    
+    /**
+     * Ensures that the finalFlag value has been populated from proxy.
+     * If this node is not backed by a proxy or if the value has already been
+     * populated, this method does nothing.
+     */
+    private void checkFinalFlagWrapped()
+    {
+        if (this.populatedProperties == null || this.populatedProperties.contains(
+                VariableModifiersNodeProperties.FINAL_FLAG))
+            return;
+        this.populatedProperties.add(VariableModifiersNodeProperties.FINAL_FLAG);
+        this.finalFlag = this.getBackingNode().getFinalFlag();
     }
     
     /**
@@ -66,7 +84,7 @@ public class VariableModifiersNodeImpl extends ModifiersNodeImpl implements Vari
      */
     public boolean getFinalFlag()
     {
-        getAttribute(LocalAttribute.FINAL_FLAG).recordAccess(ReadWriteAttribute.AccessType.READ);
+        checkFinalFlagWrapped();
         return this.finalFlag;
     }
     
@@ -76,18 +94,15 @@ public class VariableModifiersNodeImpl extends ModifiersNodeImpl implements Vari
      */
     public void setFinalFlag(boolean finalFlag)
     {
-            setFinalFlag(finalFlag, true);
-            getManager().notifyChange(this);
+        checkFinalFlagWrapped();
+        this.getManager().assertMutatable(this);
+        this.doSetFinalFlag(finalFlag);
+        if (this.getManager().isRecordingEdits())
+            super.recordEdit(new VariableModifiersNodeSetFinalFlagPropertyEditScriptElementImpl(this.getManager().getCurrentMetaprogramId(), this.getUid(), finalFlag));
     }
     
-    private void setFinalFlag(boolean finalFlag, boolean checkPermissions)
+    private void doSetFinalFlag(boolean finalFlag)
     {
-        if (checkPermissions)
-        {
-            getManager().assertMutatable(this);
-            getAttribute(LocalAttribute.FINAL_FLAG).recordAccess(ReadWriteAttribute.AccessType.WRITE);
-        }
-        
         this.finalFlag = finalFlag;
     }
     
@@ -180,6 +195,8 @@ public class VariableModifiersNodeImpl extends ModifiersNodeImpl implements Vari
     {
         StringBuilder sb = new StringBuilder();
         sb.append(this.getClass().getSimpleName());
+        sb.append('#');
+        sb.append(this.getUid());
         sb.append('[');
         sb.append("finalFlag=");
         sb.append(',');

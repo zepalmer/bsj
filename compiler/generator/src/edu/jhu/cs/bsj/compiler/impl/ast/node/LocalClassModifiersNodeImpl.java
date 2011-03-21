@@ -1,10 +1,10 @@
 package edu.jhu.cs.bsj.compiler.impl.ast.node;
 
 import java.util.Arrays;
-import java.util.EnumMap;
+import java.util.EnumSet;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
+import java.util.Set;
 
 import javax.annotation.Generated;
 
@@ -20,8 +20,11 @@ import edu.jhu.cs.bsj.compiler.ast.node.Node;
 import edu.jhu.cs.bsj.compiler.ast.node.list.AnnotationListNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaAnnotationListNode;
 import edu.jhu.cs.bsj.compiler.impl.ast.BsjNodeManager;
-import edu.jhu.cs.bsj.compiler.impl.ast.attribute.AttributeName;
-import edu.jhu.cs.bsj.compiler.impl.ast.attribute.ReadWriteAttribute;
+import edu.jhu.cs.bsj.compiler.impl.ast.BsjNodeProxyFactory;
+import edu.jhu.cs.bsj.compiler.impl.ast.delta.property.LocalClassModifiersNodeSetAbstractFlagPropertyEditScriptElementImpl;
+import edu.jhu.cs.bsj.compiler.impl.ast.delta.property.LocalClassModifiersNodeSetFinalFlagPropertyEditScriptElementImpl;
+import edu.jhu.cs.bsj.compiler.impl.ast.delta.property.LocalClassModifiersNodeSetStrictfpFlagPropertyEditScriptElementImpl;
+import edu.jhu.cs.bsj.compiler.impl.ast.properties.LocalClassModifiersNodeProperties;
 
 @Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
 public class LocalClassModifiersNodeImpl extends ModifiersNodeImpl implements LocalClassModifiersNode
@@ -35,26 +38,11 @@ public class LocalClassModifiersNodeImpl extends ModifiersNodeImpl implements Lo
     /** Whether or not the associated class uses strict floating-point. */
     private boolean strictfpFlag;
     
-    private Map<LocalAttribute,ReadWriteAttribute> localAttributes = new EnumMap<LocalAttribute,ReadWriteAttribute>(LocalAttribute.class);
-    private ReadWriteAttribute getAttribute(LocalAttribute attributeName)
-    {
-        ReadWriteAttribute attribute = localAttributes.get(attributeName);
-        if (attribute == null)
-        {
-            attribute = new ReadWriteAttribute(LocalClassModifiersNodeImpl.this, attributeName);
-            localAttributes.put(attributeName, attribute);
-        }
-        return attribute;
-    }
-    private static enum LocalAttribute implements AttributeName
-    {
-        /** Attribute identifier for the abstractFlag property. */
-        ABSTRACT_FLAG,
-        /** Attribute identifier for the finalFlag property. */
-        FINAL_FLAG,
-        /** Attribute identifier for the strictfpFlag property. */
-        STRICTFP_FLAG,
-    }
+    /**
+     * A set of those properties which have been populated from the backing node.
+     * This field is <code>null</code> if <tt>backingNode</tt> is <code>null</code>.
+     */
+    private Set<LocalClassModifiersNodeProperties> populatedProperties;
     
     /** General constructor. */
     public LocalClassModifiersNodeImpl(
@@ -69,9 +57,65 @@ public class LocalClassModifiersNodeImpl extends ModifiersNodeImpl implements Lo
             boolean binary)
     {
         super(metaAnnotations, annotations, startLocation, stopLocation, manager, binary);
-        this.abstractFlag = abstractFlag;
-        this.finalFlag = finalFlag;
-        this.strictfpFlag = strictfpFlag;
+        this.populatedProperties = null;
+        doSetAbstractFlag(abstractFlag);
+        doSetFinalFlag(finalFlag);
+        doSetStrictfpFlag(strictfpFlag);
+    }
+    
+    /** Proxy constructor. */
+    public LocalClassModifiersNodeImpl(BsjNodeManager manager, BsjNodeProxyFactory proxyFactory, LocalClassModifiersNode backingNode)
+    {
+        super(manager, proxyFactory, backingNode);
+        this.populatedProperties = EnumSet.noneOf(LocalClassModifiersNodeProperties.class);
+    }
+    
+    /** Retrieves this node's backing node (if one exists). */
+    protected LocalClassModifiersNode getBackingNode()
+    {
+        return (LocalClassModifiersNode)super.getBackingNode();
+    }
+    
+    /**
+     * Ensures that the abstractFlag value has been populated from proxy.
+     * If this node is not backed by a proxy or if the value has already been
+     * populated, this method does nothing.
+     */
+    private void checkAbstractFlagWrapped()
+    {
+        if (this.populatedProperties == null || this.populatedProperties.contains(
+                LocalClassModifiersNodeProperties.ABSTRACT_FLAG))
+            return;
+        this.populatedProperties.add(LocalClassModifiersNodeProperties.ABSTRACT_FLAG);
+        this.abstractFlag = this.getBackingNode().getAbstractFlag();
+    }
+    
+    /**
+     * Ensures that the finalFlag value has been populated from proxy.
+     * If this node is not backed by a proxy or if the value has already been
+     * populated, this method does nothing.
+     */
+    private void checkFinalFlagWrapped()
+    {
+        if (this.populatedProperties == null || this.populatedProperties.contains(
+                LocalClassModifiersNodeProperties.FINAL_FLAG))
+            return;
+        this.populatedProperties.add(LocalClassModifiersNodeProperties.FINAL_FLAG);
+        this.finalFlag = this.getBackingNode().getFinalFlag();
+    }
+    
+    /**
+     * Ensures that the strictfpFlag value has been populated from proxy.
+     * If this node is not backed by a proxy or if the value has already been
+     * populated, this method does nothing.
+     */
+    private void checkStrictfpFlagWrapped()
+    {
+        if (this.populatedProperties == null || this.populatedProperties.contains(
+                LocalClassModifiersNodeProperties.STRICTFP_FLAG))
+            return;
+        this.populatedProperties.add(LocalClassModifiersNodeProperties.STRICTFP_FLAG);
+        this.strictfpFlag = this.getBackingNode().getStrictfpFlag();
     }
     
     /**
@@ -80,7 +124,7 @@ public class LocalClassModifiersNodeImpl extends ModifiersNodeImpl implements Lo
      */
     public boolean getAbstractFlag()
     {
-        getAttribute(LocalAttribute.ABSTRACT_FLAG).recordAccess(ReadWriteAttribute.AccessType.READ);
+        checkAbstractFlagWrapped();
         return this.abstractFlag;
     }
     
@@ -90,18 +134,15 @@ public class LocalClassModifiersNodeImpl extends ModifiersNodeImpl implements Lo
      */
     public void setAbstractFlag(boolean abstractFlag)
     {
-            setAbstractFlag(abstractFlag, true);
-            getManager().notifyChange(this);
+        checkAbstractFlagWrapped();
+        this.getManager().assertMutatable(this);
+        this.doSetAbstractFlag(abstractFlag);
+        if (this.getManager().isRecordingEdits())
+            super.recordEdit(new LocalClassModifiersNodeSetAbstractFlagPropertyEditScriptElementImpl(this.getManager().getCurrentMetaprogramId(), this.getUid(), abstractFlag));
     }
     
-    private void setAbstractFlag(boolean abstractFlag, boolean checkPermissions)
+    private void doSetAbstractFlag(boolean abstractFlag)
     {
-        if (checkPermissions)
-        {
-            getManager().assertMutatable(this);
-            getAttribute(LocalAttribute.ABSTRACT_FLAG).recordAccess(ReadWriteAttribute.AccessType.WRITE);
-        }
-        
         this.abstractFlag = abstractFlag;
     }
     
@@ -111,7 +152,7 @@ public class LocalClassModifiersNodeImpl extends ModifiersNodeImpl implements Lo
      */
     public boolean getFinalFlag()
     {
-        getAttribute(LocalAttribute.FINAL_FLAG).recordAccess(ReadWriteAttribute.AccessType.READ);
+        checkFinalFlagWrapped();
         return this.finalFlag;
     }
     
@@ -121,18 +162,15 @@ public class LocalClassModifiersNodeImpl extends ModifiersNodeImpl implements Lo
      */
     public void setFinalFlag(boolean finalFlag)
     {
-            setFinalFlag(finalFlag, true);
-            getManager().notifyChange(this);
+        checkFinalFlagWrapped();
+        this.getManager().assertMutatable(this);
+        this.doSetFinalFlag(finalFlag);
+        if (this.getManager().isRecordingEdits())
+            super.recordEdit(new LocalClassModifiersNodeSetFinalFlagPropertyEditScriptElementImpl(this.getManager().getCurrentMetaprogramId(), this.getUid(), finalFlag));
     }
     
-    private void setFinalFlag(boolean finalFlag, boolean checkPermissions)
+    private void doSetFinalFlag(boolean finalFlag)
     {
-        if (checkPermissions)
-        {
-            getManager().assertMutatable(this);
-            getAttribute(LocalAttribute.FINAL_FLAG).recordAccess(ReadWriteAttribute.AccessType.WRITE);
-        }
-        
         this.finalFlag = finalFlag;
     }
     
@@ -142,7 +180,7 @@ public class LocalClassModifiersNodeImpl extends ModifiersNodeImpl implements Lo
      */
     public boolean getStrictfpFlag()
     {
-        getAttribute(LocalAttribute.STRICTFP_FLAG).recordAccess(ReadWriteAttribute.AccessType.READ);
+        checkStrictfpFlagWrapped();
         return this.strictfpFlag;
     }
     
@@ -152,18 +190,15 @@ public class LocalClassModifiersNodeImpl extends ModifiersNodeImpl implements Lo
      */
     public void setStrictfpFlag(boolean strictfpFlag)
     {
-            setStrictfpFlag(strictfpFlag, true);
-            getManager().notifyChange(this);
+        checkStrictfpFlagWrapped();
+        this.getManager().assertMutatable(this);
+        this.doSetStrictfpFlag(strictfpFlag);
+        if (this.getManager().isRecordingEdits())
+            super.recordEdit(new LocalClassModifiersNodeSetStrictfpFlagPropertyEditScriptElementImpl(this.getManager().getCurrentMetaprogramId(), this.getUid(), strictfpFlag));
     }
     
-    private void setStrictfpFlag(boolean strictfpFlag, boolean checkPermissions)
+    private void doSetStrictfpFlag(boolean strictfpFlag)
     {
-        if (checkPermissions)
-        {
-            getManager().assertMutatable(this);
-            getAttribute(LocalAttribute.STRICTFP_FLAG).recordAccess(ReadWriteAttribute.AccessType.WRITE);
-        }
-        
         this.strictfpFlag = strictfpFlag;
     }
     
@@ -258,6 +293,8 @@ public class LocalClassModifiersNodeImpl extends ModifiersNodeImpl implements Lo
     {
         StringBuilder sb = new StringBuilder();
         sb.append(this.getClass().getSimpleName());
+        sb.append('#');
+        sb.append(this.getUid());
         sb.append('[');
         sb.append("abstractFlag=");
         sb.append(',');

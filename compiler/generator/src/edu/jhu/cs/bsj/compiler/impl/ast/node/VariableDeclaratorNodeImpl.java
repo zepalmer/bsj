@@ -1,10 +1,10 @@
 package edu.jhu.cs.bsj.compiler.impl.ast.node;
 
 import java.util.Arrays;
-import java.util.EnumMap;
+import java.util.EnumSet;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
+import java.util.Set;
 
 import javax.annotation.Generated;
 
@@ -22,9 +22,12 @@ import edu.jhu.cs.bsj.compiler.ast.node.VariableDeclaratorNode;
 import edu.jhu.cs.bsj.compiler.ast.node.VariableDeclaratorOwnerNode;
 import edu.jhu.cs.bsj.compiler.ast.node.VariableInitializerNode;
 import edu.jhu.cs.bsj.compiler.impl.ast.BsjNodeManager;
+import edu.jhu.cs.bsj.compiler.impl.ast.BsjNodeProxyFactory;
 import edu.jhu.cs.bsj.compiler.impl.ast.NormalNodeUnion;
-import edu.jhu.cs.bsj.compiler.impl.ast.attribute.AttributeName;
-import edu.jhu.cs.bsj.compiler.impl.ast.attribute.ReadWriteAttribute;
+import edu.jhu.cs.bsj.compiler.impl.ast.delta.property.VariableDeclaratorNodeSetArrayLevelsPropertyEditScriptElementImpl;
+import edu.jhu.cs.bsj.compiler.impl.ast.delta.property.VariableDeclaratorNodeSetIdentifierPropertyEditScriptElementImpl;
+import edu.jhu.cs.bsj.compiler.impl.ast.delta.property.VariableDeclaratorNodeSetInitializerPropertyEditScriptElementImpl;
+import edu.jhu.cs.bsj.compiler.impl.ast.properties.VariableDeclaratorNodeProperties;
 @Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
 public class VariableDeclaratorNodeImpl extends NodeImpl implements VariableDeclaratorNode
 {
@@ -37,26 +40,11 @@ public class VariableDeclaratorNodeImpl extends NodeImpl implements VariableDecl
     /** The initializer to use. */
     private NodeUnion<? extends VariableInitializerNode> initializer;
     
-    private Map<LocalAttribute,ReadWriteAttribute> localAttributes = new EnumMap<LocalAttribute,ReadWriteAttribute>(LocalAttribute.class);
-    private ReadWriteAttribute getAttribute(LocalAttribute attributeName)
-    {
-        ReadWriteAttribute attribute = localAttributes.get(attributeName);
-        if (attribute == null)
-        {
-            attribute = new ReadWriteAttribute(VariableDeclaratorNodeImpl.this, attributeName);
-            localAttributes.put(attributeName, attribute);
-        }
-        return attribute;
-    }
-    private static enum LocalAttribute implements AttributeName
-    {
-        /** Attribute identifier for the identifier property. */
-        IDENTIFIER,
-        /** Attribute identifier for the arrayLevels property. */
-        ARRAY_LEVELS,
-        /** Attribute identifier for the initializer property. */
-        INITIALIZER,
-    }
+    /**
+     * A set of those properties which have been populated from the backing node.
+     * This field is <code>null</code> if <tt>backingNode</tt> is <code>null</code>.
+     */
+    private Set<VariableDeclaratorNodeProperties> populatedProperties;
     
     /** General constructor. */
     public VariableDeclaratorNodeImpl(
@@ -69,9 +57,93 @@ public class VariableDeclaratorNodeImpl extends NodeImpl implements VariableDecl
             boolean binary)
     {
         super(startLocation, stopLocation, manager, binary);
-        setUnionForIdentifier(identifier, false);
-        this.arrayLevels = arrayLevels;
-        setUnionForInitializer(initializer, false);
+        this.populatedProperties = null;
+        doSetIdentifier(identifier);
+        doSetArrayLevels(arrayLevels);
+        doSetInitializer(initializer);
+    }
+    
+    /** Proxy constructor. */
+    public VariableDeclaratorNodeImpl(BsjNodeManager manager, BsjNodeProxyFactory proxyFactory, VariableDeclaratorNode backingNode)
+    {
+        super(manager, proxyFactory, backingNode);
+        this.populatedProperties = EnumSet.noneOf(VariableDeclaratorNodeProperties.class);
+    }
+    
+    /** Retrieves this node's backing node (if one exists). */
+    protected VariableDeclaratorNode getBackingNode()
+    {
+        return (VariableDeclaratorNode)super.getBackingNode();
+    }
+    
+    /**
+     * Ensures that the identifier value has been populated from proxy.
+     * If this node is not backed by a proxy or if the value has already been
+     * populated, this method does nothing.
+     */
+    private void checkIdentifierWrapped()
+    {
+        if (this.populatedProperties == null || this.populatedProperties.contains(
+                VariableDeclaratorNodeProperties.IDENTIFIER))
+            return;
+        this.populatedProperties.add(VariableDeclaratorNodeProperties.IDENTIFIER);
+        NodeUnion<? extends IdentifierNode> union = this.getBackingNode().getUnionForIdentifier();
+        switch (union.getType())
+        {
+            case NORMAL:
+                union = this.getProxyFactory().makeNormalNodeUnion(
+                        this.getProxyFactory().makeIdentifierNode(union.getNormalNode()));
+                break;
+            case SPLICE:
+                union = this.getProxyFactory().makeSpliceNodeUnion(
+                        this.getProxyFactory().makeSpliceNode(union.getSpliceNode()));
+                break;
+            default:
+                throw new IllegalStateException("Unrecognized union type: " + union.getType());
+        }
+        this.identifier = union;
+    }
+    
+    /**
+     * Ensures that the arrayLevels value has been populated from proxy.
+     * If this node is not backed by a proxy or if the value has already been
+     * populated, this method does nothing.
+     */
+    private void checkArrayLevelsWrapped()
+    {
+        if (this.populatedProperties == null || this.populatedProperties.contains(
+                VariableDeclaratorNodeProperties.ARRAY_LEVELS))
+            return;
+        this.populatedProperties.add(VariableDeclaratorNodeProperties.ARRAY_LEVELS);
+        this.arrayLevels = this.getBackingNode().getArrayLevels();
+    }
+    
+    /**
+     * Ensures that the initializer value has been populated from proxy.
+     * If this node is not backed by a proxy or if the value has already been
+     * populated, this method does nothing.
+     */
+    private void checkInitializerWrapped()
+    {
+        if (this.populatedProperties == null || this.populatedProperties.contains(
+                VariableDeclaratorNodeProperties.INITIALIZER))
+            return;
+        this.populatedProperties.add(VariableDeclaratorNodeProperties.INITIALIZER);
+        NodeUnion<? extends VariableInitializerNode> union = this.getBackingNode().getUnionForInitializer();
+        switch (union.getType())
+        {
+            case NORMAL:
+                union = this.getProxyFactory().makeNormalNodeUnion(
+                        this.getProxyFactory().makeVariableInitializerNode(union.getNormalNode()));
+                break;
+            case SPLICE:
+                union = this.getProxyFactory().makeSpliceNodeUnion(
+                        this.getProxyFactory().makeSpliceNode(union.getSpliceNode()));
+                break;
+            default:
+                throw new IllegalStateException("Unrecognized union type: " + union.getType());
+        }
+        this.initializer = union;
     }
     
     /**
@@ -81,7 +153,7 @@ public class VariableDeclaratorNodeImpl extends NodeImpl implements VariableDecl
      */
     public IdentifierNode getIdentifier()
     {
-        getAttribute(LocalAttribute.IDENTIFIER).recordAccess(ReadWriteAttribute.AccessType.READ);
+        checkIdentifierWrapped();
         if (this.identifier == null)
         {
             return null;
@@ -97,7 +169,7 @@ public class VariableDeclaratorNodeImpl extends NodeImpl implements VariableDecl
      */
     public NodeUnion<? extends IdentifierNode> getUnionForIdentifier()
     {
-        getAttribute(LocalAttribute.IDENTIFIER).recordAccess(ReadWriteAttribute.AccessType.READ);
+        checkIdentifierWrapped();
         if (this.identifier == null)
         {
             this.identifier = new NormalNodeUnion<IdentifierNode>(null);
@@ -111,24 +183,8 @@ public class VariableDeclaratorNodeImpl extends NodeImpl implements VariableDecl
      */
     public void setIdentifier(IdentifierNode identifier)
     {
-            setIdentifier(identifier, true);
-            getManager().notifyChange(this);
-    }
-    
-    private void setIdentifier(IdentifierNode identifier, boolean checkPermissions)
-    {
-        if (checkPermissions)
-        {
-            getManager().assertMutatable(this);
-            getAttribute(LocalAttribute.IDENTIFIER).recordAccess(ReadWriteAttribute.AccessType.WRITE);
-        }
-        
-        if (this.identifier != null)
-        {
-            setAsChild(this.identifier.getNodeValue(), false);
-        }
-        this.identifier = new NormalNodeUnion<IdentifierNode>(identifier);
-        setAsChild(identifier, true);
+        checkIdentifierWrapped();
+        this.setUnionForIdentifier(new NormalNodeUnion<IdentifierNode>(identifier));
     }
     
     /**
@@ -137,18 +193,15 @@ public class VariableDeclaratorNodeImpl extends NodeImpl implements VariableDecl
      */
     public void setUnionForIdentifier(NodeUnion<? extends IdentifierNode> identifier)
     {
-            setUnionForIdentifier(identifier, true);
-            getManager().notifyChange(this);
+        checkIdentifierWrapped();
+        this.getManager().assertMutatable(this);
+        this.doSetIdentifier(identifier);
+        if (this.getManager().isRecordingEdits())
+            super.recordEdit(new VariableDeclaratorNodeSetIdentifierPropertyEditScriptElementImpl(this.getManager().getCurrentMetaprogramId(), this.getUid(), identifier.getNodeValue() == null ? null : identifier.getNodeValue().getUid()));
     }
     
-    private void setUnionForIdentifier(NodeUnion<? extends IdentifierNode> identifier, boolean checkPermissions)
+    private void doSetIdentifier(NodeUnion<? extends IdentifierNode> identifier)
     {
-        if (checkPermissions)
-        {
-            getManager().assertMutatable(this);
-            getAttribute(LocalAttribute.IDENTIFIER).recordAccess(ReadWriteAttribute.AccessType.WRITE);
-        }
-        
         if (identifier == null)
         {
             identifier = new NormalNodeUnion<IdentifierNode>(null);
@@ -167,7 +220,7 @@ public class VariableDeclaratorNodeImpl extends NodeImpl implements VariableDecl
      */
     public int getArrayLevels()
     {
-        getAttribute(LocalAttribute.ARRAY_LEVELS).recordAccess(ReadWriteAttribute.AccessType.READ);
+        checkArrayLevelsWrapped();
         return this.arrayLevels;
     }
     
@@ -177,18 +230,15 @@ public class VariableDeclaratorNodeImpl extends NodeImpl implements VariableDecl
      */
     public void setArrayLevels(int arrayLevels)
     {
-            setArrayLevels(arrayLevels, true);
-            getManager().notifyChange(this);
+        checkArrayLevelsWrapped();
+        this.getManager().assertMutatable(this);
+        this.doSetArrayLevels(arrayLevels);
+        if (this.getManager().isRecordingEdits())
+            super.recordEdit(new VariableDeclaratorNodeSetArrayLevelsPropertyEditScriptElementImpl(this.getManager().getCurrentMetaprogramId(), this.getUid(), arrayLevels));
     }
     
-    private void setArrayLevels(int arrayLevels, boolean checkPermissions)
+    private void doSetArrayLevels(int arrayLevels)
     {
-        if (checkPermissions)
-        {
-            getManager().assertMutatable(this);
-            getAttribute(LocalAttribute.ARRAY_LEVELS).recordAccess(ReadWriteAttribute.AccessType.WRITE);
-        }
-        
         this.arrayLevels = arrayLevels;
     }
     
@@ -199,7 +249,7 @@ public class VariableDeclaratorNodeImpl extends NodeImpl implements VariableDecl
      */
     public VariableInitializerNode getInitializer()
     {
-        getAttribute(LocalAttribute.INITIALIZER).recordAccess(ReadWriteAttribute.AccessType.READ);
+        checkInitializerWrapped();
         if (this.initializer == null)
         {
             return null;
@@ -215,7 +265,7 @@ public class VariableDeclaratorNodeImpl extends NodeImpl implements VariableDecl
      */
     public NodeUnion<? extends VariableInitializerNode> getUnionForInitializer()
     {
-        getAttribute(LocalAttribute.INITIALIZER).recordAccess(ReadWriteAttribute.AccessType.READ);
+        checkInitializerWrapped();
         if (this.initializer == null)
         {
             this.initializer = new NormalNodeUnion<VariableInitializerNode>(null);
@@ -229,24 +279,8 @@ public class VariableDeclaratorNodeImpl extends NodeImpl implements VariableDecl
      */
     public void setInitializer(VariableInitializerNode initializer)
     {
-            setInitializer(initializer, true);
-            getManager().notifyChange(this);
-    }
-    
-    private void setInitializer(VariableInitializerNode initializer, boolean checkPermissions)
-    {
-        if (checkPermissions)
-        {
-            getManager().assertMutatable(this);
-            getAttribute(LocalAttribute.INITIALIZER).recordAccess(ReadWriteAttribute.AccessType.WRITE);
-        }
-        
-        if (this.initializer != null)
-        {
-            setAsChild(this.initializer.getNodeValue(), false);
-        }
-        this.initializer = new NormalNodeUnion<VariableInitializerNode>(initializer);
-        setAsChild(initializer, true);
+        checkInitializerWrapped();
+        this.setUnionForInitializer(new NormalNodeUnion<VariableInitializerNode>(initializer));
     }
     
     /**
@@ -255,18 +289,15 @@ public class VariableDeclaratorNodeImpl extends NodeImpl implements VariableDecl
      */
     public void setUnionForInitializer(NodeUnion<? extends VariableInitializerNode> initializer)
     {
-            setUnionForInitializer(initializer, true);
-            getManager().notifyChange(this);
+        checkInitializerWrapped();
+        this.getManager().assertMutatable(this);
+        this.doSetInitializer(initializer);
+        if (this.getManager().isRecordingEdits())
+            super.recordEdit(new VariableDeclaratorNodeSetInitializerPropertyEditScriptElementImpl(this.getManager().getCurrentMetaprogramId(), this.getUid(), initializer.getNodeValue() == null ? null : initializer.getNodeValue().getUid()));
     }
     
-    private void setUnionForInitializer(NodeUnion<? extends VariableInitializerNode> initializer, boolean checkPermissions)
+    private void doSetInitializer(NodeUnion<? extends VariableInitializerNode> initializer)
     {
-        if (checkPermissions)
-        {
-            getManager().assertMutatable(this);
-            getAttribute(LocalAttribute.INITIALIZER).recordAccess(ReadWriteAttribute.AccessType.WRITE);
-        }
-        
         if (initializer == null)
         {
             initializer = new NormalNodeUnion<VariableInitializerNode>(null);
@@ -290,13 +321,13 @@ public class VariableDeclaratorNodeImpl extends NodeImpl implements VariableDecl
     protected void receiveToChildren(BsjNodeVisitor visitor)
     {
         super.receiveToChildren(visitor);
-        if (this.identifier.getNodeValue() != null)
+        if (this.getUnionForIdentifier().getNodeValue() != null)
         {
-            this.identifier.getNodeValue().receive(visitor);
+            this.getUnionForIdentifier().getNodeValue().receive(visitor);
         }
-        if (this.initializer.getNodeValue() != null)
+        if (this.getUnionForInitializer().getNodeValue() != null)
         {
-            this.initializer.getNodeValue().receive(visitor);
+            this.getUnionForInitializer().getNodeValue().receive(visitor);
         }
         Iterator<? extends Node> extras = getHiddenVisitorChildren();
         if (extras != null)
@@ -319,13 +350,13 @@ public class VariableDeclaratorNodeImpl extends NodeImpl implements VariableDecl
     protected void receiveTypedToChildren(BsjTypedNodeVisitor visitor)
     {
         super.receiveTypedToChildren(visitor);
-        if (this.identifier.getNodeValue() != null)
+        if (this.getUnionForIdentifier().getNodeValue() != null)
         {
-            this.identifier.getNodeValue().receiveTyped(visitor);
+            this.getUnionForIdentifier().getNodeValue().receiveTyped(visitor);
         }
-        if (this.initializer.getNodeValue() != null)
+        if (this.getUnionForInitializer().getNodeValue() != null)
         {
-            this.initializer.getNodeValue().receiveTyped(visitor);
+            this.getUnionForInitializer().getNodeValue().receiveTyped(visitor);
         }
         Iterator<? extends Node> extras = getHiddenVisitorChildren();
         if (extras != null)
@@ -386,6 +417,8 @@ public class VariableDeclaratorNodeImpl extends NodeImpl implements VariableDecl
     {
         StringBuilder sb = new StringBuilder();
         sb.append(this.getClass().getSimpleName());
+        sb.append('#');
+        sb.append(this.getUid());
         sb.append('[');
         sb.append("identifier=");
         sb.append(this.getUnionForIdentifier().getNodeValue() == null? "null" : this.getUnionForIdentifier().getNodeValue().getClass().getSimpleName());

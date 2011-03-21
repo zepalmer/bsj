@@ -1,15 +1,21 @@
 package edu.jhu.cs.bsj.tests.compiler.tool.compiler;
 
-import java.io.File;
-
+import org.junit.Assert;
 import org.junit.Test;
+
+import edu.jhu.cs.bsj.compiler.tool.filemanager.BsjCompilerLocation;
+import edu.jhu.cs.bsj.compiler.tool.filemanager.BsjFileManager;
 
 public class TwoFileBsjCompilerDependencyTest extends AbstractBsjCompilerTest
 {
 	@Test
-	public void testBsjCompiler() throws Exception
+	public void testTwoFileDependencies() throws Exception
 	{
-		performTest(new File(EXAMPLES + File.separator + "projects" + File.separator + "bsj-tests" + File.separator
-				+ "two-file-bsj-compiler-dependency-test"), "A", "B");
+	    BsjFileManager fileManager = performTest("TwoFileBsjCompilerDependencyTest");
+	    ClassLoader loader = fileManager.getLocationManager(BsjCompilerLocation.CLASS_OUTPUT).getClassLoader();
+	    DynamicClass aClass = new DynamicClass(loader, "A");
+	    DynamicObject bObj = aClass.call("inst");
+	    DynamicObject str = bObj.call("toString");
+	    Assert.assertEquals("B", str.unwrap());
 	}
 }

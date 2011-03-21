@@ -1,10 +1,10 @@
 package edu.jhu.cs.bsj.compiler.impl.ast.node.meta;
 
 import java.util.Arrays;
-import java.util.EnumMap;
+import java.util.EnumSet;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
+import java.util.Set;
 
 import javax.annotation.Generated;
 
@@ -19,10 +19,11 @@ import edu.jhu.cs.bsj.compiler.ast.node.Node;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaAnnotationMetaAnnotationValueNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaAnnotationNode;
 import edu.jhu.cs.bsj.compiler.impl.ast.BsjNodeManager;
+import edu.jhu.cs.bsj.compiler.impl.ast.BsjNodeProxyFactory;
 import edu.jhu.cs.bsj.compiler.impl.ast.NormalNodeUnion;
-import edu.jhu.cs.bsj.compiler.impl.ast.attribute.AttributeName;
-import edu.jhu.cs.bsj.compiler.impl.ast.attribute.ReadWriteAttribute;
+import edu.jhu.cs.bsj.compiler.impl.ast.delta.property.MetaAnnotationMetaAnnotationValueNodeSetAnnotationPropertyEditScriptElementImpl;
 import edu.jhu.cs.bsj.compiler.impl.ast.node.NodeImpl;
+import edu.jhu.cs.bsj.compiler.impl.ast.properties.MetaAnnotationMetaAnnotationValueNodeProperties;
 
 @Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
 public class MetaAnnotationMetaAnnotationValueNodeImpl extends NodeImpl implements MetaAnnotationMetaAnnotationValueNode
@@ -30,22 +31,11 @@ public class MetaAnnotationMetaAnnotationValueNodeImpl extends NodeImpl implemen
     /** The annotation. */
     private NodeUnion<? extends MetaAnnotationNode> annotation;
     
-    private Map<LocalAttribute,ReadWriteAttribute> localAttributes = new EnumMap<LocalAttribute,ReadWriteAttribute>(LocalAttribute.class);
-    private ReadWriteAttribute getAttribute(LocalAttribute attributeName)
-    {
-        ReadWriteAttribute attribute = localAttributes.get(attributeName);
-        if (attribute == null)
-        {
-            attribute = new ReadWriteAttribute(MetaAnnotationMetaAnnotationValueNodeImpl.this, attributeName);
-            localAttributes.put(attributeName, attribute);
-        }
-        return attribute;
-    }
-    private static enum LocalAttribute implements AttributeName
-    {
-        /** Attribute identifier for the annotation property. */
-        ANNOTATION,
-    }
+    /**
+     * A set of those properties which have been populated from the backing node.
+     * This field is <code>null</code> if <tt>backingNode</tt> is <code>null</code>.
+     */
+    private Set<MetaAnnotationMetaAnnotationValueNodeProperties> populatedProperties;
     
     /** General constructor. */
     public MetaAnnotationMetaAnnotationValueNodeImpl(
@@ -56,7 +46,49 @@ public class MetaAnnotationMetaAnnotationValueNodeImpl extends NodeImpl implemen
             boolean binary)
     {
         super(startLocation, stopLocation, manager, binary);
-        setUnionForAnnotation(annotation, false);
+        this.populatedProperties = null;
+        doSetAnnotation(annotation);
+    }
+    
+    /** Proxy constructor. */
+    public MetaAnnotationMetaAnnotationValueNodeImpl(BsjNodeManager manager, BsjNodeProxyFactory proxyFactory, MetaAnnotationMetaAnnotationValueNode backingNode)
+    {
+        super(manager, proxyFactory, backingNode);
+        this.populatedProperties = EnumSet.noneOf(MetaAnnotationMetaAnnotationValueNodeProperties.class);
+    }
+    
+    /** Retrieves this node's backing node (if one exists). */
+    protected MetaAnnotationMetaAnnotationValueNode getBackingNode()
+    {
+        return (MetaAnnotationMetaAnnotationValueNode)super.getBackingNode();
+    }
+    
+    /**
+     * Ensures that the annotation value has been populated from proxy.
+     * If this node is not backed by a proxy or if the value has already been
+     * populated, this method does nothing.
+     */
+    private void checkAnnotationWrapped()
+    {
+        if (this.populatedProperties == null || this.populatedProperties.contains(
+                MetaAnnotationMetaAnnotationValueNodeProperties.ANNOTATION))
+            return;
+        this.populatedProperties.add(MetaAnnotationMetaAnnotationValueNodeProperties.ANNOTATION);
+        NodeUnion<? extends MetaAnnotationNode> union = this.getBackingNode().getUnionForAnnotation();
+        switch (union.getType())
+        {
+            case NORMAL:
+                union = this.getProxyFactory().makeNormalNodeUnion(
+                        this.getProxyFactory().makeMetaAnnotationNode(union.getNormalNode()));
+                break;
+            case SPLICE:
+                union = this.getProxyFactory().makeSpliceNodeUnion(
+                        this.getProxyFactory().makeSpliceNode(union.getSpliceNode()));
+                break;
+            default:
+                throw new IllegalStateException("Unrecognized union type: " + union.getType());
+        }
+        this.annotation = union;
     }
     
     /**
@@ -66,7 +98,7 @@ public class MetaAnnotationMetaAnnotationValueNodeImpl extends NodeImpl implemen
      */
     public MetaAnnotationNode getAnnotation()
     {
-        getAttribute(LocalAttribute.ANNOTATION).recordAccess(ReadWriteAttribute.AccessType.READ);
+        checkAnnotationWrapped();
         if (this.annotation == null)
         {
             return null;
@@ -82,7 +114,7 @@ public class MetaAnnotationMetaAnnotationValueNodeImpl extends NodeImpl implemen
      */
     public NodeUnion<? extends MetaAnnotationNode> getUnionForAnnotation()
     {
-        getAttribute(LocalAttribute.ANNOTATION).recordAccess(ReadWriteAttribute.AccessType.READ);
+        checkAnnotationWrapped();
         if (this.annotation == null)
         {
             this.annotation = new NormalNodeUnion<MetaAnnotationNode>(null);
@@ -96,24 +128,8 @@ public class MetaAnnotationMetaAnnotationValueNodeImpl extends NodeImpl implemen
      */
     public void setAnnotation(MetaAnnotationNode annotation)
     {
-            setAnnotation(annotation, true);
-            getManager().notifyChange(this);
-    }
-    
-    private void setAnnotation(MetaAnnotationNode annotation, boolean checkPermissions)
-    {
-        if (checkPermissions)
-        {
-            getManager().assertMutatable(this);
-            getAttribute(LocalAttribute.ANNOTATION).recordAccess(ReadWriteAttribute.AccessType.WRITE);
-        }
-        
-        if (this.annotation != null)
-        {
-            setAsChild(this.annotation.getNodeValue(), false);
-        }
-        this.annotation = new NormalNodeUnion<MetaAnnotationNode>(annotation);
-        setAsChild(annotation, true);
+        checkAnnotationWrapped();
+        this.setUnionForAnnotation(new NormalNodeUnion<MetaAnnotationNode>(annotation));
     }
     
     /**
@@ -122,18 +138,15 @@ public class MetaAnnotationMetaAnnotationValueNodeImpl extends NodeImpl implemen
      */
     public void setUnionForAnnotation(NodeUnion<? extends MetaAnnotationNode> annotation)
     {
-            setUnionForAnnotation(annotation, true);
-            getManager().notifyChange(this);
+        checkAnnotationWrapped();
+        this.getManager().assertMutatable(this);
+        this.doSetAnnotation(annotation);
+        if (this.getManager().isRecordingEdits())
+            super.recordEdit(new MetaAnnotationMetaAnnotationValueNodeSetAnnotationPropertyEditScriptElementImpl(this.getManager().getCurrentMetaprogramId(), this.getUid(), annotation.getNodeValue() == null ? null : annotation.getNodeValue().getUid()));
     }
     
-    private void setUnionForAnnotation(NodeUnion<? extends MetaAnnotationNode> annotation, boolean checkPermissions)
+    private void doSetAnnotation(NodeUnion<? extends MetaAnnotationNode> annotation)
     {
-        if (checkPermissions)
-        {
-            getManager().assertMutatable(this);
-            getAttribute(LocalAttribute.ANNOTATION).recordAccess(ReadWriteAttribute.AccessType.WRITE);
-        }
-        
         if (annotation == null)
         {
             annotation = new NormalNodeUnion<MetaAnnotationNode>(null);
@@ -157,9 +170,9 @@ public class MetaAnnotationMetaAnnotationValueNodeImpl extends NodeImpl implemen
     protected void receiveToChildren(BsjNodeVisitor visitor)
     {
         super.receiveToChildren(visitor);
-        if (this.annotation.getNodeValue() != null)
+        if (this.getUnionForAnnotation().getNodeValue() != null)
         {
-            this.annotation.getNodeValue().receive(visitor);
+            this.getUnionForAnnotation().getNodeValue().receive(visitor);
         }
         Iterator<? extends Node> extras = getHiddenVisitorChildren();
         if (extras != null)
@@ -182,9 +195,9 @@ public class MetaAnnotationMetaAnnotationValueNodeImpl extends NodeImpl implemen
     protected void receiveTypedToChildren(BsjTypedNodeVisitor visitor)
     {
         super.receiveTypedToChildren(visitor);
-        if (this.annotation.getNodeValue() != null)
+        if (this.getUnionForAnnotation().getNodeValue() != null)
         {
-            this.annotation.getNodeValue().receiveTyped(visitor);
+            this.getUnionForAnnotation().getNodeValue().receiveTyped(visitor);
         }
         Iterator<? extends Node> extras = getHiddenVisitorChildren();
         if (extras != null)
@@ -243,6 +256,8 @@ public class MetaAnnotationMetaAnnotationValueNodeImpl extends NodeImpl implemen
     {
         StringBuilder sb = new StringBuilder();
         sb.append(this.getClass().getSimpleName());
+        sb.append('#');
+        sb.append(this.getUid());
         sb.append('[');
         sb.append("annotation=");
         sb.append(this.getUnionForAnnotation().getNodeValue() == null? "null" : this.getUnionForAnnotation().getNodeValue().getClass().getSimpleName());

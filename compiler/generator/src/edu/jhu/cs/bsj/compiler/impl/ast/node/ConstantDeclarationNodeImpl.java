@@ -20,6 +20,7 @@ import edu.jhu.cs.bsj.compiler.ast.node.Node;
 import edu.jhu.cs.bsj.compiler.ast.node.TypeNode;
 import edu.jhu.cs.bsj.compiler.ast.node.list.VariableDeclaratorListNode;
 import edu.jhu.cs.bsj.compiler.impl.ast.BsjNodeManager;
+import edu.jhu.cs.bsj.compiler.impl.ast.BsjNodeProxyFactory;
 
 @Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
 public class ConstantDeclarationNodeImpl extends AbstractMemberVariableDeclarationNodeImpl<ConstantModifiersNode> implements ConstantDeclarationNode
@@ -36,6 +37,18 @@ public class ConstantDeclarationNodeImpl extends AbstractMemberVariableDeclarati
             boolean binary)
     {
         super(modifiers, type, declarators, javadoc, startLocation, stopLocation, manager, binary);
+    }
+    
+    /** Proxy constructor. */
+    public ConstantDeclarationNodeImpl(BsjNodeManager manager, BsjNodeProxyFactory proxyFactory, ConstantDeclarationNode backingNode)
+    {
+        super(manager, proxyFactory, backingNode);
+    }
+    
+    /** Retrieves this node's backing node (if one exists). */
+    protected ConstantDeclarationNode getBackingNode()
+    {
+        return (ConstantDeclarationNode)super.getBackingNode();
     }
     
     /**
@@ -130,6 +143,8 @@ public class ConstantDeclarationNodeImpl extends AbstractMemberVariableDeclarati
     {
         StringBuilder sb = new StringBuilder();
         sb.append(this.getClass().getSimpleName());
+        sb.append('#');
+        sb.append(this.getUid());
         sb.append('[');
         sb.append("modifiers=");
         sb.append(this.getUnionForModifiers().getNodeValue() == null? "null" : this.getUnionForModifiers().getNodeValue().getClass().getSimpleName());

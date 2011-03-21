@@ -17,6 +17,7 @@ import edu.jhu.cs.bsj.compiler.ast.node.Node;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaAnnotationElementListNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaAnnotationElementNode;
 import edu.jhu.cs.bsj.compiler.impl.ast.BsjNodeManager;
+import edu.jhu.cs.bsj.compiler.impl.ast.BsjNodeProxyFactory;
 import edu.jhu.cs.bsj.compiler.impl.ast.node.list.ListNodeImpl;
 
 @Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
@@ -31,6 +32,18 @@ public class MetaAnnotationElementListNodeImpl extends ListNodeImpl<MetaAnnotati
             boolean binary)
     {
         super(children, startLocation, stopLocation, manager, binary);
+    }
+    
+    /** Proxy constructor. */
+    public MetaAnnotationElementListNodeImpl(BsjNodeManager manager, BsjNodeProxyFactory proxyFactory, MetaAnnotationElementListNode backingNode)
+    {
+        super(manager, proxyFactory, backingNode);
+    }
+    
+    /** Retrieves this node's backing node (if one exists). */
+    protected MetaAnnotationElementListNode getBackingNode()
+    {
+        return (MetaAnnotationElementListNode)super.getBackingNode();
     }
     
     /**
@@ -137,6 +150,8 @@ public class MetaAnnotationElementListNodeImpl extends ListNodeImpl<MetaAnnotati
     {
         StringBuilder sb = new StringBuilder();
         sb.append(this.getClass().getSimpleName());
+        sb.append('#');
+        sb.append(this.getUid());
         sb.append('[');
         sb.append("children=");
         sb.append(this.getUnionForChildren() == null? "null" : this.getUnionForChildren().getClass().getSimpleName());
@@ -228,6 +243,14 @@ public class MetaAnnotationElementListNodeImpl extends ListNodeImpl<MetaAnnotati
     public Class<MetaAnnotationElementNode> getElementType()
     {
         return MetaAnnotationElementNode.class;
+    }
+    
+    /**
+     * Wraps an element of this list's type.
+     */
+    protected MetaAnnotationElementNode wrapElement(MetaAnnotationElementNode element)
+    {
+        return getProxyFactory().makeMetaAnnotationElementNode(element);
     }
     
 }

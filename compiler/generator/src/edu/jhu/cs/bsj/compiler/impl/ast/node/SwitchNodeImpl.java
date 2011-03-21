@@ -1,10 +1,10 @@
 package edu.jhu.cs.bsj.compiler.impl.ast.node;
 
 import java.util.Arrays;
-import java.util.EnumMap;
+import java.util.EnumSet;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
+import java.util.Set;
 
 import javax.annotation.Generated;
 
@@ -21,9 +21,12 @@ import edu.jhu.cs.bsj.compiler.ast.node.SwitchNode;
 import edu.jhu.cs.bsj.compiler.ast.node.list.CaseListNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaAnnotationListNode;
 import edu.jhu.cs.bsj.compiler.impl.ast.BsjNodeManager;
+import edu.jhu.cs.bsj.compiler.impl.ast.BsjNodeProxyFactory;
 import edu.jhu.cs.bsj.compiler.impl.ast.NormalNodeUnion;
-import edu.jhu.cs.bsj.compiler.impl.ast.attribute.AttributeName;
-import edu.jhu.cs.bsj.compiler.impl.ast.attribute.ReadWriteAttribute;
+import edu.jhu.cs.bsj.compiler.impl.ast.delta.property.SwitchNodeSetCasesPropertyEditScriptElementImpl;
+import edu.jhu.cs.bsj.compiler.impl.ast.delta.property.SwitchNodeSetExpressionPropertyEditScriptElementImpl;
+import edu.jhu.cs.bsj.compiler.impl.ast.delta.property.SwitchNodeSetMetaAnnotationsPropertyEditScriptElementImpl;
+import edu.jhu.cs.bsj.compiler.impl.ast.properties.SwitchNodeProperties;
 
 @Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
 public class SwitchNodeImpl extends NodeImpl implements SwitchNode
@@ -37,26 +40,11 @@ public class SwitchNodeImpl extends NodeImpl implements SwitchNode
     /** The meta-annotations associated with this node. */
     private NodeUnion<? extends MetaAnnotationListNode> metaAnnotations;
     
-    private Map<LocalAttribute,ReadWriteAttribute> localAttributes = new EnumMap<LocalAttribute,ReadWriteAttribute>(LocalAttribute.class);
-    private ReadWriteAttribute getAttribute(LocalAttribute attributeName)
-    {
-        ReadWriteAttribute attribute = localAttributes.get(attributeName);
-        if (attribute == null)
-        {
-            attribute = new ReadWriteAttribute(SwitchNodeImpl.this, attributeName);
-            localAttributes.put(attributeName, attribute);
-        }
-        return attribute;
-    }
-    private static enum LocalAttribute implements AttributeName
-    {
-        /** Attribute identifier for the expression property. */
-        EXPRESSION,
-        /** Attribute identifier for the cases property. */
-        CASES,
-        /** Attribute identifier for the metaAnnotations property. */
-        META_ANNOTATIONS,
-    }
+    /**
+     * A set of those properties which have been populated from the backing node.
+     * This field is <code>null</code> if <tt>backingNode</tt> is <code>null</code>.
+     */
+    private Set<SwitchNodeProperties> populatedProperties;
     
     /** General constructor. */
     public SwitchNodeImpl(
@@ -69,9 +57,107 @@ public class SwitchNodeImpl extends NodeImpl implements SwitchNode
             boolean binary)
     {
         super(startLocation, stopLocation, manager, binary);
-        setUnionForExpression(expression, false);
-        setUnionForCases(cases, false);
-        setUnionForMetaAnnotations(metaAnnotations, false);
+        this.populatedProperties = null;
+        doSetExpression(expression);
+        doSetCases(cases);
+        doSetMetaAnnotations(metaAnnotations);
+    }
+    
+    /** Proxy constructor. */
+    public SwitchNodeImpl(BsjNodeManager manager, BsjNodeProxyFactory proxyFactory, SwitchNode backingNode)
+    {
+        super(manager, proxyFactory, backingNode);
+        this.populatedProperties = EnumSet.noneOf(SwitchNodeProperties.class);
+    }
+    
+    /** Retrieves this node's backing node (if one exists). */
+    protected SwitchNode getBackingNode()
+    {
+        return (SwitchNode)super.getBackingNode();
+    }
+    
+    /**
+     * Ensures that the expression value has been populated from proxy.
+     * If this node is not backed by a proxy or if the value has already been
+     * populated, this method does nothing.
+     */
+    private void checkExpressionWrapped()
+    {
+        if (this.populatedProperties == null || this.populatedProperties.contains(
+                SwitchNodeProperties.EXPRESSION))
+            return;
+        this.populatedProperties.add(SwitchNodeProperties.EXPRESSION);
+        NodeUnion<? extends ExpressionNode> union = this.getBackingNode().getUnionForExpression();
+        switch (union.getType())
+        {
+            case NORMAL:
+                union = this.getProxyFactory().makeNormalNodeUnion(
+                        this.getProxyFactory().makeExpressionNode(union.getNormalNode()));
+                break;
+            case SPLICE:
+                union = this.getProxyFactory().makeSpliceNodeUnion(
+                        this.getProxyFactory().makeSpliceNode(union.getSpliceNode()));
+                break;
+            default:
+                throw new IllegalStateException("Unrecognized union type: " + union.getType());
+        }
+        this.expression = union;
+    }
+    
+    /**
+     * Ensures that the cases value has been populated from proxy.
+     * If this node is not backed by a proxy or if the value has already been
+     * populated, this method does nothing.
+     */
+    private void checkCasesWrapped()
+    {
+        if (this.populatedProperties == null || this.populatedProperties.contains(
+                SwitchNodeProperties.CASES))
+            return;
+        this.populatedProperties.add(SwitchNodeProperties.CASES);
+        NodeUnion<? extends CaseListNode> union = this.getBackingNode().getUnionForCases();
+        switch (union.getType())
+        {
+            case NORMAL:
+                union = this.getProxyFactory().makeNormalNodeUnion(
+                        this.getProxyFactory().makeCaseListNode(union.getNormalNode()));
+                break;
+            case SPLICE:
+                union = this.getProxyFactory().makeSpliceNodeUnion(
+                        this.getProxyFactory().makeSpliceNode(union.getSpliceNode()));
+                break;
+            default:
+                throw new IllegalStateException("Unrecognized union type: " + union.getType());
+        }
+        this.cases = union;
+    }
+    
+    /**
+     * Ensures that the metaAnnotations value has been populated from proxy.
+     * If this node is not backed by a proxy or if the value has already been
+     * populated, this method does nothing.
+     */
+    private void checkMetaAnnotationsWrapped()
+    {
+        if (this.populatedProperties == null || this.populatedProperties.contains(
+                SwitchNodeProperties.META_ANNOTATIONS))
+            return;
+        this.populatedProperties.add(SwitchNodeProperties.META_ANNOTATIONS);
+        NodeUnion<? extends MetaAnnotationListNode> union = this.getBackingNode().getUnionForMetaAnnotations();
+        switch (union.getType())
+        {
+            case NORMAL:
+                union = this.getProxyFactory().makeNormalNodeUnion(
+                        this.getProxyFactory().makeMetaAnnotationListNode(union.getNormalNode()));
+                break;
+            case SPLICE:
+                union = this.getProxyFactory().makeSpliceNodeUnion(
+                        this.getProxyFactory().makeSpliceNode(union.getSpliceNode()));
+                break;
+            default:
+                throw new IllegalStateException("Unrecognized union type: " + union.getType());
+        }
+        this.metaAnnotations = union;
     }
     
     /**
@@ -81,7 +167,7 @@ public class SwitchNodeImpl extends NodeImpl implements SwitchNode
      */
     public ExpressionNode getExpression()
     {
-        getAttribute(LocalAttribute.EXPRESSION).recordAccess(ReadWriteAttribute.AccessType.READ);
+        checkExpressionWrapped();
         if (this.expression == null)
         {
             return null;
@@ -97,7 +183,7 @@ public class SwitchNodeImpl extends NodeImpl implements SwitchNode
      */
     public NodeUnion<? extends ExpressionNode> getUnionForExpression()
     {
-        getAttribute(LocalAttribute.EXPRESSION).recordAccess(ReadWriteAttribute.AccessType.READ);
+        checkExpressionWrapped();
         if (this.expression == null)
         {
             this.expression = new NormalNodeUnion<ExpressionNode>(null);
@@ -111,24 +197,8 @@ public class SwitchNodeImpl extends NodeImpl implements SwitchNode
      */
     public void setExpression(ExpressionNode expression)
     {
-            setExpression(expression, true);
-            getManager().notifyChange(this);
-    }
-    
-    private void setExpression(ExpressionNode expression, boolean checkPermissions)
-    {
-        if (checkPermissions)
-        {
-            getManager().assertMutatable(this);
-            getAttribute(LocalAttribute.EXPRESSION).recordAccess(ReadWriteAttribute.AccessType.WRITE);
-        }
-        
-        if (this.expression != null)
-        {
-            setAsChild(this.expression.getNodeValue(), false);
-        }
-        this.expression = new NormalNodeUnion<ExpressionNode>(expression);
-        setAsChild(expression, true);
+        checkExpressionWrapped();
+        this.setUnionForExpression(new NormalNodeUnion<ExpressionNode>(expression));
     }
     
     /**
@@ -137,18 +207,15 @@ public class SwitchNodeImpl extends NodeImpl implements SwitchNode
      */
     public void setUnionForExpression(NodeUnion<? extends ExpressionNode> expression)
     {
-            setUnionForExpression(expression, true);
-            getManager().notifyChange(this);
+        checkExpressionWrapped();
+        this.getManager().assertMutatable(this);
+        this.doSetExpression(expression);
+        if (this.getManager().isRecordingEdits())
+            super.recordEdit(new SwitchNodeSetExpressionPropertyEditScriptElementImpl(this.getManager().getCurrentMetaprogramId(), this.getUid(), expression.getNodeValue() == null ? null : expression.getNodeValue().getUid()));
     }
     
-    private void setUnionForExpression(NodeUnion<? extends ExpressionNode> expression, boolean checkPermissions)
+    private void doSetExpression(NodeUnion<? extends ExpressionNode> expression)
     {
-        if (checkPermissions)
-        {
-            getManager().assertMutatable(this);
-            getAttribute(LocalAttribute.EXPRESSION).recordAccess(ReadWriteAttribute.AccessType.WRITE);
-        }
-        
         if (expression == null)
         {
             expression = new NormalNodeUnion<ExpressionNode>(null);
@@ -168,7 +235,7 @@ public class SwitchNodeImpl extends NodeImpl implements SwitchNode
      */
     public CaseListNode getCases()
     {
-        getAttribute(LocalAttribute.CASES).recordAccess(ReadWriteAttribute.AccessType.READ);
+        checkCasesWrapped();
         if (this.cases == null)
         {
             return null;
@@ -184,7 +251,7 @@ public class SwitchNodeImpl extends NodeImpl implements SwitchNode
      */
     public NodeUnion<? extends CaseListNode> getUnionForCases()
     {
-        getAttribute(LocalAttribute.CASES).recordAccess(ReadWriteAttribute.AccessType.READ);
+        checkCasesWrapped();
         if (this.cases == null)
         {
             this.cases = new NormalNodeUnion<CaseListNode>(null);
@@ -198,24 +265,8 @@ public class SwitchNodeImpl extends NodeImpl implements SwitchNode
      */
     public void setCases(CaseListNode cases)
     {
-            setCases(cases, true);
-            getManager().notifyChange(this);
-    }
-    
-    private void setCases(CaseListNode cases, boolean checkPermissions)
-    {
-        if (checkPermissions)
-        {
-            getManager().assertMutatable(this);
-            getAttribute(LocalAttribute.CASES).recordAccess(ReadWriteAttribute.AccessType.WRITE);
-        }
-        
-        if (this.cases != null)
-        {
-            setAsChild(this.cases.getNodeValue(), false);
-        }
-        this.cases = new NormalNodeUnion<CaseListNode>(cases);
-        setAsChild(cases, true);
+        checkCasesWrapped();
+        this.setUnionForCases(new NormalNodeUnion<CaseListNode>(cases));
     }
     
     /**
@@ -224,18 +275,15 @@ public class SwitchNodeImpl extends NodeImpl implements SwitchNode
      */
     public void setUnionForCases(NodeUnion<? extends CaseListNode> cases)
     {
-            setUnionForCases(cases, true);
-            getManager().notifyChange(this);
+        checkCasesWrapped();
+        this.getManager().assertMutatable(this);
+        this.doSetCases(cases);
+        if (this.getManager().isRecordingEdits())
+            super.recordEdit(new SwitchNodeSetCasesPropertyEditScriptElementImpl(this.getManager().getCurrentMetaprogramId(), this.getUid(), cases.getNodeValue() == null ? null : cases.getNodeValue().getUid()));
     }
     
-    private void setUnionForCases(NodeUnion<? extends CaseListNode> cases, boolean checkPermissions)
+    private void doSetCases(NodeUnion<? extends CaseListNode> cases)
     {
-        if (checkPermissions)
-        {
-            getManager().assertMutatable(this);
-            getAttribute(LocalAttribute.CASES).recordAccess(ReadWriteAttribute.AccessType.WRITE);
-        }
-        
         if (cases == null)
         {
             cases = new NormalNodeUnion<CaseListNode>(null);
@@ -255,7 +303,7 @@ public class SwitchNodeImpl extends NodeImpl implements SwitchNode
      */
     public MetaAnnotationListNode getMetaAnnotations()
     {
-        getAttribute(LocalAttribute.META_ANNOTATIONS).recordAccess(ReadWriteAttribute.AccessType.READ);
+        checkMetaAnnotationsWrapped();
         if (this.metaAnnotations == null)
         {
             return null;
@@ -271,7 +319,7 @@ public class SwitchNodeImpl extends NodeImpl implements SwitchNode
      */
     public NodeUnion<? extends MetaAnnotationListNode> getUnionForMetaAnnotations()
     {
-        getAttribute(LocalAttribute.META_ANNOTATIONS).recordAccess(ReadWriteAttribute.AccessType.READ);
+        checkMetaAnnotationsWrapped();
         if (this.metaAnnotations == null)
         {
             this.metaAnnotations = new NormalNodeUnion<MetaAnnotationListNode>(null);
@@ -285,24 +333,8 @@ public class SwitchNodeImpl extends NodeImpl implements SwitchNode
      */
     public void setMetaAnnotations(MetaAnnotationListNode metaAnnotations)
     {
-            setMetaAnnotations(metaAnnotations, true);
-            getManager().notifyChange(this);
-    }
-    
-    private void setMetaAnnotations(MetaAnnotationListNode metaAnnotations, boolean checkPermissions)
-    {
-        if (checkPermissions)
-        {
-            getManager().assertMutatable(this);
-            getAttribute(LocalAttribute.META_ANNOTATIONS).recordAccess(ReadWriteAttribute.AccessType.WRITE);
-        }
-        
-        if (this.metaAnnotations != null)
-        {
-            setAsChild(this.metaAnnotations.getNodeValue(), false);
-        }
-        this.metaAnnotations = new NormalNodeUnion<MetaAnnotationListNode>(metaAnnotations);
-        setAsChild(metaAnnotations, true);
+        checkMetaAnnotationsWrapped();
+        this.setUnionForMetaAnnotations(new NormalNodeUnion<MetaAnnotationListNode>(metaAnnotations));
     }
     
     /**
@@ -311,18 +343,15 @@ public class SwitchNodeImpl extends NodeImpl implements SwitchNode
      */
     public void setUnionForMetaAnnotations(NodeUnion<? extends MetaAnnotationListNode> metaAnnotations)
     {
-            setUnionForMetaAnnotations(metaAnnotations, true);
-            getManager().notifyChange(this);
+        checkMetaAnnotationsWrapped();
+        this.getManager().assertMutatable(this);
+        this.doSetMetaAnnotations(metaAnnotations);
+        if (this.getManager().isRecordingEdits())
+            super.recordEdit(new SwitchNodeSetMetaAnnotationsPropertyEditScriptElementImpl(this.getManager().getCurrentMetaprogramId(), this.getUid(), metaAnnotations.getNodeValue() == null ? null : metaAnnotations.getNodeValue().getUid()));
     }
     
-    private void setUnionForMetaAnnotations(NodeUnion<? extends MetaAnnotationListNode> metaAnnotations, boolean checkPermissions)
+    private void doSetMetaAnnotations(NodeUnion<? extends MetaAnnotationListNode> metaAnnotations)
     {
-        if (checkPermissions)
-        {
-            getManager().assertMutatable(this);
-            getAttribute(LocalAttribute.META_ANNOTATIONS).recordAccess(ReadWriteAttribute.AccessType.WRITE);
-        }
-        
         if (metaAnnotations == null)
         {
             metaAnnotations = new NormalNodeUnion<MetaAnnotationListNode>(null);
@@ -346,17 +375,17 @@ public class SwitchNodeImpl extends NodeImpl implements SwitchNode
     protected void receiveToChildren(BsjNodeVisitor visitor)
     {
         super.receiveToChildren(visitor);
-        if (this.expression.getNodeValue() != null)
+        if (this.getUnionForExpression().getNodeValue() != null)
         {
-            this.expression.getNodeValue().receive(visitor);
+            this.getUnionForExpression().getNodeValue().receive(visitor);
         }
-        if (this.cases.getNodeValue() != null)
+        if (this.getUnionForCases().getNodeValue() != null)
         {
-            this.cases.getNodeValue().receive(visitor);
+            this.getUnionForCases().getNodeValue().receive(visitor);
         }
-        if (this.metaAnnotations.getNodeValue() != null)
+        if (this.getUnionForMetaAnnotations().getNodeValue() != null)
         {
-            this.metaAnnotations.getNodeValue().receive(visitor);
+            this.getUnionForMetaAnnotations().getNodeValue().receive(visitor);
         }
         Iterator<? extends Node> extras = getHiddenVisitorChildren();
         if (extras != null)
@@ -379,17 +408,17 @@ public class SwitchNodeImpl extends NodeImpl implements SwitchNode
     protected void receiveTypedToChildren(BsjTypedNodeVisitor visitor)
     {
         super.receiveTypedToChildren(visitor);
-        if (this.expression.getNodeValue() != null)
+        if (this.getUnionForExpression().getNodeValue() != null)
         {
-            this.expression.getNodeValue().receiveTyped(visitor);
+            this.getUnionForExpression().getNodeValue().receiveTyped(visitor);
         }
-        if (this.cases.getNodeValue() != null)
+        if (this.getUnionForCases().getNodeValue() != null)
         {
-            this.cases.getNodeValue().receiveTyped(visitor);
+            this.getUnionForCases().getNodeValue().receiveTyped(visitor);
         }
-        if (this.metaAnnotations.getNodeValue() != null)
+        if (this.getUnionForMetaAnnotations().getNodeValue() != null)
         {
-            this.metaAnnotations.getNodeValue().receiveTyped(visitor);
+            this.getUnionForMetaAnnotations().getNodeValue().receiveTyped(visitor);
         }
         Iterator<? extends Node> extras = getHiddenVisitorChildren();
         if (extras != null)
@@ -450,6 +479,8 @@ public class SwitchNodeImpl extends NodeImpl implements SwitchNode
     {
         StringBuilder sb = new StringBuilder();
         sb.append(this.getClass().getSimpleName());
+        sb.append('#');
+        sb.append(this.getUid());
         sb.append('[');
         sb.append("expression=");
         sb.append(this.getUnionForExpression().getNodeValue() == null? "null" : this.getUnionForExpression().getNodeValue().getClass().getSimpleName());

@@ -1,9 +1,13 @@
 package edu.jhu.cs.bsj.tests;
 
 import java.io.File;
+import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 
@@ -13,11 +17,13 @@ import org.apache.log4j.PropertyConfigurator;
 import edu.jhu.cs.bsj.compiler.BsjServiceRegistry;
 import edu.jhu.cs.bsj.compiler.impl.tool.filemanager.RegularFileLocationManager;
 import edu.jhu.cs.bsj.compiler.impl.tool.filemanager.UnionLocationManager;
+import edu.jhu.cs.bsj.compiler.impl.utils.Pair;
 import edu.jhu.cs.bsj.compiler.tool.BsjToolkit;
 import edu.jhu.cs.bsj.compiler.tool.BsjToolkitFactory;
 import edu.jhu.cs.bsj.compiler.tool.filemanager.BsjCompilerLocation;
 import edu.jhu.cs.bsj.compiler.tool.filemanager.BsjFileManager;
 import edu.jhu.cs.bsj.compiler.tool.filemanager.BsjFileManagerFactory;
+import edu.jhu.cs.bsj.compiler.tool.filemanager.BsjFileObject;
 import edu.jhu.cs.bsj.compiler.tool.filemanager.LocationManager;
 
 /**
@@ -29,9 +35,6 @@ public abstract class AbstractTest
 {
     /** The directory containing the example sources. */
     public static final File EXAMPLES = new File("resources" + File.separator + "source-code");
-    /** The directory containing individual sources for specific tests. */
-    public static final File SPECIFIC_SOURCE_DIR = new File(EXAMPLES + File.separator + "individual-files"
-            + File.separator + "hand-written");
 
     /** The logger for this class. */
     protected Logger LOGGER = null;
@@ -82,6 +85,53 @@ public abstract class AbstractTest
         PropertyConfigurator.configure(loggingProperties);
     }
 
+    protected List<String> searchForSources(File sourcePath)
+    {
+        List<Pair<File, String>> queue = new LinkedList<Pair<File, String>>();
+        queue.add(new Pair<File, String>(sourcePath, null));
+        List<String> namesList = new ArrayList<String>();
+        while (queue.size() > 0)
+        {
+            Pair<File, String> pair = queue.remove(0);
+            final File f = pair.getFirst();
+            final String prefix = pair.getSecond();
+            // skip things like .svn directories
+            if (f.getName().startsWith("."))
+                continue;
+            if (f.isDirectory())
+            {
+                final String newPrefix;
+                if (prefix == null)
+                {
+                    newPrefix = "";
+                } else if (prefix.length() == 0)
+                {
+                    newPrefix = f.getName();
+                } else
+                {
+                    newPrefix = prefix + "/" + f.getName();
+                }
+                for (File child : f.listFiles())
+                {
+                    queue.add(new Pair<File, String>(child, newPrefix));
+                }
+            } else
+            {
+                if (f.getName().endsWith(".java") || f.getName().endsWith(".bsj"))
+                {
+                    if (prefix != null && prefix.length() > 0)
+                    {
+                        namesList.add(prefix + "/" + f.getName());
+                    } else
+                    {
+                        namesList.add(f.getName());
+                    }
+                }
+            }
+        }
+        return namesList;
+    }
+
     private static File getTestDir(String suffix)
     {
         return new File("." + File.separator + "local" + File.separator + suffix);
@@ -97,6 +147,28 @@ public abstract class AbstractTest
             }
         }
         f.delete();
+    }
+    
+    protected static List<File> listRecursive(File f)
+    {
+        if (f.isDirectory())
+        {
+            List<File> list = new ArrayList<File>();
+            for (File ff : f.listFiles())
+            {
+                if (ff.isDirectory())
+                {
+                    list.addAll(listRecursive(ff));
+                } else
+                {
+                    list.add(ff);
+                }
+            }
+            return list;
+        } else
+        {
+            return Collections.singletonList(f);
+        }
     }
 
     private static LocationManager getTestLocationManager(String suffix, boolean clear)
@@ -177,4 +249,31 @@ public abstract class AbstractTest
         bsjToolkitFactory.setFileManager(getFileManager(sourcePath));
         return bsjToolkitFactory.newToolkit();
     }
+    
+    protected List<BsjFileObject> getFilesFromPaths(BsjFileManager fileManager, List<String> paths) throws IOException
+    {
+        List<BsjFileObject> files = new ArrayList<BsjFileObject>();
+        for (String path : paths)
+        {
+            String packageString;
+            String filename;
+            if (path.indexOf('/') != -1)
+            {
+                packageString = path.substring(0, path.lastIndexOf('/')).replaceAll("/", ".");
+                filename = path.substring(path.lastIndexOf('/') + 1);
+            } else
+            {
+                packageString = "";
+                filename = path;
+            }
+            if (!filename.contains("."))
+            {
+                filename = filename + ".bsj";
+            }
+            BsjFileObject bfo = fileManager.getFileForInput(BsjCompilerLocation.SOURCE_PATH, packageString, filename);
+            files.add(bfo);
+        }
+        return files;
+    }
+
 }

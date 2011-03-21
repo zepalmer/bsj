@@ -1,6 +1,7 @@
 package edu.jhu.cs.bsj.compiler.impl.ast.node;
 
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 
@@ -17,6 +18,7 @@ import edu.jhu.cs.bsj.compiler.ast.node.IdentifierNode;
 import edu.jhu.cs.bsj.compiler.ast.node.Node;
 import edu.jhu.cs.bsj.compiler.ast.node.SimpleNameNode;
 import edu.jhu.cs.bsj.compiler.impl.ast.BsjNodeManager;
+import edu.jhu.cs.bsj.compiler.impl.ast.BsjNodeProxyFactory;
 
 @Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
 public class SimpleNameNodeImpl extends NameNodeImpl implements SimpleNameNode
@@ -30,6 +32,18 @@ public class SimpleNameNodeImpl extends NameNodeImpl implements SimpleNameNode
             boolean binary)
     {
         super(identifier, startLocation, stopLocation, manager, binary);
+    }
+    
+    /** Proxy constructor. */
+    public SimpleNameNodeImpl(BsjNodeManager manager, BsjNodeProxyFactory proxyFactory, SimpleNameNode backingNode)
+    {
+        super(manager, proxyFactory, backingNode);
+    }
+    
+    /** Retrieves this node's backing node (if one exists). */
+    protected SimpleNameNode getBackingNode()
+    {
+        return (SimpleNameNode)super.getBackingNode();
     }
     
     /**
@@ -225,6 +239,11 @@ public class SimpleNameNodeImpl extends NameNodeImpl implements SimpleNameNode
 	public String getNameString()
 	{
 		return getIdentifier().getIdentifier();
+	}
+	
+	public List<String> getNameComponents()
+	{
+	    return Collections.singletonList(getIdentifier().getIdentifier());
 	}
 
 }

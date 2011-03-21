@@ -1,10 +1,10 @@
 package edu.jhu.cs.bsj.compiler.impl.ast.node;
 
 import java.util.Arrays;
-import java.util.EnumMap;
+import java.util.EnumSet;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
+import java.util.Set;
 
 import javax.annotation.Generated;
 
@@ -23,9 +23,14 @@ import edu.jhu.cs.bsj.compiler.ast.node.JavadocNode;
 import edu.jhu.cs.bsj.compiler.ast.node.Node;
 import edu.jhu.cs.bsj.compiler.ast.node.list.ExpressionListNode;
 import edu.jhu.cs.bsj.compiler.impl.ast.BsjNodeManager;
+import edu.jhu.cs.bsj.compiler.impl.ast.BsjNodeProxyFactory;
 import edu.jhu.cs.bsj.compiler.impl.ast.NormalNodeUnion;
-import edu.jhu.cs.bsj.compiler.impl.ast.attribute.AttributeName;
-import edu.jhu.cs.bsj.compiler.impl.ast.attribute.ReadWriteAttribute;
+import edu.jhu.cs.bsj.compiler.impl.ast.delta.property.EnumConstantDeclarationNodeSetArgumentsPropertyEditScriptElementImpl;
+import edu.jhu.cs.bsj.compiler.impl.ast.delta.property.EnumConstantDeclarationNodeSetBodyPropertyEditScriptElementImpl;
+import edu.jhu.cs.bsj.compiler.impl.ast.delta.property.EnumConstantDeclarationNodeSetIdentifierPropertyEditScriptElementImpl;
+import edu.jhu.cs.bsj.compiler.impl.ast.delta.property.EnumConstantDeclarationNodeSetJavadocPropertyEditScriptElementImpl;
+import edu.jhu.cs.bsj.compiler.impl.ast.delta.property.EnumConstantDeclarationNodeSetModifiersPropertyEditScriptElementImpl;
+import edu.jhu.cs.bsj.compiler.impl.ast.properties.EnumConstantDeclarationNodeProperties;
 
 @Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
 public class EnumConstantDeclarationNodeImpl extends NodeImpl implements EnumConstantDeclarationNode
@@ -45,30 +50,11 @@ public class EnumConstantDeclarationNodeImpl extends NodeImpl implements EnumCon
     /** The associated javadoc comment for this node. */
     private NodeUnion<? extends JavadocNode> javadoc;
     
-    private Map<LocalAttribute,ReadWriteAttribute> localAttributes = new EnumMap<LocalAttribute,ReadWriteAttribute>(LocalAttribute.class);
-    private ReadWriteAttribute getAttribute(LocalAttribute attributeName)
-    {
-        ReadWriteAttribute attribute = localAttributes.get(attributeName);
-        if (attribute == null)
-        {
-            attribute = new ReadWriteAttribute(EnumConstantDeclarationNodeImpl.this, attributeName);
-            localAttributes.put(attributeName, attribute);
-        }
-        return attribute;
-    }
-    private static enum LocalAttribute implements AttributeName
-    {
-        /** Attribute identifier for the modifiers property. */
-        MODIFIERS,
-        /** Attribute identifier for the identifier property. */
-        IDENTIFIER,
-        /** Attribute identifier for the arguments property. */
-        ARGUMENTS,
-        /** Attribute identifier for the body property. */
-        BODY,
-        /** Attribute identifier for the javadoc property. */
-        JAVADOC,
-    }
+    /**
+     * A set of those properties which have been populated from the backing node.
+     * This field is <code>null</code> if <tt>backingNode</tt> is <code>null</code>.
+     */
+    private Set<EnumConstantDeclarationNodeProperties> populatedProperties;
     
     /** General constructor. */
     public EnumConstantDeclarationNodeImpl(
@@ -83,11 +69,165 @@ public class EnumConstantDeclarationNodeImpl extends NodeImpl implements EnumCon
             boolean binary)
     {
         super(startLocation, stopLocation, manager, binary);
-        setUnionForModifiers(modifiers, false);
-        setUnionForIdentifier(identifier, false);
-        setUnionForArguments(arguments, false);
-        setUnionForBody(body, false);
-        setUnionForJavadoc(javadoc, false);
+        this.populatedProperties = null;
+        doSetModifiers(modifiers);
+        doSetIdentifier(identifier);
+        doSetArguments(arguments);
+        doSetBody(body);
+        doSetJavadoc(javadoc);
+    }
+    
+    /** Proxy constructor. */
+    public EnumConstantDeclarationNodeImpl(BsjNodeManager manager, BsjNodeProxyFactory proxyFactory, EnumConstantDeclarationNode backingNode)
+    {
+        super(manager, proxyFactory, backingNode);
+        this.populatedProperties = EnumSet.noneOf(EnumConstantDeclarationNodeProperties.class);
+    }
+    
+    /** Retrieves this node's backing node (if one exists). */
+    protected EnumConstantDeclarationNode getBackingNode()
+    {
+        return (EnumConstantDeclarationNode)super.getBackingNode();
+    }
+    
+    /**
+     * Ensures that the modifiers value has been populated from proxy.
+     * If this node is not backed by a proxy or if the value has already been
+     * populated, this method does nothing.
+     */
+    private void checkModifiersWrapped()
+    {
+        if (this.populatedProperties == null || this.populatedProperties.contains(
+                EnumConstantDeclarationNodeProperties.MODIFIERS))
+            return;
+        this.populatedProperties.add(EnumConstantDeclarationNodeProperties.MODIFIERS);
+        NodeUnion<? extends EnumConstantModifiersNode> union = this.getBackingNode().getUnionForModifiers();
+        switch (union.getType())
+        {
+            case NORMAL:
+                union = this.getProxyFactory().makeNormalNodeUnion(
+                        this.getProxyFactory().makeEnumConstantModifiersNode(union.getNormalNode()));
+                break;
+            case SPLICE:
+                union = this.getProxyFactory().makeSpliceNodeUnion(
+                        this.getProxyFactory().makeSpliceNode(union.getSpliceNode()));
+                break;
+            default:
+                throw new IllegalStateException("Unrecognized union type: " + union.getType());
+        }
+        this.modifiers = union;
+    }
+    
+    /**
+     * Ensures that the identifier value has been populated from proxy.
+     * If this node is not backed by a proxy or if the value has already been
+     * populated, this method does nothing.
+     */
+    private void checkIdentifierWrapped()
+    {
+        if (this.populatedProperties == null || this.populatedProperties.contains(
+                EnumConstantDeclarationNodeProperties.IDENTIFIER))
+            return;
+        this.populatedProperties.add(EnumConstantDeclarationNodeProperties.IDENTIFIER);
+        NodeUnion<? extends IdentifierNode> union = this.getBackingNode().getUnionForIdentifier();
+        switch (union.getType())
+        {
+            case NORMAL:
+                union = this.getProxyFactory().makeNormalNodeUnion(
+                        this.getProxyFactory().makeIdentifierNode(union.getNormalNode()));
+                break;
+            case SPLICE:
+                union = this.getProxyFactory().makeSpliceNodeUnion(
+                        this.getProxyFactory().makeSpliceNode(union.getSpliceNode()));
+                break;
+            default:
+                throw new IllegalStateException("Unrecognized union type: " + union.getType());
+        }
+        this.identifier = union;
+    }
+    
+    /**
+     * Ensures that the arguments value has been populated from proxy.
+     * If this node is not backed by a proxy or if the value has already been
+     * populated, this method does nothing.
+     */
+    private void checkArgumentsWrapped()
+    {
+        if (this.populatedProperties == null || this.populatedProperties.contains(
+                EnumConstantDeclarationNodeProperties.ARGUMENTS))
+            return;
+        this.populatedProperties.add(EnumConstantDeclarationNodeProperties.ARGUMENTS);
+        NodeUnion<? extends ExpressionListNode> union = this.getBackingNode().getUnionForArguments();
+        switch (union.getType())
+        {
+            case NORMAL:
+                union = this.getProxyFactory().makeNormalNodeUnion(
+                        this.getProxyFactory().makeExpressionListNode(union.getNormalNode()));
+                break;
+            case SPLICE:
+                union = this.getProxyFactory().makeSpliceNodeUnion(
+                        this.getProxyFactory().makeSpliceNode(union.getSpliceNode()));
+                break;
+            default:
+                throw new IllegalStateException("Unrecognized union type: " + union.getType());
+        }
+        this.arguments = union;
+    }
+    
+    /**
+     * Ensures that the body value has been populated from proxy.
+     * If this node is not backed by a proxy or if the value has already been
+     * populated, this method does nothing.
+     */
+    private void checkBodyWrapped()
+    {
+        if (this.populatedProperties == null || this.populatedProperties.contains(
+                EnumConstantDeclarationNodeProperties.BODY))
+            return;
+        this.populatedProperties.add(EnumConstantDeclarationNodeProperties.BODY);
+        NodeUnion<? extends AnonymousClassBodyNode> union = this.getBackingNode().getUnionForBody();
+        switch (union.getType())
+        {
+            case NORMAL:
+                union = this.getProxyFactory().makeNormalNodeUnion(
+                        this.getProxyFactory().makeAnonymousClassBodyNode(union.getNormalNode()));
+                break;
+            case SPLICE:
+                union = this.getProxyFactory().makeSpliceNodeUnion(
+                        this.getProxyFactory().makeSpliceNode(union.getSpliceNode()));
+                break;
+            default:
+                throw new IllegalStateException("Unrecognized union type: " + union.getType());
+        }
+        this.body = union;
+    }
+    
+    /**
+     * Ensures that the javadoc value has been populated from proxy.
+     * If this node is not backed by a proxy or if the value has already been
+     * populated, this method does nothing.
+     */
+    private void checkJavadocWrapped()
+    {
+        if (this.populatedProperties == null || this.populatedProperties.contains(
+                EnumConstantDeclarationNodeProperties.JAVADOC))
+            return;
+        this.populatedProperties.add(EnumConstantDeclarationNodeProperties.JAVADOC);
+        NodeUnion<? extends JavadocNode> union = this.getBackingNode().getUnionForJavadoc();
+        switch (union.getType())
+        {
+            case NORMAL:
+                union = this.getProxyFactory().makeNormalNodeUnion(
+                        this.getProxyFactory().makeJavadocNode(union.getNormalNode()));
+                break;
+            case SPLICE:
+                union = this.getProxyFactory().makeSpliceNodeUnion(
+                        this.getProxyFactory().makeSpliceNode(union.getSpliceNode()));
+                break;
+            default:
+                throw new IllegalStateException("Unrecognized union type: " + union.getType());
+        }
+        this.javadoc = union;
     }
     
     /**
@@ -97,7 +237,7 @@ public class EnumConstantDeclarationNodeImpl extends NodeImpl implements EnumCon
      */
     public EnumConstantModifiersNode getModifiers()
     {
-        getAttribute(LocalAttribute.MODIFIERS).recordAccess(ReadWriteAttribute.AccessType.READ);
+        checkModifiersWrapped();
         if (this.modifiers == null)
         {
             return null;
@@ -113,7 +253,7 @@ public class EnumConstantDeclarationNodeImpl extends NodeImpl implements EnumCon
      */
     public NodeUnion<? extends EnumConstantModifiersNode> getUnionForModifiers()
     {
-        getAttribute(LocalAttribute.MODIFIERS).recordAccess(ReadWriteAttribute.AccessType.READ);
+        checkModifiersWrapped();
         if (this.modifiers == null)
         {
             this.modifiers = new NormalNodeUnion<EnumConstantModifiersNode>(null);
@@ -127,24 +267,8 @@ public class EnumConstantDeclarationNodeImpl extends NodeImpl implements EnumCon
      */
     public void setModifiers(EnumConstantModifiersNode modifiers)
     {
-            setModifiers(modifiers, true);
-            getManager().notifyChange(this);
-    }
-    
-    private void setModifiers(EnumConstantModifiersNode modifiers, boolean checkPermissions)
-    {
-        if (checkPermissions)
-        {
-            getManager().assertMutatable(this);
-            getAttribute(LocalAttribute.MODIFIERS).recordAccess(ReadWriteAttribute.AccessType.WRITE);
-        }
-        
-        if (this.modifiers != null)
-        {
-            setAsChild(this.modifiers.getNodeValue(), false);
-        }
-        this.modifiers = new NormalNodeUnion<EnumConstantModifiersNode>(modifiers);
-        setAsChild(modifiers, true);
+        checkModifiersWrapped();
+        this.setUnionForModifiers(new NormalNodeUnion<EnumConstantModifiersNode>(modifiers));
     }
     
     /**
@@ -153,18 +277,15 @@ public class EnumConstantDeclarationNodeImpl extends NodeImpl implements EnumCon
      */
     public void setUnionForModifiers(NodeUnion<? extends EnumConstantModifiersNode> modifiers)
     {
-            setUnionForModifiers(modifiers, true);
-            getManager().notifyChange(this);
+        checkModifiersWrapped();
+        this.getManager().assertMutatable(this);
+        this.doSetModifiers(modifiers);
+        if (this.getManager().isRecordingEdits())
+            super.recordEdit(new EnumConstantDeclarationNodeSetModifiersPropertyEditScriptElementImpl(this.getManager().getCurrentMetaprogramId(), this.getUid(), modifiers.getNodeValue() == null ? null : modifiers.getNodeValue().getUid()));
     }
     
-    private void setUnionForModifiers(NodeUnion<? extends EnumConstantModifiersNode> modifiers, boolean checkPermissions)
+    private void doSetModifiers(NodeUnion<? extends EnumConstantModifiersNode> modifiers)
     {
-        if (checkPermissions)
-        {
-            getManager().assertMutatable(this);
-            getAttribute(LocalAttribute.MODIFIERS).recordAccess(ReadWriteAttribute.AccessType.WRITE);
-        }
-        
         if (modifiers == null)
         {
             modifiers = new NormalNodeUnion<EnumConstantModifiersNode>(null);
@@ -184,7 +305,7 @@ public class EnumConstantDeclarationNodeImpl extends NodeImpl implements EnumCon
      */
     public IdentifierNode getIdentifier()
     {
-        getAttribute(LocalAttribute.IDENTIFIER).recordAccess(ReadWriteAttribute.AccessType.READ);
+        checkIdentifierWrapped();
         if (this.identifier == null)
         {
             return null;
@@ -200,7 +321,7 @@ public class EnumConstantDeclarationNodeImpl extends NodeImpl implements EnumCon
      */
     public NodeUnion<? extends IdentifierNode> getUnionForIdentifier()
     {
-        getAttribute(LocalAttribute.IDENTIFIER).recordAccess(ReadWriteAttribute.AccessType.READ);
+        checkIdentifierWrapped();
         if (this.identifier == null)
         {
             this.identifier = new NormalNodeUnion<IdentifierNode>(null);
@@ -214,24 +335,8 @@ public class EnumConstantDeclarationNodeImpl extends NodeImpl implements EnumCon
      */
     public void setIdentifier(IdentifierNode identifier)
     {
-            setIdentifier(identifier, true);
-            getManager().notifyChange(this);
-    }
-    
-    private void setIdentifier(IdentifierNode identifier, boolean checkPermissions)
-    {
-        if (checkPermissions)
-        {
-            getManager().assertMutatable(this);
-            getAttribute(LocalAttribute.IDENTIFIER).recordAccess(ReadWriteAttribute.AccessType.WRITE);
-        }
-        
-        if (this.identifier != null)
-        {
-            setAsChild(this.identifier.getNodeValue(), false);
-        }
-        this.identifier = new NormalNodeUnion<IdentifierNode>(identifier);
-        setAsChild(identifier, true);
+        checkIdentifierWrapped();
+        this.setUnionForIdentifier(new NormalNodeUnion<IdentifierNode>(identifier));
     }
     
     /**
@@ -240,18 +345,15 @@ public class EnumConstantDeclarationNodeImpl extends NodeImpl implements EnumCon
      */
     public void setUnionForIdentifier(NodeUnion<? extends IdentifierNode> identifier)
     {
-            setUnionForIdentifier(identifier, true);
-            getManager().notifyChange(this);
+        checkIdentifierWrapped();
+        this.getManager().assertMutatable(this);
+        this.doSetIdentifier(identifier);
+        if (this.getManager().isRecordingEdits())
+            super.recordEdit(new EnumConstantDeclarationNodeSetIdentifierPropertyEditScriptElementImpl(this.getManager().getCurrentMetaprogramId(), this.getUid(), identifier.getNodeValue() == null ? null : identifier.getNodeValue().getUid()));
     }
     
-    private void setUnionForIdentifier(NodeUnion<? extends IdentifierNode> identifier, boolean checkPermissions)
+    private void doSetIdentifier(NodeUnion<? extends IdentifierNode> identifier)
     {
-        if (checkPermissions)
-        {
-            getManager().assertMutatable(this);
-            getAttribute(LocalAttribute.IDENTIFIER).recordAccess(ReadWriteAttribute.AccessType.WRITE);
-        }
-        
         if (identifier == null)
         {
             identifier = new NormalNodeUnion<IdentifierNode>(null);
@@ -271,7 +373,7 @@ public class EnumConstantDeclarationNodeImpl extends NodeImpl implements EnumCon
      */
     public ExpressionListNode getArguments()
     {
-        getAttribute(LocalAttribute.ARGUMENTS).recordAccess(ReadWriteAttribute.AccessType.READ);
+        checkArgumentsWrapped();
         if (this.arguments == null)
         {
             return null;
@@ -287,7 +389,7 @@ public class EnumConstantDeclarationNodeImpl extends NodeImpl implements EnumCon
      */
     public NodeUnion<? extends ExpressionListNode> getUnionForArguments()
     {
-        getAttribute(LocalAttribute.ARGUMENTS).recordAccess(ReadWriteAttribute.AccessType.READ);
+        checkArgumentsWrapped();
         if (this.arguments == null)
         {
             this.arguments = new NormalNodeUnion<ExpressionListNode>(null);
@@ -301,24 +403,8 @@ public class EnumConstantDeclarationNodeImpl extends NodeImpl implements EnumCon
      */
     public void setArguments(ExpressionListNode arguments)
     {
-            setArguments(arguments, true);
-            getManager().notifyChange(this);
-    }
-    
-    private void setArguments(ExpressionListNode arguments, boolean checkPermissions)
-    {
-        if (checkPermissions)
-        {
-            getManager().assertMutatable(this);
-            getAttribute(LocalAttribute.ARGUMENTS).recordAccess(ReadWriteAttribute.AccessType.WRITE);
-        }
-        
-        if (this.arguments != null)
-        {
-            setAsChild(this.arguments.getNodeValue(), false);
-        }
-        this.arguments = new NormalNodeUnion<ExpressionListNode>(arguments);
-        setAsChild(arguments, true);
+        checkArgumentsWrapped();
+        this.setUnionForArguments(new NormalNodeUnion<ExpressionListNode>(arguments));
     }
     
     /**
@@ -327,18 +413,15 @@ public class EnumConstantDeclarationNodeImpl extends NodeImpl implements EnumCon
      */
     public void setUnionForArguments(NodeUnion<? extends ExpressionListNode> arguments)
     {
-            setUnionForArguments(arguments, true);
-            getManager().notifyChange(this);
+        checkArgumentsWrapped();
+        this.getManager().assertMutatable(this);
+        this.doSetArguments(arguments);
+        if (this.getManager().isRecordingEdits())
+            super.recordEdit(new EnumConstantDeclarationNodeSetArgumentsPropertyEditScriptElementImpl(this.getManager().getCurrentMetaprogramId(), this.getUid(), arguments.getNodeValue() == null ? null : arguments.getNodeValue().getUid()));
     }
     
-    private void setUnionForArguments(NodeUnion<? extends ExpressionListNode> arguments, boolean checkPermissions)
+    private void doSetArguments(NodeUnion<? extends ExpressionListNode> arguments)
     {
-        if (checkPermissions)
-        {
-            getManager().assertMutatable(this);
-            getAttribute(LocalAttribute.ARGUMENTS).recordAccess(ReadWriteAttribute.AccessType.WRITE);
-        }
-        
         if (arguments == null)
         {
             arguments = new NormalNodeUnion<ExpressionListNode>(null);
@@ -358,7 +441,7 @@ public class EnumConstantDeclarationNodeImpl extends NodeImpl implements EnumCon
      */
     public AnonymousClassBodyNode getBody()
     {
-        getAttribute(LocalAttribute.BODY).recordAccess(ReadWriteAttribute.AccessType.READ);
+        checkBodyWrapped();
         if (this.body == null)
         {
             return null;
@@ -374,7 +457,7 @@ public class EnumConstantDeclarationNodeImpl extends NodeImpl implements EnumCon
      */
     public NodeUnion<? extends AnonymousClassBodyNode> getUnionForBody()
     {
-        getAttribute(LocalAttribute.BODY).recordAccess(ReadWriteAttribute.AccessType.READ);
+        checkBodyWrapped();
         if (this.body == null)
         {
             this.body = new NormalNodeUnion<AnonymousClassBodyNode>(null);
@@ -388,24 +471,8 @@ public class EnumConstantDeclarationNodeImpl extends NodeImpl implements EnumCon
      */
     public void setBody(AnonymousClassBodyNode body)
     {
-            setBody(body, true);
-            getManager().notifyChange(this);
-    }
-    
-    private void setBody(AnonymousClassBodyNode body, boolean checkPermissions)
-    {
-        if (checkPermissions)
-        {
-            getManager().assertMutatable(this);
-            getAttribute(LocalAttribute.BODY).recordAccess(ReadWriteAttribute.AccessType.WRITE);
-        }
-        
-        if (this.body != null)
-        {
-            setAsChild(this.body.getNodeValue(), false);
-        }
-        this.body = new NormalNodeUnion<AnonymousClassBodyNode>(body);
-        setAsChild(body, true);
+        checkBodyWrapped();
+        this.setUnionForBody(new NormalNodeUnion<AnonymousClassBodyNode>(body));
     }
     
     /**
@@ -414,18 +481,15 @@ public class EnumConstantDeclarationNodeImpl extends NodeImpl implements EnumCon
      */
     public void setUnionForBody(NodeUnion<? extends AnonymousClassBodyNode> body)
     {
-            setUnionForBody(body, true);
-            getManager().notifyChange(this);
+        checkBodyWrapped();
+        this.getManager().assertMutatable(this);
+        this.doSetBody(body);
+        if (this.getManager().isRecordingEdits())
+            super.recordEdit(new EnumConstantDeclarationNodeSetBodyPropertyEditScriptElementImpl(this.getManager().getCurrentMetaprogramId(), this.getUid(), body.getNodeValue() == null ? null : body.getNodeValue().getUid()));
     }
     
-    private void setUnionForBody(NodeUnion<? extends AnonymousClassBodyNode> body, boolean checkPermissions)
+    private void doSetBody(NodeUnion<? extends AnonymousClassBodyNode> body)
     {
-        if (checkPermissions)
-        {
-            getManager().assertMutatable(this);
-            getAttribute(LocalAttribute.BODY).recordAccess(ReadWriteAttribute.AccessType.WRITE);
-        }
-        
         if (body == null)
         {
             body = new NormalNodeUnion<AnonymousClassBodyNode>(null);
@@ -445,7 +509,7 @@ public class EnumConstantDeclarationNodeImpl extends NodeImpl implements EnumCon
      */
     public JavadocNode getJavadoc()
     {
-        getAttribute(LocalAttribute.JAVADOC).recordAccess(ReadWriteAttribute.AccessType.READ);
+        checkJavadocWrapped();
         if (this.javadoc == null)
         {
             return null;
@@ -461,7 +525,7 @@ public class EnumConstantDeclarationNodeImpl extends NodeImpl implements EnumCon
      */
     public NodeUnion<? extends JavadocNode> getUnionForJavadoc()
     {
-        getAttribute(LocalAttribute.JAVADOC).recordAccess(ReadWriteAttribute.AccessType.READ);
+        checkJavadocWrapped();
         if (this.javadoc == null)
         {
             this.javadoc = new NormalNodeUnion<JavadocNode>(null);
@@ -475,24 +539,8 @@ public class EnumConstantDeclarationNodeImpl extends NodeImpl implements EnumCon
      */
     public void setJavadoc(JavadocNode javadoc)
     {
-            setJavadoc(javadoc, true);
-            getManager().notifyChange(this);
-    }
-    
-    private void setJavadoc(JavadocNode javadoc, boolean checkPermissions)
-    {
-        if (checkPermissions)
-        {
-            getManager().assertMutatable(this);
-            getAttribute(LocalAttribute.JAVADOC).recordAccess(ReadWriteAttribute.AccessType.WRITE);
-        }
-        
-        if (this.javadoc != null)
-        {
-            setAsChild(this.javadoc.getNodeValue(), false);
-        }
-        this.javadoc = new NormalNodeUnion<JavadocNode>(javadoc);
-        setAsChild(javadoc, true);
+        checkJavadocWrapped();
+        this.setUnionForJavadoc(new NormalNodeUnion<JavadocNode>(javadoc));
     }
     
     /**
@@ -501,18 +549,15 @@ public class EnumConstantDeclarationNodeImpl extends NodeImpl implements EnumCon
      */
     public void setUnionForJavadoc(NodeUnion<? extends JavadocNode> javadoc)
     {
-            setUnionForJavadoc(javadoc, true);
-            getManager().notifyChange(this);
+        checkJavadocWrapped();
+        this.getManager().assertMutatable(this);
+        this.doSetJavadoc(javadoc);
+        if (this.getManager().isRecordingEdits())
+            super.recordEdit(new EnumConstantDeclarationNodeSetJavadocPropertyEditScriptElementImpl(this.getManager().getCurrentMetaprogramId(), this.getUid(), javadoc.getNodeValue() == null ? null : javadoc.getNodeValue().getUid()));
     }
     
-    private void setUnionForJavadoc(NodeUnion<? extends JavadocNode> javadoc, boolean checkPermissions)
+    private void doSetJavadoc(NodeUnion<? extends JavadocNode> javadoc)
     {
-        if (checkPermissions)
-        {
-            getManager().assertMutatable(this);
-            getAttribute(LocalAttribute.JAVADOC).recordAccess(ReadWriteAttribute.AccessType.WRITE);
-        }
-        
         if (javadoc == null)
         {
             javadoc = new NormalNodeUnion<JavadocNode>(null);
@@ -536,25 +581,25 @@ public class EnumConstantDeclarationNodeImpl extends NodeImpl implements EnumCon
     protected void receiveToChildren(BsjNodeVisitor visitor)
     {
         super.receiveToChildren(visitor);
-        if (this.modifiers.getNodeValue() != null)
+        if (this.getUnionForModifiers().getNodeValue() != null)
         {
-            this.modifiers.getNodeValue().receive(visitor);
+            this.getUnionForModifiers().getNodeValue().receive(visitor);
         }
-        if (this.identifier.getNodeValue() != null)
+        if (this.getUnionForIdentifier().getNodeValue() != null)
         {
-            this.identifier.getNodeValue().receive(visitor);
+            this.getUnionForIdentifier().getNodeValue().receive(visitor);
         }
-        if (this.arguments.getNodeValue() != null)
+        if (this.getUnionForArguments().getNodeValue() != null)
         {
-            this.arguments.getNodeValue().receive(visitor);
+            this.getUnionForArguments().getNodeValue().receive(visitor);
         }
-        if (this.body.getNodeValue() != null)
+        if (this.getUnionForBody().getNodeValue() != null)
         {
-            this.body.getNodeValue().receive(visitor);
+            this.getUnionForBody().getNodeValue().receive(visitor);
         }
-        if (this.javadoc.getNodeValue() != null)
+        if (this.getUnionForJavadoc().getNodeValue() != null)
         {
-            this.javadoc.getNodeValue().receive(visitor);
+            this.getUnionForJavadoc().getNodeValue().receive(visitor);
         }
         Iterator<? extends Node> extras = getHiddenVisitorChildren();
         if (extras != null)
@@ -577,25 +622,25 @@ public class EnumConstantDeclarationNodeImpl extends NodeImpl implements EnumCon
     protected void receiveTypedToChildren(BsjTypedNodeVisitor visitor)
     {
         super.receiveTypedToChildren(visitor);
-        if (this.modifiers.getNodeValue() != null)
+        if (this.getUnionForModifiers().getNodeValue() != null)
         {
-            this.modifiers.getNodeValue().receiveTyped(visitor);
+            this.getUnionForModifiers().getNodeValue().receiveTyped(visitor);
         }
-        if (this.identifier.getNodeValue() != null)
+        if (this.getUnionForIdentifier().getNodeValue() != null)
         {
-            this.identifier.getNodeValue().receiveTyped(visitor);
+            this.getUnionForIdentifier().getNodeValue().receiveTyped(visitor);
         }
-        if (this.arguments.getNodeValue() != null)
+        if (this.getUnionForArguments().getNodeValue() != null)
         {
-            this.arguments.getNodeValue().receiveTyped(visitor);
+            this.getUnionForArguments().getNodeValue().receiveTyped(visitor);
         }
-        if (this.body.getNodeValue() != null)
+        if (this.getUnionForBody().getNodeValue() != null)
         {
-            this.body.getNodeValue().receiveTyped(visitor);
+            this.getUnionForBody().getNodeValue().receiveTyped(visitor);
         }
-        if (this.javadoc.getNodeValue() != null)
+        if (this.getUnionForJavadoc().getNodeValue() != null)
         {
-            this.javadoc.getNodeValue().receiveTyped(visitor);
+            this.getUnionForJavadoc().getNodeValue().receiveTyped(visitor);
         }
         Iterator<? extends Node> extras = getHiddenVisitorChildren();
         if (extras != null)
@@ -662,6 +707,8 @@ public class EnumConstantDeclarationNodeImpl extends NodeImpl implements EnumCon
     {
         StringBuilder sb = new StringBuilder();
         sb.append(this.getClass().getSimpleName());
+        sb.append('#');
+        sb.append(this.getUid());
         sb.append('[');
         sb.append("modifiers=");
         sb.append(this.getUnionForModifiers().getNodeValue() == null? "null" : this.getUnionForModifiers().getNodeValue().getClass().getSimpleName());

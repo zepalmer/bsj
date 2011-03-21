@@ -1,0 +1,6 @@
+#import edu.jhu.cs.bsj.tests.support.HelloWorldMetaAnnotation;
+
+@@HelloWorldMetaAnnotation(ids={<:x:>,<:y:>})
+public class MetaAnnotationCodeLiteralArgumentsClass
+{
+}

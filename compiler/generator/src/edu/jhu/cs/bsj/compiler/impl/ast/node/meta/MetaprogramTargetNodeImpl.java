@@ -1,10 +1,10 @@
 package edu.jhu.cs.bsj.compiler.impl.ast.node.meta;
 
 import java.util.Arrays;
-import java.util.EnumMap;
+import java.util.EnumSet;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
+import java.util.Set;
 
 import javax.annotation.Generated;
 
@@ -19,10 +19,11 @@ import edu.jhu.cs.bsj.compiler.ast.node.Node;
 import edu.jhu.cs.bsj.compiler.ast.node.list.IdentifierListNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramTargetNode;
 import edu.jhu.cs.bsj.compiler.impl.ast.BsjNodeManager;
+import edu.jhu.cs.bsj.compiler.impl.ast.BsjNodeProxyFactory;
 import edu.jhu.cs.bsj.compiler.impl.ast.NormalNodeUnion;
-import edu.jhu.cs.bsj.compiler.impl.ast.attribute.AttributeName;
-import edu.jhu.cs.bsj.compiler.impl.ast.attribute.ReadWriteAttribute;
+import edu.jhu.cs.bsj.compiler.impl.ast.delta.property.MetaprogramTargetNodeSetTargetsPropertyEditScriptElementImpl;
 import edu.jhu.cs.bsj.compiler.impl.ast.node.NodeImpl;
+import edu.jhu.cs.bsj.compiler.impl.ast.properties.MetaprogramTargetNodeProperties;
 
 @Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
 public class MetaprogramTargetNodeImpl extends NodeImpl implements MetaprogramTargetNode
@@ -30,22 +31,11 @@ public class MetaprogramTargetNodeImpl extends NodeImpl implements MetaprogramTa
     /** The names of the metaprogram targets in which to participate. */
     private NodeUnion<? extends IdentifierListNode> targets;
     
-    private Map<LocalAttribute,ReadWriteAttribute> localAttributes = new EnumMap<LocalAttribute,ReadWriteAttribute>(LocalAttribute.class);
-    private ReadWriteAttribute getAttribute(LocalAttribute attributeName)
-    {
-        ReadWriteAttribute attribute = localAttributes.get(attributeName);
-        if (attribute == null)
-        {
-            attribute = new ReadWriteAttribute(MetaprogramTargetNodeImpl.this, attributeName);
-            localAttributes.put(attributeName, attribute);
-        }
-        return attribute;
-    }
-    private static enum LocalAttribute implements AttributeName
-    {
-        /** Attribute identifier for the targets property. */
-        TARGETS,
-    }
+    /**
+     * A set of those properties which have been populated from the backing node.
+     * This field is <code>null</code> if <tt>backingNode</tt> is <code>null</code>.
+     */
+    private Set<MetaprogramTargetNodeProperties> populatedProperties;
     
     /** General constructor. */
     public MetaprogramTargetNodeImpl(
@@ -56,7 +46,49 @@ public class MetaprogramTargetNodeImpl extends NodeImpl implements MetaprogramTa
             boolean binary)
     {
         super(startLocation, stopLocation, manager, binary);
-        setUnionForTargets(targets, false);
+        this.populatedProperties = null;
+        doSetTargets(targets);
+    }
+    
+    /** Proxy constructor. */
+    public MetaprogramTargetNodeImpl(BsjNodeManager manager, BsjNodeProxyFactory proxyFactory, MetaprogramTargetNode backingNode)
+    {
+        super(manager, proxyFactory, backingNode);
+        this.populatedProperties = EnumSet.noneOf(MetaprogramTargetNodeProperties.class);
+    }
+    
+    /** Retrieves this node's backing node (if one exists). */
+    protected MetaprogramTargetNode getBackingNode()
+    {
+        return (MetaprogramTargetNode)super.getBackingNode();
+    }
+    
+    /**
+     * Ensures that the targets value has been populated from proxy.
+     * If this node is not backed by a proxy or if the value has already been
+     * populated, this method does nothing.
+     */
+    private void checkTargetsWrapped()
+    {
+        if (this.populatedProperties == null || this.populatedProperties.contains(
+                MetaprogramTargetNodeProperties.TARGETS))
+            return;
+        this.populatedProperties.add(MetaprogramTargetNodeProperties.TARGETS);
+        NodeUnion<? extends IdentifierListNode> union = this.getBackingNode().getUnionForTargets();
+        switch (union.getType())
+        {
+            case NORMAL:
+                union = this.getProxyFactory().makeNormalNodeUnion(
+                        this.getProxyFactory().makeIdentifierListNode(union.getNormalNode()));
+                break;
+            case SPLICE:
+                union = this.getProxyFactory().makeSpliceNodeUnion(
+                        this.getProxyFactory().makeSpliceNode(union.getSpliceNode()));
+                break;
+            default:
+                throw new IllegalStateException("Unrecognized union type: " + union.getType());
+        }
+        this.targets = union;
     }
     
     /**
@@ -66,7 +98,7 @@ public class MetaprogramTargetNodeImpl extends NodeImpl implements MetaprogramTa
      */
     public IdentifierListNode getTargets()
     {
-        getAttribute(LocalAttribute.TARGETS).recordAccess(ReadWriteAttribute.AccessType.READ);
+        checkTargetsWrapped();
         if (this.targets == null)
         {
             return null;
@@ -82,7 +114,7 @@ public class MetaprogramTargetNodeImpl extends NodeImpl implements MetaprogramTa
      */
     public NodeUnion<? extends IdentifierListNode> getUnionForTargets()
     {
-        getAttribute(LocalAttribute.TARGETS).recordAccess(ReadWriteAttribute.AccessType.READ);
+        checkTargetsWrapped();
         if (this.targets == null)
         {
             this.targets = new NormalNodeUnion<IdentifierListNode>(null);
@@ -96,24 +128,8 @@ public class MetaprogramTargetNodeImpl extends NodeImpl implements MetaprogramTa
      */
     public void setTargets(IdentifierListNode targets)
     {
-            setTargets(targets, true);
-            getManager().notifyChange(this);
-    }
-    
-    private void setTargets(IdentifierListNode targets, boolean checkPermissions)
-    {
-        if (checkPermissions)
-        {
-            getManager().assertMutatable(this);
-            getAttribute(LocalAttribute.TARGETS).recordAccess(ReadWriteAttribute.AccessType.WRITE);
-        }
-        
-        if (this.targets != null)
-        {
-            setAsChild(this.targets.getNodeValue(), false);
-        }
-        this.targets = new NormalNodeUnion<IdentifierListNode>(targets);
-        setAsChild(targets, true);
+        checkTargetsWrapped();
+        this.setUnionForTargets(new NormalNodeUnion<IdentifierListNode>(targets));
     }
     
     /**
@@ -122,18 +138,15 @@ public class MetaprogramTargetNodeImpl extends NodeImpl implements MetaprogramTa
      */
     public void setUnionForTargets(NodeUnion<? extends IdentifierListNode> targets)
     {
-            setUnionForTargets(targets, true);
-            getManager().notifyChange(this);
+        checkTargetsWrapped();
+        this.getManager().assertMutatable(this);
+        this.doSetTargets(targets);
+        if (this.getManager().isRecordingEdits())
+            super.recordEdit(new MetaprogramTargetNodeSetTargetsPropertyEditScriptElementImpl(this.getManager().getCurrentMetaprogramId(), this.getUid(), targets.getNodeValue() == null ? null : targets.getNodeValue().getUid()));
     }
     
-    private void setUnionForTargets(NodeUnion<? extends IdentifierListNode> targets, boolean checkPermissions)
+    private void doSetTargets(NodeUnion<? extends IdentifierListNode> targets)
     {
-        if (checkPermissions)
-        {
-            getManager().assertMutatable(this);
-            getAttribute(LocalAttribute.TARGETS).recordAccess(ReadWriteAttribute.AccessType.WRITE);
-        }
-        
         if (targets == null)
         {
             targets = new NormalNodeUnion<IdentifierListNode>(null);
@@ -157,9 +170,9 @@ public class MetaprogramTargetNodeImpl extends NodeImpl implements MetaprogramTa
     protected void receiveToChildren(BsjNodeVisitor visitor)
     {
         super.receiveToChildren(visitor);
-        if (this.targets.getNodeValue() != null)
+        if (this.getUnionForTargets().getNodeValue() != null)
         {
-            this.targets.getNodeValue().receive(visitor);
+            this.getUnionForTargets().getNodeValue().receive(visitor);
         }
         Iterator<? extends Node> extras = getHiddenVisitorChildren();
         if (extras != null)
@@ -182,9 +195,9 @@ public class MetaprogramTargetNodeImpl extends NodeImpl implements MetaprogramTa
     protected void receiveTypedToChildren(BsjTypedNodeVisitor visitor)
     {
         super.receiveTypedToChildren(visitor);
-        if (this.targets.getNodeValue() != null)
+        if (this.getUnionForTargets().getNodeValue() != null)
         {
-            this.targets.getNodeValue().receiveTyped(visitor);
+            this.getUnionForTargets().getNodeValue().receiveTyped(visitor);
         }
         Iterator<? extends Node> extras = getHiddenVisitorChildren();
         if (extras != null)
@@ -241,6 +254,8 @@ public class MetaprogramTargetNodeImpl extends NodeImpl implements MetaprogramTa
     {
         StringBuilder sb = new StringBuilder();
         sb.append(this.getClass().getSimpleName());
+        sb.append('#');
+        sb.append(this.getUid());
         sb.append('[');
         sb.append("targets=");
         sb.append(this.getUnionForTargets().getNodeValue() == null? "null" : this.getUnionForTargets().getNodeValue().getClass().getSimpleName());

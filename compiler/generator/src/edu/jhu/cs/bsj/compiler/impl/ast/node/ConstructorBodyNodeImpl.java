@@ -1,10 +1,10 @@
 package edu.jhu.cs.bsj.compiler.impl.ast.node;
 
 import java.util.Arrays;
-import java.util.EnumMap;
+import java.util.EnumSet;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
+import java.util.Set;
 
 import javax.annotation.Generated;
 
@@ -20,9 +20,11 @@ import edu.jhu.cs.bsj.compiler.ast.node.ConstructorInvocationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.Node;
 import edu.jhu.cs.bsj.compiler.ast.node.list.BlockStatementListNode;
 import edu.jhu.cs.bsj.compiler.impl.ast.BsjNodeManager;
+import edu.jhu.cs.bsj.compiler.impl.ast.BsjNodeProxyFactory;
 import edu.jhu.cs.bsj.compiler.impl.ast.NormalNodeUnion;
-import edu.jhu.cs.bsj.compiler.impl.ast.attribute.AttributeName;
-import edu.jhu.cs.bsj.compiler.impl.ast.attribute.ReadWriteAttribute;
+import edu.jhu.cs.bsj.compiler.impl.ast.delta.property.ConstructorBodyNodeSetConstructorInvocationPropertyEditScriptElementImpl;
+import edu.jhu.cs.bsj.compiler.impl.ast.delta.property.ConstructorBodyNodeSetStatementsPropertyEditScriptElementImpl;
+import edu.jhu.cs.bsj.compiler.impl.ast.properties.ConstructorBodyNodeProperties;
 
 @Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
 public class ConstructorBodyNodeImpl extends NodeImpl implements ConstructorBodyNode
@@ -33,24 +35,11 @@ public class ConstructorBodyNodeImpl extends NodeImpl implements ConstructorBody
     /** The statements contained in this constructor. */
     private NodeUnion<? extends BlockStatementListNode> statements;
     
-    private Map<LocalAttribute,ReadWriteAttribute> localAttributes = new EnumMap<LocalAttribute,ReadWriteAttribute>(LocalAttribute.class);
-    private ReadWriteAttribute getAttribute(LocalAttribute attributeName)
-    {
-        ReadWriteAttribute attribute = localAttributes.get(attributeName);
-        if (attribute == null)
-        {
-            attribute = new ReadWriteAttribute(ConstructorBodyNodeImpl.this, attributeName);
-            localAttributes.put(attributeName, attribute);
-        }
-        return attribute;
-    }
-    private static enum LocalAttribute implements AttributeName
-    {
-        /** Attribute identifier for the constructorInvocation property. */
-        CONSTRUCTOR_INVOCATION,
-        /** Attribute identifier for the statements property. */
-        STATEMENTS,
-    }
+    /**
+     * A set of those properties which have been populated from the backing node.
+     * This field is <code>null</code> if <tt>backingNode</tt> is <code>null</code>.
+     */
+    private Set<ConstructorBodyNodeProperties> populatedProperties;
     
     /** General constructor. */
     public ConstructorBodyNodeImpl(
@@ -62,8 +51,78 @@ public class ConstructorBodyNodeImpl extends NodeImpl implements ConstructorBody
             boolean binary)
     {
         super(startLocation, stopLocation, manager, binary);
-        setUnionForConstructorInvocation(constructorInvocation, false);
-        setUnionForStatements(statements, false);
+        this.populatedProperties = null;
+        doSetConstructorInvocation(constructorInvocation);
+        doSetStatements(statements);
+    }
+    
+    /** Proxy constructor. */
+    public ConstructorBodyNodeImpl(BsjNodeManager manager, BsjNodeProxyFactory proxyFactory, ConstructorBodyNode backingNode)
+    {
+        super(manager, proxyFactory, backingNode);
+        this.populatedProperties = EnumSet.noneOf(ConstructorBodyNodeProperties.class);
+    }
+    
+    /** Retrieves this node's backing node (if one exists). */
+    protected ConstructorBodyNode getBackingNode()
+    {
+        return (ConstructorBodyNode)super.getBackingNode();
+    }
+    
+    /**
+     * Ensures that the constructorInvocation value has been populated from proxy.
+     * If this node is not backed by a proxy or if the value has already been
+     * populated, this method does nothing.
+     */
+    private void checkConstructorInvocationWrapped()
+    {
+        if (this.populatedProperties == null || this.populatedProperties.contains(
+                ConstructorBodyNodeProperties.CONSTRUCTOR_INVOCATION))
+            return;
+        this.populatedProperties.add(ConstructorBodyNodeProperties.CONSTRUCTOR_INVOCATION);
+        NodeUnion<? extends ConstructorInvocationNode> union = this.getBackingNode().getUnionForConstructorInvocation();
+        switch (union.getType())
+        {
+            case NORMAL:
+                union = this.getProxyFactory().makeNormalNodeUnion(
+                        this.getProxyFactory().makeConstructorInvocationNode(union.getNormalNode()));
+                break;
+            case SPLICE:
+                union = this.getProxyFactory().makeSpliceNodeUnion(
+                        this.getProxyFactory().makeSpliceNode(union.getSpliceNode()));
+                break;
+            default:
+                throw new IllegalStateException("Unrecognized union type: " + union.getType());
+        }
+        this.constructorInvocation = union;
+    }
+    
+    /**
+     * Ensures that the statements value has been populated from proxy.
+     * If this node is not backed by a proxy or if the value has already been
+     * populated, this method does nothing.
+     */
+    private void checkStatementsWrapped()
+    {
+        if (this.populatedProperties == null || this.populatedProperties.contains(
+                ConstructorBodyNodeProperties.STATEMENTS))
+            return;
+        this.populatedProperties.add(ConstructorBodyNodeProperties.STATEMENTS);
+        NodeUnion<? extends BlockStatementListNode> union = this.getBackingNode().getUnionForStatements();
+        switch (union.getType())
+        {
+            case NORMAL:
+                union = this.getProxyFactory().makeNormalNodeUnion(
+                        this.getProxyFactory().makeBlockStatementListNode(union.getNormalNode()));
+                break;
+            case SPLICE:
+                union = this.getProxyFactory().makeSpliceNodeUnion(
+                        this.getProxyFactory().makeSpliceNode(union.getSpliceNode()));
+                break;
+            default:
+                throw new IllegalStateException("Unrecognized union type: " + union.getType());
+        }
+        this.statements = union;
     }
     
     /**
@@ -73,7 +132,7 @@ public class ConstructorBodyNodeImpl extends NodeImpl implements ConstructorBody
      */
     public ConstructorInvocationNode getConstructorInvocation()
     {
-        getAttribute(LocalAttribute.CONSTRUCTOR_INVOCATION).recordAccess(ReadWriteAttribute.AccessType.READ);
+        checkConstructorInvocationWrapped();
         if (this.constructorInvocation == null)
         {
             return null;
@@ -89,7 +148,7 @@ public class ConstructorBodyNodeImpl extends NodeImpl implements ConstructorBody
      */
     public NodeUnion<? extends ConstructorInvocationNode> getUnionForConstructorInvocation()
     {
-        getAttribute(LocalAttribute.CONSTRUCTOR_INVOCATION).recordAccess(ReadWriteAttribute.AccessType.READ);
+        checkConstructorInvocationWrapped();
         if (this.constructorInvocation == null)
         {
             this.constructorInvocation = new NormalNodeUnion<ConstructorInvocationNode>(null);
@@ -103,24 +162,8 @@ public class ConstructorBodyNodeImpl extends NodeImpl implements ConstructorBody
      */
     public void setConstructorInvocation(ConstructorInvocationNode constructorInvocation)
     {
-            setConstructorInvocation(constructorInvocation, true);
-            getManager().notifyChange(this);
-    }
-    
-    private void setConstructorInvocation(ConstructorInvocationNode constructorInvocation, boolean checkPermissions)
-    {
-        if (checkPermissions)
-        {
-            getManager().assertMutatable(this);
-            getAttribute(LocalAttribute.CONSTRUCTOR_INVOCATION).recordAccess(ReadWriteAttribute.AccessType.WRITE);
-        }
-        
-        if (this.constructorInvocation != null)
-        {
-            setAsChild(this.constructorInvocation.getNodeValue(), false);
-        }
-        this.constructorInvocation = new NormalNodeUnion<ConstructorInvocationNode>(constructorInvocation);
-        setAsChild(constructorInvocation, true);
+        checkConstructorInvocationWrapped();
+        this.setUnionForConstructorInvocation(new NormalNodeUnion<ConstructorInvocationNode>(constructorInvocation));
     }
     
     /**
@@ -129,18 +172,15 @@ public class ConstructorBodyNodeImpl extends NodeImpl implements ConstructorBody
      */
     public void setUnionForConstructorInvocation(NodeUnion<? extends ConstructorInvocationNode> constructorInvocation)
     {
-            setUnionForConstructorInvocation(constructorInvocation, true);
-            getManager().notifyChange(this);
+        checkConstructorInvocationWrapped();
+        this.getManager().assertMutatable(this);
+        this.doSetConstructorInvocation(constructorInvocation);
+        if (this.getManager().isRecordingEdits())
+            super.recordEdit(new ConstructorBodyNodeSetConstructorInvocationPropertyEditScriptElementImpl(this.getManager().getCurrentMetaprogramId(), this.getUid(), constructorInvocation.getNodeValue() == null ? null : constructorInvocation.getNodeValue().getUid()));
     }
     
-    private void setUnionForConstructorInvocation(NodeUnion<? extends ConstructorInvocationNode> constructorInvocation, boolean checkPermissions)
+    private void doSetConstructorInvocation(NodeUnion<? extends ConstructorInvocationNode> constructorInvocation)
     {
-        if (checkPermissions)
-        {
-            getManager().assertMutatable(this);
-            getAttribute(LocalAttribute.CONSTRUCTOR_INVOCATION).recordAccess(ReadWriteAttribute.AccessType.WRITE);
-        }
-        
         if (constructorInvocation == null)
         {
             constructorInvocation = new NormalNodeUnion<ConstructorInvocationNode>(null);
@@ -160,7 +200,7 @@ public class ConstructorBodyNodeImpl extends NodeImpl implements ConstructorBody
      */
     public BlockStatementListNode getStatements()
     {
-        getAttribute(LocalAttribute.STATEMENTS).recordAccess(ReadWriteAttribute.AccessType.READ);
+        checkStatementsWrapped();
         if (this.statements == null)
         {
             return null;
@@ -176,7 +216,7 @@ public class ConstructorBodyNodeImpl extends NodeImpl implements ConstructorBody
      */
     public NodeUnion<? extends BlockStatementListNode> getUnionForStatements()
     {
-        getAttribute(LocalAttribute.STATEMENTS).recordAccess(ReadWriteAttribute.AccessType.READ);
+        checkStatementsWrapped();
         if (this.statements == null)
         {
             this.statements = new NormalNodeUnion<BlockStatementListNode>(null);
@@ -190,24 +230,8 @@ public class ConstructorBodyNodeImpl extends NodeImpl implements ConstructorBody
      */
     public void setStatements(BlockStatementListNode statements)
     {
-            setStatements(statements, true);
-            getManager().notifyChange(this);
-    }
-    
-    private void setStatements(BlockStatementListNode statements, boolean checkPermissions)
-    {
-        if (checkPermissions)
-        {
-            getManager().assertMutatable(this);
-            getAttribute(LocalAttribute.STATEMENTS).recordAccess(ReadWriteAttribute.AccessType.WRITE);
-        }
-        
-        if (this.statements != null)
-        {
-            setAsChild(this.statements.getNodeValue(), false);
-        }
-        this.statements = new NormalNodeUnion<BlockStatementListNode>(statements);
-        setAsChild(statements, true);
+        checkStatementsWrapped();
+        this.setUnionForStatements(new NormalNodeUnion<BlockStatementListNode>(statements));
     }
     
     /**
@@ -216,18 +240,15 @@ public class ConstructorBodyNodeImpl extends NodeImpl implements ConstructorBody
      */
     public void setUnionForStatements(NodeUnion<? extends BlockStatementListNode> statements)
     {
-            setUnionForStatements(statements, true);
-            getManager().notifyChange(this);
+        checkStatementsWrapped();
+        this.getManager().assertMutatable(this);
+        this.doSetStatements(statements);
+        if (this.getManager().isRecordingEdits())
+            super.recordEdit(new ConstructorBodyNodeSetStatementsPropertyEditScriptElementImpl(this.getManager().getCurrentMetaprogramId(), this.getUid(), statements.getNodeValue() == null ? null : statements.getNodeValue().getUid()));
     }
     
-    private void setUnionForStatements(NodeUnion<? extends BlockStatementListNode> statements, boolean checkPermissions)
+    private void doSetStatements(NodeUnion<? extends BlockStatementListNode> statements)
     {
-        if (checkPermissions)
-        {
-            getManager().assertMutatable(this);
-            getAttribute(LocalAttribute.STATEMENTS).recordAccess(ReadWriteAttribute.AccessType.WRITE);
-        }
-        
         if (statements == null)
         {
             statements = new NormalNodeUnion<BlockStatementListNode>(null);
@@ -251,13 +272,13 @@ public class ConstructorBodyNodeImpl extends NodeImpl implements ConstructorBody
     protected void receiveToChildren(BsjNodeVisitor visitor)
     {
         super.receiveToChildren(visitor);
-        if (this.constructorInvocation.getNodeValue() != null)
+        if (this.getUnionForConstructorInvocation().getNodeValue() != null)
         {
-            this.constructorInvocation.getNodeValue().receive(visitor);
+            this.getUnionForConstructorInvocation().getNodeValue().receive(visitor);
         }
-        if (this.statements.getNodeValue() != null)
+        if (this.getUnionForStatements().getNodeValue() != null)
         {
-            this.statements.getNodeValue().receive(visitor);
+            this.getUnionForStatements().getNodeValue().receive(visitor);
         }
         Iterator<? extends Node> extras = getHiddenVisitorChildren();
         if (extras != null)
@@ -280,13 +301,13 @@ public class ConstructorBodyNodeImpl extends NodeImpl implements ConstructorBody
     protected void receiveTypedToChildren(BsjTypedNodeVisitor visitor)
     {
         super.receiveTypedToChildren(visitor);
-        if (this.constructorInvocation.getNodeValue() != null)
+        if (this.getUnionForConstructorInvocation().getNodeValue() != null)
         {
-            this.constructorInvocation.getNodeValue().receiveTyped(visitor);
+            this.getUnionForConstructorInvocation().getNodeValue().receiveTyped(visitor);
         }
-        if (this.statements.getNodeValue() != null)
+        if (this.getUnionForStatements().getNodeValue() != null)
         {
-            this.statements.getNodeValue().receiveTyped(visitor);
+            this.getUnionForStatements().getNodeValue().receiveTyped(visitor);
         }
         Iterator<? extends Node> extras = getHiddenVisitorChildren();
         if (extras != null)
@@ -344,6 +365,8 @@ public class ConstructorBodyNodeImpl extends NodeImpl implements ConstructorBody
     {
         StringBuilder sb = new StringBuilder();
         sb.append(this.getClass().getSimpleName());
+        sb.append('#');
+        sb.append(this.getUid());
         sb.append('[');
         sb.append("constructorInvocation=");
         sb.append(this.getUnionForConstructorInvocation().getNodeValue() == null? "null" : this.getUnionForConstructorInvocation().getNodeValue().getClass().getSimpleName());

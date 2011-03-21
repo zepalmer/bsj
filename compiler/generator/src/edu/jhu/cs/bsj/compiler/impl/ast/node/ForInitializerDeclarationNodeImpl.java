@@ -1,10 +1,10 @@
 package edu.jhu.cs.bsj.compiler.impl.ast.node;
 
 import java.util.Arrays;
-import java.util.EnumMap;
+import java.util.EnumSet;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
+import java.util.Set;
 
 import javax.annotation.Generated;
 
@@ -19,9 +19,10 @@ import edu.jhu.cs.bsj.compiler.ast.node.ForInitializerDeclarationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.LocalVariableDeclarationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.Node;
 import edu.jhu.cs.bsj.compiler.impl.ast.BsjNodeManager;
+import edu.jhu.cs.bsj.compiler.impl.ast.BsjNodeProxyFactory;
 import edu.jhu.cs.bsj.compiler.impl.ast.NormalNodeUnion;
-import edu.jhu.cs.bsj.compiler.impl.ast.attribute.AttributeName;
-import edu.jhu.cs.bsj.compiler.impl.ast.attribute.ReadWriteAttribute;
+import edu.jhu.cs.bsj.compiler.impl.ast.delta.property.ForInitializerDeclarationNodeSetDeclarationPropertyEditScriptElementImpl;
+import edu.jhu.cs.bsj.compiler.impl.ast.properties.ForInitializerDeclarationNodeProperties;
 
 @Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
 public class ForInitializerDeclarationNodeImpl extends NodeImpl implements ForInitializerDeclarationNode
@@ -29,22 +30,11 @@ public class ForInitializerDeclarationNodeImpl extends NodeImpl implements ForIn
     /** The variables declared in this initializer. */
     private NodeUnion<? extends LocalVariableDeclarationNode> declaration;
     
-    private Map<LocalAttribute,ReadWriteAttribute> localAttributes = new EnumMap<LocalAttribute,ReadWriteAttribute>(LocalAttribute.class);
-    private ReadWriteAttribute getAttribute(LocalAttribute attributeName)
-    {
-        ReadWriteAttribute attribute = localAttributes.get(attributeName);
-        if (attribute == null)
-        {
-            attribute = new ReadWriteAttribute(ForInitializerDeclarationNodeImpl.this, attributeName);
-            localAttributes.put(attributeName, attribute);
-        }
-        return attribute;
-    }
-    private static enum LocalAttribute implements AttributeName
-    {
-        /** Attribute identifier for the declaration property. */
-        DECLARATION,
-    }
+    /**
+     * A set of those properties which have been populated from the backing node.
+     * This field is <code>null</code> if <tt>backingNode</tt> is <code>null</code>.
+     */
+    private Set<ForInitializerDeclarationNodeProperties> populatedProperties;
     
     /** General constructor. */
     public ForInitializerDeclarationNodeImpl(
@@ -55,7 +45,49 @@ public class ForInitializerDeclarationNodeImpl extends NodeImpl implements ForIn
             boolean binary)
     {
         super(startLocation, stopLocation, manager, binary);
-        setUnionForDeclaration(declaration, false);
+        this.populatedProperties = null;
+        doSetDeclaration(declaration);
+    }
+    
+    /** Proxy constructor. */
+    public ForInitializerDeclarationNodeImpl(BsjNodeManager manager, BsjNodeProxyFactory proxyFactory, ForInitializerDeclarationNode backingNode)
+    {
+        super(manager, proxyFactory, backingNode);
+        this.populatedProperties = EnumSet.noneOf(ForInitializerDeclarationNodeProperties.class);
+    }
+    
+    /** Retrieves this node's backing node (if one exists). */
+    protected ForInitializerDeclarationNode getBackingNode()
+    {
+        return (ForInitializerDeclarationNode)super.getBackingNode();
+    }
+    
+    /**
+     * Ensures that the declaration value has been populated from proxy.
+     * If this node is not backed by a proxy or if the value has already been
+     * populated, this method does nothing.
+     */
+    private void checkDeclarationWrapped()
+    {
+        if (this.populatedProperties == null || this.populatedProperties.contains(
+                ForInitializerDeclarationNodeProperties.DECLARATION))
+            return;
+        this.populatedProperties.add(ForInitializerDeclarationNodeProperties.DECLARATION);
+        NodeUnion<? extends LocalVariableDeclarationNode> union = this.getBackingNode().getUnionForDeclaration();
+        switch (union.getType())
+        {
+            case NORMAL:
+                union = this.getProxyFactory().makeNormalNodeUnion(
+                        this.getProxyFactory().makeLocalVariableDeclarationNode(union.getNormalNode()));
+                break;
+            case SPLICE:
+                union = this.getProxyFactory().makeSpliceNodeUnion(
+                        this.getProxyFactory().makeSpliceNode(union.getSpliceNode()));
+                break;
+            default:
+                throw new IllegalStateException("Unrecognized union type: " + union.getType());
+        }
+        this.declaration = union;
     }
     
     /**
@@ -65,7 +97,7 @@ public class ForInitializerDeclarationNodeImpl extends NodeImpl implements ForIn
      */
     public LocalVariableDeclarationNode getDeclaration()
     {
-        getAttribute(LocalAttribute.DECLARATION).recordAccess(ReadWriteAttribute.AccessType.READ);
+        checkDeclarationWrapped();
         if (this.declaration == null)
         {
             return null;
@@ -81,7 +113,7 @@ public class ForInitializerDeclarationNodeImpl extends NodeImpl implements ForIn
      */
     public NodeUnion<? extends LocalVariableDeclarationNode> getUnionForDeclaration()
     {
-        getAttribute(LocalAttribute.DECLARATION).recordAccess(ReadWriteAttribute.AccessType.READ);
+        checkDeclarationWrapped();
         if (this.declaration == null)
         {
             this.declaration = new NormalNodeUnion<LocalVariableDeclarationNode>(null);
@@ -95,24 +127,8 @@ public class ForInitializerDeclarationNodeImpl extends NodeImpl implements ForIn
      */
     public void setDeclaration(LocalVariableDeclarationNode declaration)
     {
-            setDeclaration(declaration, true);
-            getManager().notifyChange(this);
-    }
-    
-    private void setDeclaration(LocalVariableDeclarationNode declaration, boolean checkPermissions)
-    {
-        if (checkPermissions)
-        {
-            getManager().assertMutatable(this);
-            getAttribute(LocalAttribute.DECLARATION).recordAccess(ReadWriteAttribute.AccessType.WRITE);
-        }
-        
-        if (this.declaration != null)
-        {
-            setAsChild(this.declaration.getNodeValue(), false);
-        }
-        this.declaration = new NormalNodeUnion<LocalVariableDeclarationNode>(declaration);
-        setAsChild(declaration, true);
+        checkDeclarationWrapped();
+        this.setUnionForDeclaration(new NormalNodeUnion<LocalVariableDeclarationNode>(declaration));
     }
     
     /**
@@ -121,18 +137,15 @@ public class ForInitializerDeclarationNodeImpl extends NodeImpl implements ForIn
      */
     public void setUnionForDeclaration(NodeUnion<? extends LocalVariableDeclarationNode> declaration)
     {
-            setUnionForDeclaration(declaration, true);
-            getManager().notifyChange(this);
+        checkDeclarationWrapped();
+        this.getManager().assertMutatable(this);
+        this.doSetDeclaration(declaration);
+        if (this.getManager().isRecordingEdits())
+            super.recordEdit(new ForInitializerDeclarationNodeSetDeclarationPropertyEditScriptElementImpl(this.getManager().getCurrentMetaprogramId(), this.getUid(), declaration.getNodeValue() == null ? null : declaration.getNodeValue().getUid()));
     }
     
-    private void setUnionForDeclaration(NodeUnion<? extends LocalVariableDeclarationNode> declaration, boolean checkPermissions)
+    private void doSetDeclaration(NodeUnion<? extends LocalVariableDeclarationNode> declaration)
     {
-        if (checkPermissions)
-        {
-            getManager().assertMutatable(this);
-            getAttribute(LocalAttribute.DECLARATION).recordAccess(ReadWriteAttribute.AccessType.WRITE);
-        }
-        
         if (declaration == null)
         {
             declaration = new NormalNodeUnion<LocalVariableDeclarationNode>(null);
@@ -156,9 +169,9 @@ public class ForInitializerDeclarationNodeImpl extends NodeImpl implements ForIn
     protected void receiveToChildren(BsjNodeVisitor visitor)
     {
         super.receiveToChildren(visitor);
-        if (this.declaration.getNodeValue() != null)
+        if (this.getUnionForDeclaration().getNodeValue() != null)
         {
-            this.declaration.getNodeValue().receive(visitor);
+            this.getUnionForDeclaration().getNodeValue().receive(visitor);
         }
         Iterator<? extends Node> extras = getHiddenVisitorChildren();
         if (extras != null)
@@ -181,9 +194,9 @@ public class ForInitializerDeclarationNodeImpl extends NodeImpl implements ForIn
     protected void receiveTypedToChildren(BsjTypedNodeVisitor visitor)
     {
         super.receiveTypedToChildren(visitor);
-        if (this.declaration.getNodeValue() != null)
+        if (this.getUnionForDeclaration().getNodeValue() != null)
         {
-            this.declaration.getNodeValue().receiveTyped(visitor);
+            this.getUnionForDeclaration().getNodeValue().receiveTyped(visitor);
         }
         Iterator<? extends Node> extras = getHiddenVisitorChildren();
         if (extras != null)
@@ -242,6 +255,8 @@ public class ForInitializerDeclarationNodeImpl extends NodeImpl implements ForIn
     {
         StringBuilder sb = new StringBuilder();
         sb.append(this.getClass().getSimpleName());
+        sb.append('#');
+        sb.append(this.getUid());
         sb.append('[');
         sb.append("declaration=");
         sb.append(this.getUnionForDeclaration().getNodeValue() == null? "null" : this.getUnionForDeclaration().getNodeValue().getClass().getSimpleName());

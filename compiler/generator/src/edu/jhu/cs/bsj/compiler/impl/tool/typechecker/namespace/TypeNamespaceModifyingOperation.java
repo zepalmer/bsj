@@ -194,7 +194,7 @@ public class TypeNamespaceModifyingOperation extends AbstractNamespaceModifyingO
                         ImportOnDemandNode.class)));
 
                 // Automatic import of java.lang.* is treated as an on-demand import
-                PackageNode javaLangPackage = node.getRootPackage().getSubpackageByQualifiedName("java.lang");
+                PackageNode javaLangPackage = node.getRootPackage().getSubpackage("java.lang");
                 javaLangPackage.loadAllCompilationUnits(getLoadingInfo());
                 strategies.add(createPackagePopulationStrategy(javaLangPackage, node, AccessModifier.PUBLIC));
 
@@ -420,7 +420,7 @@ public class TypeNamespaceModifyingOperation extends AbstractNamespaceModifyingO
                         switch (importNode.getName().getCategory(getLoadingInfo()))
                         {
                             case PACKAGE:
-                                PackageNode packageNode = importNode.getRootPackage().getSubpackageByQualifiedName(
+                                PackageNode packageNode = importNode.getRootPackage().getSubpackage(
                                         importNode.getName());
                                 packageNode.loadAllCompilationUnits(getLoadingInfo());
                                 return createPackagePopulationStrategy(packageNode, importNode, AccessModifier.PUBLIC);

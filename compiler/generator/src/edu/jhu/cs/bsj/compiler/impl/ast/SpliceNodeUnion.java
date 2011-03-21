@@ -60,6 +60,12 @@ public class SpliceNodeUnion<T extends Node> implements NodeUnion<T>
     }
     
     @Override
+    public String toString()
+    {
+        return "SpliceNodeUnion(" + String.valueOf(getNodeValue()) + ")";
+    }
+    
+    @Override
     public boolean equals(Object o)
     {
         if (o instanceof SpliceNodeUnion<?>)

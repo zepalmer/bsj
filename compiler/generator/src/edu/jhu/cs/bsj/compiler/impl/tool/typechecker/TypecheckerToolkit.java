@@ -535,7 +535,7 @@ public class TypecheckerToolkit
 		PackageNode packageNode = this.manager.getRootPackage();
 		if (name != null)
 		{
-			packageNode = packageNode.getSubpackageByQualifiedName(name);
+			packageNode = packageNode.getSubpackage(name);
 		}
 
 		// Obtain the type from the package

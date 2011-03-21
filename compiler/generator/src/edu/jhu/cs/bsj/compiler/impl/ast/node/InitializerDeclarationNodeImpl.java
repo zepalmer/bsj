@@ -1,10 +1,10 @@
 package edu.jhu.cs.bsj.compiler.impl.ast.node;
 
 import java.util.Arrays;
-import java.util.EnumMap;
+import java.util.EnumSet;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
+import java.util.Set;
 
 import javax.annotation.Generated;
 
@@ -20,9 +20,12 @@ import edu.jhu.cs.bsj.compiler.ast.node.Node;
 import edu.jhu.cs.bsj.compiler.ast.node.list.BlockStatementListNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaAnnotationListNode;
 import edu.jhu.cs.bsj.compiler.impl.ast.BsjNodeManager;
+import edu.jhu.cs.bsj.compiler.impl.ast.BsjNodeProxyFactory;
 import edu.jhu.cs.bsj.compiler.impl.ast.NormalNodeUnion;
-import edu.jhu.cs.bsj.compiler.impl.ast.attribute.AttributeName;
-import edu.jhu.cs.bsj.compiler.impl.ast.attribute.ReadWriteAttribute;
+import edu.jhu.cs.bsj.compiler.impl.ast.delta.property.InitializerDeclarationNodeSetBodyPropertyEditScriptElementImpl;
+import edu.jhu.cs.bsj.compiler.impl.ast.delta.property.InitializerDeclarationNodeSetMetaAnnotationsPropertyEditScriptElementImpl;
+import edu.jhu.cs.bsj.compiler.impl.ast.delta.property.InitializerDeclarationNodeSetStaticInitializerPropertyEditScriptElementImpl;
+import edu.jhu.cs.bsj.compiler.impl.ast.properties.InitializerDeclarationNodeProperties;
 
 @Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
 public class InitializerDeclarationNodeImpl extends NodeImpl implements InitializerDeclarationNode
@@ -36,26 +39,11 @@ public class InitializerDeclarationNodeImpl extends NodeImpl implements Initiali
     /** The meta-annotations associated with this node. */
     private NodeUnion<? extends MetaAnnotationListNode> metaAnnotations;
     
-    private Map<LocalAttribute,ReadWriteAttribute> localAttributes = new EnumMap<LocalAttribute,ReadWriteAttribute>(LocalAttribute.class);
-    private ReadWriteAttribute getAttribute(LocalAttribute attributeName)
-    {
-        ReadWriteAttribute attribute = localAttributes.get(attributeName);
-        if (attribute == null)
-        {
-            attribute = new ReadWriteAttribute(InitializerDeclarationNodeImpl.this, attributeName);
-            localAttributes.put(attributeName, attribute);
-        }
-        return attribute;
-    }
-    private static enum LocalAttribute implements AttributeName
-    {
-        /** Attribute identifier for the staticInitializer property. */
-        STATIC_INITIALIZER,
-        /** Attribute identifier for the body property. */
-        BODY,
-        /** Attribute identifier for the metaAnnotations property. */
-        META_ANNOTATIONS,
-    }
+    /**
+     * A set of those properties which have been populated from the backing node.
+     * This field is <code>null</code> if <tt>backingNode</tt> is <code>null</code>.
+     */
+    private Set<InitializerDeclarationNodeProperties> populatedProperties;
     
     /** General constructor. */
     public InitializerDeclarationNodeImpl(
@@ -68,9 +56,93 @@ public class InitializerDeclarationNodeImpl extends NodeImpl implements Initiali
             boolean binary)
     {
         super(startLocation, stopLocation, manager, binary);
-        this.staticInitializer = staticInitializer;
-        setUnionForBody(body, false);
-        setUnionForMetaAnnotations(metaAnnotations, false);
+        this.populatedProperties = null;
+        doSetStaticInitializer(staticInitializer);
+        doSetBody(body);
+        doSetMetaAnnotations(metaAnnotations);
+    }
+    
+    /** Proxy constructor. */
+    public InitializerDeclarationNodeImpl(BsjNodeManager manager, BsjNodeProxyFactory proxyFactory, InitializerDeclarationNode backingNode)
+    {
+        super(manager, proxyFactory, backingNode);
+        this.populatedProperties = EnumSet.noneOf(InitializerDeclarationNodeProperties.class);
+    }
+    
+    /** Retrieves this node's backing node (if one exists). */
+    protected InitializerDeclarationNode getBackingNode()
+    {
+        return (InitializerDeclarationNode)super.getBackingNode();
+    }
+    
+    /**
+     * Ensures that the staticInitializer value has been populated from proxy.
+     * If this node is not backed by a proxy or if the value has already been
+     * populated, this method does nothing.
+     */
+    private void checkStaticInitializerWrapped()
+    {
+        if (this.populatedProperties == null || this.populatedProperties.contains(
+                InitializerDeclarationNodeProperties.STATIC_INITIALIZER))
+            return;
+        this.populatedProperties.add(InitializerDeclarationNodeProperties.STATIC_INITIALIZER);
+        this.staticInitializer = this.getBackingNode().getStaticInitializer();
+    }
+    
+    /**
+     * Ensures that the body value has been populated from proxy.
+     * If this node is not backed by a proxy or if the value has already been
+     * populated, this method does nothing.
+     */
+    private void checkBodyWrapped()
+    {
+        if (this.populatedProperties == null || this.populatedProperties.contains(
+                InitializerDeclarationNodeProperties.BODY))
+            return;
+        this.populatedProperties.add(InitializerDeclarationNodeProperties.BODY);
+        NodeUnion<? extends BlockStatementListNode> union = this.getBackingNode().getUnionForBody();
+        switch (union.getType())
+        {
+            case NORMAL:
+                union = this.getProxyFactory().makeNormalNodeUnion(
+                        this.getProxyFactory().makeBlockStatementListNode(union.getNormalNode()));
+                break;
+            case SPLICE:
+                union = this.getProxyFactory().makeSpliceNodeUnion(
+                        this.getProxyFactory().makeSpliceNode(union.getSpliceNode()));
+                break;
+            default:
+                throw new IllegalStateException("Unrecognized union type: " + union.getType());
+        }
+        this.body = union;
+    }
+    
+    /**
+     * Ensures that the metaAnnotations value has been populated from proxy.
+     * If this node is not backed by a proxy or if the value has already been
+     * populated, this method does nothing.
+     */
+    private void checkMetaAnnotationsWrapped()
+    {
+        if (this.populatedProperties == null || this.populatedProperties.contains(
+                InitializerDeclarationNodeProperties.META_ANNOTATIONS))
+            return;
+        this.populatedProperties.add(InitializerDeclarationNodeProperties.META_ANNOTATIONS);
+        NodeUnion<? extends MetaAnnotationListNode> union = this.getBackingNode().getUnionForMetaAnnotations();
+        switch (union.getType())
+        {
+            case NORMAL:
+                union = this.getProxyFactory().makeNormalNodeUnion(
+                        this.getProxyFactory().makeMetaAnnotationListNode(union.getNormalNode()));
+                break;
+            case SPLICE:
+                union = this.getProxyFactory().makeSpliceNodeUnion(
+                        this.getProxyFactory().makeSpliceNode(union.getSpliceNode()));
+                break;
+            default:
+                throw new IllegalStateException("Unrecognized union type: " + union.getType());
+        }
+        this.metaAnnotations = union;
     }
     
     /**
@@ -79,7 +151,7 @@ public class InitializerDeclarationNodeImpl extends NodeImpl implements Initiali
      */
     public boolean getStaticInitializer()
     {
-        getAttribute(LocalAttribute.STATIC_INITIALIZER).recordAccess(ReadWriteAttribute.AccessType.READ);
+        checkStaticInitializerWrapped();
         return this.staticInitializer;
     }
     
@@ -89,18 +161,15 @@ public class InitializerDeclarationNodeImpl extends NodeImpl implements Initiali
      */
     public void setStaticInitializer(boolean staticInitializer)
     {
-            setStaticInitializer(staticInitializer, true);
-            getManager().notifyChange(this);
+        checkStaticInitializerWrapped();
+        this.getManager().assertMutatable(this);
+        this.doSetStaticInitializer(staticInitializer);
+        if (this.getManager().isRecordingEdits())
+            super.recordEdit(new InitializerDeclarationNodeSetStaticInitializerPropertyEditScriptElementImpl(this.getManager().getCurrentMetaprogramId(), this.getUid(), staticInitializer));
     }
     
-    private void setStaticInitializer(boolean staticInitializer, boolean checkPermissions)
+    private void doSetStaticInitializer(boolean staticInitializer)
     {
-        if (checkPermissions)
-        {
-            getManager().assertMutatable(this);
-            getAttribute(LocalAttribute.STATIC_INITIALIZER).recordAccess(ReadWriteAttribute.AccessType.WRITE);
-        }
-        
         this.staticInitializer = staticInitializer;
     }
     
@@ -111,7 +180,7 @@ public class InitializerDeclarationNodeImpl extends NodeImpl implements Initiali
      */
     public BlockStatementListNode getBody()
     {
-        getAttribute(LocalAttribute.BODY).recordAccess(ReadWriteAttribute.AccessType.READ);
+        checkBodyWrapped();
         if (this.body == null)
         {
             return null;
@@ -127,7 +196,7 @@ public class InitializerDeclarationNodeImpl extends NodeImpl implements Initiali
      */
     public NodeUnion<? extends BlockStatementListNode> getUnionForBody()
     {
-        getAttribute(LocalAttribute.BODY).recordAccess(ReadWriteAttribute.AccessType.READ);
+        checkBodyWrapped();
         if (this.body == null)
         {
             this.body = new NormalNodeUnion<BlockStatementListNode>(null);
@@ -141,24 +210,8 @@ public class InitializerDeclarationNodeImpl extends NodeImpl implements Initiali
      */
     public void setBody(BlockStatementListNode body)
     {
-            setBody(body, true);
-            getManager().notifyChange(this);
-    }
-    
-    private void setBody(BlockStatementListNode body, boolean checkPermissions)
-    {
-        if (checkPermissions)
-        {
-            getManager().assertMutatable(this);
-            getAttribute(LocalAttribute.BODY).recordAccess(ReadWriteAttribute.AccessType.WRITE);
-        }
-        
-        if (this.body != null)
-        {
-            setAsChild(this.body.getNodeValue(), false);
-        }
-        this.body = new NormalNodeUnion<BlockStatementListNode>(body);
-        setAsChild(body, true);
+        checkBodyWrapped();
+        this.setUnionForBody(new NormalNodeUnion<BlockStatementListNode>(body));
     }
     
     /**
@@ -167,18 +220,15 @@ public class InitializerDeclarationNodeImpl extends NodeImpl implements Initiali
      */
     public void setUnionForBody(NodeUnion<? extends BlockStatementListNode> body)
     {
-            setUnionForBody(body, true);
-            getManager().notifyChange(this);
+        checkBodyWrapped();
+        this.getManager().assertMutatable(this);
+        this.doSetBody(body);
+        if (this.getManager().isRecordingEdits())
+            super.recordEdit(new InitializerDeclarationNodeSetBodyPropertyEditScriptElementImpl(this.getManager().getCurrentMetaprogramId(), this.getUid(), body.getNodeValue() == null ? null : body.getNodeValue().getUid()));
     }
     
-    private void setUnionForBody(NodeUnion<? extends BlockStatementListNode> body, boolean checkPermissions)
+    private void doSetBody(NodeUnion<? extends BlockStatementListNode> body)
     {
-        if (checkPermissions)
-        {
-            getManager().assertMutatable(this);
-            getAttribute(LocalAttribute.BODY).recordAccess(ReadWriteAttribute.AccessType.WRITE);
-        }
-        
         if (body == null)
         {
             body = new NormalNodeUnion<BlockStatementListNode>(null);
@@ -198,7 +248,7 @@ public class InitializerDeclarationNodeImpl extends NodeImpl implements Initiali
      */
     public MetaAnnotationListNode getMetaAnnotations()
     {
-        getAttribute(LocalAttribute.META_ANNOTATIONS).recordAccess(ReadWriteAttribute.AccessType.READ);
+        checkMetaAnnotationsWrapped();
         if (this.metaAnnotations == null)
         {
             return null;
@@ -214,7 +264,7 @@ public class InitializerDeclarationNodeImpl extends NodeImpl implements Initiali
      */
     public NodeUnion<? extends MetaAnnotationListNode> getUnionForMetaAnnotations()
     {
-        getAttribute(LocalAttribute.META_ANNOTATIONS).recordAccess(ReadWriteAttribute.AccessType.READ);
+        checkMetaAnnotationsWrapped();
         if (this.metaAnnotations == null)
         {
             this.metaAnnotations = new NormalNodeUnion<MetaAnnotationListNode>(null);
@@ -228,24 +278,8 @@ public class InitializerDeclarationNodeImpl extends NodeImpl implements Initiali
      */
     public void setMetaAnnotations(MetaAnnotationListNode metaAnnotations)
     {
-            setMetaAnnotations(metaAnnotations, true);
-            getManager().notifyChange(this);
-    }
-    
-    private void setMetaAnnotations(MetaAnnotationListNode metaAnnotations, boolean checkPermissions)
-    {
-        if (checkPermissions)
-        {
-            getManager().assertMutatable(this);
-            getAttribute(LocalAttribute.META_ANNOTATIONS).recordAccess(ReadWriteAttribute.AccessType.WRITE);
-        }
-        
-        if (this.metaAnnotations != null)
-        {
-            setAsChild(this.metaAnnotations.getNodeValue(), false);
-        }
-        this.metaAnnotations = new NormalNodeUnion<MetaAnnotationListNode>(metaAnnotations);
-        setAsChild(metaAnnotations, true);
+        checkMetaAnnotationsWrapped();
+        this.setUnionForMetaAnnotations(new NormalNodeUnion<MetaAnnotationListNode>(metaAnnotations));
     }
     
     /**
@@ -254,18 +288,15 @@ public class InitializerDeclarationNodeImpl extends NodeImpl implements Initiali
      */
     public void setUnionForMetaAnnotations(NodeUnion<? extends MetaAnnotationListNode> metaAnnotations)
     {
-            setUnionForMetaAnnotations(metaAnnotations, true);
-            getManager().notifyChange(this);
+        checkMetaAnnotationsWrapped();
+        this.getManager().assertMutatable(this);
+        this.doSetMetaAnnotations(metaAnnotations);
+        if (this.getManager().isRecordingEdits())
+            super.recordEdit(new InitializerDeclarationNodeSetMetaAnnotationsPropertyEditScriptElementImpl(this.getManager().getCurrentMetaprogramId(), this.getUid(), metaAnnotations.getNodeValue() == null ? null : metaAnnotations.getNodeValue().getUid()));
     }
     
-    private void setUnionForMetaAnnotations(NodeUnion<? extends MetaAnnotationListNode> metaAnnotations, boolean checkPermissions)
+    private void doSetMetaAnnotations(NodeUnion<? extends MetaAnnotationListNode> metaAnnotations)
     {
-        if (checkPermissions)
-        {
-            getManager().assertMutatable(this);
-            getAttribute(LocalAttribute.META_ANNOTATIONS).recordAccess(ReadWriteAttribute.AccessType.WRITE);
-        }
-        
         if (metaAnnotations == null)
         {
             metaAnnotations = new NormalNodeUnion<MetaAnnotationListNode>(null);
@@ -289,13 +320,13 @@ public class InitializerDeclarationNodeImpl extends NodeImpl implements Initiali
     protected void receiveToChildren(BsjNodeVisitor visitor)
     {
         super.receiveToChildren(visitor);
-        if (this.body.getNodeValue() != null)
+        if (this.getUnionForBody().getNodeValue() != null)
         {
-            this.body.getNodeValue().receive(visitor);
+            this.getUnionForBody().getNodeValue().receive(visitor);
         }
-        if (this.metaAnnotations.getNodeValue() != null)
+        if (this.getUnionForMetaAnnotations().getNodeValue() != null)
         {
-            this.metaAnnotations.getNodeValue().receive(visitor);
+            this.getUnionForMetaAnnotations().getNodeValue().receive(visitor);
         }
         Iterator<? extends Node> extras = getHiddenVisitorChildren();
         if (extras != null)
@@ -318,13 +349,13 @@ public class InitializerDeclarationNodeImpl extends NodeImpl implements Initiali
     protected void receiveTypedToChildren(BsjTypedNodeVisitor visitor)
     {
         super.receiveTypedToChildren(visitor);
-        if (this.body.getNodeValue() != null)
+        if (this.getUnionForBody().getNodeValue() != null)
         {
-            this.body.getNodeValue().receiveTyped(visitor);
+            this.getUnionForBody().getNodeValue().receiveTyped(visitor);
         }
-        if (this.metaAnnotations.getNodeValue() != null)
+        if (this.getUnionForMetaAnnotations().getNodeValue() != null)
         {
-            this.metaAnnotations.getNodeValue().receiveTyped(visitor);
+            this.getUnionForMetaAnnotations().getNodeValue().receiveTyped(visitor);
         }
         Iterator<? extends Node> extras = getHiddenVisitorChildren();
         if (extras != null)
@@ -391,6 +422,8 @@ public class InitializerDeclarationNodeImpl extends NodeImpl implements Initiali
     {
         StringBuilder sb = new StringBuilder();
         sb.append(this.getClass().getSimpleName());
+        sb.append('#');
+        sb.append(this.getUid());
         sb.append('[');
         sb.append("staticInitializer=");
         sb.append(',');

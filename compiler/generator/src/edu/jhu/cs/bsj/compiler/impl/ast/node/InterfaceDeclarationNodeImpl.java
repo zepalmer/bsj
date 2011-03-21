@@ -1,10 +1,10 @@
 package edu.jhu.cs.bsj.compiler.impl.ast.node;
 
 import java.util.Arrays;
-import java.util.EnumMap;
+import java.util.EnumSet;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
+import java.util.Set;
 
 import javax.annotation.Generated;
 
@@ -26,9 +26,15 @@ import edu.jhu.cs.bsj.compiler.ast.node.PackageNode;
 import edu.jhu.cs.bsj.compiler.ast.node.list.DeclaredTypeListNode;
 import edu.jhu.cs.bsj.compiler.ast.node.list.TypeParameterListNode;
 import edu.jhu.cs.bsj.compiler.impl.ast.BsjNodeManager;
+import edu.jhu.cs.bsj.compiler.impl.ast.BsjNodeProxyFactory;
 import edu.jhu.cs.bsj.compiler.impl.ast.NormalNodeUnion;
-import edu.jhu.cs.bsj.compiler.impl.ast.attribute.AttributeName;
-import edu.jhu.cs.bsj.compiler.impl.ast.attribute.ReadWriteAttribute;
+import edu.jhu.cs.bsj.compiler.impl.ast.delta.property.InterfaceDeclarationNodeSetBodyPropertyEditScriptElementImpl;
+import edu.jhu.cs.bsj.compiler.impl.ast.delta.property.InterfaceDeclarationNodeSetExtendsClausePropertyEditScriptElementImpl;
+import edu.jhu.cs.bsj.compiler.impl.ast.delta.property.InterfaceDeclarationNodeSetIdentifierPropertyEditScriptElementImpl;
+import edu.jhu.cs.bsj.compiler.impl.ast.delta.property.InterfaceDeclarationNodeSetJavadocPropertyEditScriptElementImpl;
+import edu.jhu.cs.bsj.compiler.impl.ast.delta.property.InterfaceDeclarationNodeSetModifiersPropertyEditScriptElementImpl;
+import edu.jhu.cs.bsj.compiler.impl.ast.delta.property.InterfaceDeclarationNodeSetTypeParametersPropertyEditScriptElementImpl;
+import edu.jhu.cs.bsj.compiler.impl.ast.properties.InterfaceDeclarationNodeProperties;
 
 @Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
 public class InterfaceDeclarationNodeImpl extends NodeImpl implements InterfaceDeclarationNode
@@ -51,32 +57,11 @@ public class InterfaceDeclarationNodeImpl extends NodeImpl implements InterfaceD
     /** The associated javadoc comment for this node. */
     private NodeUnion<? extends JavadocNode> javadoc;
     
-    private Map<LocalAttribute,ReadWriteAttribute> localAttributes = new EnumMap<LocalAttribute,ReadWriteAttribute>(LocalAttribute.class);
-    private ReadWriteAttribute getAttribute(LocalAttribute attributeName)
-    {
-        ReadWriteAttribute attribute = localAttributes.get(attributeName);
-        if (attribute == null)
-        {
-            attribute = new ReadWriteAttribute(InterfaceDeclarationNodeImpl.this, attributeName);
-            localAttributes.put(attributeName, attribute);
-        }
-        return attribute;
-    }
-    private static enum LocalAttribute implements AttributeName
-    {
-        /** Attribute identifier for the modifiers property. */
-        MODIFIERS,
-        /** Attribute identifier for the extendsClause property. */
-        EXTENDS_CLAUSE,
-        /** Attribute identifier for the body property. */
-        BODY,
-        /** Attribute identifier for the typeParameters property. */
-        TYPE_PARAMETERS,
-        /** Attribute identifier for the identifier property. */
-        IDENTIFIER,
-        /** Attribute identifier for the javadoc property. */
-        JAVADOC,
-    }
+    /**
+     * A set of those properties which have been populated from the backing node.
+     * This field is <code>null</code> if <tt>backingNode</tt> is <code>null</code>.
+     */
+    private Set<InterfaceDeclarationNodeProperties> populatedProperties;
     
     /** General constructor. */
     public InterfaceDeclarationNodeImpl(
@@ -92,12 +77,194 @@ public class InterfaceDeclarationNodeImpl extends NodeImpl implements InterfaceD
             boolean binary)
     {
         super(startLocation, stopLocation, manager, binary);
-        setUnionForModifiers(modifiers, false);
-        setUnionForExtendsClause(extendsClause, false);
-        setUnionForBody(body, false);
-        setUnionForTypeParameters(typeParameters, false);
-        setUnionForIdentifier(identifier, false);
-        setUnionForJavadoc(javadoc, false);
+        this.populatedProperties = null;
+        doSetModifiers(modifiers);
+        doSetExtendsClause(extendsClause);
+        doSetBody(body);
+        doSetTypeParameters(typeParameters);
+        doSetIdentifier(identifier);
+        doSetJavadoc(javadoc);
+    }
+    
+    /** Proxy constructor. */
+    public InterfaceDeclarationNodeImpl(BsjNodeManager manager, BsjNodeProxyFactory proxyFactory, InterfaceDeclarationNode backingNode)
+    {
+        super(manager, proxyFactory, backingNode);
+        this.populatedProperties = EnumSet.noneOf(InterfaceDeclarationNodeProperties.class);
+    }
+    
+    /** Retrieves this node's backing node (if one exists). */
+    protected InterfaceDeclarationNode getBackingNode()
+    {
+        return (InterfaceDeclarationNode)super.getBackingNode();
+    }
+    
+    /**
+     * Ensures that the modifiers value has been populated from proxy.
+     * If this node is not backed by a proxy or if the value has already been
+     * populated, this method does nothing.
+     */
+    private void checkModifiersWrapped()
+    {
+        if (this.populatedProperties == null || this.populatedProperties.contains(
+                InterfaceDeclarationNodeProperties.MODIFIERS))
+            return;
+        this.populatedProperties.add(InterfaceDeclarationNodeProperties.MODIFIERS);
+        NodeUnion<? extends InterfaceModifiersNode> union = this.getBackingNode().getUnionForModifiers();
+        switch (union.getType())
+        {
+            case NORMAL:
+                union = this.getProxyFactory().makeNormalNodeUnion(
+                        this.getProxyFactory().makeInterfaceModifiersNode(union.getNormalNode()));
+                break;
+            case SPLICE:
+                union = this.getProxyFactory().makeSpliceNodeUnion(
+                        this.getProxyFactory().makeSpliceNode(union.getSpliceNode()));
+                break;
+            default:
+                throw new IllegalStateException("Unrecognized union type: " + union.getType());
+        }
+        this.modifiers = union;
+    }
+    
+    /**
+     * Ensures that the extendsClause value has been populated from proxy.
+     * If this node is not backed by a proxy or if the value has already been
+     * populated, this method does nothing.
+     */
+    private void checkExtendsClauseWrapped()
+    {
+        if (this.populatedProperties == null || this.populatedProperties.contains(
+                InterfaceDeclarationNodeProperties.EXTENDS_CLAUSE))
+            return;
+        this.populatedProperties.add(InterfaceDeclarationNodeProperties.EXTENDS_CLAUSE);
+        NodeUnion<? extends DeclaredTypeListNode> union = this.getBackingNode().getUnionForExtendsClause();
+        switch (union.getType())
+        {
+            case NORMAL:
+                union = this.getProxyFactory().makeNormalNodeUnion(
+                        this.getProxyFactory().makeDeclaredTypeListNode(union.getNormalNode()));
+                break;
+            case SPLICE:
+                union = this.getProxyFactory().makeSpliceNodeUnion(
+                        this.getProxyFactory().makeSpliceNode(union.getSpliceNode()));
+                break;
+            default:
+                throw new IllegalStateException("Unrecognized union type: " + union.getType());
+        }
+        this.extendsClause = union;
+    }
+    
+    /**
+     * Ensures that the body value has been populated from proxy.
+     * If this node is not backed by a proxy or if the value has already been
+     * populated, this method does nothing.
+     */
+    private void checkBodyWrapped()
+    {
+        if (this.populatedProperties == null || this.populatedProperties.contains(
+                InterfaceDeclarationNodeProperties.BODY))
+            return;
+        this.populatedProperties.add(InterfaceDeclarationNodeProperties.BODY);
+        NodeUnion<? extends InterfaceBodyNode> union = this.getBackingNode().getUnionForBody();
+        switch (union.getType())
+        {
+            case NORMAL:
+                union = this.getProxyFactory().makeNormalNodeUnion(
+                        this.getProxyFactory().makeInterfaceBodyNode(union.getNormalNode()));
+                break;
+            case SPLICE:
+                union = this.getProxyFactory().makeSpliceNodeUnion(
+                        this.getProxyFactory().makeSpliceNode(union.getSpliceNode()));
+                break;
+            default:
+                throw new IllegalStateException("Unrecognized union type: " + union.getType());
+        }
+        this.body = union;
+    }
+    
+    /**
+     * Ensures that the typeParameters value has been populated from proxy.
+     * If this node is not backed by a proxy or if the value has already been
+     * populated, this method does nothing.
+     */
+    private void checkTypeParametersWrapped()
+    {
+        if (this.populatedProperties == null || this.populatedProperties.contains(
+                InterfaceDeclarationNodeProperties.TYPE_PARAMETERS))
+            return;
+        this.populatedProperties.add(InterfaceDeclarationNodeProperties.TYPE_PARAMETERS);
+        NodeUnion<? extends TypeParameterListNode> union = this.getBackingNode().getUnionForTypeParameters();
+        switch (union.getType())
+        {
+            case NORMAL:
+                union = this.getProxyFactory().makeNormalNodeUnion(
+                        this.getProxyFactory().makeTypeParameterListNode(union.getNormalNode()));
+                break;
+            case SPLICE:
+                union = this.getProxyFactory().makeSpliceNodeUnion(
+                        this.getProxyFactory().makeSpliceNode(union.getSpliceNode()));
+                break;
+            default:
+                throw new IllegalStateException("Unrecognized union type: " + union.getType());
+        }
+        this.typeParameters = union;
+    }
+    
+    /**
+     * Ensures that the identifier value has been populated from proxy.
+     * If this node is not backed by a proxy or if the value has already been
+     * populated, this method does nothing.
+     */
+    private void checkIdentifierWrapped()
+    {
+        if (this.populatedProperties == null || this.populatedProperties.contains(
+                InterfaceDeclarationNodeProperties.IDENTIFIER))
+            return;
+        this.populatedProperties.add(InterfaceDeclarationNodeProperties.IDENTIFIER);
+        NodeUnion<? extends IdentifierNode> union = this.getBackingNode().getUnionForIdentifier();
+        switch (union.getType())
+        {
+            case NORMAL:
+                union = this.getProxyFactory().makeNormalNodeUnion(
+                        this.getProxyFactory().makeIdentifierNode(union.getNormalNode()));
+                break;
+            case SPLICE:
+                union = this.getProxyFactory().makeSpliceNodeUnion(
+                        this.getProxyFactory().makeSpliceNode(union.getSpliceNode()));
+                break;
+            default:
+                throw new IllegalStateException("Unrecognized union type: " + union.getType());
+        }
+        this.identifier = union;
+    }
+    
+    /**
+     * Ensures that the javadoc value has been populated from proxy.
+     * If this node is not backed by a proxy or if the value has already been
+     * populated, this method does nothing.
+     */
+    private void checkJavadocWrapped()
+    {
+        if (this.populatedProperties == null || this.populatedProperties.contains(
+                InterfaceDeclarationNodeProperties.JAVADOC))
+            return;
+        this.populatedProperties.add(InterfaceDeclarationNodeProperties.JAVADOC);
+        NodeUnion<? extends JavadocNode> union = this.getBackingNode().getUnionForJavadoc();
+        switch (union.getType())
+        {
+            case NORMAL:
+                union = this.getProxyFactory().makeNormalNodeUnion(
+                        this.getProxyFactory().makeJavadocNode(union.getNormalNode()));
+                break;
+            case SPLICE:
+                union = this.getProxyFactory().makeSpliceNodeUnion(
+                        this.getProxyFactory().makeSpliceNode(union.getSpliceNode()));
+                break;
+            default:
+                throw new IllegalStateException("Unrecognized union type: " + union.getType());
+        }
+        this.javadoc = union;
     }
     
     /**
@@ -107,7 +274,7 @@ public class InterfaceDeclarationNodeImpl extends NodeImpl implements InterfaceD
      */
     public InterfaceModifiersNode getModifiers()
     {
-        getAttribute(LocalAttribute.MODIFIERS).recordAccess(ReadWriteAttribute.AccessType.READ);
+        checkModifiersWrapped();
         if (this.modifiers == null)
         {
             return null;
@@ -123,7 +290,7 @@ public class InterfaceDeclarationNodeImpl extends NodeImpl implements InterfaceD
      */
     public NodeUnion<? extends InterfaceModifiersNode> getUnionForModifiers()
     {
-        getAttribute(LocalAttribute.MODIFIERS).recordAccess(ReadWriteAttribute.AccessType.READ);
+        checkModifiersWrapped();
         if (this.modifiers == null)
         {
             this.modifiers = new NormalNodeUnion<InterfaceModifiersNode>(null);
@@ -137,24 +304,8 @@ public class InterfaceDeclarationNodeImpl extends NodeImpl implements InterfaceD
      */
     public void setModifiers(InterfaceModifiersNode modifiers)
     {
-            setModifiers(modifiers, true);
-            getManager().notifyChange(this);
-    }
-    
-    private void setModifiers(InterfaceModifiersNode modifiers, boolean checkPermissions)
-    {
-        if (checkPermissions)
-        {
-            getManager().assertMutatable(this);
-            getAttribute(LocalAttribute.MODIFIERS).recordAccess(ReadWriteAttribute.AccessType.WRITE);
-        }
-        
-        if (this.modifiers != null)
-        {
-            setAsChild(this.modifiers.getNodeValue(), false);
-        }
-        this.modifiers = new NormalNodeUnion<InterfaceModifiersNode>(modifiers);
-        setAsChild(modifiers, true);
+        checkModifiersWrapped();
+        this.setUnionForModifiers(new NormalNodeUnion<InterfaceModifiersNode>(modifiers));
     }
     
     /**
@@ -163,18 +314,15 @@ public class InterfaceDeclarationNodeImpl extends NodeImpl implements InterfaceD
      */
     public void setUnionForModifiers(NodeUnion<? extends InterfaceModifiersNode> modifiers)
     {
-            setUnionForModifiers(modifiers, true);
-            getManager().notifyChange(this);
+        checkModifiersWrapped();
+        this.getManager().assertMutatable(this);
+        this.doSetModifiers(modifiers);
+        if (this.getManager().isRecordingEdits())
+            super.recordEdit(new InterfaceDeclarationNodeSetModifiersPropertyEditScriptElementImpl(this.getManager().getCurrentMetaprogramId(), this.getUid(), modifiers.getNodeValue() == null ? null : modifiers.getNodeValue().getUid()));
     }
     
-    private void setUnionForModifiers(NodeUnion<? extends InterfaceModifiersNode> modifiers, boolean checkPermissions)
+    private void doSetModifiers(NodeUnion<? extends InterfaceModifiersNode> modifiers)
     {
-        if (checkPermissions)
-        {
-            getManager().assertMutatable(this);
-            getAttribute(LocalAttribute.MODIFIERS).recordAccess(ReadWriteAttribute.AccessType.WRITE);
-        }
-        
         if (modifiers == null)
         {
             modifiers = new NormalNodeUnion<InterfaceModifiersNode>(null);
@@ -194,7 +342,7 @@ public class InterfaceDeclarationNodeImpl extends NodeImpl implements InterfaceD
      */
     public DeclaredTypeListNode getExtendsClause()
     {
-        getAttribute(LocalAttribute.EXTENDS_CLAUSE).recordAccess(ReadWriteAttribute.AccessType.READ);
+        checkExtendsClauseWrapped();
         if (this.extendsClause == null)
         {
             return null;
@@ -210,7 +358,7 @@ public class InterfaceDeclarationNodeImpl extends NodeImpl implements InterfaceD
      */
     public NodeUnion<? extends DeclaredTypeListNode> getUnionForExtendsClause()
     {
-        getAttribute(LocalAttribute.EXTENDS_CLAUSE).recordAccess(ReadWriteAttribute.AccessType.READ);
+        checkExtendsClauseWrapped();
         if (this.extendsClause == null)
         {
             this.extendsClause = new NormalNodeUnion<DeclaredTypeListNode>(null);
@@ -224,24 +372,8 @@ public class InterfaceDeclarationNodeImpl extends NodeImpl implements InterfaceD
      */
     public void setExtendsClause(DeclaredTypeListNode extendsClause)
     {
-            setExtendsClause(extendsClause, true);
-            getManager().notifyChange(this);
-    }
-    
-    private void setExtendsClause(DeclaredTypeListNode extendsClause, boolean checkPermissions)
-    {
-        if (checkPermissions)
-        {
-            getManager().assertMutatable(this);
-            getAttribute(LocalAttribute.EXTENDS_CLAUSE).recordAccess(ReadWriteAttribute.AccessType.WRITE);
-        }
-        
-        if (this.extendsClause != null)
-        {
-            setAsChild(this.extendsClause.getNodeValue(), false);
-        }
-        this.extendsClause = new NormalNodeUnion<DeclaredTypeListNode>(extendsClause);
-        setAsChild(extendsClause, true);
+        checkExtendsClauseWrapped();
+        this.setUnionForExtendsClause(new NormalNodeUnion<DeclaredTypeListNode>(extendsClause));
     }
     
     /**
@@ -250,18 +382,15 @@ public class InterfaceDeclarationNodeImpl extends NodeImpl implements InterfaceD
      */
     public void setUnionForExtendsClause(NodeUnion<? extends DeclaredTypeListNode> extendsClause)
     {
-            setUnionForExtendsClause(extendsClause, true);
-            getManager().notifyChange(this);
+        checkExtendsClauseWrapped();
+        this.getManager().assertMutatable(this);
+        this.doSetExtendsClause(extendsClause);
+        if (this.getManager().isRecordingEdits())
+            super.recordEdit(new InterfaceDeclarationNodeSetExtendsClausePropertyEditScriptElementImpl(this.getManager().getCurrentMetaprogramId(), this.getUid(), extendsClause.getNodeValue() == null ? null : extendsClause.getNodeValue().getUid()));
     }
     
-    private void setUnionForExtendsClause(NodeUnion<? extends DeclaredTypeListNode> extendsClause, boolean checkPermissions)
+    private void doSetExtendsClause(NodeUnion<? extends DeclaredTypeListNode> extendsClause)
     {
-        if (checkPermissions)
-        {
-            getManager().assertMutatable(this);
-            getAttribute(LocalAttribute.EXTENDS_CLAUSE).recordAccess(ReadWriteAttribute.AccessType.WRITE);
-        }
-        
         if (extendsClause == null)
         {
             extendsClause = new NormalNodeUnion<DeclaredTypeListNode>(null);
@@ -281,7 +410,7 @@ public class InterfaceDeclarationNodeImpl extends NodeImpl implements InterfaceD
      */
     public InterfaceBodyNode getBody()
     {
-        getAttribute(LocalAttribute.BODY).recordAccess(ReadWriteAttribute.AccessType.READ);
+        checkBodyWrapped();
         if (this.body == null)
         {
             return null;
@@ -297,7 +426,7 @@ public class InterfaceDeclarationNodeImpl extends NodeImpl implements InterfaceD
      */
     public NodeUnion<? extends InterfaceBodyNode> getUnionForBody()
     {
-        getAttribute(LocalAttribute.BODY).recordAccess(ReadWriteAttribute.AccessType.READ);
+        checkBodyWrapped();
         if (this.body == null)
         {
             this.body = new NormalNodeUnion<InterfaceBodyNode>(null);
@@ -311,24 +440,8 @@ public class InterfaceDeclarationNodeImpl extends NodeImpl implements InterfaceD
      */
     public void setBody(InterfaceBodyNode body)
     {
-            setBody(body, true);
-            getManager().notifyChange(this);
-    }
-    
-    private void setBody(InterfaceBodyNode body, boolean checkPermissions)
-    {
-        if (checkPermissions)
-        {
-            getManager().assertMutatable(this);
-            getAttribute(LocalAttribute.BODY).recordAccess(ReadWriteAttribute.AccessType.WRITE);
-        }
-        
-        if (this.body != null)
-        {
-            setAsChild(this.body.getNodeValue(), false);
-        }
-        this.body = new NormalNodeUnion<InterfaceBodyNode>(body);
-        setAsChild(body, true);
+        checkBodyWrapped();
+        this.setUnionForBody(new NormalNodeUnion<InterfaceBodyNode>(body));
     }
     
     /**
@@ -337,18 +450,15 @@ public class InterfaceDeclarationNodeImpl extends NodeImpl implements InterfaceD
      */
     public void setUnionForBody(NodeUnion<? extends InterfaceBodyNode> body)
     {
-            setUnionForBody(body, true);
-            getManager().notifyChange(this);
+        checkBodyWrapped();
+        this.getManager().assertMutatable(this);
+        this.doSetBody(body);
+        if (this.getManager().isRecordingEdits())
+            super.recordEdit(new InterfaceDeclarationNodeSetBodyPropertyEditScriptElementImpl(this.getManager().getCurrentMetaprogramId(), this.getUid(), body.getNodeValue() == null ? null : body.getNodeValue().getUid()));
     }
     
-    private void setUnionForBody(NodeUnion<? extends InterfaceBodyNode> body, boolean checkPermissions)
+    private void doSetBody(NodeUnion<? extends InterfaceBodyNode> body)
     {
-        if (checkPermissions)
-        {
-            getManager().assertMutatable(this);
-            getAttribute(LocalAttribute.BODY).recordAccess(ReadWriteAttribute.AccessType.WRITE);
-        }
-        
         if (body == null)
         {
             body = new NormalNodeUnion<InterfaceBodyNode>(null);
@@ -368,7 +478,7 @@ public class InterfaceDeclarationNodeImpl extends NodeImpl implements InterfaceD
      */
     public TypeParameterListNode getTypeParameters()
     {
-        getAttribute(LocalAttribute.TYPE_PARAMETERS).recordAccess(ReadWriteAttribute.AccessType.READ);
+        checkTypeParametersWrapped();
         if (this.typeParameters == null)
         {
             return null;
@@ -384,7 +494,7 @@ public class InterfaceDeclarationNodeImpl extends NodeImpl implements InterfaceD
      */
     public NodeUnion<? extends TypeParameterListNode> getUnionForTypeParameters()
     {
-        getAttribute(LocalAttribute.TYPE_PARAMETERS).recordAccess(ReadWriteAttribute.AccessType.READ);
+        checkTypeParametersWrapped();
         if (this.typeParameters == null)
         {
             this.typeParameters = new NormalNodeUnion<TypeParameterListNode>(null);
@@ -398,24 +508,8 @@ public class InterfaceDeclarationNodeImpl extends NodeImpl implements InterfaceD
      */
     public void setTypeParameters(TypeParameterListNode typeParameters)
     {
-            setTypeParameters(typeParameters, true);
-            getManager().notifyChange(this);
-    }
-    
-    private void setTypeParameters(TypeParameterListNode typeParameters, boolean checkPermissions)
-    {
-        if (checkPermissions)
-        {
-            getManager().assertMutatable(this);
-            getAttribute(LocalAttribute.TYPE_PARAMETERS).recordAccess(ReadWriteAttribute.AccessType.WRITE);
-        }
-        
-        if (this.typeParameters != null)
-        {
-            setAsChild(this.typeParameters.getNodeValue(), false);
-        }
-        this.typeParameters = new NormalNodeUnion<TypeParameterListNode>(typeParameters);
-        setAsChild(typeParameters, true);
+        checkTypeParametersWrapped();
+        this.setUnionForTypeParameters(new NormalNodeUnion<TypeParameterListNode>(typeParameters));
     }
     
     /**
@@ -424,18 +518,15 @@ public class InterfaceDeclarationNodeImpl extends NodeImpl implements InterfaceD
      */
     public void setUnionForTypeParameters(NodeUnion<? extends TypeParameterListNode> typeParameters)
     {
-            setUnionForTypeParameters(typeParameters, true);
-            getManager().notifyChange(this);
+        checkTypeParametersWrapped();
+        this.getManager().assertMutatable(this);
+        this.doSetTypeParameters(typeParameters);
+        if (this.getManager().isRecordingEdits())
+            super.recordEdit(new InterfaceDeclarationNodeSetTypeParametersPropertyEditScriptElementImpl(this.getManager().getCurrentMetaprogramId(), this.getUid(), typeParameters.getNodeValue() == null ? null : typeParameters.getNodeValue().getUid()));
     }
     
-    private void setUnionForTypeParameters(NodeUnion<? extends TypeParameterListNode> typeParameters, boolean checkPermissions)
+    private void doSetTypeParameters(NodeUnion<? extends TypeParameterListNode> typeParameters)
     {
-        if (checkPermissions)
-        {
-            getManager().assertMutatable(this);
-            getAttribute(LocalAttribute.TYPE_PARAMETERS).recordAccess(ReadWriteAttribute.AccessType.WRITE);
-        }
-        
         if (typeParameters == null)
         {
             typeParameters = new NormalNodeUnion<TypeParameterListNode>(null);
@@ -455,7 +546,7 @@ public class InterfaceDeclarationNodeImpl extends NodeImpl implements InterfaceD
      */
     public IdentifierNode getIdentifier()
     {
-        getAttribute(LocalAttribute.IDENTIFIER).recordAccess(ReadWriteAttribute.AccessType.READ);
+        checkIdentifierWrapped();
         if (this.identifier == null)
         {
             return null;
@@ -471,7 +562,7 @@ public class InterfaceDeclarationNodeImpl extends NodeImpl implements InterfaceD
      */
     public NodeUnion<? extends IdentifierNode> getUnionForIdentifier()
     {
-        getAttribute(LocalAttribute.IDENTIFIER).recordAccess(ReadWriteAttribute.AccessType.READ);
+        checkIdentifierWrapped();
         if (this.identifier == null)
         {
             this.identifier = new NormalNodeUnion<IdentifierNode>(null);
@@ -485,24 +576,8 @@ public class InterfaceDeclarationNodeImpl extends NodeImpl implements InterfaceD
      */
     public void setIdentifier(IdentifierNode identifier)
     {
-            setIdentifier(identifier, true);
-            getManager().notifyChange(this);
-    }
-    
-    private void setIdentifier(IdentifierNode identifier, boolean checkPermissions)
-    {
-        if (checkPermissions)
-        {
-            getManager().assertMutatable(this);
-            getAttribute(LocalAttribute.IDENTIFIER).recordAccess(ReadWriteAttribute.AccessType.WRITE);
-        }
-        
-        if (this.identifier != null)
-        {
-            setAsChild(this.identifier.getNodeValue(), false);
-        }
-        this.identifier = new NormalNodeUnion<IdentifierNode>(identifier);
-        setAsChild(identifier, true);
+        checkIdentifierWrapped();
+        this.setUnionForIdentifier(new NormalNodeUnion<IdentifierNode>(identifier));
     }
     
     /**
@@ -511,18 +586,15 @@ public class InterfaceDeclarationNodeImpl extends NodeImpl implements InterfaceD
      */
     public void setUnionForIdentifier(NodeUnion<? extends IdentifierNode> identifier)
     {
-            setUnionForIdentifier(identifier, true);
-            getManager().notifyChange(this);
+        checkIdentifierWrapped();
+        this.getManager().assertMutatable(this);
+        this.doSetIdentifier(identifier);
+        if (this.getManager().isRecordingEdits())
+            super.recordEdit(new InterfaceDeclarationNodeSetIdentifierPropertyEditScriptElementImpl(this.getManager().getCurrentMetaprogramId(), this.getUid(), identifier.getNodeValue() == null ? null : identifier.getNodeValue().getUid()));
     }
     
-    private void setUnionForIdentifier(NodeUnion<? extends IdentifierNode> identifier, boolean checkPermissions)
+    private void doSetIdentifier(NodeUnion<? extends IdentifierNode> identifier)
     {
-        if (checkPermissions)
-        {
-            getManager().assertMutatable(this);
-            getAttribute(LocalAttribute.IDENTIFIER).recordAccess(ReadWriteAttribute.AccessType.WRITE);
-        }
-        
         if (identifier == null)
         {
             identifier = new NormalNodeUnion<IdentifierNode>(null);
@@ -542,7 +614,7 @@ public class InterfaceDeclarationNodeImpl extends NodeImpl implements InterfaceD
      */
     public JavadocNode getJavadoc()
     {
-        getAttribute(LocalAttribute.JAVADOC).recordAccess(ReadWriteAttribute.AccessType.READ);
+        checkJavadocWrapped();
         if (this.javadoc == null)
         {
             return null;
@@ -558,7 +630,7 @@ public class InterfaceDeclarationNodeImpl extends NodeImpl implements InterfaceD
      */
     public NodeUnion<? extends JavadocNode> getUnionForJavadoc()
     {
-        getAttribute(LocalAttribute.JAVADOC).recordAccess(ReadWriteAttribute.AccessType.READ);
+        checkJavadocWrapped();
         if (this.javadoc == null)
         {
             this.javadoc = new NormalNodeUnion<JavadocNode>(null);
@@ -572,24 +644,8 @@ public class InterfaceDeclarationNodeImpl extends NodeImpl implements InterfaceD
      */
     public void setJavadoc(JavadocNode javadoc)
     {
-            setJavadoc(javadoc, true);
-            getManager().notifyChange(this);
-    }
-    
-    private void setJavadoc(JavadocNode javadoc, boolean checkPermissions)
-    {
-        if (checkPermissions)
-        {
-            getManager().assertMutatable(this);
-            getAttribute(LocalAttribute.JAVADOC).recordAccess(ReadWriteAttribute.AccessType.WRITE);
-        }
-        
-        if (this.javadoc != null)
-        {
-            setAsChild(this.javadoc.getNodeValue(), false);
-        }
-        this.javadoc = new NormalNodeUnion<JavadocNode>(javadoc);
-        setAsChild(javadoc, true);
+        checkJavadocWrapped();
+        this.setUnionForJavadoc(new NormalNodeUnion<JavadocNode>(javadoc));
     }
     
     /**
@@ -598,18 +654,15 @@ public class InterfaceDeclarationNodeImpl extends NodeImpl implements InterfaceD
      */
     public void setUnionForJavadoc(NodeUnion<? extends JavadocNode> javadoc)
     {
-            setUnionForJavadoc(javadoc, true);
-            getManager().notifyChange(this);
+        checkJavadocWrapped();
+        this.getManager().assertMutatable(this);
+        this.doSetJavadoc(javadoc);
+        if (this.getManager().isRecordingEdits())
+            super.recordEdit(new InterfaceDeclarationNodeSetJavadocPropertyEditScriptElementImpl(this.getManager().getCurrentMetaprogramId(), this.getUid(), javadoc.getNodeValue() == null ? null : javadoc.getNodeValue().getUid()));
     }
     
-    private void setUnionForJavadoc(NodeUnion<? extends JavadocNode> javadoc, boolean checkPermissions)
+    private void doSetJavadoc(NodeUnion<? extends JavadocNode> javadoc)
     {
-        if (checkPermissions)
-        {
-            getManager().assertMutatable(this);
-            getAttribute(LocalAttribute.JAVADOC).recordAccess(ReadWriteAttribute.AccessType.WRITE);
-        }
-        
         if (javadoc == null)
         {
             javadoc = new NormalNodeUnion<JavadocNode>(null);
@@ -633,29 +686,29 @@ public class InterfaceDeclarationNodeImpl extends NodeImpl implements InterfaceD
     protected void receiveToChildren(BsjNodeVisitor visitor)
     {
         super.receiveToChildren(visitor);
-        if (this.modifiers.getNodeValue() != null)
+        if (this.getUnionForModifiers().getNodeValue() != null)
         {
-            this.modifiers.getNodeValue().receive(visitor);
+            this.getUnionForModifiers().getNodeValue().receive(visitor);
         }
-        if (this.extendsClause.getNodeValue() != null)
+        if (this.getUnionForExtendsClause().getNodeValue() != null)
         {
-            this.extendsClause.getNodeValue().receive(visitor);
+            this.getUnionForExtendsClause().getNodeValue().receive(visitor);
         }
-        if (this.body.getNodeValue() != null)
+        if (this.getUnionForBody().getNodeValue() != null)
         {
-            this.body.getNodeValue().receive(visitor);
+            this.getUnionForBody().getNodeValue().receive(visitor);
         }
-        if (this.typeParameters.getNodeValue() != null)
+        if (this.getUnionForTypeParameters().getNodeValue() != null)
         {
-            this.typeParameters.getNodeValue().receive(visitor);
+            this.getUnionForTypeParameters().getNodeValue().receive(visitor);
         }
-        if (this.identifier.getNodeValue() != null)
+        if (this.getUnionForIdentifier().getNodeValue() != null)
         {
-            this.identifier.getNodeValue().receive(visitor);
+            this.getUnionForIdentifier().getNodeValue().receive(visitor);
         }
-        if (this.javadoc.getNodeValue() != null)
+        if (this.getUnionForJavadoc().getNodeValue() != null)
         {
-            this.javadoc.getNodeValue().receive(visitor);
+            this.getUnionForJavadoc().getNodeValue().receive(visitor);
         }
         Iterator<? extends Node> extras = getHiddenVisitorChildren();
         if (extras != null)
@@ -678,29 +731,29 @@ public class InterfaceDeclarationNodeImpl extends NodeImpl implements InterfaceD
     protected void receiveTypedToChildren(BsjTypedNodeVisitor visitor)
     {
         super.receiveTypedToChildren(visitor);
-        if (this.modifiers.getNodeValue() != null)
+        if (this.getUnionForModifiers().getNodeValue() != null)
         {
-            this.modifiers.getNodeValue().receiveTyped(visitor);
+            this.getUnionForModifiers().getNodeValue().receiveTyped(visitor);
         }
-        if (this.extendsClause.getNodeValue() != null)
+        if (this.getUnionForExtendsClause().getNodeValue() != null)
         {
-            this.extendsClause.getNodeValue().receiveTyped(visitor);
+            this.getUnionForExtendsClause().getNodeValue().receiveTyped(visitor);
         }
-        if (this.body.getNodeValue() != null)
+        if (this.getUnionForBody().getNodeValue() != null)
         {
-            this.body.getNodeValue().receiveTyped(visitor);
+            this.getUnionForBody().getNodeValue().receiveTyped(visitor);
         }
-        if (this.typeParameters.getNodeValue() != null)
+        if (this.getUnionForTypeParameters().getNodeValue() != null)
         {
-            this.typeParameters.getNodeValue().receiveTyped(visitor);
+            this.getUnionForTypeParameters().getNodeValue().receiveTyped(visitor);
         }
-        if (this.identifier.getNodeValue() != null)
+        if (this.getUnionForIdentifier().getNodeValue() != null)
         {
-            this.identifier.getNodeValue().receiveTyped(visitor);
+            this.getUnionForIdentifier().getNodeValue().receiveTyped(visitor);
         }
-        if (this.javadoc.getNodeValue() != null)
+        if (this.getUnionForJavadoc().getNodeValue() != null)
         {
-            this.javadoc.getNodeValue().receiveTyped(visitor);
+            this.getUnionForJavadoc().getNodeValue().receiveTyped(visitor);
         }
         Iterator<? extends Node> extras = getHiddenVisitorChildren();
         if (extras != null)
@@ -768,6 +821,8 @@ public class InterfaceDeclarationNodeImpl extends NodeImpl implements InterfaceD
     {
         StringBuilder sb = new StringBuilder();
         sb.append(this.getClass().getSimpleName());
+        sb.append('#');
+        sb.append(this.getUid());
         sb.append('[');
         sb.append("modifiers=");
         sb.append(this.getUnionForModifiers().getNodeValue() == null? "null" : this.getUnionForModifiers().getNodeValue().getClass().getSimpleName());

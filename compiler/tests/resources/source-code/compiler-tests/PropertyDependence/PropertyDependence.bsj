@@ -1,0 +1,21 @@
+public class BadName
+{
+    [:
+        #mode mutate;
+        #target a;
+        ClassDeclarationNode n = context.getAnchor().<ClassDeclarationNode>getNearestAncestorOfType(ClassDeclarationNode.class);
+        n.setIdentifier(context.getFactory().makeIdentifierNode("PropertyDependenceTest"));
+    :]
+    
+    [:
+        #mode mutate;
+        #depends a;
+        ClassDeclarationNode n = context.getAnchor().<ClassDeclarationNode>getNearestAncestorOfType(ClassDeclarationNode.class);
+        String s = n.getIdentifier().getIdentifier();
+        if (!s.equals("PropertyDependenceTest"))
+        {
+            throw new MetaprogramExecutionFailureException("Class declaration had wrong name!  (Expected PropertyDependenceTest, was " + s + ")");
+        }
+        n.setIdentifier(context.getFactory().makeIdentifierNode("PropertyDependence"));
+    :]
+}

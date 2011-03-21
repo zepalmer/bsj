@@ -1,10 +1,10 @@
 package edu.jhu.cs.bsj.compiler.impl.ast.node;
 
 import java.util.Arrays;
-import java.util.EnumMap;
+import java.util.EnumSet;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
+import java.util.Set;
 
 import javax.annotation.Generated;
 
@@ -21,9 +21,12 @@ import edu.jhu.cs.bsj.compiler.ast.node.StatementNode;
 import edu.jhu.cs.bsj.compiler.ast.node.WhileLoopNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaAnnotationListNode;
 import edu.jhu.cs.bsj.compiler.impl.ast.BsjNodeManager;
+import edu.jhu.cs.bsj.compiler.impl.ast.BsjNodeProxyFactory;
 import edu.jhu.cs.bsj.compiler.impl.ast.NormalNodeUnion;
-import edu.jhu.cs.bsj.compiler.impl.ast.attribute.AttributeName;
-import edu.jhu.cs.bsj.compiler.impl.ast.attribute.ReadWriteAttribute;
+import edu.jhu.cs.bsj.compiler.impl.ast.delta.property.WhileLoopNodeSetConditionPropertyEditScriptElementImpl;
+import edu.jhu.cs.bsj.compiler.impl.ast.delta.property.WhileLoopNodeSetMetaAnnotationsPropertyEditScriptElementImpl;
+import edu.jhu.cs.bsj.compiler.impl.ast.delta.property.WhileLoopNodeSetStatementPropertyEditScriptElementImpl;
+import edu.jhu.cs.bsj.compiler.impl.ast.properties.WhileLoopNodeProperties;
 
 @Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
 public class WhileLoopNodeImpl extends NodeImpl implements WhileLoopNode
@@ -37,26 +40,11 @@ public class WhileLoopNodeImpl extends NodeImpl implements WhileLoopNode
     /** The meta-annotations associated with this node. */
     private NodeUnion<? extends MetaAnnotationListNode> metaAnnotations;
     
-    private Map<LocalAttribute,ReadWriteAttribute> localAttributes = new EnumMap<LocalAttribute,ReadWriteAttribute>(LocalAttribute.class);
-    private ReadWriteAttribute getAttribute(LocalAttribute attributeName)
-    {
-        ReadWriteAttribute attribute = localAttributes.get(attributeName);
-        if (attribute == null)
-        {
-            attribute = new ReadWriteAttribute(WhileLoopNodeImpl.this, attributeName);
-            localAttributes.put(attributeName, attribute);
-        }
-        return attribute;
-    }
-    private static enum LocalAttribute implements AttributeName
-    {
-        /** Attribute identifier for the condition property. */
-        CONDITION,
-        /** Attribute identifier for the statement property. */
-        STATEMENT,
-        /** Attribute identifier for the metaAnnotations property. */
-        META_ANNOTATIONS,
-    }
+    /**
+     * A set of those properties which have been populated from the backing node.
+     * This field is <code>null</code> if <tt>backingNode</tt> is <code>null</code>.
+     */
+    private Set<WhileLoopNodeProperties> populatedProperties;
     
     /** General constructor. */
     public WhileLoopNodeImpl(
@@ -69,9 +57,107 @@ public class WhileLoopNodeImpl extends NodeImpl implements WhileLoopNode
             boolean binary)
     {
         super(startLocation, stopLocation, manager, binary);
-        setUnionForCondition(condition, false);
-        setUnionForStatement(statement, false);
-        setUnionForMetaAnnotations(metaAnnotations, false);
+        this.populatedProperties = null;
+        doSetCondition(condition);
+        doSetStatement(statement);
+        doSetMetaAnnotations(metaAnnotations);
+    }
+    
+    /** Proxy constructor. */
+    public WhileLoopNodeImpl(BsjNodeManager manager, BsjNodeProxyFactory proxyFactory, WhileLoopNode backingNode)
+    {
+        super(manager, proxyFactory, backingNode);
+        this.populatedProperties = EnumSet.noneOf(WhileLoopNodeProperties.class);
+    }
+    
+    /** Retrieves this node's backing node (if one exists). */
+    protected WhileLoopNode getBackingNode()
+    {
+        return (WhileLoopNode)super.getBackingNode();
+    }
+    
+    /**
+     * Ensures that the condition value has been populated from proxy.
+     * If this node is not backed by a proxy or if the value has already been
+     * populated, this method does nothing.
+     */
+    private void checkConditionWrapped()
+    {
+        if (this.populatedProperties == null || this.populatedProperties.contains(
+                WhileLoopNodeProperties.CONDITION))
+            return;
+        this.populatedProperties.add(WhileLoopNodeProperties.CONDITION);
+        NodeUnion<? extends ExpressionNode> union = this.getBackingNode().getUnionForCondition();
+        switch (union.getType())
+        {
+            case NORMAL:
+                union = this.getProxyFactory().makeNormalNodeUnion(
+                        this.getProxyFactory().makeExpressionNode(union.getNormalNode()));
+                break;
+            case SPLICE:
+                union = this.getProxyFactory().makeSpliceNodeUnion(
+                        this.getProxyFactory().makeSpliceNode(union.getSpliceNode()));
+                break;
+            default:
+                throw new IllegalStateException("Unrecognized union type: " + union.getType());
+        }
+        this.condition = union;
+    }
+    
+    /**
+     * Ensures that the statement value has been populated from proxy.
+     * If this node is not backed by a proxy or if the value has already been
+     * populated, this method does nothing.
+     */
+    private void checkStatementWrapped()
+    {
+        if (this.populatedProperties == null || this.populatedProperties.contains(
+                WhileLoopNodeProperties.STATEMENT))
+            return;
+        this.populatedProperties.add(WhileLoopNodeProperties.STATEMENT);
+        NodeUnion<? extends StatementNode> union = this.getBackingNode().getUnionForStatement();
+        switch (union.getType())
+        {
+            case NORMAL:
+                union = this.getProxyFactory().makeNormalNodeUnion(
+                        this.getProxyFactory().makeStatementNode(union.getNormalNode()));
+                break;
+            case SPLICE:
+                union = this.getProxyFactory().makeSpliceNodeUnion(
+                        this.getProxyFactory().makeSpliceNode(union.getSpliceNode()));
+                break;
+            default:
+                throw new IllegalStateException("Unrecognized union type: " + union.getType());
+        }
+        this.statement = union;
+    }
+    
+    /**
+     * Ensures that the metaAnnotations value has been populated from proxy.
+     * If this node is not backed by a proxy or if the value has already been
+     * populated, this method does nothing.
+     */
+    private void checkMetaAnnotationsWrapped()
+    {
+        if (this.populatedProperties == null || this.populatedProperties.contains(
+                WhileLoopNodeProperties.META_ANNOTATIONS))
+            return;
+        this.populatedProperties.add(WhileLoopNodeProperties.META_ANNOTATIONS);
+        NodeUnion<? extends MetaAnnotationListNode> union = this.getBackingNode().getUnionForMetaAnnotations();
+        switch (union.getType())
+        {
+            case NORMAL:
+                union = this.getProxyFactory().makeNormalNodeUnion(
+                        this.getProxyFactory().makeMetaAnnotationListNode(union.getNormalNode()));
+                break;
+            case SPLICE:
+                union = this.getProxyFactory().makeSpliceNodeUnion(
+                        this.getProxyFactory().makeSpliceNode(union.getSpliceNode()));
+                break;
+            default:
+                throw new IllegalStateException("Unrecognized union type: " + union.getType());
+        }
+        this.metaAnnotations = union;
     }
     
     /**
@@ -81,7 +167,7 @@ public class WhileLoopNodeImpl extends NodeImpl implements WhileLoopNode
      */
     public ExpressionNode getCondition()
     {
-        getAttribute(LocalAttribute.CONDITION).recordAccess(ReadWriteAttribute.AccessType.READ);
+        checkConditionWrapped();
         if (this.condition == null)
         {
             return null;
@@ -97,7 +183,7 @@ public class WhileLoopNodeImpl extends NodeImpl implements WhileLoopNode
      */
     public NodeUnion<? extends ExpressionNode> getUnionForCondition()
     {
-        getAttribute(LocalAttribute.CONDITION).recordAccess(ReadWriteAttribute.AccessType.READ);
+        checkConditionWrapped();
         if (this.condition == null)
         {
             this.condition = new NormalNodeUnion<ExpressionNode>(null);
@@ -111,24 +197,8 @@ public class WhileLoopNodeImpl extends NodeImpl implements WhileLoopNode
      */
     public void setCondition(ExpressionNode condition)
     {
-            setCondition(condition, true);
-            getManager().notifyChange(this);
-    }
-    
-    private void setCondition(ExpressionNode condition, boolean checkPermissions)
-    {
-        if (checkPermissions)
-        {
-            getManager().assertMutatable(this);
-            getAttribute(LocalAttribute.CONDITION).recordAccess(ReadWriteAttribute.AccessType.WRITE);
-        }
-        
-        if (this.condition != null)
-        {
-            setAsChild(this.condition.getNodeValue(), false);
-        }
-        this.condition = new NormalNodeUnion<ExpressionNode>(condition);
-        setAsChild(condition, true);
+        checkConditionWrapped();
+        this.setUnionForCondition(new NormalNodeUnion<ExpressionNode>(condition));
     }
     
     /**
@@ -137,18 +207,15 @@ public class WhileLoopNodeImpl extends NodeImpl implements WhileLoopNode
      */
     public void setUnionForCondition(NodeUnion<? extends ExpressionNode> condition)
     {
-            setUnionForCondition(condition, true);
-            getManager().notifyChange(this);
+        checkConditionWrapped();
+        this.getManager().assertMutatable(this);
+        this.doSetCondition(condition);
+        if (this.getManager().isRecordingEdits())
+            super.recordEdit(new WhileLoopNodeSetConditionPropertyEditScriptElementImpl(this.getManager().getCurrentMetaprogramId(), this.getUid(), condition.getNodeValue() == null ? null : condition.getNodeValue().getUid()));
     }
     
-    private void setUnionForCondition(NodeUnion<? extends ExpressionNode> condition, boolean checkPermissions)
+    private void doSetCondition(NodeUnion<? extends ExpressionNode> condition)
     {
-        if (checkPermissions)
-        {
-            getManager().assertMutatable(this);
-            getAttribute(LocalAttribute.CONDITION).recordAccess(ReadWriteAttribute.AccessType.WRITE);
-        }
-        
         if (condition == null)
         {
             condition = new NormalNodeUnion<ExpressionNode>(null);
@@ -168,7 +235,7 @@ public class WhileLoopNodeImpl extends NodeImpl implements WhileLoopNode
      */
     public StatementNode getStatement()
     {
-        getAttribute(LocalAttribute.STATEMENT).recordAccess(ReadWriteAttribute.AccessType.READ);
+        checkStatementWrapped();
         if (this.statement == null)
         {
             return null;
@@ -184,7 +251,7 @@ public class WhileLoopNodeImpl extends NodeImpl implements WhileLoopNode
      */
     public NodeUnion<? extends StatementNode> getUnionForStatement()
     {
-        getAttribute(LocalAttribute.STATEMENT).recordAccess(ReadWriteAttribute.AccessType.READ);
+        checkStatementWrapped();
         if (this.statement == null)
         {
             this.statement = new NormalNodeUnion<StatementNode>(null);
@@ -198,24 +265,8 @@ public class WhileLoopNodeImpl extends NodeImpl implements WhileLoopNode
      */
     public void setStatement(StatementNode statement)
     {
-            setStatement(statement, true);
-            getManager().notifyChange(this);
-    }
-    
-    private void setStatement(StatementNode statement, boolean checkPermissions)
-    {
-        if (checkPermissions)
-        {
-            getManager().assertMutatable(this);
-            getAttribute(LocalAttribute.STATEMENT).recordAccess(ReadWriteAttribute.AccessType.WRITE);
-        }
-        
-        if (this.statement != null)
-        {
-            setAsChild(this.statement.getNodeValue(), false);
-        }
-        this.statement = new NormalNodeUnion<StatementNode>(statement);
-        setAsChild(statement, true);
+        checkStatementWrapped();
+        this.setUnionForStatement(new NormalNodeUnion<StatementNode>(statement));
     }
     
     /**
@@ -224,18 +275,15 @@ public class WhileLoopNodeImpl extends NodeImpl implements WhileLoopNode
      */
     public void setUnionForStatement(NodeUnion<? extends StatementNode> statement)
     {
-            setUnionForStatement(statement, true);
-            getManager().notifyChange(this);
+        checkStatementWrapped();
+        this.getManager().assertMutatable(this);
+        this.doSetStatement(statement);
+        if (this.getManager().isRecordingEdits())
+            super.recordEdit(new WhileLoopNodeSetStatementPropertyEditScriptElementImpl(this.getManager().getCurrentMetaprogramId(), this.getUid(), statement.getNodeValue() == null ? null : statement.getNodeValue().getUid()));
     }
     
-    private void setUnionForStatement(NodeUnion<? extends StatementNode> statement, boolean checkPermissions)
+    private void doSetStatement(NodeUnion<? extends StatementNode> statement)
     {
-        if (checkPermissions)
-        {
-            getManager().assertMutatable(this);
-            getAttribute(LocalAttribute.STATEMENT).recordAccess(ReadWriteAttribute.AccessType.WRITE);
-        }
-        
         if (statement == null)
         {
             statement = new NormalNodeUnion<StatementNode>(null);
@@ -255,7 +303,7 @@ public class WhileLoopNodeImpl extends NodeImpl implements WhileLoopNode
      */
     public MetaAnnotationListNode getMetaAnnotations()
     {
-        getAttribute(LocalAttribute.META_ANNOTATIONS).recordAccess(ReadWriteAttribute.AccessType.READ);
+        checkMetaAnnotationsWrapped();
         if (this.metaAnnotations == null)
         {
             return null;
@@ -271,7 +319,7 @@ public class WhileLoopNodeImpl extends NodeImpl implements WhileLoopNode
      */
     public NodeUnion<? extends MetaAnnotationListNode> getUnionForMetaAnnotations()
     {
-        getAttribute(LocalAttribute.META_ANNOTATIONS).recordAccess(ReadWriteAttribute.AccessType.READ);
+        checkMetaAnnotationsWrapped();
         if (this.metaAnnotations == null)
         {
             this.metaAnnotations = new NormalNodeUnion<MetaAnnotationListNode>(null);
@@ -285,24 +333,8 @@ public class WhileLoopNodeImpl extends NodeImpl implements WhileLoopNode
      */
     public void setMetaAnnotations(MetaAnnotationListNode metaAnnotations)
     {
-            setMetaAnnotations(metaAnnotations, true);
-            getManager().notifyChange(this);
-    }
-    
-    private void setMetaAnnotations(MetaAnnotationListNode metaAnnotations, boolean checkPermissions)
-    {
-        if (checkPermissions)
-        {
-            getManager().assertMutatable(this);
-            getAttribute(LocalAttribute.META_ANNOTATIONS).recordAccess(ReadWriteAttribute.AccessType.WRITE);
-        }
-        
-        if (this.metaAnnotations != null)
-        {
-            setAsChild(this.metaAnnotations.getNodeValue(), false);
-        }
-        this.metaAnnotations = new NormalNodeUnion<MetaAnnotationListNode>(metaAnnotations);
-        setAsChild(metaAnnotations, true);
+        checkMetaAnnotationsWrapped();
+        this.setUnionForMetaAnnotations(new NormalNodeUnion<MetaAnnotationListNode>(metaAnnotations));
     }
     
     /**
@@ -311,18 +343,15 @@ public class WhileLoopNodeImpl extends NodeImpl implements WhileLoopNode
      */
     public void setUnionForMetaAnnotations(NodeUnion<? extends MetaAnnotationListNode> metaAnnotations)
     {
-            setUnionForMetaAnnotations(metaAnnotations, true);
-            getManager().notifyChange(this);
+        checkMetaAnnotationsWrapped();
+        this.getManager().assertMutatable(this);
+        this.doSetMetaAnnotations(metaAnnotations);
+        if (this.getManager().isRecordingEdits())
+            super.recordEdit(new WhileLoopNodeSetMetaAnnotationsPropertyEditScriptElementImpl(this.getManager().getCurrentMetaprogramId(), this.getUid(), metaAnnotations.getNodeValue() == null ? null : metaAnnotations.getNodeValue().getUid()));
     }
     
-    private void setUnionForMetaAnnotations(NodeUnion<? extends MetaAnnotationListNode> metaAnnotations, boolean checkPermissions)
+    private void doSetMetaAnnotations(NodeUnion<? extends MetaAnnotationListNode> metaAnnotations)
     {
-        if (checkPermissions)
-        {
-            getManager().assertMutatable(this);
-            getAttribute(LocalAttribute.META_ANNOTATIONS).recordAccess(ReadWriteAttribute.AccessType.WRITE);
-        }
-        
         if (metaAnnotations == null)
         {
             metaAnnotations = new NormalNodeUnion<MetaAnnotationListNode>(null);
@@ -346,17 +375,17 @@ public class WhileLoopNodeImpl extends NodeImpl implements WhileLoopNode
     protected void receiveToChildren(BsjNodeVisitor visitor)
     {
         super.receiveToChildren(visitor);
-        if (this.condition.getNodeValue() != null)
+        if (this.getUnionForCondition().getNodeValue() != null)
         {
-            this.condition.getNodeValue().receive(visitor);
+            this.getUnionForCondition().getNodeValue().receive(visitor);
         }
-        if (this.statement.getNodeValue() != null)
+        if (this.getUnionForStatement().getNodeValue() != null)
         {
-            this.statement.getNodeValue().receive(visitor);
+            this.getUnionForStatement().getNodeValue().receive(visitor);
         }
-        if (this.metaAnnotations.getNodeValue() != null)
+        if (this.getUnionForMetaAnnotations().getNodeValue() != null)
         {
-            this.metaAnnotations.getNodeValue().receive(visitor);
+            this.getUnionForMetaAnnotations().getNodeValue().receive(visitor);
         }
         Iterator<? extends Node> extras = getHiddenVisitorChildren();
         if (extras != null)
@@ -379,17 +408,17 @@ public class WhileLoopNodeImpl extends NodeImpl implements WhileLoopNode
     protected void receiveTypedToChildren(BsjTypedNodeVisitor visitor)
     {
         super.receiveTypedToChildren(visitor);
-        if (this.condition.getNodeValue() != null)
+        if (this.getUnionForCondition().getNodeValue() != null)
         {
-            this.condition.getNodeValue().receiveTyped(visitor);
+            this.getUnionForCondition().getNodeValue().receiveTyped(visitor);
         }
-        if (this.statement.getNodeValue() != null)
+        if (this.getUnionForStatement().getNodeValue() != null)
         {
-            this.statement.getNodeValue().receiveTyped(visitor);
+            this.getUnionForStatement().getNodeValue().receiveTyped(visitor);
         }
-        if (this.metaAnnotations.getNodeValue() != null)
+        if (this.getUnionForMetaAnnotations().getNodeValue() != null)
         {
-            this.metaAnnotations.getNodeValue().receiveTyped(visitor);
+            this.getUnionForMetaAnnotations().getNodeValue().receiveTyped(visitor);
         }
         Iterator<? extends Node> extras = getHiddenVisitorChildren();
         if (extras != null)
@@ -450,6 +479,8 @@ public class WhileLoopNodeImpl extends NodeImpl implements WhileLoopNode
     {
         StringBuilder sb = new StringBuilder();
         sb.append(this.getClass().getSimpleName());
+        sb.append('#');
+        sb.append(this.getUid());
         sb.append('[');
         sb.append("condition=");
         sb.append(this.getUnionForCondition().getNodeValue() == null? "null" : this.getUnionForCondition().getNodeValue().getClass().getSimpleName());

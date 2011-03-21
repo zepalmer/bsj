@@ -1,10 +1,10 @@
 package edu.jhu.cs.bsj.compiler.impl.ast.node;
 
 import java.util.Arrays;
-import java.util.EnumMap;
+import java.util.EnumSet;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
+import java.util.Set;
 
 import javax.annotation.Generated;
 
@@ -22,9 +22,13 @@ import edu.jhu.cs.bsj.compiler.ast.node.UnparameterizedTypeNode;
 import edu.jhu.cs.bsj.compiler.ast.node.list.ExpressionListNode;
 import edu.jhu.cs.bsj.compiler.ast.node.list.ReferenceTypeListNode;
 import edu.jhu.cs.bsj.compiler.impl.ast.BsjNodeManager;
+import edu.jhu.cs.bsj.compiler.impl.ast.BsjNodeProxyFactory;
 import edu.jhu.cs.bsj.compiler.impl.ast.NormalNodeUnion;
-import edu.jhu.cs.bsj.compiler.impl.ast.attribute.AttributeName;
-import edu.jhu.cs.bsj.compiler.impl.ast.attribute.ReadWriteAttribute;
+import edu.jhu.cs.bsj.compiler.impl.ast.delta.property.SuperMethodInvocationNodeSetArgumentsPropertyEditScriptElementImpl;
+import edu.jhu.cs.bsj.compiler.impl.ast.delta.property.SuperMethodInvocationNodeSetIdentifierPropertyEditScriptElementImpl;
+import edu.jhu.cs.bsj.compiler.impl.ast.delta.property.SuperMethodInvocationNodeSetTypeArgumentsPropertyEditScriptElementImpl;
+import edu.jhu.cs.bsj.compiler.impl.ast.delta.property.SuperMethodInvocationNodeSetTypePropertyEditScriptElementImpl;
+import edu.jhu.cs.bsj.compiler.impl.ast.properties.SuperMethodInvocationNodeProperties;
 
 @Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
 public class SuperMethodInvocationNodeImpl extends NodeImpl implements SuperMethodInvocationNode
@@ -41,28 +45,11 @@ public class SuperMethodInvocationNodeImpl extends NodeImpl implements SuperMeth
     /** The type arguments for the method. */
     private NodeUnion<? extends ReferenceTypeListNode> typeArguments;
     
-    private Map<LocalAttribute,ReadWriteAttribute> localAttributes = new EnumMap<LocalAttribute,ReadWriteAttribute>(LocalAttribute.class);
-    private ReadWriteAttribute getAttribute(LocalAttribute attributeName)
-    {
-        ReadWriteAttribute attribute = localAttributes.get(attributeName);
-        if (attribute == null)
-        {
-            attribute = new ReadWriteAttribute(SuperMethodInvocationNodeImpl.this, attributeName);
-            localAttributes.put(attributeName, attribute);
-        }
-        return attribute;
-    }
-    private static enum LocalAttribute implements AttributeName
-    {
-        /** Attribute identifier for the type property. */
-        TYPE,
-        /** Attribute identifier for the identifier property. */
-        IDENTIFIER,
-        /** Attribute identifier for the arguments property. */
-        ARGUMENTS,
-        /** Attribute identifier for the typeArguments property. */
-        TYPE_ARGUMENTS,
-    }
+    /**
+     * A set of those properties which have been populated from the backing node.
+     * This field is <code>null</code> if <tt>backingNode</tt> is <code>null</code>.
+     */
+    private Set<SuperMethodInvocationNodeProperties> populatedProperties;
     
     /** General constructor. */
     public SuperMethodInvocationNodeImpl(
@@ -76,10 +63,136 @@ public class SuperMethodInvocationNodeImpl extends NodeImpl implements SuperMeth
             boolean binary)
     {
         super(startLocation, stopLocation, manager, binary);
-        setUnionForType(type, false);
-        setUnionForIdentifier(identifier, false);
-        setUnionForArguments(arguments, false);
-        setUnionForTypeArguments(typeArguments, false);
+        this.populatedProperties = null;
+        doSetType(type);
+        doSetIdentifier(identifier);
+        doSetArguments(arguments);
+        doSetTypeArguments(typeArguments);
+    }
+    
+    /** Proxy constructor. */
+    public SuperMethodInvocationNodeImpl(BsjNodeManager manager, BsjNodeProxyFactory proxyFactory, SuperMethodInvocationNode backingNode)
+    {
+        super(manager, proxyFactory, backingNode);
+        this.populatedProperties = EnumSet.noneOf(SuperMethodInvocationNodeProperties.class);
+    }
+    
+    /** Retrieves this node's backing node (if one exists). */
+    protected SuperMethodInvocationNode getBackingNode()
+    {
+        return (SuperMethodInvocationNode)super.getBackingNode();
+    }
+    
+    /**
+     * Ensures that the type value has been populated from proxy.
+     * If this node is not backed by a proxy or if the value has already been
+     * populated, this method does nothing.
+     */
+    private void checkTypeWrapped()
+    {
+        if (this.populatedProperties == null || this.populatedProperties.contains(
+                SuperMethodInvocationNodeProperties.TYPE))
+            return;
+        this.populatedProperties.add(SuperMethodInvocationNodeProperties.TYPE);
+        NodeUnion<? extends UnparameterizedTypeNode> union = this.getBackingNode().getUnionForType();
+        switch (union.getType())
+        {
+            case NORMAL:
+                union = this.getProxyFactory().makeNormalNodeUnion(
+                        this.getProxyFactory().makeUnparameterizedTypeNode(union.getNormalNode()));
+                break;
+            case SPLICE:
+                union = this.getProxyFactory().makeSpliceNodeUnion(
+                        this.getProxyFactory().makeSpliceNode(union.getSpliceNode()));
+                break;
+            default:
+                throw new IllegalStateException("Unrecognized union type: " + union.getType());
+        }
+        this.type = union;
+    }
+    
+    /**
+     * Ensures that the identifier value has been populated from proxy.
+     * If this node is not backed by a proxy or if the value has already been
+     * populated, this method does nothing.
+     */
+    private void checkIdentifierWrapped()
+    {
+        if (this.populatedProperties == null || this.populatedProperties.contains(
+                SuperMethodInvocationNodeProperties.IDENTIFIER))
+            return;
+        this.populatedProperties.add(SuperMethodInvocationNodeProperties.IDENTIFIER);
+        NodeUnion<? extends IdentifierNode> union = this.getBackingNode().getUnionForIdentifier();
+        switch (union.getType())
+        {
+            case NORMAL:
+                union = this.getProxyFactory().makeNormalNodeUnion(
+                        this.getProxyFactory().makeIdentifierNode(union.getNormalNode()));
+                break;
+            case SPLICE:
+                union = this.getProxyFactory().makeSpliceNodeUnion(
+                        this.getProxyFactory().makeSpliceNode(union.getSpliceNode()));
+                break;
+            default:
+                throw new IllegalStateException("Unrecognized union type: " + union.getType());
+        }
+        this.identifier = union;
+    }
+    
+    /**
+     * Ensures that the arguments value has been populated from proxy.
+     * If this node is not backed by a proxy or if the value has already been
+     * populated, this method does nothing.
+     */
+    private void checkArgumentsWrapped()
+    {
+        if (this.populatedProperties == null || this.populatedProperties.contains(
+                SuperMethodInvocationNodeProperties.ARGUMENTS))
+            return;
+        this.populatedProperties.add(SuperMethodInvocationNodeProperties.ARGUMENTS);
+        NodeUnion<? extends ExpressionListNode> union = this.getBackingNode().getUnionForArguments();
+        switch (union.getType())
+        {
+            case NORMAL:
+                union = this.getProxyFactory().makeNormalNodeUnion(
+                        this.getProxyFactory().makeExpressionListNode(union.getNormalNode()));
+                break;
+            case SPLICE:
+                union = this.getProxyFactory().makeSpliceNodeUnion(
+                        this.getProxyFactory().makeSpliceNode(union.getSpliceNode()));
+                break;
+            default:
+                throw new IllegalStateException("Unrecognized union type: " + union.getType());
+        }
+        this.arguments = union;
+    }
+    
+    /**
+     * Ensures that the typeArguments value has been populated from proxy.
+     * If this node is not backed by a proxy or if the value has already been
+     * populated, this method does nothing.
+     */
+    private void checkTypeArgumentsWrapped()
+    {
+        if (this.populatedProperties == null || this.populatedProperties.contains(
+                SuperMethodInvocationNodeProperties.TYPE_ARGUMENTS))
+            return;
+        this.populatedProperties.add(SuperMethodInvocationNodeProperties.TYPE_ARGUMENTS);
+        NodeUnion<? extends ReferenceTypeListNode> union = this.getBackingNode().getUnionForTypeArguments();
+        switch (union.getType())
+        {
+            case NORMAL:
+                union = this.getProxyFactory().makeNormalNodeUnion(
+                        this.getProxyFactory().makeReferenceTypeListNode(union.getNormalNode()));
+                break;
+            case SPLICE:
+                union = this.getProxyFactory().makeSpliceNodeUnion(
+                        this.getProxyFactory().makeSpliceNode(union.getSpliceNode()));
+                break;
+            default:
+                throw new IllegalStateException("Unrecognized union type: " + union.getType());
+        }
+        this.typeArguments = union;
     }
     
     /**
@@ -89,7 +202,7 @@ public class SuperMethodInvocationNodeImpl extends NodeImpl implements SuperMeth
      */
     public UnparameterizedTypeNode getType()
     {
-        getAttribute(LocalAttribute.TYPE).recordAccess(ReadWriteAttribute.AccessType.READ);
+        checkTypeWrapped();
         if (this.type == null)
         {
             return null;
@@ -105,7 +218,7 @@ public class SuperMethodInvocationNodeImpl extends NodeImpl implements SuperMeth
      */
     public NodeUnion<? extends UnparameterizedTypeNode> getUnionForType()
     {
-        getAttribute(LocalAttribute.TYPE).recordAccess(ReadWriteAttribute.AccessType.READ);
+        checkTypeWrapped();
         if (this.type == null)
         {
             this.type = new NormalNodeUnion<UnparameterizedTypeNode>(null);
@@ -119,24 +232,8 @@ public class SuperMethodInvocationNodeImpl extends NodeImpl implements SuperMeth
      */
     public void setType(UnparameterizedTypeNode type)
     {
-            setType(type, true);
-            getManager().notifyChange(this);
-    }
-    
-    private void setType(UnparameterizedTypeNode type, boolean checkPermissions)
-    {
-        if (checkPermissions)
-        {
-            getManager().assertMutatable(this);
-            getAttribute(LocalAttribute.TYPE).recordAccess(ReadWriteAttribute.AccessType.WRITE);
-        }
-        
-        if (this.type != null)
-        {
-            setAsChild(this.type.getNodeValue(), false);
-        }
-        this.type = new NormalNodeUnion<UnparameterizedTypeNode>(type);
-        setAsChild(type, true);
+        checkTypeWrapped();
+        this.setUnionForType(new NormalNodeUnion<UnparameterizedTypeNode>(type));
     }
     
     /**
@@ -145,18 +242,15 @@ public class SuperMethodInvocationNodeImpl extends NodeImpl implements SuperMeth
      */
     public void setUnionForType(NodeUnion<? extends UnparameterizedTypeNode> type)
     {
-            setUnionForType(type, true);
-            getManager().notifyChange(this);
+        checkTypeWrapped();
+        this.getManager().assertMutatable(this);
+        this.doSetType(type);
+        if (this.getManager().isRecordingEdits())
+            super.recordEdit(new SuperMethodInvocationNodeSetTypePropertyEditScriptElementImpl(this.getManager().getCurrentMetaprogramId(), this.getUid(), type.getNodeValue() == null ? null : type.getNodeValue().getUid()));
     }
     
-    private void setUnionForType(NodeUnion<? extends UnparameterizedTypeNode> type, boolean checkPermissions)
+    private void doSetType(NodeUnion<? extends UnparameterizedTypeNode> type)
     {
-        if (checkPermissions)
-        {
-            getManager().assertMutatable(this);
-            getAttribute(LocalAttribute.TYPE).recordAccess(ReadWriteAttribute.AccessType.WRITE);
-        }
-        
         if (type == null)
         {
             type = new NormalNodeUnion<UnparameterizedTypeNode>(null);
@@ -176,7 +270,7 @@ public class SuperMethodInvocationNodeImpl extends NodeImpl implements SuperMeth
      */
     public IdentifierNode getIdentifier()
     {
-        getAttribute(LocalAttribute.IDENTIFIER).recordAccess(ReadWriteAttribute.AccessType.READ);
+        checkIdentifierWrapped();
         if (this.identifier == null)
         {
             return null;
@@ -192,7 +286,7 @@ public class SuperMethodInvocationNodeImpl extends NodeImpl implements SuperMeth
      */
     public NodeUnion<? extends IdentifierNode> getUnionForIdentifier()
     {
-        getAttribute(LocalAttribute.IDENTIFIER).recordAccess(ReadWriteAttribute.AccessType.READ);
+        checkIdentifierWrapped();
         if (this.identifier == null)
         {
             this.identifier = new NormalNodeUnion<IdentifierNode>(null);
@@ -206,24 +300,8 @@ public class SuperMethodInvocationNodeImpl extends NodeImpl implements SuperMeth
      */
     public void setIdentifier(IdentifierNode identifier)
     {
-            setIdentifier(identifier, true);
-            getManager().notifyChange(this);
-    }
-    
-    private void setIdentifier(IdentifierNode identifier, boolean checkPermissions)
-    {
-        if (checkPermissions)
-        {
-            getManager().assertMutatable(this);
-            getAttribute(LocalAttribute.IDENTIFIER).recordAccess(ReadWriteAttribute.AccessType.WRITE);
-        }
-        
-        if (this.identifier != null)
-        {
-            setAsChild(this.identifier.getNodeValue(), false);
-        }
-        this.identifier = new NormalNodeUnion<IdentifierNode>(identifier);
-        setAsChild(identifier, true);
+        checkIdentifierWrapped();
+        this.setUnionForIdentifier(new NormalNodeUnion<IdentifierNode>(identifier));
     }
     
     /**
@@ -232,18 +310,15 @@ public class SuperMethodInvocationNodeImpl extends NodeImpl implements SuperMeth
      */
     public void setUnionForIdentifier(NodeUnion<? extends IdentifierNode> identifier)
     {
-            setUnionForIdentifier(identifier, true);
-            getManager().notifyChange(this);
+        checkIdentifierWrapped();
+        this.getManager().assertMutatable(this);
+        this.doSetIdentifier(identifier);
+        if (this.getManager().isRecordingEdits())
+            super.recordEdit(new SuperMethodInvocationNodeSetIdentifierPropertyEditScriptElementImpl(this.getManager().getCurrentMetaprogramId(), this.getUid(), identifier.getNodeValue() == null ? null : identifier.getNodeValue().getUid()));
     }
     
-    private void setUnionForIdentifier(NodeUnion<? extends IdentifierNode> identifier, boolean checkPermissions)
+    private void doSetIdentifier(NodeUnion<? extends IdentifierNode> identifier)
     {
-        if (checkPermissions)
-        {
-            getManager().assertMutatable(this);
-            getAttribute(LocalAttribute.IDENTIFIER).recordAccess(ReadWriteAttribute.AccessType.WRITE);
-        }
-        
         if (identifier == null)
         {
             identifier = new NormalNodeUnion<IdentifierNode>(null);
@@ -263,7 +338,7 @@ public class SuperMethodInvocationNodeImpl extends NodeImpl implements SuperMeth
      */
     public ExpressionListNode getArguments()
     {
-        getAttribute(LocalAttribute.ARGUMENTS).recordAccess(ReadWriteAttribute.AccessType.READ);
+        checkArgumentsWrapped();
         if (this.arguments == null)
         {
             return null;
@@ -279,7 +354,7 @@ public class SuperMethodInvocationNodeImpl extends NodeImpl implements SuperMeth
      */
     public NodeUnion<? extends ExpressionListNode> getUnionForArguments()
     {
-        getAttribute(LocalAttribute.ARGUMENTS).recordAccess(ReadWriteAttribute.AccessType.READ);
+        checkArgumentsWrapped();
         if (this.arguments == null)
         {
             this.arguments = new NormalNodeUnion<ExpressionListNode>(null);
@@ -293,24 +368,8 @@ public class SuperMethodInvocationNodeImpl extends NodeImpl implements SuperMeth
      */
     public void setArguments(ExpressionListNode arguments)
     {
-            setArguments(arguments, true);
-            getManager().notifyChange(this);
-    }
-    
-    private void setArguments(ExpressionListNode arguments, boolean checkPermissions)
-    {
-        if (checkPermissions)
-        {
-            getManager().assertMutatable(this);
-            getAttribute(LocalAttribute.ARGUMENTS).recordAccess(ReadWriteAttribute.AccessType.WRITE);
-        }
-        
-        if (this.arguments != null)
-        {
-            setAsChild(this.arguments.getNodeValue(), false);
-        }
-        this.arguments = new NormalNodeUnion<ExpressionListNode>(arguments);
-        setAsChild(arguments, true);
+        checkArgumentsWrapped();
+        this.setUnionForArguments(new NormalNodeUnion<ExpressionListNode>(arguments));
     }
     
     /**
@@ -319,18 +378,15 @@ public class SuperMethodInvocationNodeImpl extends NodeImpl implements SuperMeth
      */
     public void setUnionForArguments(NodeUnion<? extends ExpressionListNode> arguments)
     {
-            setUnionForArguments(arguments, true);
-            getManager().notifyChange(this);
+        checkArgumentsWrapped();
+        this.getManager().assertMutatable(this);
+        this.doSetArguments(arguments);
+        if (this.getManager().isRecordingEdits())
+            super.recordEdit(new SuperMethodInvocationNodeSetArgumentsPropertyEditScriptElementImpl(this.getManager().getCurrentMetaprogramId(), this.getUid(), arguments.getNodeValue() == null ? null : arguments.getNodeValue().getUid()));
     }
     
-    private void setUnionForArguments(NodeUnion<? extends ExpressionListNode> arguments, boolean checkPermissions)
+    private void doSetArguments(NodeUnion<? extends ExpressionListNode> arguments)
     {
-        if (checkPermissions)
-        {
-            getManager().assertMutatable(this);
-            getAttribute(LocalAttribute.ARGUMENTS).recordAccess(ReadWriteAttribute.AccessType.WRITE);
-        }
-        
         if (arguments == null)
         {
             arguments = new NormalNodeUnion<ExpressionListNode>(null);
@@ -350,7 +406,7 @@ public class SuperMethodInvocationNodeImpl extends NodeImpl implements SuperMeth
      */
     public ReferenceTypeListNode getTypeArguments()
     {
-        getAttribute(LocalAttribute.TYPE_ARGUMENTS).recordAccess(ReadWriteAttribute.AccessType.READ);
+        checkTypeArgumentsWrapped();
         if (this.typeArguments == null)
         {
             return null;
@@ -366,7 +422,7 @@ public class SuperMethodInvocationNodeImpl extends NodeImpl implements SuperMeth
      */
     public NodeUnion<? extends ReferenceTypeListNode> getUnionForTypeArguments()
     {
-        getAttribute(LocalAttribute.TYPE_ARGUMENTS).recordAccess(ReadWriteAttribute.AccessType.READ);
+        checkTypeArgumentsWrapped();
         if (this.typeArguments == null)
         {
             this.typeArguments = new NormalNodeUnion<ReferenceTypeListNode>(null);
@@ -380,24 +436,8 @@ public class SuperMethodInvocationNodeImpl extends NodeImpl implements SuperMeth
      */
     public void setTypeArguments(ReferenceTypeListNode typeArguments)
     {
-            setTypeArguments(typeArguments, true);
-            getManager().notifyChange(this);
-    }
-    
-    private void setTypeArguments(ReferenceTypeListNode typeArguments, boolean checkPermissions)
-    {
-        if (checkPermissions)
-        {
-            getManager().assertMutatable(this);
-            getAttribute(LocalAttribute.TYPE_ARGUMENTS).recordAccess(ReadWriteAttribute.AccessType.WRITE);
-        }
-        
-        if (this.typeArguments != null)
-        {
-            setAsChild(this.typeArguments.getNodeValue(), false);
-        }
-        this.typeArguments = new NormalNodeUnion<ReferenceTypeListNode>(typeArguments);
-        setAsChild(typeArguments, true);
+        checkTypeArgumentsWrapped();
+        this.setUnionForTypeArguments(new NormalNodeUnion<ReferenceTypeListNode>(typeArguments));
     }
     
     /**
@@ -406,18 +446,15 @@ public class SuperMethodInvocationNodeImpl extends NodeImpl implements SuperMeth
      */
     public void setUnionForTypeArguments(NodeUnion<? extends ReferenceTypeListNode> typeArguments)
     {
-            setUnionForTypeArguments(typeArguments, true);
-            getManager().notifyChange(this);
+        checkTypeArgumentsWrapped();
+        this.getManager().assertMutatable(this);
+        this.doSetTypeArguments(typeArguments);
+        if (this.getManager().isRecordingEdits())
+            super.recordEdit(new SuperMethodInvocationNodeSetTypeArgumentsPropertyEditScriptElementImpl(this.getManager().getCurrentMetaprogramId(), this.getUid(), typeArguments.getNodeValue() == null ? null : typeArguments.getNodeValue().getUid()));
     }
     
-    private void setUnionForTypeArguments(NodeUnion<? extends ReferenceTypeListNode> typeArguments, boolean checkPermissions)
+    private void doSetTypeArguments(NodeUnion<? extends ReferenceTypeListNode> typeArguments)
     {
-        if (checkPermissions)
-        {
-            getManager().assertMutatable(this);
-            getAttribute(LocalAttribute.TYPE_ARGUMENTS).recordAccess(ReadWriteAttribute.AccessType.WRITE);
-        }
-        
         if (typeArguments == null)
         {
             typeArguments = new NormalNodeUnion<ReferenceTypeListNode>(null);
@@ -441,21 +478,21 @@ public class SuperMethodInvocationNodeImpl extends NodeImpl implements SuperMeth
     protected void receiveToChildren(BsjNodeVisitor visitor)
     {
         super.receiveToChildren(visitor);
-        if (this.type.getNodeValue() != null)
+        if (this.getUnionForType().getNodeValue() != null)
         {
-            this.type.getNodeValue().receive(visitor);
+            this.getUnionForType().getNodeValue().receive(visitor);
         }
-        if (this.identifier.getNodeValue() != null)
+        if (this.getUnionForIdentifier().getNodeValue() != null)
         {
-            this.identifier.getNodeValue().receive(visitor);
+            this.getUnionForIdentifier().getNodeValue().receive(visitor);
         }
-        if (this.arguments.getNodeValue() != null)
+        if (this.getUnionForArguments().getNodeValue() != null)
         {
-            this.arguments.getNodeValue().receive(visitor);
+            this.getUnionForArguments().getNodeValue().receive(visitor);
         }
-        if (this.typeArguments.getNodeValue() != null)
+        if (this.getUnionForTypeArguments().getNodeValue() != null)
         {
-            this.typeArguments.getNodeValue().receive(visitor);
+            this.getUnionForTypeArguments().getNodeValue().receive(visitor);
         }
         Iterator<? extends Node> extras = getHiddenVisitorChildren();
         if (extras != null)
@@ -478,21 +515,21 @@ public class SuperMethodInvocationNodeImpl extends NodeImpl implements SuperMeth
     protected void receiveTypedToChildren(BsjTypedNodeVisitor visitor)
     {
         super.receiveTypedToChildren(visitor);
-        if (this.type.getNodeValue() != null)
+        if (this.getUnionForType().getNodeValue() != null)
         {
-            this.type.getNodeValue().receiveTyped(visitor);
+            this.getUnionForType().getNodeValue().receiveTyped(visitor);
         }
-        if (this.identifier.getNodeValue() != null)
+        if (this.getUnionForIdentifier().getNodeValue() != null)
         {
-            this.identifier.getNodeValue().receiveTyped(visitor);
+            this.getUnionForIdentifier().getNodeValue().receiveTyped(visitor);
         }
-        if (this.arguments.getNodeValue() != null)
+        if (this.getUnionForArguments().getNodeValue() != null)
         {
-            this.arguments.getNodeValue().receiveTyped(visitor);
+            this.getUnionForArguments().getNodeValue().receiveTyped(visitor);
         }
-        if (this.typeArguments.getNodeValue() != null)
+        if (this.getUnionForTypeArguments().getNodeValue() != null)
         {
-            this.typeArguments.getNodeValue().receiveTyped(visitor);
+            this.getUnionForTypeArguments().getNodeValue().receiveTyped(visitor);
         }
         Iterator<? extends Node> extras = getHiddenVisitorChildren();
         if (extras != null)
@@ -556,6 +593,8 @@ public class SuperMethodInvocationNodeImpl extends NodeImpl implements SuperMeth
     {
         StringBuilder sb = new StringBuilder();
         sb.append(this.getClass().getSimpleName());
+        sb.append('#');
+        sb.append(this.getUid());
         sb.append('[');
         sb.append("type=");
         sb.append(this.getUnionForType().getNodeValue() == null? "null" : this.getUnionForType().getNodeValue().getClass().getSimpleName());

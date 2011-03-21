@@ -1510,7 +1510,8 @@ metaAnnotation returns [NodeUnion<? extends MetaAnnotationNode> ret]
                             $ret = factory.makeNormalNodeUnion(
                                        factory.makeNormalMetaAnnotationNodeWithUnions(
                                                $optionalMetaAnnotationElementValuePairs.ret,
-                                               $unparameterizedType.ret));
+                                               $unparameterizedType.ret,
+                                               factory.makeMetaAnnotationMetaprogramAnchorNode()));
                         }
                     |
                         metaAnnotationElementValue
@@ -1518,7 +1519,8 @@ metaAnnotation returns [NodeUnion<? extends MetaAnnotationNode> ret]
                             $ret = factory.makeNormalNodeUnion(
                                        factory.makeSingleElementMetaAnnotationNodeWithUnions(
                                            $metaAnnotationElementValue.ret,
-                                           $unparameterizedType.ret));
+                                           $unparameterizedType.ret,
+                                           factory.makeMetaAnnotationMetaprogramAnchorNode()));
                         }
                     )? 
                     ')' 
@@ -1528,7 +1530,8 @@ metaAnnotation returns [NodeUnion<? extends MetaAnnotationNode> ret]
                     $ret = factory.makeNormalNodeUnion(
                                factory.makeNormalMetaAnnotationNodeWithUnions(
                                    factory.makeNormalNodeUnion(factory.makeMetaAnnotationElementListNode()),
-                                   $unparameterizedType.ret));
+                                   $unparameterizedType.ret,
+                                   factory.makeMetaAnnotationMetaprogramAnchorNode()));
                 }            
             )
         )

@@ -1,9 +1,9 @@
 package edu.jhu.cs.bsj.compiler.impl.ast.node;
 
-import java.util.EnumMap;
+import java.util.EnumSet;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
+import java.util.Set;
 
 import javax.annotation.Generated;
 
@@ -17,9 +17,12 @@ import edu.jhu.cs.bsj.compiler.ast.node.Node;
 import edu.jhu.cs.bsj.compiler.ast.node.list.ExpressionListNode;
 import edu.jhu.cs.bsj.compiler.ast.node.list.TypeArgumentListNode;
 import edu.jhu.cs.bsj.compiler.impl.ast.BsjNodeManager;
+import edu.jhu.cs.bsj.compiler.impl.ast.BsjNodeProxyFactory;
 import edu.jhu.cs.bsj.compiler.impl.ast.NormalNodeUnion;
-import edu.jhu.cs.bsj.compiler.impl.ast.attribute.AttributeName;
-import edu.jhu.cs.bsj.compiler.impl.ast.attribute.ReadWriteAttribute;
+import edu.jhu.cs.bsj.compiler.impl.ast.delta.property.ClassInstantiationNodeSetArgumentsPropertyEditScriptElementImpl;
+import edu.jhu.cs.bsj.compiler.impl.ast.delta.property.ClassInstantiationNodeSetBodyPropertyEditScriptElementImpl;
+import edu.jhu.cs.bsj.compiler.impl.ast.delta.property.ClassInstantiationNodeSetConstructorTypeArgumentsPropertyEditScriptElementImpl;
+import edu.jhu.cs.bsj.compiler.impl.ast.properties.ClassInstantiationNodeProperties;
 
 @Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
 public abstract class ClassInstantiationNodeImpl extends NodeImpl implements ClassInstantiationNode
@@ -33,26 +36,11 @@ public abstract class ClassInstantiationNodeImpl extends NodeImpl implements Cla
     /** The body of the anonymous class. */
     private NodeUnion<? extends AnonymousClassBodyNode> body;
     
-    private Map<LocalAttribute,ReadWriteAttribute> localAttributes = new EnumMap<LocalAttribute,ReadWriteAttribute>(LocalAttribute.class);
-    private ReadWriteAttribute getAttribute(LocalAttribute attributeName)
-    {
-        ReadWriteAttribute attribute = localAttributes.get(attributeName);
-        if (attribute == null)
-        {
-            attribute = new ReadWriteAttribute(ClassInstantiationNodeImpl.this, attributeName);
-            localAttributes.put(attributeName, attribute);
-        }
-        return attribute;
-    }
-    private static enum LocalAttribute implements AttributeName
-    {
-        /** Attribute identifier for the constructorTypeArguments property. */
-        CONSTRUCTOR_TYPE_ARGUMENTS,
-        /** Attribute identifier for the arguments property. */
-        ARGUMENTS,
-        /** Attribute identifier for the body property. */
-        BODY,
-    }
+    /**
+     * A set of those properties which have been populated from the backing node.
+     * This field is <code>null</code> if <tt>backingNode</tt> is <code>null</code>.
+     */
+    private Set<ClassInstantiationNodeProperties> populatedProperties;
     
     /** General constructor. */
     protected ClassInstantiationNodeImpl(
@@ -65,9 +53,107 @@ public abstract class ClassInstantiationNodeImpl extends NodeImpl implements Cla
             boolean binary)
     {
         super(startLocation, stopLocation, manager, binary);
-        setUnionForConstructorTypeArguments(constructorTypeArguments, false);
-        setUnionForArguments(arguments, false);
-        setUnionForBody(body, false);
+        this.populatedProperties = null;
+        doSetConstructorTypeArguments(constructorTypeArguments);
+        doSetArguments(arguments);
+        doSetBody(body);
+    }
+    
+    /** Proxy constructor. */
+    protected ClassInstantiationNodeImpl(BsjNodeManager manager, BsjNodeProxyFactory proxyFactory, ClassInstantiationNode backingNode)
+    {
+        super(manager, proxyFactory, backingNode);
+        this.populatedProperties = EnumSet.noneOf(ClassInstantiationNodeProperties.class);
+    }
+    
+    /** Retrieves this node's backing node (if one exists). */
+    protected ClassInstantiationNode getBackingNode()
+    {
+        return (ClassInstantiationNode)super.getBackingNode();
+    }
+    
+    /**
+     * Ensures that the constructorTypeArguments value has been populated from proxy.
+     * If this node is not backed by a proxy or if the value has already been
+     * populated, this method does nothing.
+     */
+    private void checkConstructorTypeArgumentsWrapped()
+    {
+        if (this.populatedProperties == null || this.populatedProperties.contains(
+                ClassInstantiationNodeProperties.CONSTRUCTOR_TYPE_ARGUMENTS))
+            return;
+        this.populatedProperties.add(ClassInstantiationNodeProperties.CONSTRUCTOR_TYPE_ARGUMENTS);
+        NodeUnion<? extends TypeArgumentListNode> union = this.getBackingNode().getUnionForConstructorTypeArguments();
+        switch (union.getType())
+        {
+            case NORMAL:
+                union = this.getProxyFactory().makeNormalNodeUnion(
+                        this.getProxyFactory().makeTypeArgumentListNode(union.getNormalNode()));
+                break;
+            case SPLICE:
+                union = this.getProxyFactory().makeSpliceNodeUnion(
+                        this.getProxyFactory().makeSpliceNode(union.getSpliceNode()));
+                break;
+            default:
+                throw new IllegalStateException("Unrecognized union type: " + union.getType());
+        }
+        this.constructorTypeArguments = union;
+    }
+    
+    /**
+     * Ensures that the arguments value has been populated from proxy.
+     * If this node is not backed by a proxy or if the value has already been
+     * populated, this method does nothing.
+     */
+    private void checkArgumentsWrapped()
+    {
+        if (this.populatedProperties == null || this.populatedProperties.contains(
+                ClassInstantiationNodeProperties.ARGUMENTS))
+            return;
+        this.populatedProperties.add(ClassInstantiationNodeProperties.ARGUMENTS);
+        NodeUnion<? extends ExpressionListNode> union = this.getBackingNode().getUnionForArguments();
+        switch (union.getType())
+        {
+            case NORMAL:
+                union = this.getProxyFactory().makeNormalNodeUnion(
+                        this.getProxyFactory().makeExpressionListNode(union.getNormalNode()));
+                break;
+            case SPLICE:
+                union = this.getProxyFactory().makeSpliceNodeUnion(
+                        this.getProxyFactory().makeSpliceNode(union.getSpliceNode()));
+                break;
+            default:
+                throw new IllegalStateException("Unrecognized union type: " + union.getType());
+        }
+        this.arguments = union;
+    }
+    
+    /**
+     * Ensures that the body value has been populated from proxy.
+     * If this node is not backed by a proxy or if the value has already been
+     * populated, this method does nothing.
+     */
+    private void checkBodyWrapped()
+    {
+        if (this.populatedProperties == null || this.populatedProperties.contains(
+                ClassInstantiationNodeProperties.BODY))
+            return;
+        this.populatedProperties.add(ClassInstantiationNodeProperties.BODY);
+        NodeUnion<? extends AnonymousClassBodyNode> union = this.getBackingNode().getUnionForBody();
+        switch (union.getType())
+        {
+            case NORMAL:
+                union = this.getProxyFactory().makeNormalNodeUnion(
+                        this.getProxyFactory().makeAnonymousClassBodyNode(union.getNormalNode()));
+                break;
+            case SPLICE:
+                union = this.getProxyFactory().makeSpliceNodeUnion(
+                        this.getProxyFactory().makeSpliceNode(union.getSpliceNode()));
+                break;
+            default:
+                throw new IllegalStateException("Unrecognized union type: " + union.getType());
+        }
+        this.body = union;
     }
     
     /**
@@ -77,7 +163,7 @@ public abstract class ClassInstantiationNodeImpl extends NodeImpl implements Cla
      */
     public TypeArgumentListNode getConstructorTypeArguments()
     {
-        getAttribute(LocalAttribute.CONSTRUCTOR_TYPE_ARGUMENTS).recordAccess(ReadWriteAttribute.AccessType.READ);
+        checkConstructorTypeArgumentsWrapped();
         if (this.constructorTypeArguments == null)
         {
             return null;
@@ -93,7 +179,7 @@ public abstract class ClassInstantiationNodeImpl extends NodeImpl implements Cla
      */
     public NodeUnion<? extends TypeArgumentListNode> getUnionForConstructorTypeArguments()
     {
-        getAttribute(LocalAttribute.CONSTRUCTOR_TYPE_ARGUMENTS).recordAccess(ReadWriteAttribute.AccessType.READ);
+        checkConstructorTypeArgumentsWrapped();
         if (this.constructorTypeArguments == null)
         {
             this.constructorTypeArguments = new NormalNodeUnion<TypeArgumentListNode>(null);
@@ -107,24 +193,8 @@ public abstract class ClassInstantiationNodeImpl extends NodeImpl implements Cla
      */
     public void setConstructorTypeArguments(TypeArgumentListNode constructorTypeArguments)
     {
-            setConstructorTypeArguments(constructorTypeArguments, true);
-            getManager().notifyChange(this);
-    }
-    
-    private void setConstructorTypeArguments(TypeArgumentListNode constructorTypeArguments, boolean checkPermissions)
-    {
-        if (checkPermissions)
-        {
-            getManager().assertMutatable(this);
-            getAttribute(LocalAttribute.CONSTRUCTOR_TYPE_ARGUMENTS).recordAccess(ReadWriteAttribute.AccessType.WRITE);
-        }
-        
-        if (this.constructorTypeArguments != null)
-        {
-            setAsChild(this.constructorTypeArguments.getNodeValue(), false);
-        }
-        this.constructorTypeArguments = new NormalNodeUnion<TypeArgumentListNode>(constructorTypeArguments);
-        setAsChild(constructorTypeArguments, true);
+        checkConstructorTypeArgumentsWrapped();
+        this.setUnionForConstructorTypeArguments(new NormalNodeUnion<TypeArgumentListNode>(constructorTypeArguments));
     }
     
     /**
@@ -133,18 +203,15 @@ public abstract class ClassInstantiationNodeImpl extends NodeImpl implements Cla
      */
     public void setUnionForConstructorTypeArguments(NodeUnion<? extends TypeArgumentListNode> constructorTypeArguments)
     {
-            setUnionForConstructorTypeArguments(constructorTypeArguments, true);
-            getManager().notifyChange(this);
+        checkConstructorTypeArgumentsWrapped();
+        this.getManager().assertMutatable(this);
+        this.doSetConstructorTypeArguments(constructorTypeArguments);
+        if (this.getManager().isRecordingEdits())
+            super.recordEdit(new ClassInstantiationNodeSetConstructorTypeArgumentsPropertyEditScriptElementImpl(this.getManager().getCurrentMetaprogramId(), this.getUid(), constructorTypeArguments.getNodeValue() == null ? null : constructorTypeArguments.getNodeValue().getUid()));
     }
     
-    private void setUnionForConstructorTypeArguments(NodeUnion<? extends TypeArgumentListNode> constructorTypeArguments, boolean checkPermissions)
+    private void doSetConstructorTypeArguments(NodeUnion<? extends TypeArgumentListNode> constructorTypeArguments)
     {
-        if (checkPermissions)
-        {
-            getManager().assertMutatable(this);
-            getAttribute(LocalAttribute.CONSTRUCTOR_TYPE_ARGUMENTS).recordAccess(ReadWriteAttribute.AccessType.WRITE);
-        }
-        
         if (constructorTypeArguments == null)
         {
             constructorTypeArguments = new NormalNodeUnion<TypeArgumentListNode>(null);
@@ -164,7 +231,7 @@ public abstract class ClassInstantiationNodeImpl extends NodeImpl implements Cla
      */
     public ExpressionListNode getArguments()
     {
-        getAttribute(LocalAttribute.ARGUMENTS).recordAccess(ReadWriteAttribute.AccessType.READ);
+        checkArgumentsWrapped();
         if (this.arguments == null)
         {
             return null;
@@ -180,7 +247,7 @@ public abstract class ClassInstantiationNodeImpl extends NodeImpl implements Cla
      */
     public NodeUnion<? extends ExpressionListNode> getUnionForArguments()
     {
-        getAttribute(LocalAttribute.ARGUMENTS).recordAccess(ReadWriteAttribute.AccessType.READ);
+        checkArgumentsWrapped();
         if (this.arguments == null)
         {
             this.arguments = new NormalNodeUnion<ExpressionListNode>(null);
@@ -194,24 +261,8 @@ public abstract class ClassInstantiationNodeImpl extends NodeImpl implements Cla
      */
     public void setArguments(ExpressionListNode arguments)
     {
-            setArguments(arguments, true);
-            getManager().notifyChange(this);
-    }
-    
-    private void setArguments(ExpressionListNode arguments, boolean checkPermissions)
-    {
-        if (checkPermissions)
-        {
-            getManager().assertMutatable(this);
-            getAttribute(LocalAttribute.ARGUMENTS).recordAccess(ReadWriteAttribute.AccessType.WRITE);
-        }
-        
-        if (this.arguments != null)
-        {
-            setAsChild(this.arguments.getNodeValue(), false);
-        }
-        this.arguments = new NormalNodeUnion<ExpressionListNode>(arguments);
-        setAsChild(arguments, true);
+        checkArgumentsWrapped();
+        this.setUnionForArguments(new NormalNodeUnion<ExpressionListNode>(arguments));
     }
     
     /**
@@ -220,18 +271,15 @@ public abstract class ClassInstantiationNodeImpl extends NodeImpl implements Cla
      */
     public void setUnionForArguments(NodeUnion<? extends ExpressionListNode> arguments)
     {
-            setUnionForArguments(arguments, true);
-            getManager().notifyChange(this);
+        checkArgumentsWrapped();
+        this.getManager().assertMutatable(this);
+        this.doSetArguments(arguments);
+        if (this.getManager().isRecordingEdits())
+            super.recordEdit(new ClassInstantiationNodeSetArgumentsPropertyEditScriptElementImpl(this.getManager().getCurrentMetaprogramId(), this.getUid(), arguments.getNodeValue() == null ? null : arguments.getNodeValue().getUid()));
     }
     
-    private void setUnionForArguments(NodeUnion<? extends ExpressionListNode> arguments, boolean checkPermissions)
+    private void doSetArguments(NodeUnion<? extends ExpressionListNode> arguments)
     {
-        if (checkPermissions)
-        {
-            getManager().assertMutatable(this);
-            getAttribute(LocalAttribute.ARGUMENTS).recordAccess(ReadWriteAttribute.AccessType.WRITE);
-        }
-        
         if (arguments == null)
         {
             arguments = new NormalNodeUnion<ExpressionListNode>(null);
@@ -251,7 +299,7 @@ public abstract class ClassInstantiationNodeImpl extends NodeImpl implements Cla
      */
     public AnonymousClassBodyNode getBody()
     {
-        getAttribute(LocalAttribute.BODY).recordAccess(ReadWriteAttribute.AccessType.READ);
+        checkBodyWrapped();
         if (this.body == null)
         {
             return null;
@@ -267,7 +315,7 @@ public abstract class ClassInstantiationNodeImpl extends NodeImpl implements Cla
      */
     public NodeUnion<? extends AnonymousClassBodyNode> getUnionForBody()
     {
-        getAttribute(LocalAttribute.BODY).recordAccess(ReadWriteAttribute.AccessType.READ);
+        checkBodyWrapped();
         if (this.body == null)
         {
             this.body = new NormalNodeUnion<AnonymousClassBodyNode>(null);
@@ -281,24 +329,8 @@ public abstract class ClassInstantiationNodeImpl extends NodeImpl implements Cla
      */
     public void setBody(AnonymousClassBodyNode body)
     {
-            setBody(body, true);
-            getManager().notifyChange(this);
-    }
-    
-    private void setBody(AnonymousClassBodyNode body, boolean checkPermissions)
-    {
-        if (checkPermissions)
-        {
-            getManager().assertMutatable(this);
-            getAttribute(LocalAttribute.BODY).recordAccess(ReadWriteAttribute.AccessType.WRITE);
-        }
-        
-        if (this.body != null)
-        {
-            setAsChild(this.body.getNodeValue(), false);
-        }
-        this.body = new NormalNodeUnion<AnonymousClassBodyNode>(body);
-        setAsChild(body, true);
+        checkBodyWrapped();
+        this.setUnionForBody(new NormalNodeUnion<AnonymousClassBodyNode>(body));
     }
     
     /**
@@ -307,18 +339,15 @@ public abstract class ClassInstantiationNodeImpl extends NodeImpl implements Cla
      */
     public void setUnionForBody(NodeUnion<? extends AnonymousClassBodyNode> body)
     {
-            setUnionForBody(body, true);
-            getManager().notifyChange(this);
+        checkBodyWrapped();
+        this.getManager().assertMutatable(this);
+        this.doSetBody(body);
+        if (this.getManager().isRecordingEdits())
+            super.recordEdit(new ClassInstantiationNodeSetBodyPropertyEditScriptElementImpl(this.getManager().getCurrentMetaprogramId(), this.getUid(), body.getNodeValue() == null ? null : body.getNodeValue().getUid()));
     }
     
-    private void setUnionForBody(NodeUnion<? extends AnonymousClassBodyNode> body, boolean checkPermissions)
+    private void doSetBody(NodeUnion<? extends AnonymousClassBodyNode> body)
     {
-        if (checkPermissions)
-        {
-            getManager().assertMutatable(this);
-            getAttribute(LocalAttribute.BODY).recordAccess(ReadWriteAttribute.AccessType.WRITE);
-        }
-        
         if (body == null)
         {
             body = new NormalNodeUnion<AnonymousClassBodyNode>(null);
@@ -342,17 +371,17 @@ public abstract class ClassInstantiationNodeImpl extends NodeImpl implements Cla
     protected void receiveToChildren(BsjNodeVisitor visitor)
     {
         super.receiveToChildren(visitor);
-        if (this.constructorTypeArguments.getNodeValue() != null)
+        if (this.getUnionForConstructorTypeArguments().getNodeValue() != null)
         {
-            this.constructorTypeArguments.getNodeValue().receive(visitor);
+            this.getUnionForConstructorTypeArguments().getNodeValue().receive(visitor);
         }
-        if (this.arguments.getNodeValue() != null)
+        if (this.getUnionForArguments().getNodeValue() != null)
         {
-            this.arguments.getNodeValue().receive(visitor);
+            this.getUnionForArguments().getNodeValue().receive(visitor);
         }
-        if (this.body.getNodeValue() != null)
+        if (this.getUnionForBody().getNodeValue() != null)
         {
-            this.body.getNodeValue().receive(visitor);
+            this.getUnionForBody().getNodeValue().receive(visitor);
         }
         Iterator<? extends Node> extras = getHiddenVisitorChildren();
         if (extras != null)
@@ -375,17 +404,17 @@ public abstract class ClassInstantiationNodeImpl extends NodeImpl implements Cla
     protected void receiveTypedToChildren(BsjTypedNodeVisitor visitor)
     {
         super.receiveTypedToChildren(visitor);
-        if (this.constructorTypeArguments.getNodeValue() != null)
+        if (this.getUnionForConstructorTypeArguments().getNodeValue() != null)
         {
-            this.constructorTypeArguments.getNodeValue().receiveTyped(visitor);
+            this.getUnionForConstructorTypeArguments().getNodeValue().receiveTyped(visitor);
         }
-        if (this.arguments.getNodeValue() != null)
+        if (this.getUnionForArguments().getNodeValue() != null)
         {
-            this.arguments.getNodeValue().receiveTyped(visitor);
+            this.getUnionForArguments().getNodeValue().receiveTyped(visitor);
         }
-        if (this.body.getNodeValue() != null)
+        if (this.getUnionForBody().getNodeValue() != null)
         {
-            this.body.getNodeValue().receiveTyped(visitor);
+            this.getUnionForBody().getNodeValue().receiveTyped(visitor);
         }
         Iterator<? extends Node> extras = getHiddenVisitorChildren();
         if (extras != null)
@@ -438,6 +467,8 @@ public abstract class ClassInstantiationNodeImpl extends NodeImpl implements Cla
     {
         StringBuilder sb = new StringBuilder();
         sb.append(this.getClass().getSimpleName());
+        sb.append('#');
+        sb.append(this.getUid());
         sb.append('[');
         sb.append("constructorTypeArguments=");
         sb.append(this.getUnionForConstructorTypeArguments().getNodeValue() == null? "null" : this.getUnionForConstructorTypeArguments().getNodeValue().getClass().getSimpleName());

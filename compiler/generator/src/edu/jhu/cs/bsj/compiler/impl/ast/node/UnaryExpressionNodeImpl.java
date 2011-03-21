@@ -1,10 +1,10 @@
 package edu.jhu.cs.bsj.compiler.impl.ast.node;
 
 import java.util.Arrays;
-import java.util.EnumMap;
+import java.util.EnumSet;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
+import java.util.Set;
 
 import javax.annotation.Generated;
 
@@ -20,9 +20,11 @@ import edu.jhu.cs.bsj.compiler.ast.node.ExpressionNode;
 import edu.jhu.cs.bsj.compiler.ast.node.Node;
 import edu.jhu.cs.bsj.compiler.ast.node.UnaryExpressionNode;
 import edu.jhu.cs.bsj.compiler.impl.ast.BsjNodeManager;
+import edu.jhu.cs.bsj.compiler.impl.ast.BsjNodeProxyFactory;
 import edu.jhu.cs.bsj.compiler.impl.ast.NormalNodeUnion;
-import edu.jhu.cs.bsj.compiler.impl.ast.attribute.AttributeName;
-import edu.jhu.cs.bsj.compiler.impl.ast.attribute.ReadWriteAttribute;
+import edu.jhu.cs.bsj.compiler.impl.ast.delta.property.UnaryExpressionNodeSetExpressionPropertyEditScriptElementImpl;
+import edu.jhu.cs.bsj.compiler.impl.ast.delta.property.UnaryExpressionNodeSetOperatorPropertyEditScriptElementImpl;
+import edu.jhu.cs.bsj.compiler.impl.ast.properties.UnaryExpressionNodeProperties;
 
 @Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
 public class UnaryExpressionNodeImpl extends NodeImpl implements UnaryExpressionNode
@@ -33,24 +35,11 @@ public class UnaryExpressionNodeImpl extends NodeImpl implements UnaryExpression
     /** The operator to apply. */
     private UnaryOperator operator;
     
-    private Map<LocalAttribute,ReadWriteAttribute> localAttributes = new EnumMap<LocalAttribute,ReadWriteAttribute>(LocalAttribute.class);
-    private ReadWriteAttribute getAttribute(LocalAttribute attributeName)
-    {
-        ReadWriteAttribute attribute = localAttributes.get(attributeName);
-        if (attribute == null)
-        {
-            attribute = new ReadWriteAttribute(UnaryExpressionNodeImpl.this, attributeName);
-            localAttributes.put(attributeName, attribute);
-        }
-        return attribute;
-    }
-    private static enum LocalAttribute implements AttributeName
-    {
-        /** Attribute identifier for the expression property. */
-        EXPRESSION,
-        /** Attribute identifier for the operator property. */
-        OPERATOR,
-    }
+    /**
+     * A set of those properties which have been populated from the backing node.
+     * This field is <code>null</code> if <tt>backingNode</tt> is <code>null</code>.
+     */
+    private Set<UnaryExpressionNodeProperties> populatedProperties;
     
     /** General constructor. */
     public UnaryExpressionNodeImpl(
@@ -62,8 +51,64 @@ public class UnaryExpressionNodeImpl extends NodeImpl implements UnaryExpression
             boolean binary)
     {
         super(startLocation, stopLocation, manager, binary);
-        setUnionForExpression(expression, false);
-        this.operator = operator;
+        this.populatedProperties = null;
+        doSetExpression(expression);
+        doSetOperator(operator);
+    }
+    
+    /** Proxy constructor. */
+    public UnaryExpressionNodeImpl(BsjNodeManager manager, BsjNodeProxyFactory proxyFactory, UnaryExpressionNode backingNode)
+    {
+        super(manager, proxyFactory, backingNode);
+        this.populatedProperties = EnumSet.noneOf(UnaryExpressionNodeProperties.class);
+    }
+    
+    /** Retrieves this node's backing node (if one exists). */
+    protected UnaryExpressionNode getBackingNode()
+    {
+        return (UnaryExpressionNode)super.getBackingNode();
+    }
+    
+    /**
+     * Ensures that the expression value has been populated from proxy.
+     * If this node is not backed by a proxy or if the value has already been
+     * populated, this method does nothing.
+     */
+    private void checkExpressionWrapped()
+    {
+        if (this.populatedProperties == null || this.populatedProperties.contains(
+                UnaryExpressionNodeProperties.EXPRESSION))
+            return;
+        this.populatedProperties.add(UnaryExpressionNodeProperties.EXPRESSION);
+        NodeUnion<? extends ExpressionNode> union = this.getBackingNode().getUnionForExpression();
+        switch (union.getType())
+        {
+            case NORMAL:
+                union = this.getProxyFactory().makeNormalNodeUnion(
+                        this.getProxyFactory().makeExpressionNode(union.getNormalNode()));
+                break;
+            case SPLICE:
+                union = this.getProxyFactory().makeSpliceNodeUnion(
+                        this.getProxyFactory().makeSpliceNode(union.getSpliceNode()));
+                break;
+            default:
+                throw new IllegalStateException("Unrecognized union type: " + union.getType());
+        }
+        this.expression = union;
+    }
+    
+    /**
+     * Ensures that the operator value has been populated from proxy.
+     * If this node is not backed by a proxy or if the value has already been
+     * populated, this method does nothing.
+     */
+    private void checkOperatorWrapped()
+    {
+        if (this.populatedProperties == null || this.populatedProperties.contains(
+                UnaryExpressionNodeProperties.OPERATOR))
+            return;
+        this.populatedProperties.add(UnaryExpressionNodeProperties.OPERATOR);
+        this.operator = this.getBackingNode().getOperator();
     }
     
     /**
@@ -73,7 +118,7 @@ public class UnaryExpressionNodeImpl extends NodeImpl implements UnaryExpression
      */
     public ExpressionNode getExpression()
     {
-        getAttribute(LocalAttribute.EXPRESSION).recordAccess(ReadWriteAttribute.AccessType.READ);
+        checkExpressionWrapped();
         if (this.expression == null)
         {
             return null;
@@ -89,7 +134,7 @@ public class UnaryExpressionNodeImpl extends NodeImpl implements UnaryExpression
      */
     public NodeUnion<? extends ExpressionNode> getUnionForExpression()
     {
-        getAttribute(LocalAttribute.EXPRESSION).recordAccess(ReadWriteAttribute.AccessType.READ);
+        checkExpressionWrapped();
         if (this.expression == null)
         {
             this.expression = new NormalNodeUnion<ExpressionNode>(null);
@@ -103,24 +148,8 @@ public class UnaryExpressionNodeImpl extends NodeImpl implements UnaryExpression
      */
     public void setExpression(ExpressionNode expression)
     {
-            setExpression(expression, true);
-            getManager().notifyChange(this);
-    }
-    
-    private void setExpression(ExpressionNode expression, boolean checkPermissions)
-    {
-        if (checkPermissions)
-        {
-            getManager().assertMutatable(this);
-            getAttribute(LocalAttribute.EXPRESSION).recordAccess(ReadWriteAttribute.AccessType.WRITE);
-        }
-        
-        if (this.expression != null)
-        {
-            setAsChild(this.expression.getNodeValue(), false);
-        }
-        this.expression = new NormalNodeUnion<ExpressionNode>(expression);
-        setAsChild(expression, true);
+        checkExpressionWrapped();
+        this.setUnionForExpression(new NormalNodeUnion<ExpressionNode>(expression));
     }
     
     /**
@@ -129,18 +158,15 @@ public class UnaryExpressionNodeImpl extends NodeImpl implements UnaryExpression
      */
     public void setUnionForExpression(NodeUnion<? extends ExpressionNode> expression)
     {
-            setUnionForExpression(expression, true);
-            getManager().notifyChange(this);
+        checkExpressionWrapped();
+        this.getManager().assertMutatable(this);
+        this.doSetExpression(expression);
+        if (this.getManager().isRecordingEdits())
+            super.recordEdit(new UnaryExpressionNodeSetExpressionPropertyEditScriptElementImpl(this.getManager().getCurrentMetaprogramId(), this.getUid(), expression.getNodeValue() == null ? null : expression.getNodeValue().getUid()));
     }
     
-    private void setUnionForExpression(NodeUnion<? extends ExpressionNode> expression, boolean checkPermissions)
+    private void doSetExpression(NodeUnion<? extends ExpressionNode> expression)
     {
-        if (checkPermissions)
-        {
-            getManager().assertMutatable(this);
-            getAttribute(LocalAttribute.EXPRESSION).recordAccess(ReadWriteAttribute.AccessType.WRITE);
-        }
-        
         if (expression == null)
         {
             expression = new NormalNodeUnion<ExpressionNode>(null);
@@ -159,7 +185,7 @@ public class UnaryExpressionNodeImpl extends NodeImpl implements UnaryExpression
      */
     public UnaryOperator getOperator()
     {
-        getAttribute(LocalAttribute.OPERATOR).recordAccess(ReadWriteAttribute.AccessType.READ);
+        checkOperatorWrapped();
         return this.operator;
     }
     
@@ -169,18 +195,15 @@ public class UnaryExpressionNodeImpl extends NodeImpl implements UnaryExpression
      */
     public void setOperator(UnaryOperator operator)
     {
-            setOperator(operator, true);
-            getManager().notifyChange(this);
+        checkOperatorWrapped();
+        this.getManager().assertMutatable(this);
+        this.doSetOperator(operator);
+        if (this.getManager().isRecordingEdits())
+            super.recordEdit(new UnaryExpressionNodeSetOperatorPropertyEditScriptElementImpl(this.getManager().getCurrentMetaprogramId(), this.getUid(), operator));
     }
     
-    private void setOperator(UnaryOperator operator, boolean checkPermissions)
+    private void doSetOperator(UnaryOperator operator)
     {
-        if (checkPermissions)
-        {
-            getManager().assertMutatable(this);
-            getAttribute(LocalAttribute.OPERATOR).recordAccess(ReadWriteAttribute.AccessType.WRITE);
-        }
-        
         this.operator = operator;
     }
     
@@ -195,9 +218,9 @@ public class UnaryExpressionNodeImpl extends NodeImpl implements UnaryExpression
     protected void receiveToChildren(BsjNodeVisitor visitor)
     {
         super.receiveToChildren(visitor);
-        if (this.expression.getNodeValue() != null)
+        if (this.getUnionForExpression().getNodeValue() != null)
         {
-            this.expression.getNodeValue().receive(visitor);
+            this.getUnionForExpression().getNodeValue().receive(visitor);
         }
         Iterator<? extends Node> extras = getHiddenVisitorChildren();
         if (extras != null)
@@ -220,9 +243,9 @@ public class UnaryExpressionNodeImpl extends NodeImpl implements UnaryExpression
     protected void receiveTypedToChildren(BsjTypedNodeVisitor visitor)
     {
         super.receiveTypedToChildren(visitor);
-        if (this.expression.getNodeValue() != null)
+        if (this.getUnionForExpression().getNodeValue() != null)
         {
-            this.expression.getNodeValue().receiveTyped(visitor);
+            this.getUnionForExpression().getNodeValue().receiveTyped(visitor);
         }
         Iterator<? extends Node> extras = getHiddenVisitorChildren();
         if (extras != null)
@@ -282,6 +305,8 @@ public class UnaryExpressionNodeImpl extends NodeImpl implements UnaryExpression
     {
         StringBuilder sb = new StringBuilder();
         sb.append(this.getClass().getSimpleName());
+        sb.append('#');
+        sb.append(this.getUid());
         sb.append('[');
         sb.append("expression=");
         sb.append(this.getUnionForExpression().getNodeValue() == null? "null" : this.getUnionForExpression().getNodeValue().getClass().getSimpleName());

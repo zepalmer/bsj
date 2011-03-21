@@ -1,10 +1,12 @@
 package edu.jhu.cs.bsj.compiler.impl.ast.node;
 
+import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.EnumMap;
+import java.util.Collections;
+import java.util.EnumSet;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
+import java.util.Set;
 
 import javax.annotation.Generated;
 
@@ -20,9 +22,10 @@ import edu.jhu.cs.bsj.compiler.ast.node.NameNode;
 import edu.jhu.cs.bsj.compiler.ast.node.Node;
 import edu.jhu.cs.bsj.compiler.ast.node.QualifiedNameNode;
 import edu.jhu.cs.bsj.compiler.impl.ast.BsjNodeManager;
+import edu.jhu.cs.bsj.compiler.impl.ast.BsjNodeProxyFactory;
 import edu.jhu.cs.bsj.compiler.impl.ast.NormalNodeUnion;
-import edu.jhu.cs.bsj.compiler.impl.ast.attribute.AttributeName;
-import edu.jhu.cs.bsj.compiler.impl.ast.attribute.ReadWriteAttribute;
+import edu.jhu.cs.bsj.compiler.impl.ast.delta.property.QualifiedNameNodeSetBasePropertyEditScriptElementImpl;
+import edu.jhu.cs.bsj.compiler.impl.ast.properties.QualifiedNameNodeProperties;
 
 @Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
 public class QualifiedNameNodeImpl extends NameNodeImpl implements QualifiedNameNode
@@ -30,22 +33,11 @@ public class QualifiedNameNodeImpl extends NameNodeImpl implements QualifiedName
     /** The name being qualified. */
     private NodeUnion<? extends NameNode> base;
     
-    private Map<LocalAttribute,ReadWriteAttribute> localAttributes = new EnumMap<LocalAttribute,ReadWriteAttribute>(LocalAttribute.class);
-    private ReadWriteAttribute getAttribute(LocalAttribute attributeName)
-    {
-        ReadWriteAttribute attribute = localAttributes.get(attributeName);
-        if (attribute == null)
-        {
-            attribute = new ReadWriteAttribute(QualifiedNameNodeImpl.this, attributeName);
-            localAttributes.put(attributeName, attribute);
-        }
-        return attribute;
-    }
-    private static enum LocalAttribute implements AttributeName
-    {
-        /** Attribute identifier for the base property. */
-        BASE,
-    }
+    /**
+     * A set of those properties which have been populated from the backing node.
+     * This field is <code>null</code> if <tt>backingNode</tt> is <code>null</code>.
+     */
+    private Set<QualifiedNameNodeProperties> populatedProperties;
     
     /** General constructor. */
     public QualifiedNameNodeImpl(
@@ -57,7 +49,49 @@ public class QualifiedNameNodeImpl extends NameNodeImpl implements QualifiedName
             boolean binary)
     {
         super(identifier, startLocation, stopLocation, manager, binary);
-        setUnionForBase(base, false);
+        this.populatedProperties = null;
+        doSetBase(base);
+    }
+    
+    /** Proxy constructor. */
+    public QualifiedNameNodeImpl(BsjNodeManager manager, BsjNodeProxyFactory proxyFactory, QualifiedNameNode backingNode)
+    {
+        super(manager, proxyFactory, backingNode);
+        this.populatedProperties = EnumSet.noneOf(QualifiedNameNodeProperties.class);
+    }
+    
+    /** Retrieves this node's backing node (if one exists). */
+    protected QualifiedNameNode getBackingNode()
+    {
+        return (QualifiedNameNode)super.getBackingNode();
+    }
+    
+    /**
+     * Ensures that the base value has been populated from proxy.
+     * If this node is not backed by a proxy or if the value has already been
+     * populated, this method does nothing.
+     */
+    private void checkBaseWrapped()
+    {
+        if (this.populatedProperties == null || this.populatedProperties.contains(
+                QualifiedNameNodeProperties.BASE))
+            return;
+        this.populatedProperties.add(QualifiedNameNodeProperties.BASE);
+        NodeUnion<? extends NameNode> union = this.getBackingNode().getUnionForBase();
+        switch (union.getType())
+        {
+            case NORMAL:
+                union = this.getProxyFactory().makeNormalNodeUnion(
+                        this.getProxyFactory().makeNameNode(union.getNormalNode()));
+                break;
+            case SPLICE:
+                union = this.getProxyFactory().makeSpliceNodeUnion(
+                        this.getProxyFactory().makeSpliceNode(union.getSpliceNode()));
+                break;
+            default:
+                throw new IllegalStateException("Unrecognized union type: " + union.getType());
+        }
+        this.base = union;
     }
     
     /**
@@ -67,7 +101,7 @@ public class QualifiedNameNodeImpl extends NameNodeImpl implements QualifiedName
      */
     public NameNode getBase()
     {
-        getAttribute(LocalAttribute.BASE).recordAccess(ReadWriteAttribute.AccessType.READ);
+        checkBaseWrapped();
         if (this.base == null)
         {
             return null;
@@ -83,7 +117,7 @@ public class QualifiedNameNodeImpl extends NameNodeImpl implements QualifiedName
      */
     public NodeUnion<? extends NameNode> getUnionForBase()
     {
-        getAttribute(LocalAttribute.BASE).recordAccess(ReadWriteAttribute.AccessType.READ);
+        checkBaseWrapped();
         if (this.base == null)
         {
             this.base = new NormalNodeUnion<NameNode>(null);
@@ -97,24 +131,8 @@ public class QualifiedNameNodeImpl extends NameNodeImpl implements QualifiedName
      */
     public void setBase(NameNode base)
     {
-            setBase(base, true);
-            getManager().notifyChange(this);
-    }
-    
-    private void setBase(NameNode base, boolean checkPermissions)
-    {
-        if (checkPermissions)
-        {
-            getManager().assertMutatable(this);
-            getAttribute(LocalAttribute.BASE).recordAccess(ReadWriteAttribute.AccessType.WRITE);
-        }
-        
-        if (this.base != null)
-        {
-            setAsChild(this.base.getNodeValue(), false);
-        }
-        this.base = new NormalNodeUnion<NameNode>(base);
-        setAsChild(base, true);
+        checkBaseWrapped();
+        this.setUnionForBase(new NormalNodeUnion<NameNode>(base));
     }
     
     /**
@@ -123,18 +141,15 @@ public class QualifiedNameNodeImpl extends NameNodeImpl implements QualifiedName
      */
     public void setUnionForBase(NodeUnion<? extends NameNode> base)
     {
-            setUnionForBase(base, true);
-            getManager().notifyChange(this);
+        checkBaseWrapped();
+        this.getManager().assertMutatable(this);
+        this.doSetBase(base);
+        if (this.getManager().isRecordingEdits())
+            super.recordEdit(new QualifiedNameNodeSetBasePropertyEditScriptElementImpl(this.getManager().getCurrentMetaprogramId(), this.getUid(), base.getNodeValue() == null ? null : base.getNodeValue().getUid()));
     }
     
-    private void setUnionForBase(NodeUnion<? extends NameNode> base, boolean checkPermissions)
+    private void doSetBase(NodeUnion<? extends NameNode> base)
     {
-        if (checkPermissions)
-        {
-            getManager().assertMutatable(this);
-            getAttribute(LocalAttribute.BASE).recordAccess(ReadWriteAttribute.AccessType.WRITE);
-        }
-        
         if (base == null)
         {
             base = new NormalNodeUnion<NameNode>(null);
@@ -158,9 +173,9 @@ public class QualifiedNameNodeImpl extends NameNodeImpl implements QualifiedName
     protected void receiveToChildren(BsjNodeVisitor visitor)
     {
         super.receiveToChildren(visitor);
-        if (this.base.getNodeValue() != null)
+        if (this.getUnionForBase().getNodeValue() != null)
         {
-            this.base.getNodeValue().receive(visitor);
+            this.getUnionForBase().getNodeValue().receive(visitor);
         }
         Iterator<? extends Node> extras = getHiddenVisitorChildren();
         if (extras != null)
@@ -183,9 +198,9 @@ public class QualifiedNameNodeImpl extends NameNodeImpl implements QualifiedName
     protected void receiveTypedToChildren(BsjTypedNodeVisitor visitor)
     {
         super.receiveTypedToChildren(visitor);
-        if (this.base.getNodeValue() != null)
+        if (this.getUnionForBase().getNodeValue() != null)
         {
-            this.base.getNodeValue().receiveTyped(visitor);
+            this.getUnionForBase().getNodeValue().receiveTyped(visitor);
         }
         Iterator<? extends Node> extras = getHiddenVisitorChildren();
         if (extras != null)
@@ -395,4 +410,23 @@ public class QualifiedNameNodeImpl extends NameNodeImpl implements QualifiedName
 	{
 		return getBase().getNameString() + "." + getIdentifier().getIdentifier();
 	}
+
+    public List<String> getNameComponents()
+    {
+        List<String> list = new ArrayList<String>();
+        NameNode n = this;
+        while (n != null)
+        {
+            list.add(n.getIdentifier().getIdentifier());
+            if (n instanceof QualifiedNameNode)
+            {
+                n = ((QualifiedNameNode)n).getBase();
+            } else
+            {
+                n = null;
+            }
+        }
+        Collections.reverse(list);
+        return list;
+    }
 }

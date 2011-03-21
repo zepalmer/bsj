@@ -1,6 +1,7 @@
 package edu.jhu.cs.bsj.compiler.ast.node;
 
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 
 import javax.annotation.Generated;
@@ -53,10 +54,29 @@ public interface PackageNode extends Node
     /**
      * Retrieves a subpackage of this package.
      * 
-     * @param name The simple name of the subpackage to retrieve.
-     * @return The subpackage. If it does not exist, a package node is created for this subpackage and returned.
+     * @param name The name of the subpackage to retrieve.
+     * @return The subpackage. If it does not exist, a package node is created.
      */
     public PackageNode getSubpackage(String name);
+
+    /**
+     * Retrieves a subpackage of this package.
+     * 
+     * @param nameComponents The components of the name of the subpackage to retrieve. Each component identifies a
+     *            single simple name; for instance, <tt>["java","util","concurrent"]</tt> would refer to
+     *            <tt>java.util.concurrent</tt>.
+     * @return The subpackage. If it does not exist, a package node is created.
+     */
+    public PackageNode getSubpackage(List<String> nameComponents);
+
+    /**
+     * Retrieves a subpackage of this package by qualified name. This method is provided for convenience and is
+     * equivalent to calling {@link #getSubpackage} compositionally.
+     * 
+     * @param name The qualified name of the subpackage to retrieve.
+     * @return The resulting package node or <code>null</code> if no such node exists.
+     */
+    public PackageNode getSubpackage(NameNode name);
 
     /**
      * Adds a new compilation unit to this node. This compilation unit cannot already be a member of another package.
@@ -116,25 +136,6 @@ public interface PackageNode extends Node
      * @return A recursive iterator over all loaded compilation units.
      */
     public Iterator<CompilationUnitNode> getRecursiveCompilationUnitIterator();
-
-    /**
-     * Retrieves a subpackage of this package by qualified name. This method is provided for convenience and is
-     * equivalent to calling {@link #getSubpackage} compositionally.
-     * 
-     * @param name The qualified name of the subpackage to retrieve. The name components are separated by '.'
-     *            characters.
-     * @return The resulting package node or <code>null</code> if no such node exists.
-     */
-    public PackageNode getSubpackageByQualifiedName(String name);
-
-    /**
-     * Retrieves a subpackage of this package by qualified name. This method is provided for convenience and is
-     * equivalent to calling {@link #getSubpackage} compositionally.
-     * 
-     * @param name The qualified name of the subpackage to retrieve.
-     * @return The resulting package node or <code>null</code> if no such node exists.
-     */
-    public PackageNode getSubpackageByQualifiedName(NameNode name);
 
     /**
      * Retrieves a type declaration for a top level type in this package.

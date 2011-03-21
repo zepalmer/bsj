@@ -1,0 +1,7 @@
+[:
+	#depends #weak foo;
+:]
+
+public class WeakDependencySuccess
+{
+}

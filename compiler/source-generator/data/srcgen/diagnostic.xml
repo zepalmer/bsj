@@ -130,7 +130,7 @@
                     A diagnostic representing a missing token.
                 ]]></doc>
             </diagnostic>
-            
+
             <diagnostic name="RuleParseFailureDiagnostic" code="bsj.parser.error.ruleParseFailure"
                 super="BsjParserDiagnostic">
                 <prop name="endSource" type="BsjSourceLocation" desc="the location where the parse failure stopped" />
@@ -476,43 +476,29 @@
                 ]]></doc>
             </diagnostic>
 
-            <diagnostic name="MetaprogramAttributeConflictDiagnostic" super="MetaprogramConflictDiagnostic"
-                superTypeArg="MetaprogramAttributeConflictException" code="bsj.compiler.metaprogram.failure.conflict.attribute">
+            <diagnostic name="MetaprogramPropertyConflictDiagnostic" super="MetaprogramConflictDiagnostic"
+                superTypeArg="MetaprogramPropertyConflictException" code="bsj.compiler.metaprogram.failure.conflict.property">
                 <exception />
-                <prop name="attributeName" type="String" desc="the name of the attribute in conflict" />
-                <prop name="firstAccess" type="String" desc="a description of the access performed by the first metaprogram" />
-                <prop name="secondAccess" type="String" desc="a description of the access performed by the second metaprogram" />
+                <prop name="attributeName" type="String" desc="the name of the property in conflict" />
                 <doc><![CDATA[
-                    Indicates that two metaprograms are in conflict because of the manner in which they accessed the same
-                    attribute of a given node.
+                    Indicates that two metaprograms are in conflict because they performed write operations to the same
+                    property of the same node and neither is dependent upon the other.
                 ]]></doc>
             </diagnostic>
 
             <diagnostic name="MetaprogramListConflictDiagnostic" super="MetaprogramConflictDiagnostic"
-                superTypeArg="MetaprogramListConflictException" code="bsj.compiler.metaprogram.failure.conflict.list">
+                superTypeArg="MetaprogramListConflictException" typeParam="N extends Node"
+                code="bsj.compiler.metaprogram.failure.conflict.list">
                 <exception />
-                <prop name="conflicts" type="Set&lt;? extends ConflictKnowledge&lt;?&gt;&gt;" desc="the conflicts which were detected" />
-                <messageProp name="conflictKnowledge"
-                    expression="&quot;    &quot; + DiagnosticMessageUtilities.getConflictsDescription(conflicts,locale).replaceAll(&quot;\n&quot;, &quot;\n    &quot;).replaceAll(&quot;\n +$&quot;, &quot;\n&quot;)" />
+                <prop name="list" type="ListNode" typeArg="N" desc="the list over which the metaprograms conflicted" />
+                <prop name="reference" type="N"
+                    desc="the node which both metaprograms used as a reference point (or null for beginning or end)" />
+                <prop name="after" type="boolean"
+                    desc="true if the nodes added after the reference point; false if they added before" />
+                <prop name="element" type="N" desc="the node added by the first metaprogram" />
                 <doc><![CDATA[
-                    Indicates that two metaprograms are in conflict because of the manner in which they accessed the same
-                    {@link ListNode}.  Note that this diagnostic has the ability to represent multiple failures
-                    detected in a closure.  As a result, the anchors provided are merely advisory and represent one
-                    of the possible conflicts contained within.
-                ]]></doc>
-            </diagnostic>
-
-            <diagnostic name="MetaprogramPackageConflictDiagnostic" super="MetaprogramConflictDiagnostic"
-                superTypeArg="MetaprogramPackageConflictException" code="bsj.compiler.metaprogram.failure.conflict.package">
-                <exception />
-                <prop name="conflicts" type="Set&lt;? extends edu.jhu.cs.bsj.compiler.ast.conflict.knowledge.ConflictKnowledge&gt;" desc="the conflicts which were detected" />
-                <messageProp name="conflictKnowledge"
-                    expression="&quot;    &quot; + DiagnosticMessageUtilities.getDescriptionForConflicts(conflicts,locale).replaceAll(&quot;\n&quot;, &quot;\n    &quot;).replaceAll(&quot;\n +$&quot;, &quot;\n&quot;)" />
-                <doc><![CDATA[
-                    Indicates that two metaprograms are in conflict because of the manner in which they accessed the same
-                    {@link ListNode}.  Note that this diagnostic has the ability to represent multiple failures
-                    detected in a closure.  As a result, the anchors provided are merely advisory and represent one
-                    of the possible conflicts contained within.
+                    Indicates that two metaprograms are in conflict because they attempted to insert different
+                    order-dependent elements into the same position in a list.
                 ]]></doc>
             </diagnostic>
 
@@ -541,36 +527,38 @@
                     A diagnostic which acts as a supertype for all BSJ type checking diagnostics.
                 ]]></doc>
             </diagnostic>
-            
+
             <diagnostic name="NamespaceLookupFailureDiagnostic" super="BsjTypeCheckerDiagnostic">
-                <prop name="name" type="String" desc="the name of the symbol which could not be resolved or was ambiguous"/>
-                <prop name="symbolType" type="SymbolType" desc="the type of symbol that could not be resolved"/>
+                <prop name="name" type="String"
+                    desc="the name of the symbol which could not be resolved or was ambiguous" />
+                <prop name="symbolType" type="SymbolType" desc="the type of symbol that could not be resolved" />
                 <doc><![CDATA[
                     Indicates that a namespace lookup failed during BSJ type checking.  This means that some name
                     could not be resolved to a unique symbol (type, method, or variable).
                 ]]></doc>
             </diagnostic>
-            
-            <diagnostic name="UnknownSymbolNameDiagnostic" super="NamespaceLookupFailureDiagnostic" code="bsj.typechecker.name.unknown">
+
+            <diagnostic name="UnknownSymbolNameDiagnostic" super="NamespaceLookupFailureDiagnostic"
+                code="bsj.typechecker.name.unknown">
                 <doc><![CDATA[
                     Indicates that a name could not be resolved because no corresponding declaration could be found
                     in scope.
                 ]]></doc>
             </diagnostic>
-            
+
             <diagnostic name="AmbiguousSymbolNameDiagnostic" super="NamespaceLookupFailureDiagnostic"
                 code="bsj.typechecker.name.ambiguous">
-                <prop name="examples" type="Collection&lt;? extends Node&gt;" desc="the declarations which caused the ambiguity"/>
+                <prop name="examples" type="Collection&lt;? extends Node&gt;" desc="the declarations which caused the ambiguity" />
                 <doc><![CDATA[
                     Indicates that a symbol name could not be resolved because at least two different symbols of the
                     same symbol type applied.
                 ]]></doc>
             </diagnostic>
-            
+
             <diagnostic name="WrongPackageDiagnostic" super="BsjTypeCheckerDiagnostic"
                 code="bsj.typechecker.incorrectPackageDeclaration">
-                <prop name="expectedName" type="String" desc="the name of the expected package declaration"/>
-                <prop name="actualName" type="String" desc="the name of the package declaration which was found"/>
+                <prop name="expectedName" type="String" desc="the name of the expected package declaration" />
+                <prop name="actualName" type="String" desc="the name of the package declaration which was found" />
                 <doc><![CDATA[
                     A diagnostic indicating that a compilation unit does not contain a correct package declaration.
                 ]]></doc>

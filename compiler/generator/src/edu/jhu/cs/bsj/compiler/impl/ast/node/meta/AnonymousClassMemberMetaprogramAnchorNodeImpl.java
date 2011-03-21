@@ -19,6 +19,7 @@ import edu.jhu.cs.bsj.compiler.ast.node.Node;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.AnonymousClassMemberMetaprogramAnchorNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramNode;
 import edu.jhu.cs.bsj.compiler.impl.ast.BsjNodeManager;
+import edu.jhu.cs.bsj.compiler.impl.ast.BsjNodeProxyFactory;
 
 @Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
 public class AnonymousClassMemberMetaprogramAnchorNodeImpl extends ExplicitMetaprogramAnchorNodeImpl<AnonymousClassMemberNode> implements AnonymousClassMemberMetaprogramAnchorNode
@@ -32,6 +33,18 @@ public class AnonymousClassMemberMetaprogramAnchorNodeImpl extends ExplicitMetap
             boolean binary)
     {
         super(metaprogram, startLocation, stopLocation, manager, binary);
+    }
+    
+    /** Proxy constructor. */
+    public AnonymousClassMemberMetaprogramAnchorNodeImpl(BsjNodeManager manager, BsjNodeProxyFactory proxyFactory, AnonymousClassMemberMetaprogramAnchorNode backingNode)
+    {
+        super(manager, proxyFactory, backingNode);
+    }
+    
+    /** Retrieves this node's backing node (if one exists). */
+    protected AnonymousClassMemberMetaprogramAnchorNode getBackingNode()
+    {
+        return (AnonymousClassMemberMetaprogramAnchorNode)super.getBackingNode();
     }
     
     /**
@@ -135,6 +148,8 @@ public class AnonymousClassMemberMetaprogramAnchorNodeImpl extends ExplicitMetap
     {
         StringBuilder sb = new StringBuilder();
         sb.append(this.getClass().getSimpleName());
+        sb.append('#');
+        sb.append(this.getUid());
         sb.append('[');
         sb.append("metaprogram=");
         sb.append(this.getUnionForMetaprogram().getNodeValue() == null? "null" : this.getUnionForMetaprogram().getNodeValue().getClass().getSimpleName());
@@ -230,8 +245,8 @@ public class AnonymousClassMemberMetaprogramAnchorNodeImpl extends ExplicitMetap
         return false;
     }
     
-	public NoOperationNode getDefaultReplacement(BsjNodeFactory factory)
-	{
-		return factory.makeNoOperationNode();
-	}
+    public NoOperationNode getDefaultReplacement(BsjNodeFactory factory)
+    {
+        return factory.makeNoOperationNode();
+    }
 }

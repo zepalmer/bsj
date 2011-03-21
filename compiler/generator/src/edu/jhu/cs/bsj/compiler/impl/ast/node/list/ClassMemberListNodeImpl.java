@@ -17,6 +17,7 @@ import edu.jhu.cs.bsj.compiler.ast.node.ClassMemberNode;
 import edu.jhu.cs.bsj.compiler.ast.node.Node;
 import edu.jhu.cs.bsj.compiler.ast.node.list.ClassMemberListNode;
 import edu.jhu.cs.bsj.compiler.impl.ast.BsjNodeManager;
+import edu.jhu.cs.bsj.compiler.impl.ast.BsjNodeProxyFactory;
 
 @Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
 public class ClassMemberListNodeImpl extends ListNodeImpl<ClassMemberNode> implements ClassMemberListNode
@@ -30,6 +31,18 @@ public class ClassMemberListNodeImpl extends ListNodeImpl<ClassMemberNode> imple
             boolean binary)
     {
         super(children, startLocation, stopLocation, manager, binary);
+    }
+    
+    /** Proxy constructor. */
+    public ClassMemberListNodeImpl(BsjNodeManager manager, BsjNodeProxyFactory proxyFactory, ClassMemberListNode backingNode)
+    {
+        super(manager, proxyFactory, backingNode);
+    }
+    
+    /** Retrieves this node's backing node (if one exists). */
+    protected ClassMemberListNode getBackingNode()
+    {
+        return (ClassMemberListNode)super.getBackingNode();
     }
     
     /**
@@ -136,6 +149,8 @@ public class ClassMemberListNodeImpl extends ListNodeImpl<ClassMemberNode> imple
     {
         StringBuilder sb = new StringBuilder();
         sb.append(this.getClass().getSimpleName());
+        sb.append('#');
+        sb.append(this.getUid());
         sb.append('[');
         sb.append("children=");
         sb.append(this.getUnionForChildren() == null? "null" : this.getUnionForChildren().getClass().getSimpleName());
@@ -227,6 +242,14 @@ public class ClassMemberListNodeImpl extends ListNodeImpl<ClassMemberNode> imple
     public Class<ClassMemberNode> getElementType()
     {
         return ClassMemberNode.class;
+    }
+    
+    /**
+     * Wraps an element of this list's type.
+     */
+    protected ClassMemberNode wrapElement(ClassMemberNode element)
+    {
+        return getProxyFactory().makeClassMemberNode(element);
     }
     
 }

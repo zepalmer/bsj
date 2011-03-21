@@ -66,7 +66,7 @@ public class PackageOrTypeNameCategorizer
 				PackageNode rootPackage = name.getRootPackage();
 				if (rootPackage != null)
 				{
-					PackageNode packageNode = rootPackage.getSubpackageByQualifiedName(qualifiedNameNode.getBase());
+					PackageNode packageNode = rootPackage.getSubpackage(qualifiedNameNode.getBase());
 					if (packageNode != null)
 					{
 						if (packageNode.getTopLevelTypeDeclaration(name.getIdentifier().getIdentifier(), info) != null)

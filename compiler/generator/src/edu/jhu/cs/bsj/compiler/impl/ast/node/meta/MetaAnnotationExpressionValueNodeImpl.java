@@ -1,10 +1,10 @@
 package edu.jhu.cs.bsj.compiler.impl.ast.node.meta;
 
 import java.util.Arrays;
-import java.util.EnumMap;
+import java.util.EnumSet;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
+import java.util.Set;
 
 import javax.annotation.Generated;
 
@@ -19,10 +19,11 @@ import edu.jhu.cs.bsj.compiler.ast.node.Node;
 import edu.jhu.cs.bsj.compiler.ast.node.NonAssignmentExpressionNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaAnnotationExpressionValueNode;
 import edu.jhu.cs.bsj.compiler.impl.ast.BsjNodeManager;
+import edu.jhu.cs.bsj.compiler.impl.ast.BsjNodeProxyFactory;
 import edu.jhu.cs.bsj.compiler.impl.ast.NormalNodeUnion;
-import edu.jhu.cs.bsj.compiler.impl.ast.attribute.AttributeName;
-import edu.jhu.cs.bsj.compiler.impl.ast.attribute.ReadWriteAttribute;
+import edu.jhu.cs.bsj.compiler.impl.ast.delta.property.MetaAnnotationExpressionValueNodeSetExpressionPropertyEditScriptElementImpl;
 import edu.jhu.cs.bsj.compiler.impl.ast.node.NodeImpl;
+import edu.jhu.cs.bsj.compiler.impl.ast.properties.MetaAnnotationExpressionValueNodeProperties;
 
 @Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
 public class MetaAnnotationExpressionValueNodeImpl extends NodeImpl implements MetaAnnotationExpressionValueNode
@@ -30,22 +31,11 @@ public class MetaAnnotationExpressionValueNodeImpl extends NodeImpl implements M
     /** The expression. */
     private NodeUnion<? extends NonAssignmentExpressionNode> expression;
     
-    private Map<LocalAttribute,ReadWriteAttribute> localAttributes = new EnumMap<LocalAttribute,ReadWriteAttribute>(LocalAttribute.class);
-    private ReadWriteAttribute getAttribute(LocalAttribute attributeName)
-    {
-        ReadWriteAttribute attribute = localAttributes.get(attributeName);
-        if (attribute == null)
-        {
-            attribute = new ReadWriteAttribute(MetaAnnotationExpressionValueNodeImpl.this, attributeName);
-            localAttributes.put(attributeName, attribute);
-        }
-        return attribute;
-    }
-    private static enum LocalAttribute implements AttributeName
-    {
-        /** Attribute identifier for the expression property. */
-        EXPRESSION,
-    }
+    /**
+     * A set of those properties which have been populated from the backing node.
+     * This field is <code>null</code> if <tt>backingNode</tt> is <code>null</code>.
+     */
+    private Set<MetaAnnotationExpressionValueNodeProperties> populatedProperties;
     
     /** General constructor. */
     public MetaAnnotationExpressionValueNodeImpl(
@@ -56,7 +46,49 @@ public class MetaAnnotationExpressionValueNodeImpl extends NodeImpl implements M
             boolean binary)
     {
         super(startLocation, stopLocation, manager, binary);
-        setUnionForExpression(expression, false);
+        this.populatedProperties = null;
+        doSetExpression(expression);
+    }
+    
+    /** Proxy constructor. */
+    public MetaAnnotationExpressionValueNodeImpl(BsjNodeManager manager, BsjNodeProxyFactory proxyFactory, MetaAnnotationExpressionValueNode backingNode)
+    {
+        super(manager, proxyFactory, backingNode);
+        this.populatedProperties = EnumSet.noneOf(MetaAnnotationExpressionValueNodeProperties.class);
+    }
+    
+    /** Retrieves this node's backing node (if one exists). */
+    protected MetaAnnotationExpressionValueNode getBackingNode()
+    {
+        return (MetaAnnotationExpressionValueNode)super.getBackingNode();
+    }
+    
+    /**
+     * Ensures that the expression value has been populated from proxy.
+     * If this node is not backed by a proxy or if the value has already been
+     * populated, this method does nothing.
+     */
+    private void checkExpressionWrapped()
+    {
+        if (this.populatedProperties == null || this.populatedProperties.contains(
+                MetaAnnotationExpressionValueNodeProperties.EXPRESSION))
+            return;
+        this.populatedProperties.add(MetaAnnotationExpressionValueNodeProperties.EXPRESSION);
+        NodeUnion<? extends NonAssignmentExpressionNode> union = this.getBackingNode().getUnionForExpression();
+        switch (union.getType())
+        {
+            case NORMAL:
+                union = this.getProxyFactory().makeNormalNodeUnion(
+                        this.getProxyFactory().makeNonAssignmentExpressionNode(union.getNormalNode()));
+                break;
+            case SPLICE:
+                union = this.getProxyFactory().makeSpliceNodeUnion(
+                        this.getProxyFactory().makeSpliceNode(union.getSpliceNode()));
+                break;
+            default:
+                throw new IllegalStateException("Unrecognized union type: " + union.getType());
+        }
+        this.expression = union;
     }
     
     /**
@@ -66,7 +98,7 @@ public class MetaAnnotationExpressionValueNodeImpl extends NodeImpl implements M
      */
     public NonAssignmentExpressionNode getExpression()
     {
-        getAttribute(LocalAttribute.EXPRESSION).recordAccess(ReadWriteAttribute.AccessType.READ);
+        checkExpressionWrapped();
         if (this.expression == null)
         {
             return null;
@@ -82,7 +114,7 @@ public class MetaAnnotationExpressionValueNodeImpl extends NodeImpl implements M
      */
     public NodeUnion<? extends NonAssignmentExpressionNode> getUnionForExpression()
     {
-        getAttribute(LocalAttribute.EXPRESSION).recordAccess(ReadWriteAttribute.AccessType.READ);
+        checkExpressionWrapped();
         if (this.expression == null)
         {
             this.expression = new NormalNodeUnion<NonAssignmentExpressionNode>(null);
@@ -96,24 +128,8 @@ public class MetaAnnotationExpressionValueNodeImpl extends NodeImpl implements M
      */
     public void setExpression(NonAssignmentExpressionNode expression)
     {
-            setExpression(expression, true);
-            getManager().notifyChange(this);
-    }
-    
-    private void setExpression(NonAssignmentExpressionNode expression, boolean checkPermissions)
-    {
-        if (checkPermissions)
-        {
-            getManager().assertMutatable(this);
-            getAttribute(LocalAttribute.EXPRESSION).recordAccess(ReadWriteAttribute.AccessType.WRITE);
-        }
-        
-        if (this.expression != null)
-        {
-            setAsChild(this.expression.getNodeValue(), false);
-        }
-        this.expression = new NormalNodeUnion<NonAssignmentExpressionNode>(expression);
-        setAsChild(expression, true);
+        checkExpressionWrapped();
+        this.setUnionForExpression(new NormalNodeUnion<NonAssignmentExpressionNode>(expression));
     }
     
     /**
@@ -122,18 +138,15 @@ public class MetaAnnotationExpressionValueNodeImpl extends NodeImpl implements M
      */
     public void setUnionForExpression(NodeUnion<? extends NonAssignmentExpressionNode> expression)
     {
-            setUnionForExpression(expression, true);
-            getManager().notifyChange(this);
+        checkExpressionWrapped();
+        this.getManager().assertMutatable(this);
+        this.doSetExpression(expression);
+        if (this.getManager().isRecordingEdits())
+            super.recordEdit(new MetaAnnotationExpressionValueNodeSetExpressionPropertyEditScriptElementImpl(this.getManager().getCurrentMetaprogramId(), this.getUid(), expression.getNodeValue() == null ? null : expression.getNodeValue().getUid()));
     }
     
-    private void setUnionForExpression(NodeUnion<? extends NonAssignmentExpressionNode> expression, boolean checkPermissions)
+    private void doSetExpression(NodeUnion<? extends NonAssignmentExpressionNode> expression)
     {
-        if (checkPermissions)
-        {
-            getManager().assertMutatable(this);
-            getAttribute(LocalAttribute.EXPRESSION).recordAccess(ReadWriteAttribute.AccessType.WRITE);
-        }
-        
         if (expression == null)
         {
             expression = new NormalNodeUnion<NonAssignmentExpressionNode>(null);
@@ -157,9 +170,9 @@ public class MetaAnnotationExpressionValueNodeImpl extends NodeImpl implements M
     protected void receiveToChildren(BsjNodeVisitor visitor)
     {
         super.receiveToChildren(visitor);
-        if (this.expression.getNodeValue() != null)
+        if (this.getUnionForExpression().getNodeValue() != null)
         {
-            this.expression.getNodeValue().receive(visitor);
+            this.getUnionForExpression().getNodeValue().receive(visitor);
         }
         Iterator<? extends Node> extras = getHiddenVisitorChildren();
         if (extras != null)
@@ -182,9 +195,9 @@ public class MetaAnnotationExpressionValueNodeImpl extends NodeImpl implements M
     protected void receiveTypedToChildren(BsjTypedNodeVisitor visitor)
     {
         super.receiveTypedToChildren(visitor);
-        if (this.expression.getNodeValue() != null)
+        if (this.getUnionForExpression().getNodeValue() != null)
         {
-            this.expression.getNodeValue().receiveTyped(visitor);
+            this.getUnionForExpression().getNodeValue().receiveTyped(visitor);
         }
         Iterator<? extends Node> extras = getHiddenVisitorChildren();
         if (extras != null)
@@ -243,6 +256,8 @@ public class MetaAnnotationExpressionValueNodeImpl extends NodeImpl implements M
     {
         StringBuilder sb = new StringBuilder();
         sb.append(this.getClass().getSimpleName());
+        sb.append('#');
+        sb.append(this.getUid());
         sb.append('[');
         sb.append("expression=");
         sb.append(this.getUnionForExpression().getNodeValue() == null? "null" : this.getUnionForExpression().getNodeValue().getClass().getSimpleName());

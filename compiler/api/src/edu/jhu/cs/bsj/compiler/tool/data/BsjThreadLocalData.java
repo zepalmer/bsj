@@ -15,6 +15,8 @@ import edu.jhu.cs.bsj.compiler.metaprogram.Context;
  * 
  * @author Zachary Palmer
  */
+// TODO: consider replacing this with language built-ins like #factory.  This would allow us to hide the thread local
+// data from the API, permitting each compiler implementation to handle this problem in its own way.
 public class BsjThreadLocalData
 {
     private static final BsjThreadLocalData INSTANCE = new BsjThreadLocalData();

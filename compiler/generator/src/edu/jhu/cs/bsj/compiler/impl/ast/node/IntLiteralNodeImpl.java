@@ -1,10 +1,10 @@
 package edu.jhu.cs.bsj.compiler.impl.ast.node;
 
 import java.util.Arrays;
-import java.util.EnumMap;
+import java.util.EnumSet;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
+import java.util.Set;
 
 import javax.annotation.Generated;
 
@@ -17,8 +17,9 @@ import edu.jhu.cs.bsj.compiler.ast.BsjTypedNodeVisitor;
 import edu.jhu.cs.bsj.compiler.ast.node.IntLiteralNode;
 import edu.jhu.cs.bsj.compiler.ast.node.Node;
 import edu.jhu.cs.bsj.compiler.impl.ast.BsjNodeManager;
-import edu.jhu.cs.bsj.compiler.impl.ast.attribute.AttributeName;
-import edu.jhu.cs.bsj.compiler.impl.ast.attribute.ReadWriteAttribute;
+import edu.jhu.cs.bsj.compiler.impl.ast.BsjNodeProxyFactory;
+import edu.jhu.cs.bsj.compiler.impl.ast.delta.property.IntLiteralNodeSetValuePropertyEditScriptElementImpl;
+import edu.jhu.cs.bsj.compiler.impl.ast.properties.IntLiteralNodeProperties;
 
 @Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
 public class IntLiteralNodeImpl extends NodeImpl implements IntLiteralNode
@@ -26,22 +27,11 @@ public class IntLiteralNodeImpl extends NodeImpl implements IntLiteralNode
     /** The literal value for this node. */
     private Integer value;
     
-    private Map<LocalAttribute,ReadWriteAttribute> localAttributes = new EnumMap<LocalAttribute,ReadWriteAttribute>(LocalAttribute.class);
-    private ReadWriteAttribute getAttribute(LocalAttribute attributeName)
-    {
-        ReadWriteAttribute attribute = localAttributes.get(attributeName);
-        if (attribute == null)
-        {
-            attribute = new ReadWriteAttribute(IntLiteralNodeImpl.this, attributeName);
-            localAttributes.put(attributeName, attribute);
-        }
-        return attribute;
-    }
-    private static enum LocalAttribute implements AttributeName
-    {
-        /** Attribute identifier for the value property. */
-        VALUE,
-    }
+    /**
+     * A set of those properties which have been populated from the backing node.
+     * This field is <code>null</code> if <tt>backingNode</tt> is <code>null</code>.
+     */
+    private Set<IntLiteralNodeProperties> populatedProperties;
     
     /** General constructor. */
     public IntLiteralNodeImpl(
@@ -52,7 +42,35 @@ public class IntLiteralNodeImpl extends NodeImpl implements IntLiteralNode
             boolean binary)
     {
         super(startLocation, stopLocation, manager, binary);
-        this.value = value;
+        this.populatedProperties = null;
+        doSetValue(value);
+    }
+    
+    /** Proxy constructor. */
+    public IntLiteralNodeImpl(BsjNodeManager manager, BsjNodeProxyFactory proxyFactory, IntLiteralNode backingNode)
+    {
+        super(manager, proxyFactory, backingNode);
+        this.populatedProperties = EnumSet.noneOf(IntLiteralNodeProperties.class);
+    }
+    
+    /** Retrieves this node's backing node (if one exists). */
+    protected IntLiteralNode getBackingNode()
+    {
+        return (IntLiteralNode)super.getBackingNode();
+    }
+    
+    /**
+     * Ensures that the value value has been populated from proxy.
+     * If this node is not backed by a proxy or if the value has already been
+     * populated, this method does nothing.
+     */
+    private void checkValueWrapped()
+    {
+        if (this.populatedProperties == null || this.populatedProperties.contains(
+                IntLiteralNodeProperties.VALUE))
+            return;
+        this.populatedProperties.add(IntLiteralNodeProperties.VALUE);
+        this.value = this.getBackingNode().getValue();
     }
     
     /**
@@ -61,7 +79,7 @@ public class IntLiteralNodeImpl extends NodeImpl implements IntLiteralNode
      */
     public Integer getValue()
     {
-        getAttribute(LocalAttribute.VALUE).recordAccess(ReadWriteAttribute.AccessType.READ);
+        checkValueWrapped();
         return this.value;
     }
     
@@ -71,18 +89,15 @@ public class IntLiteralNodeImpl extends NodeImpl implements IntLiteralNode
      */
     public void setValue(Integer value)
     {
-            setValue(value, true);
-            getManager().notifyChange(this);
+        checkValueWrapped();
+        this.getManager().assertMutatable(this);
+        this.doSetValue(value);
+        if (this.getManager().isRecordingEdits())
+            super.recordEdit(new IntLiteralNodeSetValuePropertyEditScriptElementImpl(this.getManager().getCurrentMetaprogramId(), this.getUid(), value));
     }
     
-    private void setValue(Integer value, boolean checkPermissions)
+    private void doSetValue(Integer value)
     {
-        if (checkPermissions)
-        {
-            getManager().assertMutatable(this);
-            getAttribute(LocalAttribute.VALUE).recordAccess(ReadWriteAttribute.AccessType.WRITE);
-        }
-        
         this.value = value;
     }
     
@@ -175,6 +190,8 @@ public class IntLiteralNodeImpl extends NodeImpl implements IntLiteralNode
     {
         StringBuilder sb = new StringBuilder();
         sb.append(this.getClass().getSimpleName());
+        sb.append('#');
+        sb.append(this.getUid());
         sb.append('[');
         sb.append("value=");
         sb.append(String.valueOf(this.getValue()) + ":" + (this.getValue() != null ? this.getValue().getClass().getSimpleName() : "null"));

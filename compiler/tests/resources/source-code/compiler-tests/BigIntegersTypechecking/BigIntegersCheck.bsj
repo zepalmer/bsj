@@ -1,0 +1,12 @@
+#import java.math.BigInteger;
+
+import java.math.BigInteger;
+
+[:
+    Long x = 5L;
+    BigInteger a = BigInteger.valueOf(x);
+:]
+
+public class BigIntegersCheck
+{
+}

@@ -1,0 +1,14 @@
+public class PropertyConflict
+{
+    [:
+        #mode mutate;
+        ClassDeclarationNode n = context.getAnchor().<ClassDeclarationNode>getNearestAncestorOfType(ClassDeclarationNode.class);
+        n.setIdentifier(context.getFactory().makeIdentifierNode("PropertyConflict1"));
+    :]
+    
+    [:
+        #mode mutate;
+        ClassDeclarationNode n = context.getAnchor().<ClassDeclarationNode>getNearestAncestorOfType(ClassDeclarationNode.class);
+        n.setIdentifier(context.getFactory().makeIdentifierNode("PropertyConflict2"));
+    :]
+}

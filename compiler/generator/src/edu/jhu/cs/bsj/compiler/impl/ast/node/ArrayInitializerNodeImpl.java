@@ -1,10 +1,10 @@
 package edu.jhu.cs.bsj.compiler.impl.ast.node;
 
 import java.util.Arrays;
-import java.util.EnumMap;
+import java.util.EnumSet;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
+import java.util.Set;
 
 import javax.annotation.Generated;
 
@@ -19,9 +19,10 @@ import edu.jhu.cs.bsj.compiler.ast.node.ArrayInitializerNode;
 import edu.jhu.cs.bsj.compiler.ast.node.Node;
 import edu.jhu.cs.bsj.compiler.ast.node.list.VariableInitializerListNode;
 import edu.jhu.cs.bsj.compiler.impl.ast.BsjNodeManager;
+import edu.jhu.cs.bsj.compiler.impl.ast.BsjNodeProxyFactory;
 import edu.jhu.cs.bsj.compiler.impl.ast.NormalNodeUnion;
-import edu.jhu.cs.bsj.compiler.impl.ast.attribute.AttributeName;
-import edu.jhu.cs.bsj.compiler.impl.ast.attribute.ReadWriteAttribute;
+import edu.jhu.cs.bsj.compiler.impl.ast.delta.property.ArrayInitializerNodeSetInitializersPropertyEditScriptElementImpl;
+import edu.jhu.cs.bsj.compiler.impl.ast.properties.ArrayInitializerNodeProperties;
 
 @Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
 public class ArrayInitializerNodeImpl extends NodeImpl implements ArrayInitializerNode
@@ -29,22 +30,11 @@ public class ArrayInitializerNodeImpl extends NodeImpl implements ArrayInitializ
     /** The initializers for the array. */
     private NodeUnion<? extends VariableInitializerListNode> initializers;
     
-    private Map<LocalAttribute,ReadWriteAttribute> localAttributes = new EnumMap<LocalAttribute,ReadWriteAttribute>(LocalAttribute.class);
-    private ReadWriteAttribute getAttribute(LocalAttribute attributeName)
-    {
-        ReadWriteAttribute attribute = localAttributes.get(attributeName);
-        if (attribute == null)
-        {
-            attribute = new ReadWriteAttribute(ArrayInitializerNodeImpl.this, attributeName);
-            localAttributes.put(attributeName, attribute);
-        }
-        return attribute;
-    }
-    private static enum LocalAttribute implements AttributeName
-    {
-        /** Attribute identifier for the initializers property. */
-        INITIALIZERS,
-    }
+    /**
+     * A set of those properties which have been populated from the backing node.
+     * This field is <code>null</code> if <tt>backingNode</tt> is <code>null</code>.
+     */
+    private Set<ArrayInitializerNodeProperties> populatedProperties;
     
     /** General constructor. */
     public ArrayInitializerNodeImpl(
@@ -55,7 +45,49 @@ public class ArrayInitializerNodeImpl extends NodeImpl implements ArrayInitializ
             boolean binary)
     {
         super(startLocation, stopLocation, manager, binary);
-        setUnionForInitializers(initializers, false);
+        this.populatedProperties = null;
+        doSetInitializers(initializers);
+    }
+    
+    /** Proxy constructor. */
+    public ArrayInitializerNodeImpl(BsjNodeManager manager, BsjNodeProxyFactory proxyFactory, ArrayInitializerNode backingNode)
+    {
+        super(manager, proxyFactory, backingNode);
+        this.populatedProperties = EnumSet.noneOf(ArrayInitializerNodeProperties.class);
+    }
+    
+    /** Retrieves this node's backing node (if one exists). */
+    protected ArrayInitializerNode getBackingNode()
+    {
+        return (ArrayInitializerNode)super.getBackingNode();
+    }
+    
+    /**
+     * Ensures that the initializers value has been populated from proxy.
+     * If this node is not backed by a proxy or if the value has already been
+     * populated, this method does nothing.
+     */
+    private void checkInitializersWrapped()
+    {
+        if (this.populatedProperties == null || this.populatedProperties.contains(
+                ArrayInitializerNodeProperties.INITIALIZERS))
+            return;
+        this.populatedProperties.add(ArrayInitializerNodeProperties.INITIALIZERS);
+        NodeUnion<? extends VariableInitializerListNode> union = this.getBackingNode().getUnionForInitializers();
+        switch (union.getType())
+        {
+            case NORMAL:
+                union = this.getProxyFactory().makeNormalNodeUnion(
+                        this.getProxyFactory().makeVariableInitializerListNode(union.getNormalNode()));
+                break;
+            case SPLICE:
+                union = this.getProxyFactory().makeSpliceNodeUnion(
+                        this.getProxyFactory().makeSpliceNode(union.getSpliceNode()));
+                break;
+            default:
+                throw new IllegalStateException("Unrecognized union type: " + union.getType());
+        }
+        this.initializers = union;
     }
     
     /**
@@ -65,7 +97,7 @@ public class ArrayInitializerNodeImpl extends NodeImpl implements ArrayInitializ
      */
     public VariableInitializerListNode getInitializers()
     {
-        getAttribute(LocalAttribute.INITIALIZERS).recordAccess(ReadWriteAttribute.AccessType.READ);
+        checkInitializersWrapped();
         if (this.initializers == null)
         {
             return null;
@@ -81,7 +113,7 @@ public class ArrayInitializerNodeImpl extends NodeImpl implements ArrayInitializ
      */
     public NodeUnion<? extends VariableInitializerListNode> getUnionForInitializers()
     {
-        getAttribute(LocalAttribute.INITIALIZERS).recordAccess(ReadWriteAttribute.AccessType.READ);
+        checkInitializersWrapped();
         if (this.initializers == null)
         {
             this.initializers = new NormalNodeUnion<VariableInitializerListNode>(null);
@@ -95,24 +127,8 @@ public class ArrayInitializerNodeImpl extends NodeImpl implements ArrayInitializ
      */
     public void setInitializers(VariableInitializerListNode initializers)
     {
-            setInitializers(initializers, true);
-            getManager().notifyChange(this);
-    }
-    
-    private void setInitializers(VariableInitializerListNode initializers, boolean checkPermissions)
-    {
-        if (checkPermissions)
-        {
-            getManager().assertMutatable(this);
-            getAttribute(LocalAttribute.INITIALIZERS).recordAccess(ReadWriteAttribute.AccessType.WRITE);
-        }
-        
-        if (this.initializers != null)
-        {
-            setAsChild(this.initializers.getNodeValue(), false);
-        }
-        this.initializers = new NormalNodeUnion<VariableInitializerListNode>(initializers);
-        setAsChild(initializers, true);
+        checkInitializersWrapped();
+        this.setUnionForInitializers(new NormalNodeUnion<VariableInitializerListNode>(initializers));
     }
     
     /**
@@ -121,18 +137,15 @@ public class ArrayInitializerNodeImpl extends NodeImpl implements ArrayInitializ
      */
     public void setUnionForInitializers(NodeUnion<? extends VariableInitializerListNode> initializers)
     {
-            setUnionForInitializers(initializers, true);
-            getManager().notifyChange(this);
+        checkInitializersWrapped();
+        this.getManager().assertMutatable(this);
+        this.doSetInitializers(initializers);
+        if (this.getManager().isRecordingEdits())
+            super.recordEdit(new ArrayInitializerNodeSetInitializersPropertyEditScriptElementImpl(this.getManager().getCurrentMetaprogramId(), this.getUid(), initializers.getNodeValue() == null ? null : initializers.getNodeValue().getUid()));
     }
     
-    private void setUnionForInitializers(NodeUnion<? extends VariableInitializerListNode> initializers, boolean checkPermissions)
+    private void doSetInitializers(NodeUnion<? extends VariableInitializerListNode> initializers)
     {
-        if (checkPermissions)
-        {
-            getManager().assertMutatable(this);
-            getAttribute(LocalAttribute.INITIALIZERS).recordAccess(ReadWriteAttribute.AccessType.WRITE);
-        }
-        
         if (initializers == null)
         {
             initializers = new NormalNodeUnion<VariableInitializerListNode>(null);
@@ -156,9 +169,9 @@ public class ArrayInitializerNodeImpl extends NodeImpl implements ArrayInitializ
     protected void receiveToChildren(BsjNodeVisitor visitor)
     {
         super.receiveToChildren(visitor);
-        if (this.initializers.getNodeValue() != null)
+        if (this.getUnionForInitializers().getNodeValue() != null)
         {
-            this.initializers.getNodeValue().receive(visitor);
+            this.getUnionForInitializers().getNodeValue().receive(visitor);
         }
         Iterator<? extends Node> extras = getHiddenVisitorChildren();
         if (extras != null)
@@ -181,9 +194,9 @@ public class ArrayInitializerNodeImpl extends NodeImpl implements ArrayInitializ
     protected void receiveTypedToChildren(BsjTypedNodeVisitor visitor)
     {
         super.receiveTypedToChildren(visitor);
-        if (this.initializers.getNodeValue() != null)
+        if (this.getUnionForInitializers().getNodeValue() != null)
         {
-            this.initializers.getNodeValue().receiveTyped(visitor);
+            this.getUnionForInitializers().getNodeValue().receiveTyped(visitor);
         }
         Iterator<? extends Node> extras = getHiddenVisitorChildren();
         if (extras != null)
@@ -242,6 +255,8 @@ public class ArrayInitializerNodeImpl extends NodeImpl implements ArrayInitializ
     {
         StringBuilder sb = new StringBuilder();
         sb.append(this.getClass().getSimpleName());
+        sb.append('#');
+        sb.append(this.getUid());
         sb.append('[');
         sb.append("initializers=");
         sb.append(this.getUnionForInitializers().getNodeValue() == null? "null" : this.getUnionForInitializers().getNodeValue().getClass().getSimpleName());

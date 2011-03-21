@@ -1,10 +1,10 @@
 package edu.jhu.cs.bsj.compiler.impl.ast.node.meta;
 
 import java.util.Arrays;
-import java.util.EnumMap;
+import java.util.EnumSet;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
+import java.util.Set;
 
 import javax.annotation.Generated;
 
@@ -18,9 +18,10 @@ import edu.jhu.cs.bsj.compiler.ast.node.ExpressionNode;
 import edu.jhu.cs.bsj.compiler.ast.node.Node;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.SpliceNode;
 import edu.jhu.cs.bsj.compiler.impl.ast.BsjNodeManager;
-import edu.jhu.cs.bsj.compiler.impl.ast.attribute.AttributeName;
-import edu.jhu.cs.bsj.compiler.impl.ast.attribute.ReadWriteAttribute;
+import edu.jhu.cs.bsj.compiler.impl.ast.BsjNodeProxyFactory;
+import edu.jhu.cs.bsj.compiler.impl.ast.delta.property.SpliceNodeSetSpliceExpressionPropertyEditScriptElementImpl;
 import edu.jhu.cs.bsj.compiler.impl.ast.node.NodeImpl;
+import edu.jhu.cs.bsj.compiler.impl.ast.properties.SpliceNodeProperties;
 
 @Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
 public class SpliceNodeImpl extends NodeImpl implements SpliceNode
@@ -28,22 +29,11 @@ public class SpliceNodeImpl extends NodeImpl implements SpliceNode
     /** The expression which will replace this splice upon lifting. */
     private ExpressionNode spliceExpression;
     
-    private Map<LocalAttribute,ReadWriteAttribute> localAttributes = new EnumMap<LocalAttribute,ReadWriteAttribute>(LocalAttribute.class);
-    private ReadWriteAttribute getAttribute(LocalAttribute attributeName)
-    {
-        ReadWriteAttribute attribute = localAttributes.get(attributeName);
-        if (attribute == null)
-        {
-            attribute = new ReadWriteAttribute(SpliceNodeImpl.this, attributeName);
-            localAttributes.put(attributeName, attribute);
-        }
-        return attribute;
-    }
-    private static enum LocalAttribute implements AttributeName
-    {
-        /** Attribute identifier for the spliceExpression property. */
-        SPLICE_EXPRESSION,
-    }
+    /**
+     * A set of those properties which have been populated from the backing node.
+     * This field is <code>null</code> if <tt>backingNode</tt> is <code>null</code>.
+     */
+    private Set<SpliceNodeProperties> populatedProperties;
     
     /** General constructor. */
     public SpliceNodeImpl(
@@ -54,7 +44,36 @@ public class SpliceNodeImpl extends NodeImpl implements SpliceNode
             boolean binary)
     {
         super(startLocation, stopLocation, manager, binary);
-        this.spliceExpression = spliceExpression;
+        this.populatedProperties = null;
+        doSetSpliceExpression(spliceExpression);
+    }
+    
+    /** Proxy constructor. */
+    public SpliceNodeImpl(BsjNodeManager manager, BsjNodeProxyFactory proxyFactory, SpliceNode backingNode)
+    {
+        super(manager, proxyFactory, backingNode);
+        this.populatedProperties = EnumSet.noneOf(SpliceNodeProperties.class);
+    }
+    
+    /** Retrieves this node's backing node (if one exists). */
+    protected SpliceNode getBackingNode()
+    {
+        return (SpliceNode)super.getBackingNode();
+    }
+    
+    /**
+     * Ensures that the spliceExpression value has been populated from proxy.
+     * If this node is not backed by a proxy or if the value has already been
+     * populated, this method does nothing.
+     */
+    private void checkSpliceExpressionWrapped()
+    {
+        if (this.populatedProperties == null || this.populatedProperties.contains(
+                SpliceNodeProperties.SPLICE_EXPRESSION))
+            return;
+        this.populatedProperties.add(SpliceNodeProperties.SPLICE_EXPRESSION);
+        this.spliceExpression = this.getProxyFactory().makeExpressionNode(
+                this.getBackingNode().getSpliceExpression());
     }
     
     /**
@@ -63,7 +82,7 @@ public class SpliceNodeImpl extends NodeImpl implements SpliceNode
      */
     public ExpressionNode getSpliceExpression()
     {
-        getAttribute(LocalAttribute.SPLICE_EXPRESSION).recordAccess(ReadWriteAttribute.AccessType.READ);
+        checkSpliceExpressionWrapped();
         return this.spliceExpression;
     }
     
@@ -73,19 +92,20 @@ public class SpliceNodeImpl extends NodeImpl implements SpliceNode
      */
     public void setSpliceExpression(ExpressionNode spliceExpression)
     {
-            setSpliceExpression(spliceExpression, true);
-            getManager().notifyChange(this);
+        checkSpliceExpressionWrapped();
+        this.getManager().assertMutatable(this);
+        this.doSetSpliceExpression(spliceExpression);
+        if (this.getManager().isRecordingEdits())
+            super.recordEdit(new SpliceNodeSetSpliceExpressionPropertyEditScriptElementImpl(this.getManager().getCurrentMetaprogramId(), this.getUid(), spliceExpression.getUid()));
     }
     
-    private void setSpliceExpression(ExpressionNode spliceExpression, boolean checkPermissions)
+    private void doSetSpliceExpression(ExpressionNode spliceExpression)
     {
-        if (checkPermissions)
-        {
-            getManager().assertMutatable(this);
-            getAttribute(LocalAttribute.SPLICE_EXPRESSION).recordAccess(ReadWriteAttribute.AccessType.WRITE);
-        }
-        
+        if (this.spliceExpression != null)
+            setAsChild(this.spliceExpression, false);
         this.spliceExpression = spliceExpression;
+        if (this.spliceExpression != null)
+            setAsChild(this.spliceExpression, true);
     }
     
     /**
@@ -99,9 +119,9 @@ public class SpliceNodeImpl extends NodeImpl implements SpliceNode
     protected void receiveToChildren(BsjNodeVisitor visitor)
     {
         super.receiveToChildren(visitor);
-        if (this.spliceExpression != null)
+        if (this.getSpliceExpression() != null)
         {
-            this.spliceExpression.receive(visitor);
+            this.getSpliceExpression().receive(visitor);
         }
         Iterator<? extends Node> extras = getHiddenVisitorChildren();
         if (extras != null)
@@ -124,9 +144,9 @@ public class SpliceNodeImpl extends NodeImpl implements SpliceNode
     protected void receiveTypedToChildren(BsjTypedNodeVisitor visitor)
     {
         super.receiveTypedToChildren(visitor);
-        if (this.spliceExpression != null)
+        if (this.getSpliceExpression() != null)
         {
-            this.spliceExpression.receiveTyped(visitor);
+            this.getSpliceExpression().receiveTyped(visitor);
         }
         Iterator<? extends Node> extras = getHiddenVisitorChildren();
         if (extras != null)
@@ -183,6 +203,8 @@ public class SpliceNodeImpl extends NodeImpl implements SpliceNode
     {
         StringBuilder sb = new StringBuilder();
         sb.append(this.getClass().getSimpleName());
+        sb.append('#');
+        sb.append(this.getUid());
         sb.append('[');
         sb.append("spliceExpression=");
         sb.append(this.getSpliceExpression() == null? "null" : this.getSpliceExpression().getClass().getSimpleName());

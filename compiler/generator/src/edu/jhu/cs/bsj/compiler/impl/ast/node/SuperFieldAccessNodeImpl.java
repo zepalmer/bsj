@@ -1,10 +1,10 @@
 package edu.jhu.cs.bsj.compiler.impl.ast.node;
 
 import java.util.Arrays;
-import java.util.EnumMap;
+import java.util.EnumSet;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
+import java.util.Set;
 
 import javax.annotation.Generated;
 
@@ -20,9 +20,11 @@ import edu.jhu.cs.bsj.compiler.ast.node.Node;
 import edu.jhu.cs.bsj.compiler.ast.node.SuperFieldAccessNode;
 import edu.jhu.cs.bsj.compiler.ast.node.UnparameterizedTypeNode;
 import edu.jhu.cs.bsj.compiler.impl.ast.BsjNodeManager;
+import edu.jhu.cs.bsj.compiler.impl.ast.BsjNodeProxyFactory;
 import edu.jhu.cs.bsj.compiler.impl.ast.NormalNodeUnion;
-import edu.jhu.cs.bsj.compiler.impl.ast.attribute.AttributeName;
-import edu.jhu.cs.bsj.compiler.impl.ast.attribute.ReadWriteAttribute;
+import edu.jhu.cs.bsj.compiler.impl.ast.delta.property.SuperFieldAccessNodeSetIdentifierPropertyEditScriptElementImpl;
+import edu.jhu.cs.bsj.compiler.impl.ast.delta.property.SuperFieldAccessNodeSetTypePropertyEditScriptElementImpl;
+import edu.jhu.cs.bsj.compiler.impl.ast.properties.SuperFieldAccessNodeProperties;
 
 @Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
 public class SuperFieldAccessNodeImpl extends NodeImpl implements SuperFieldAccessNode
@@ -33,24 +35,11 @@ public class SuperFieldAccessNodeImpl extends NodeImpl implements SuperFieldAcce
     /** The identifier of the field being accessed. */
     private NodeUnion<? extends IdentifierNode> identifier;
     
-    private Map<LocalAttribute,ReadWriteAttribute> localAttributes = new EnumMap<LocalAttribute,ReadWriteAttribute>(LocalAttribute.class);
-    private ReadWriteAttribute getAttribute(LocalAttribute attributeName)
-    {
-        ReadWriteAttribute attribute = localAttributes.get(attributeName);
-        if (attribute == null)
-        {
-            attribute = new ReadWriteAttribute(SuperFieldAccessNodeImpl.this, attributeName);
-            localAttributes.put(attributeName, attribute);
-        }
-        return attribute;
-    }
-    private static enum LocalAttribute implements AttributeName
-    {
-        /** Attribute identifier for the type property. */
-        TYPE,
-        /** Attribute identifier for the identifier property. */
-        IDENTIFIER,
-    }
+    /**
+     * A set of those properties which have been populated from the backing node.
+     * This field is <code>null</code> if <tt>backingNode</tt> is <code>null</code>.
+     */
+    private Set<SuperFieldAccessNodeProperties> populatedProperties;
     
     /** General constructor. */
     public SuperFieldAccessNodeImpl(
@@ -62,8 +51,78 @@ public class SuperFieldAccessNodeImpl extends NodeImpl implements SuperFieldAcce
             boolean binary)
     {
         super(startLocation, stopLocation, manager, binary);
-        setUnionForType(type, false);
-        setUnionForIdentifier(identifier, false);
+        this.populatedProperties = null;
+        doSetType(type);
+        doSetIdentifier(identifier);
+    }
+    
+    /** Proxy constructor. */
+    public SuperFieldAccessNodeImpl(BsjNodeManager manager, BsjNodeProxyFactory proxyFactory, SuperFieldAccessNode backingNode)
+    {
+        super(manager, proxyFactory, backingNode);
+        this.populatedProperties = EnumSet.noneOf(SuperFieldAccessNodeProperties.class);
+    }
+    
+    /** Retrieves this node's backing node (if one exists). */
+    protected SuperFieldAccessNode getBackingNode()
+    {
+        return (SuperFieldAccessNode)super.getBackingNode();
+    }
+    
+    /**
+     * Ensures that the type value has been populated from proxy.
+     * If this node is not backed by a proxy or if the value has already been
+     * populated, this method does nothing.
+     */
+    private void checkTypeWrapped()
+    {
+        if (this.populatedProperties == null || this.populatedProperties.contains(
+                SuperFieldAccessNodeProperties.TYPE))
+            return;
+        this.populatedProperties.add(SuperFieldAccessNodeProperties.TYPE);
+        NodeUnion<? extends UnparameterizedTypeNode> union = this.getBackingNode().getUnionForType();
+        switch (union.getType())
+        {
+            case NORMAL:
+                union = this.getProxyFactory().makeNormalNodeUnion(
+                        this.getProxyFactory().makeUnparameterizedTypeNode(union.getNormalNode()));
+                break;
+            case SPLICE:
+                union = this.getProxyFactory().makeSpliceNodeUnion(
+                        this.getProxyFactory().makeSpliceNode(union.getSpliceNode()));
+                break;
+            default:
+                throw new IllegalStateException("Unrecognized union type: " + union.getType());
+        }
+        this.type = union;
+    }
+    
+    /**
+     * Ensures that the identifier value has been populated from proxy.
+     * If this node is not backed by a proxy or if the value has already been
+     * populated, this method does nothing.
+     */
+    private void checkIdentifierWrapped()
+    {
+        if (this.populatedProperties == null || this.populatedProperties.contains(
+                SuperFieldAccessNodeProperties.IDENTIFIER))
+            return;
+        this.populatedProperties.add(SuperFieldAccessNodeProperties.IDENTIFIER);
+        NodeUnion<? extends IdentifierNode> union = this.getBackingNode().getUnionForIdentifier();
+        switch (union.getType())
+        {
+            case NORMAL:
+                union = this.getProxyFactory().makeNormalNodeUnion(
+                        this.getProxyFactory().makeIdentifierNode(union.getNormalNode()));
+                break;
+            case SPLICE:
+                union = this.getProxyFactory().makeSpliceNodeUnion(
+                        this.getProxyFactory().makeSpliceNode(union.getSpliceNode()));
+                break;
+            default:
+                throw new IllegalStateException("Unrecognized union type: " + union.getType());
+        }
+        this.identifier = union;
     }
     
     /**
@@ -73,7 +132,7 @@ public class SuperFieldAccessNodeImpl extends NodeImpl implements SuperFieldAcce
      */
     public UnparameterizedTypeNode getType()
     {
-        getAttribute(LocalAttribute.TYPE).recordAccess(ReadWriteAttribute.AccessType.READ);
+        checkTypeWrapped();
         if (this.type == null)
         {
             return null;
@@ -89,7 +148,7 @@ public class SuperFieldAccessNodeImpl extends NodeImpl implements SuperFieldAcce
      */
     public NodeUnion<? extends UnparameterizedTypeNode> getUnionForType()
     {
-        getAttribute(LocalAttribute.TYPE).recordAccess(ReadWriteAttribute.AccessType.READ);
+        checkTypeWrapped();
         if (this.type == null)
         {
             this.type = new NormalNodeUnion<UnparameterizedTypeNode>(null);
@@ -103,24 +162,8 @@ public class SuperFieldAccessNodeImpl extends NodeImpl implements SuperFieldAcce
      */
     public void setType(UnparameterizedTypeNode type)
     {
-            setType(type, true);
-            getManager().notifyChange(this);
-    }
-    
-    private void setType(UnparameterizedTypeNode type, boolean checkPermissions)
-    {
-        if (checkPermissions)
-        {
-            getManager().assertMutatable(this);
-            getAttribute(LocalAttribute.TYPE).recordAccess(ReadWriteAttribute.AccessType.WRITE);
-        }
-        
-        if (this.type != null)
-        {
-            setAsChild(this.type.getNodeValue(), false);
-        }
-        this.type = new NormalNodeUnion<UnparameterizedTypeNode>(type);
-        setAsChild(type, true);
+        checkTypeWrapped();
+        this.setUnionForType(new NormalNodeUnion<UnparameterizedTypeNode>(type));
     }
     
     /**
@@ -129,18 +172,15 @@ public class SuperFieldAccessNodeImpl extends NodeImpl implements SuperFieldAcce
      */
     public void setUnionForType(NodeUnion<? extends UnparameterizedTypeNode> type)
     {
-            setUnionForType(type, true);
-            getManager().notifyChange(this);
+        checkTypeWrapped();
+        this.getManager().assertMutatable(this);
+        this.doSetType(type);
+        if (this.getManager().isRecordingEdits())
+            super.recordEdit(new SuperFieldAccessNodeSetTypePropertyEditScriptElementImpl(this.getManager().getCurrentMetaprogramId(), this.getUid(), type.getNodeValue() == null ? null : type.getNodeValue().getUid()));
     }
     
-    private void setUnionForType(NodeUnion<? extends UnparameterizedTypeNode> type, boolean checkPermissions)
+    private void doSetType(NodeUnion<? extends UnparameterizedTypeNode> type)
     {
-        if (checkPermissions)
-        {
-            getManager().assertMutatable(this);
-            getAttribute(LocalAttribute.TYPE).recordAccess(ReadWriteAttribute.AccessType.WRITE);
-        }
-        
         if (type == null)
         {
             type = new NormalNodeUnion<UnparameterizedTypeNode>(null);
@@ -160,7 +200,7 @@ public class SuperFieldAccessNodeImpl extends NodeImpl implements SuperFieldAcce
      */
     public IdentifierNode getIdentifier()
     {
-        getAttribute(LocalAttribute.IDENTIFIER).recordAccess(ReadWriteAttribute.AccessType.READ);
+        checkIdentifierWrapped();
         if (this.identifier == null)
         {
             return null;
@@ -176,7 +216,7 @@ public class SuperFieldAccessNodeImpl extends NodeImpl implements SuperFieldAcce
      */
     public NodeUnion<? extends IdentifierNode> getUnionForIdentifier()
     {
-        getAttribute(LocalAttribute.IDENTIFIER).recordAccess(ReadWriteAttribute.AccessType.READ);
+        checkIdentifierWrapped();
         if (this.identifier == null)
         {
             this.identifier = new NormalNodeUnion<IdentifierNode>(null);
@@ -190,24 +230,8 @@ public class SuperFieldAccessNodeImpl extends NodeImpl implements SuperFieldAcce
      */
     public void setIdentifier(IdentifierNode identifier)
     {
-            setIdentifier(identifier, true);
-            getManager().notifyChange(this);
-    }
-    
-    private void setIdentifier(IdentifierNode identifier, boolean checkPermissions)
-    {
-        if (checkPermissions)
-        {
-            getManager().assertMutatable(this);
-            getAttribute(LocalAttribute.IDENTIFIER).recordAccess(ReadWriteAttribute.AccessType.WRITE);
-        }
-        
-        if (this.identifier != null)
-        {
-            setAsChild(this.identifier.getNodeValue(), false);
-        }
-        this.identifier = new NormalNodeUnion<IdentifierNode>(identifier);
-        setAsChild(identifier, true);
+        checkIdentifierWrapped();
+        this.setUnionForIdentifier(new NormalNodeUnion<IdentifierNode>(identifier));
     }
     
     /**
@@ -216,18 +240,15 @@ public class SuperFieldAccessNodeImpl extends NodeImpl implements SuperFieldAcce
      */
     public void setUnionForIdentifier(NodeUnion<? extends IdentifierNode> identifier)
     {
-            setUnionForIdentifier(identifier, true);
-            getManager().notifyChange(this);
+        checkIdentifierWrapped();
+        this.getManager().assertMutatable(this);
+        this.doSetIdentifier(identifier);
+        if (this.getManager().isRecordingEdits())
+            super.recordEdit(new SuperFieldAccessNodeSetIdentifierPropertyEditScriptElementImpl(this.getManager().getCurrentMetaprogramId(), this.getUid(), identifier.getNodeValue() == null ? null : identifier.getNodeValue().getUid()));
     }
     
-    private void setUnionForIdentifier(NodeUnion<? extends IdentifierNode> identifier, boolean checkPermissions)
+    private void doSetIdentifier(NodeUnion<? extends IdentifierNode> identifier)
     {
-        if (checkPermissions)
-        {
-            getManager().assertMutatable(this);
-            getAttribute(LocalAttribute.IDENTIFIER).recordAccess(ReadWriteAttribute.AccessType.WRITE);
-        }
-        
         if (identifier == null)
         {
             identifier = new NormalNodeUnion<IdentifierNode>(null);
@@ -251,13 +272,13 @@ public class SuperFieldAccessNodeImpl extends NodeImpl implements SuperFieldAcce
     protected void receiveToChildren(BsjNodeVisitor visitor)
     {
         super.receiveToChildren(visitor);
-        if (this.type.getNodeValue() != null)
+        if (this.getUnionForType().getNodeValue() != null)
         {
-            this.type.getNodeValue().receive(visitor);
+            this.getUnionForType().getNodeValue().receive(visitor);
         }
-        if (this.identifier.getNodeValue() != null)
+        if (this.getUnionForIdentifier().getNodeValue() != null)
         {
-            this.identifier.getNodeValue().receive(visitor);
+            this.getUnionForIdentifier().getNodeValue().receive(visitor);
         }
         Iterator<? extends Node> extras = getHiddenVisitorChildren();
         if (extras != null)
@@ -280,13 +301,13 @@ public class SuperFieldAccessNodeImpl extends NodeImpl implements SuperFieldAcce
     protected void receiveTypedToChildren(BsjTypedNodeVisitor visitor)
     {
         super.receiveTypedToChildren(visitor);
-        if (this.type.getNodeValue() != null)
+        if (this.getUnionForType().getNodeValue() != null)
         {
-            this.type.getNodeValue().receiveTyped(visitor);
+            this.getUnionForType().getNodeValue().receiveTyped(visitor);
         }
-        if (this.identifier.getNodeValue() != null)
+        if (this.getUnionForIdentifier().getNodeValue() != null)
         {
-            this.identifier.getNodeValue().receiveTyped(visitor);
+            this.getUnionForIdentifier().getNodeValue().receiveTyped(visitor);
         }
         Iterator<? extends Node> extras = getHiddenVisitorChildren();
         if (extras != null)
@@ -346,6 +367,8 @@ public class SuperFieldAccessNodeImpl extends NodeImpl implements SuperFieldAcce
     {
         StringBuilder sb = new StringBuilder();
         sb.append(this.getClass().getSimpleName());
+        sb.append('#');
+        sb.append(this.getUid());
         sb.append('[');
         sb.append("type=");
         sb.append(this.getUnionForType().getNodeValue() == null? "null" : this.getUnionForType().getNodeValue().getClass().getSimpleName());

@@ -1,10 +1,10 @@
 package edu.jhu.cs.bsj.compiler.impl.ast.node;
 
 import java.util.Arrays;
-import java.util.EnumMap;
+import java.util.EnumSet;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
+import java.util.Set;
 
 import javax.annotation.Generated;
 
@@ -19,9 +19,10 @@ import edu.jhu.cs.bsj.compiler.ast.node.AnnotationAnnotationValueNode;
 import edu.jhu.cs.bsj.compiler.ast.node.AnnotationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.Node;
 import edu.jhu.cs.bsj.compiler.impl.ast.BsjNodeManager;
+import edu.jhu.cs.bsj.compiler.impl.ast.BsjNodeProxyFactory;
 import edu.jhu.cs.bsj.compiler.impl.ast.NormalNodeUnion;
-import edu.jhu.cs.bsj.compiler.impl.ast.attribute.AttributeName;
-import edu.jhu.cs.bsj.compiler.impl.ast.attribute.ReadWriteAttribute;
+import edu.jhu.cs.bsj.compiler.impl.ast.delta.property.AnnotationAnnotationValueNodeSetAnnotationPropertyEditScriptElementImpl;
+import edu.jhu.cs.bsj.compiler.impl.ast.properties.AnnotationAnnotationValueNodeProperties;
 
 @Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
 public class AnnotationAnnotationValueNodeImpl extends NodeImpl implements AnnotationAnnotationValueNode
@@ -29,22 +30,11 @@ public class AnnotationAnnotationValueNodeImpl extends NodeImpl implements Annot
     /** The annotation. */
     private NodeUnion<? extends AnnotationNode> annotation;
     
-    private Map<LocalAttribute,ReadWriteAttribute> localAttributes = new EnumMap<LocalAttribute,ReadWriteAttribute>(LocalAttribute.class);
-    private ReadWriteAttribute getAttribute(LocalAttribute attributeName)
-    {
-        ReadWriteAttribute attribute = localAttributes.get(attributeName);
-        if (attribute == null)
-        {
-            attribute = new ReadWriteAttribute(AnnotationAnnotationValueNodeImpl.this, attributeName);
-            localAttributes.put(attributeName, attribute);
-        }
-        return attribute;
-    }
-    private static enum LocalAttribute implements AttributeName
-    {
-        /** Attribute identifier for the annotation property. */
-        ANNOTATION,
-    }
+    /**
+     * A set of those properties which have been populated from the backing node.
+     * This field is <code>null</code> if <tt>backingNode</tt> is <code>null</code>.
+     */
+    private Set<AnnotationAnnotationValueNodeProperties> populatedProperties;
     
     /** General constructor. */
     public AnnotationAnnotationValueNodeImpl(
@@ -55,7 +45,49 @@ public class AnnotationAnnotationValueNodeImpl extends NodeImpl implements Annot
             boolean binary)
     {
         super(startLocation, stopLocation, manager, binary);
-        setUnionForAnnotation(annotation, false);
+        this.populatedProperties = null;
+        doSetAnnotation(annotation);
+    }
+    
+    /** Proxy constructor. */
+    public AnnotationAnnotationValueNodeImpl(BsjNodeManager manager, BsjNodeProxyFactory proxyFactory, AnnotationAnnotationValueNode backingNode)
+    {
+        super(manager, proxyFactory, backingNode);
+        this.populatedProperties = EnumSet.noneOf(AnnotationAnnotationValueNodeProperties.class);
+    }
+    
+    /** Retrieves this node's backing node (if one exists). */
+    protected AnnotationAnnotationValueNode getBackingNode()
+    {
+        return (AnnotationAnnotationValueNode)super.getBackingNode();
+    }
+    
+    /**
+     * Ensures that the annotation value has been populated from proxy.
+     * If this node is not backed by a proxy or if the value has already been
+     * populated, this method does nothing.
+     */
+    private void checkAnnotationWrapped()
+    {
+        if (this.populatedProperties == null || this.populatedProperties.contains(
+                AnnotationAnnotationValueNodeProperties.ANNOTATION))
+            return;
+        this.populatedProperties.add(AnnotationAnnotationValueNodeProperties.ANNOTATION);
+        NodeUnion<? extends AnnotationNode> union = this.getBackingNode().getUnionForAnnotation();
+        switch (union.getType())
+        {
+            case NORMAL:
+                union = this.getProxyFactory().makeNormalNodeUnion(
+                        this.getProxyFactory().makeAnnotationNode(union.getNormalNode()));
+                break;
+            case SPLICE:
+                union = this.getProxyFactory().makeSpliceNodeUnion(
+                        this.getProxyFactory().makeSpliceNode(union.getSpliceNode()));
+                break;
+            default:
+                throw new IllegalStateException("Unrecognized union type: " + union.getType());
+        }
+        this.annotation = union;
     }
     
     /**
@@ -65,7 +97,7 @@ public class AnnotationAnnotationValueNodeImpl extends NodeImpl implements Annot
      */
     public AnnotationNode getAnnotation()
     {
-        getAttribute(LocalAttribute.ANNOTATION).recordAccess(ReadWriteAttribute.AccessType.READ);
+        checkAnnotationWrapped();
         if (this.annotation == null)
         {
             return null;
@@ -81,7 +113,7 @@ public class AnnotationAnnotationValueNodeImpl extends NodeImpl implements Annot
      */
     public NodeUnion<? extends AnnotationNode> getUnionForAnnotation()
     {
-        getAttribute(LocalAttribute.ANNOTATION).recordAccess(ReadWriteAttribute.AccessType.READ);
+        checkAnnotationWrapped();
         if (this.annotation == null)
         {
             this.annotation = new NormalNodeUnion<AnnotationNode>(null);
@@ -95,24 +127,8 @@ public class AnnotationAnnotationValueNodeImpl extends NodeImpl implements Annot
      */
     public void setAnnotation(AnnotationNode annotation)
     {
-            setAnnotation(annotation, true);
-            getManager().notifyChange(this);
-    }
-    
-    private void setAnnotation(AnnotationNode annotation, boolean checkPermissions)
-    {
-        if (checkPermissions)
-        {
-            getManager().assertMutatable(this);
-            getAttribute(LocalAttribute.ANNOTATION).recordAccess(ReadWriteAttribute.AccessType.WRITE);
-        }
-        
-        if (this.annotation != null)
-        {
-            setAsChild(this.annotation.getNodeValue(), false);
-        }
-        this.annotation = new NormalNodeUnion<AnnotationNode>(annotation);
-        setAsChild(annotation, true);
+        checkAnnotationWrapped();
+        this.setUnionForAnnotation(new NormalNodeUnion<AnnotationNode>(annotation));
     }
     
     /**
@@ -121,18 +137,15 @@ public class AnnotationAnnotationValueNodeImpl extends NodeImpl implements Annot
      */
     public void setUnionForAnnotation(NodeUnion<? extends AnnotationNode> annotation)
     {
-            setUnionForAnnotation(annotation, true);
-            getManager().notifyChange(this);
+        checkAnnotationWrapped();
+        this.getManager().assertMutatable(this);
+        this.doSetAnnotation(annotation);
+        if (this.getManager().isRecordingEdits())
+            super.recordEdit(new AnnotationAnnotationValueNodeSetAnnotationPropertyEditScriptElementImpl(this.getManager().getCurrentMetaprogramId(), this.getUid(), annotation.getNodeValue() == null ? null : annotation.getNodeValue().getUid()));
     }
     
-    private void setUnionForAnnotation(NodeUnion<? extends AnnotationNode> annotation, boolean checkPermissions)
+    private void doSetAnnotation(NodeUnion<? extends AnnotationNode> annotation)
     {
-        if (checkPermissions)
-        {
-            getManager().assertMutatable(this);
-            getAttribute(LocalAttribute.ANNOTATION).recordAccess(ReadWriteAttribute.AccessType.WRITE);
-        }
-        
         if (annotation == null)
         {
             annotation = new NormalNodeUnion<AnnotationNode>(null);
@@ -156,9 +169,9 @@ public class AnnotationAnnotationValueNodeImpl extends NodeImpl implements Annot
     protected void receiveToChildren(BsjNodeVisitor visitor)
     {
         super.receiveToChildren(visitor);
-        if (this.annotation.getNodeValue() != null)
+        if (this.getUnionForAnnotation().getNodeValue() != null)
         {
-            this.annotation.getNodeValue().receive(visitor);
+            this.getUnionForAnnotation().getNodeValue().receive(visitor);
         }
         Iterator<? extends Node> extras = getHiddenVisitorChildren();
         if (extras != null)
@@ -181,9 +194,9 @@ public class AnnotationAnnotationValueNodeImpl extends NodeImpl implements Annot
     protected void receiveTypedToChildren(BsjTypedNodeVisitor visitor)
     {
         super.receiveTypedToChildren(visitor);
-        if (this.annotation.getNodeValue() != null)
+        if (this.getUnionForAnnotation().getNodeValue() != null)
         {
-            this.annotation.getNodeValue().receiveTyped(visitor);
+            this.getUnionForAnnotation().getNodeValue().receiveTyped(visitor);
         }
         Iterator<? extends Node> extras = getHiddenVisitorChildren();
         if (extras != null)
@@ -242,6 +255,8 @@ public class AnnotationAnnotationValueNodeImpl extends NodeImpl implements Annot
     {
         StringBuilder sb = new StringBuilder();
         sb.append(this.getClass().getSimpleName());
+        sb.append('#');
+        sb.append(this.getUid());
         sb.append('[');
         sb.append("annotation=");
         sb.append(this.getUnionForAnnotation().getNodeValue() == null? "null" : this.getUnionForAnnotation().getNodeValue().getClass().getSimpleName());

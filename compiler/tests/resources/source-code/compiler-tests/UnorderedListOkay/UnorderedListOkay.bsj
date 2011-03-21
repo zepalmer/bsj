@@ -1,0 +1,16 @@
+public class UnorderedListOkay
+{
+    public void foo()
+    {
+    }
+    [:
+        ClassMemberListNode list = context.getAnchor().<ClassMemberListNode>getNearestAncestorOfType(ClassMemberListNode.class);
+        BsjNodeFactory factory = context.getFactory();
+        list.add(1, <:public void bar() { }:> );
+    :]
+    [:
+        ClassMemberListNode list = context.getAnchor().<ClassMemberListNode>getNearestAncestorOfType(ClassMemberListNode.class);
+        BsjNodeFactory factory = context.getFactory();
+        list.add(1, <:public void baz() { }:> );
+    :]
+}

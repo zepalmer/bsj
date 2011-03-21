@@ -1,0 +1,6 @@
+#import edu.jhu.cs.bsj.stdlib.metaannotations.*;
+
+@@MakeObservable(listenerName="MyListener",eventName="MyEvent")
+public class ObservableClass
+{
+}

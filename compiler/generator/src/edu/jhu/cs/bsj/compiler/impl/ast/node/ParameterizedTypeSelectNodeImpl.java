@@ -1,10 +1,10 @@
 package edu.jhu.cs.bsj.compiler.impl.ast.node;
 
 import java.util.Arrays;
-import java.util.EnumMap;
+import java.util.EnumSet;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
+import java.util.Set;
 
 import javax.annotation.Generated;
 
@@ -20,9 +20,11 @@ import edu.jhu.cs.bsj.compiler.ast.node.Node;
 import edu.jhu.cs.bsj.compiler.ast.node.ParameterizedTypeNode;
 import edu.jhu.cs.bsj.compiler.ast.node.ParameterizedTypeSelectNode;
 import edu.jhu.cs.bsj.compiler.impl.ast.BsjNodeManager;
+import edu.jhu.cs.bsj.compiler.impl.ast.BsjNodeProxyFactory;
 import edu.jhu.cs.bsj.compiler.impl.ast.NormalNodeUnion;
-import edu.jhu.cs.bsj.compiler.impl.ast.attribute.AttributeName;
-import edu.jhu.cs.bsj.compiler.impl.ast.attribute.ReadWriteAttribute;
+import edu.jhu.cs.bsj.compiler.impl.ast.delta.property.ParameterizedTypeSelectNodeSetBasePropertyEditScriptElementImpl;
+import edu.jhu.cs.bsj.compiler.impl.ast.delta.property.ParameterizedTypeSelectNodeSetSelectPropertyEditScriptElementImpl;
+import edu.jhu.cs.bsj.compiler.impl.ast.properties.ParameterizedTypeSelectNodeProperties;
 
 @Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
 public class ParameterizedTypeSelectNodeImpl extends NodeImpl implements ParameterizedTypeSelectNode
@@ -33,24 +35,11 @@ public class ParameterizedTypeSelectNodeImpl extends NodeImpl implements Paramet
     /** The type which is selected from the base. */
     private NodeUnion<? extends DeclaredTypeNode> select;
     
-    private Map<LocalAttribute,ReadWriteAttribute> localAttributes = new EnumMap<LocalAttribute,ReadWriteAttribute>(LocalAttribute.class);
-    private ReadWriteAttribute getAttribute(LocalAttribute attributeName)
-    {
-        ReadWriteAttribute attribute = localAttributes.get(attributeName);
-        if (attribute == null)
-        {
-            attribute = new ReadWriteAttribute(ParameterizedTypeSelectNodeImpl.this, attributeName);
-            localAttributes.put(attributeName, attribute);
-        }
-        return attribute;
-    }
-    private static enum LocalAttribute implements AttributeName
-    {
-        /** Attribute identifier for the base property. */
-        BASE,
-        /** Attribute identifier for the select property. */
-        SELECT,
-    }
+    /**
+     * A set of those properties which have been populated from the backing node.
+     * This field is <code>null</code> if <tt>backingNode</tt> is <code>null</code>.
+     */
+    private Set<ParameterizedTypeSelectNodeProperties> populatedProperties;
     
     /** General constructor. */
     public ParameterizedTypeSelectNodeImpl(
@@ -62,8 +51,78 @@ public class ParameterizedTypeSelectNodeImpl extends NodeImpl implements Paramet
             boolean binary)
     {
         super(startLocation, stopLocation, manager, binary);
-        setUnionForBase(base, false);
-        setUnionForSelect(select, false);
+        this.populatedProperties = null;
+        doSetBase(base);
+        doSetSelect(select);
+    }
+    
+    /** Proxy constructor. */
+    public ParameterizedTypeSelectNodeImpl(BsjNodeManager manager, BsjNodeProxyFactory proxyFactory, ParameterizedTypeSelectNode backingNode)
+    {
+        super(manager, proxyFactory, backingNode);
+        this.populatedProperties = EnumSet.noneOf(ParameterizedTypeSelectNodeProperties.class);
+    }
+    
+    /** Retrieves this node's backing node (if one exists). */
+    protected ParameterizedTypeSelectNode getBackingNode()
+    {
+        return (ParameterizedTypeSelectNode)super.getBackingNode();
+    }
+    
+    /**
+     * Ensures that the base value has been populated from proxy.
+     * If this node is not backed by a proxy or if the value has already been
+     * populated, this method does nothing.
+     */
+    private void checkBaseWrapped()
+    {
+        if (this.populatedProperties == null || this.populatedProperties.contains(
+                ParameterizedTypeSelectNodeProperties.BASE))
+            return;
+        this.populatedProperties.add(ParameterizedTypeSelectNodeProperties.BASE);
+        NodeUnion<? extends ParameterizedTypeNode> union = this.getBackingNode().getUnionForBase();
+        switch (union.getType())
+        {
+            case NORMAL:
+                union = this.getProxyFactory().makeNormalNodeUnion(
+                        this.getProxyFactory().makeParameterizedTypeNode(union.getNormalNode()));
+                break;
+            case SPLICE:
+                union = this.getProxyFactory().makeSpliceNodeUnion(
+                        this.getProxyFactory().makeSpliceNode(union.getSpliceNode()));
+                break;
+            default:
+                throw new IllegalStateException("Unrecognized union type: " + union.getType());
+        }
+        this.base = union;
+    }
+    
+    /**
+     * Ensures that the select value has been populated from proxy.
+     * If this node is not backed by a proxy or if the value has already been
+     * populated, this method does nothing.
+     */
+    private void checkSelectWrapped()
+    {
+        if (this.populatedProperties == null || this.populatedProperties.contains(
+                ParameterizedTypeSelectNodeProperties.SELECT))
+            return;
+        this.populatedProperties.add(ParameterizedTypeSelectNodeProperties.SELECT);
+        NodeUnion<? extends DeclaredTypeNode> union = this.getBackingNode().getUnionForSelect();
+        switch (union.getType())
+        {
+            case NORMAL:
+                union = this.getProxyFactory().makeNormalNodeUnion(
+                        this.getProxyFactory().makeDeclaredTypeNode(union.getNormalNode()));
+                break;
+            case SPLICE:
+                union = this.getProxyFactory().makeSpliceNodeUnion(
+                        this.getProxyFactory().makeSpliceNode(union.getSpliceNode()));
+                break;
+            default:
+                throw new IllegalStateException("Unrecognized union type: " + union.getType());
+        }
+        this.select = union;
     }
     
     /**
@@ -73,7 +132,7 @@ public class ParameterizedTypeSelectNodeImpl extends NodeImpl implements Paramet
      */
     public ParameterizedTypeNode getBase()
     {
-        getAttribute(LocalAttribute.BASE).recordAccess(ReadWriteAttribute.AccessType.READ);
+        checkBaseWrapped();
         if (this.base == null)
         {
             return null;
@@ -89,7 +148,7 @@ public class ParameterizedTypeSelectNodeImpl extends NodeImpl implements Paramet
      */
     public NodeUnion<? extends ParameterizedTypeNode> getUnionForBase()
     {
-        getAttribute(LocalAttribute.BASE).recordAccess(ReadWriteAttribute.AccessType.READ);
+        checkBaseWrapped();
         if (this.base == null)
         {
             this.base = new NormalNodeUnion<ParameterizedTypeNode>(null);
@@ -103,24 +162,8 @@ public class ParameterizedTypeSelectNodeImpl extends NodeImpl implements Paramet
      */
     public void setBase(ParameterizedTypeNode base)
     {
-            setBase(base, true);
-            getManager().notifyChange(this);
-    }
-    
-    private void setBase(ParameterizedTypeNode base, boolean checkPermissions)
-    {
-        if (checkPermissions)
-        {
-            getManager().assertMutatable(this);
-            getAttribute(LocalAttribute.BASE).recordAccess(ReadWriteAttribute.AccessType.WRITE);
-        }
-        
-        if (this.base != null)
-        {
-            setAsChild(this.base.getNodeValue(), false);
-        }
-        this.base = new NormalNodeUnion<ParameterizedTypeNode>(base);
-        setAsChild(base, true);
+        checkBaseWrapped();
+        this.setUnionForBase(new NormalNodeUnion<ParameterizedTypeNode>(base));
     }
     
     /**
@@ -129,18 +172,15 @@ public class ParameterizedTypeSelectNodeImpl extends NodeImpl implements Paramet
      */
     public void setUnionForBase(NodeUnion<? extends ParameterizedTypeNode> base)
     {
-            setUnionForBase(base, true);
-            getManager().notifyChange(this);
+        checkBaseWrapped();
+        this.getManager().assertMutatable(this);
+        this.doSetBase(base);
+        if (this.getManager().isRecordingEdits())
+            super.recordEdit(new ParameterizedTypeSelectNodeSetBasePropertyEditScriptElementImpl(this.getManager().getCurrentMetaprogramId(), this.getUid(), base.getNodeValue() == null ? null : base.getNodeValue().getUid()));
     }
     
-    private void setUnionForBase(NodeUnion<? extends ParameterizedTypeNode> base, boolean checkPermissions)
+    private void doSetBase(NodeUnion<? extends ParameterizedTypeNode> base)
     {
-        if (checkPermissions)
-        {
-            getManager().assertMutatable(this);
-            getAttribute(LocalAttribute.BASE).recordAccess(ReadWriteAttribute.AccessType.WRITE);
-        }
-        
         if (base == null)
         {
             base = new NormalNodeUnion<ParameterizedTypeNode>(null);
@@ -160,7 +200,7 @@ public class ParameterizedTypeSelectNodeImpl extends NodeImpl implements Paramet
      */
     public DeclaredTypeNode getSelect()
     {
-        getAttribute(LocalAttribute.SELECT).recordAccess(ReadWriteAttribute.AccessType.READ);
+        checkSelectWrapped();
         if (this.select == null)
         {
             return null;
@@ -176,7 +216,7 @@ public class ParameterizedTypeSelectNodeImpl extends NodeImpl implements Paramet
      */
     public NodeUnion<? extends DeclaredTypeNode> getUnionForSelect()
     {
-        getAttribute(LocalAttribute.SELECT).recordAccess(ReadWriteAttribute.AccessType.READ);
+        checkSelectWrapped();
         if (this.select == null)
         {
             this.select = new NormalNodeUnion<DeclaredTypeNode>(null);
@@ -190,24 +230,8 @@ public class ParameterizedTypeSelectNodeImpl extends NodeImpl implements Paramet
      */
     public void setSelect(DeclaredTypeNode select)
     {
-            setSelect(select, true);
-            getManager().notifyChange(this);
-    }
-    
-    private void setSelect(DeclaredTypeNode select, boolean checkPermissions)
-    {
-        if (checkPermissions)
-        {
-            getManager().assertMutatable(this);
-            getAttribute(LocalAttribute.SELECT).recordAccess(ReadWriteAttribute.AccessType.WRITE);
-        }
-        
-        if (this.select != null)
-        {
-            setAsChild(this.select.getNodeValue(), false);
-        }
-        this.select = new NormalNodeUnion<DeclaredTypeNode>(select);
-        setAsChild(select, true);
+        checkSelectWrapped();
+        this.setUnionForSelect(new NormalNodeUnion<DeclaredTypeNode>(select));
     }
     
     /**
@@ -216,18 +240,15 @@ public class ParameterizedTypeSelectNodeImpl extends NodeImpl implements Paramet
      */
     public void setUnionForSelect(NodeUnion<? extends DeclaredTypeNode> select)
     {
-            setUnionForSelect(select, true);
-            getManager().notifyChange(this);
+        checkSelectWrapped();
+        this.getManager().assertMutatable(this);
+        this.doSetSelect(select);
+        if (this.getManager().isRecordingEdits())
+            super.recordEdit(new ParameterizedTypeSelectNodeSetSelectPropertyEditScriptElementImpl(this.getManager().getCurrentMetaprogramId(), this.getUid(), select.getNodeValue() == null ? null : select.getNodeValue().getUid()));
     }
     
-    private void setUnionForSelect(NodeUnion<? extends DeclaredTypeNode> select, boolean checkPermissions)
+    private void doSetSelect(NodeUnion<? extends DeclaredTypeNode> select)
     {
-        if (checkPermissions)
-        {
-            getManager().assertMutatable(this);
-            getAttribute(LocalAttribute.SELECT).recordAccess(ReadWriteAttribute.AccessType.WRITE);
-        }
-        
         if (select == null)
         {
             select = new NormalNodeUnion<DeclaredTypeNode>(null);
@@ -251,13 +272,13 @@ public class ParameterizedTypeSelectNodeImpl extends NodeImpl implements Paramet
     protected void receiveToChildren(BsjNodeVisitor visitor)
     {
         super.receiveToChildren(visitor);
-        if (this.base.getNodeValue() != null)
+        if (this.getUnionForBase().getNodeValue() != null)
         {
-            this.base.getNodeValue().receive(visitor);
+            this.getUnionForBase().getNodeValue().receive(visitor);
         }
-        if (this.select.getNodeValue() != null)
+        if (this.getUnionForSelect().getNodeValue() != null)
         {
-            this.select.getNodeValue().receive(visitor);
+            this.getUnionForSelect().getNodeValue().receive(visitor);
         }
         Iterator<? extends Node> extras = getHiddenVisitorChildren();
         if (extras != null)
@@ -280,13 +301,13 @@ public class ParameterizedTypeSelectNodeImpl extends NodeImpl implements Paramet
     protected void receiveTypedToChildren(BsjTypedNodeVisitor visitor)
     {
         super.receiveTypedToChildren(visitor);
-        if (this.base.getNodeValue() != null)
+        if (this.getUnionForBase().getNodeValue() != null)
         {
-            this.base.getNodeValue().receiveTyped(visitor);
+            this.getUnionForBase().getNodeValue().receiveTyped(visitor);
         }
-        if (this.select.getNodeValue() != null)
+        if (this.getUnionForSelect().getNodeValue() != null)
         {
-            this.select.getNodeValue().receiveTyped(visitor);
+            this.getUnionForSelect().getNodeValue().receiveTyped(visitor);
         }
         Iterator<? extends Node> extras = getHiddenVisitorChildren();
         if (extras != null)
@@ -346,6 +367,8 @@ public class ParameterizedTypeSelectNodeImpl extends NodeImpl implements Paramet
     {
         StringBuilder sb = new StringBuilder();
         sb.append(this.getClass().getSimpleName());
+        sb.append('#');
+        sb.append(this.getUid());
         sb.append('[');
         sb.append("base=");
         sb.append(this.getUnionForBase().getNodeValue() == null? "null" : this.getUnionForBase().getNodeValue().getClass().getSimpleName());

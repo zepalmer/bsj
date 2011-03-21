@@ -1,0 +1,13 @@
+public class A
+{
+    public static B inst()
+    {
+        B b = new B();
+        return b;
+    }
+    
+    [:
+        #depends B.x;
+        System.out.println("Hello from A!");
+    :]
+}

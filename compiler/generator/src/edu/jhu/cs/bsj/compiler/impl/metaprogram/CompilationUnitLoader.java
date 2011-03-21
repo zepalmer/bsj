@@ -3,9 +3,9 @@ package edu.jhu.cs.bsj.compiler.impl.metaprogram;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.HashSet;
+import java.util.HashMap;
 import java.util.List;
-import java.util.Set;
+import java.util.Map;
 
 import javax.tools.DiagnosticListener;
 import javax.tools.JavaFileObject.Kind;
@@ -14,11 +14,14 @@ import org.apache.log4j.Logger;
 
 import edu.jhu.cs.bsj.compiler.ast.BsjSourceLocation;
 import edu.jhu.cs.bsj.compiler.ast.node.CompilationUnitNode;
+import edu.jhu.cs.bsj.compiler.ast.node.Node;
 import edu.jhu.cs.bsj.compiler.ast.node.PackageNode;
 import edu.jhu.cs.bsj.compiler.impl.ast.BsjNodeManager;
+import edu.jhu.cs.bsj.compiler.impl.ast.MetaprogramExecutionStack;
 import edu.jhu.cs.bsj.compiler.impl.ast.PackageNodeUtilities;
 import edu.jhu.cs.bsj.compiler.impl.ast.node.PackageNodeImpl;
 import edu.jhu.cs.bsj.compiler.impl.tool.classpath.bcel.BsjBinaryNodeLoader;
+import edu.jhu.cs.bsj.compiler.impl.tool.compiler.CompilerUtilities;
 import edu.jhu.cs.bsj.compiler.impl.utils.NotImplementedYetException;
 import edu.jhu.cs.bsj.compiler.metaprogram.CompilationUnitLoadingInfo;
 import edu.jhu.cs.bsj.compiler.tool.BsjToolkit;
@@ -38,6 +41,10 @@ public class CompilationUnitLoader
     private BsjToolkit toolkit;
     /** The node manager which controls the nodes. */
     private BsjNodeManager nodeManager;
+    /** A mapping from the UIDs of loaded compilation units and their children to the nodes themselves. */
+    private Map<Long, Node> loadNodeMap = new HashMap<Long, Node>();
+    /** A returnable version of the <tt>loadNodeMap</tt>. */
+    private Map<Long, Node> returnableLoadNodeMap = Collections.unmodifiableMap(this.loadNodeMap);
 
     public CompilationUnitLoader(BsjToolkit toolkit, BsjNodeManager nodeManager)
     {
@@ -92,42 +99,76 @@ public class CompilationUnitLoader
                 return false;
             return true;
         }
+
+        @Override
+        public String toString()
+        {
+            return "(" + fullyQualifiedPackageName + "," + name + ")";
+        }
     }
 
-    private Set<LoadCacheKey> alreadyFailedToLoad = new HashSet<LoadCacheKey>();
+    private Map<LoadCacheKey, CompilationUnitNode> loadCache = new HashMap<LoadCacheKey, CompilationUnitNode>();
 
     public CompilationUnitNode load(String fullyQualifiedPackageName, String name, CompilationUnitLoadingInfo info)
     {
+        MetaprogramExecutionStack.Element executionStackElement = new MetaprogramExecutionStack.Element(null, null,
+                null, null, null);
+        this.nodeManager.getMetaprogramExecutionStack().push(executionStackElement);
+        try
+        {
+            return innerLoad(fullyQualifiedPackageName, name, info);
+        } finally
+        {
+            this.nodeManager.getMetaprogramExecutionStack().pop(executionStackElement);
+        }
+    }
+
+    private CompilationUnitNode innerLoad(String fullyQualifiedPackageName, String name, CompilationUnitLoadingInfo info)
+    {
+        if (fullyQualifiedPackageName == null)
+        {
+            if (LOGGER.isTraceEnabled())
+            {
+                LOGGER.trace("Ignoring request to load for a disconnected package.");
+            }
+            return null;
+        }
+
         CompilationUnitNode compilationUnitNode = null;
 
         if (LOGGER.isTraceEnabled())
         {
-            LOGGER.trace("Loading compilation unit " + name + " in package node \""
-                    + fullyQualifiedPackageName + "\"");
+            LOGGER.trace("Loading compilation unit " + name + " in package node \"" + fullyQualifiedPackageName + "\"");
         }
 
         // Check the loading cache
         LoadCacheKey key = new LoadCacheKey(fullyQualifiedPackageName, name);
-        if (!this.alreadyFailedToLoad.contains(key))
+        if (!this.loadCache.containsKey(key))
         {
             // Otherwise, we have to go searching
-            if (fullyQualifiedPackageName != null)
+            for (BsjFileObject file : PackageNodeUtilities.findCompilationUnits(this.toolkit.getFileManager(),
+                    fullyQualifiedPackageName, false))
             {
-                for (BsjFileObject file : PackageNodeUtilities.findCompilationUnits(this.toolkit.getFileManager(),
-                        fullyQualifiedPackageName, false))
+                if (PackageNodeUtilities.getCompilationUnitName(file).equals(name))
                 {
-                    if (PackageNodeUtilities.getCompilationUnitName(file).equals(name))
-                    {
-                        compilationUnitNode = actualLoad(name, info.getDiagnosticListener(), file);
-                        break;
-                    }
+                    compilationUnitNode = actualLoad(name, info.getDiagnosticListener(), file);
+                    break;
                 }
             }
+            this.loadCache.put(key, compilationUnitNode);
+            if (compilationUnitNode != null)
+            {
+                // set up the node map for this unit
+                Map<Long, Node> uidMap = CompilerUtilities.buildTreeIdMap(compilationUnitNode);
+                this.loadNodeMap.putAll(uidMap);
+            }
+        } else
+        {
+            compilationUnitNode = this.loadCache.get(key);
         }
 
         if (compilationUnitNode == null)
         {
-            this.alreadyFailedToLoad.add(key);
             if (LOGGER.isTraceEnabled())
             {
                 LOGGER.trace("No such compilation unit " + name + " exists in package node \""
@@ -153,13 +194,15 @@ public class CompilationUnitLoader
      * @param file The file from which to load the compilation unit.
      * @return The compilation unit if it was loaded; <code>null</code> if it could not be loaded.
      */
-    private CompilationUnitNode actualLoad(String name,
-            DiagnosticListener<BsjSourceLocation> diagnosticListener, BsjFileObject file)
+    private CompilationUnitNode actualLoad(String name, DiagnosticListener<BsjSourceLocation> diagnosticListener,
+            BsjFileObject file)
     {
         // Try to load the compilation unit.
+        MetaprogramExecutionStack.Element executionStackElement = new MetaprogramExecutionStack.Element(null, null,
+                null,  null, null);
         try
         {
-            this.nodeManager.pushNull();
+            this.nodeManager.getMetaprogramExecutionStack().push(executionStackElement);
             CompilationUnitNode compilationUnitNode;
             if (file.getKind() == Kind.CLASS)
             {
@@ -169,7 +212,7 @@ public class CompilationUnitLoader
             {
                 compilationUnitNode = this.toolkit.getParser().parse(name, file.openReader(true), diagnosticListener);
             }
-            
+
             return compilationUnitNode;
         } catch (IOException e)
         {
@@ -177,7 +220,7 @@ public class CompilationUnitLoader
             throw new NotImplementedYetException(e);
         } finally
         {
-            this.nodeManager.popAll();
+            this.nodeManager.getMetaprogramExecutionStack().pop(executionStackElement);
         }
     }
 
@@ -203,5 +246,28 @@ public class CompilationUnitLoader
             names.add(PackageNodeUtilities.getCompilationUnitName(file));
         }
         return names;
+    }
+
+    /**
+     * Obtains the UID map for a given compilation unit node by that node's UID.
+     * 
+     * @param uid The UID of the compilation unit.
+     * @return The mapping in question or <code>null</code> if no such mapping exists.
+     */
+    public Map<Long, Node> getUidMap()
+    {
+        return this.returnableLoadNodeMap;
+    }
+
+    /**
+     * An interface for callback objects to implement when they wish to receive notification of loaded compilation
+     * units.
+     */
+    public static interface Listener
+    {
+        /**
+         * Indicates that a compilation unit was loaded.
+         */
+        public void compilationUnitLoaded(String fullyQualifiedPackageName, CompilationUnitNode node);
     }
 }

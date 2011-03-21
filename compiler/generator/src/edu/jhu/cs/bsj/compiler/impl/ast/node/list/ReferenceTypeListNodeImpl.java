@@ -17,6 +17,7 @@ import edu.jhu.cs.bsj.compiler.ast.node.Node;
 import edu.jhu.cs.bsj.compiler.ast.node.ReferenceTypeNode;
 import edu.jhu.cs.bsj.compiler.ast.node.list.ReferenceTypeListNode;
 import edu.jhu.cs.bsj.compiler.impl.ast.BsjNodeManager;
+import edu.jhu.cs.bsj.compiler.impl.ast.BsjNodeProxyFactory;
 
 @Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
 public class ReferenceTypeListNodeImpl extends ListNodeImpl<ReferenceTypeNode> implements ReferenceTypeListNode
@@ -30,6 +31,18 @@ public class ReferenceTypeListNodeImpl extends ListNodeImpl<ReferenceTypeNode> i
             boolean binary)
     {
         super(children, startLocation, stopLocation, manager, binary);
+    }
+    
+    /** Proxy constructor. */
+    public ReferenceTypeListNodeImpl(BsjNodeManager manager, BsjNodeProxyFactory proxyFactory, ReferenceTypeListNode backingNode)
+    {
+        super(manager, proxyFactory, backingNode);
+    }
+    
+    /** Retrieves this node's backing node (if one exists). */
+    protected ReferenceTypeListNode getBackingNode()
+    {
+        return (ReferenceTypeListNode)super.getBackingNode();
     }
     
     /**
@@ -136,6 +149,8 @@ public class ReferenceTypeListNodeImpl extends ListNodeImpl<ReferenceTypeNode> i
     {
         StringBuilder sb = new StringBuilder();
         sb.append(this.getClass().getSimpleName());
+        sb.append('#');
+        sb.append(this.getUid());
         sb.append('[');
         sb.append("children=");
         sb.append(this.getUnionForChildren() == null? "null" : this.getUnionForChildren().getClass().getSimpleName());
@@ -227,6 +242,14 @@ public class ReferenceTypeListNodeImpl extends ListNodeImpl<ReferenceTypeNode> i
     public Class<ReferenceTypeNode> getElementType()
     {
         return ReferenceTypeNode.class;
+    }
+    
+    /**
+     * Wraps an element of this list's type.
+     */
+    protected ReferenceTypeNode wrapElement(ReferenceTypeNode element)
+    {
+        return getProxyFactory().makeReferenceTypeNode(element);
     }
     
 }

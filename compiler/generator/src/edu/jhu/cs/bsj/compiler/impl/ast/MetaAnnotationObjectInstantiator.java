@@ -26,7 +26,6 @@ import edu.jhu.cs.bsj.compiler.ast.AccessModifier;
 import edu.jhu.cs.bsj.compiler.ast.BsjNodeFactory;
 import edu.jhu.cs.bsj.compiler.ast.BsjNodeVisitor;
 import edu.jhu.cs.bsj.compiler.ast.BsjSourceLocation;
-import edu.jhu.cs.bsj.compiler.ast.NameCategory;
 import edu.jhu.cs.bsj.compiler.ast.exception.MetaAnnotationInstantiationFailureException;
 import edu.jhu.cs.bsj.compiler.ast.node.BinaryExpressionNode;
 import edu.jhu.cs.bsj.compiler.ast.node.ClassDeclarationNode;
@@ -54,7 +53,6 @@ import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaAnnotationArrayValueNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaAnnotationElementNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaAnnotationExpressionValueNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaAnnotationMetaAnnotationValueNode;
-import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaAnnotationMetaprogramAnchorNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaAnnotationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaAnnotationValueNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramImportNode;
@@ -78,7 +76,6 @@ import edu.jhu.cs.bsj.compiler.lang.type.BsjType;
 import edu.jhu.cs.bsj.compiler.lang.value.SelectionBag;
 import edu.jhu.cs.bsj.compiler.metaannotation.BsjMetaAnnotation;
 import edu.jhu.cs.bsj.compiler.metaannotation.InvalidMetaAnnotationConfigurationException;
-import edu.jhu.cs.bsj.compiler.metaprogram.CompilationUnitLoadingInfo;
 import edu.jhu.cs.bsj.compiler.tool.BsjToolkit;
 import edu.jhu.cs.bsj.compiler.tool.filemanager.BsjCompilerLocation;
 import edu.jhu.cs.bsj.compiler.tool.filemanager.BsjFileManager;
@@ -112,20 +109,6 @@ public class MetaAnnotationObjectInstantiator
     public MetaAnnotationObjectInstantiator(BsjToolkit toolkit)
     {
         this.toolkit = toolkit;
-    }
-
-    /**
-     * Creates a new meta-annotation metaprogram anchor. This functionality is provided here to prevent nodes from
-     * needing access to a factory. It is intended to be used by the {@link MetaAnnotationNode} when an anchor is
-     * required to support its annotation object.
-     * 
-     * @param node The node for which the anchor is being created.
-     * @return A new meta-annotation metaprogram anchor.
-     */
-    public MetaAnnotationMetaprogramAnchorNode instantiateMetaAnnotationMetaprogramAnchor(Node node)
-    {
-        return this.toolkit.getNodeFactory().makeMetaAnnotationMetaprogramAnchorNode(node.getStartLocation(),
-                node.getStopLocation());
     }
 
     /**
@@ -262,36 +245,32 @@ public class MetaAnnotationObjectInstantiator
 
         Class<?> clazz = null;
 
-        // If the base name is a type, then an import might apply
-        CompilationUnitLoadingInfo loader = this.toolkit.getCompilationUnitLoadingInfoFactory().makeLoadingInfo(listener);
-        if (baseNameNode.getCategory(loader).equals(NameCategory.TYPE))
+        // If the base name is a type, then an import might apply. See if we can find a suitable class using a single
+        // type import
+        for (ImportNode importNode : imports)
         {
-            // Next, see if we can find a suitable class using a single type import
-            for (ImportNode importNode : imports)
+            if (importNode instanceof ImportSingleTypeNode || importNode instanceof SingleStaticImportNode)
             {
-                if (importNode instanceof ImportSingleTypeNode || importNode instanceof SingleStaticImportNode)
+                if (importNode.getName().getIdentifier().getIdentifier().equals(
+                        baseNameNode.getIdentifier().getIdentifier()))
                 {
-                    if (importNode.getName().getIdentifier().getIdentifier().equals(
-                            baseNameNode.getIdentifier().getIdentifier()))
-                    {
-                        clazz = tryClass(importNode.getName(), nameNode, true, listener);
-                        if (clazz != null)
-                            break;
-                    }
+                    clazz = tryClass(importNode.getName(), nameNode, true, listener);
+                    if (clazz != null)
+                        break;
                 }
             }
+        }
 
-            if (clazz == null)
+        if (clazz == null)
+        {
+            // Didn't find anything direct. Let's look at the on-demand imports
+            for (ImportNode importNode : imports)
             {
-                // Didn't find anything direct. Let's look at the on-demand imports
-                for (ImportNode importNode : imports)
+                if (importNode instanceof ImportOnDemandNode || importNode instanceof StaticImportOnDemandNode)
                 {
-                    if (importNode instanceof ImportOnDemandNode || importNode instanceof StaticImportOnDemandNode)
-                    {
-                        clazz = tryClass(importNode.getName(), nameNode, false, listener);
-                        if (clazz != null)
-                            break;
-                    }
+                    clazz = tryClass(importNode.getName(), nameNode, false, listener);
+                    if (clazz != null)
+                        break;
                 }
             }
         }
@@ -328,80 +307,67 @@ public class MetaAnnotationObjectInstantiator
      * 
      * @param importNode The import name to consider or <code>null</code> for no import name.
      * @param name The name of the type to consider.
-     * @param ignoreLast <code>true</code> to ignore the last component of the import's name.
+     * @param ignoreLast <code>true</code> to ignore the last component of the import's name (such as in the case of a
+     *            single import).
      * @param listener The listener to use to report any problems.
      * @return The class if it is found; <code>null</code> if it is not.
      */
     private Class<?> tryClass(NameNode importName, NameNode name, boolean ignoreLast,
             DiagnosticListener<BsjSourceLocation> listener)
     {
-        // Create a list of names to consider in order from right to left in the name string
-        List<NameNode> names;
-        if (importName == null)
+        final int startIndex;
+        List<String> nameComponents = new ArrayList<String>();
+        if (importName != null)
         {
-            names = Arrays.asList(name);
-        } else
-        {
+            nameComponents.addAll(importName.getNameComponents());
             if (ignoreLast)
             {
-                if (importName instanceof QualifiedNameNode)
-                {
-                    names = Arrays.asList(name, ((QualifiedNameNode) importName).getBase());
-                } else
-                {
-                    names = Arrays.asList(name);
-                }
-            } else
-            {
-                names = Arrays.asList(name, importName);
+                nameComponents.remove(nameComponents.size() - 1);
             }
-        }
-
-        // Set up loop variables
-        StringBuilder sb = new StringBuilder();
-
-        // For each name, remove the components and build the binary name appropriately
-        CompilationUnitLoadingInfo loader = this.toolkit.getCompilationUnitLoadingInfoFactory().makeLoadingInfo(listener);
-        for (NameNode nameNode : names)
+            startIndex = nameComponents.size();
+        } else
         {
-            while (nameNode != null)
+            startIndex = 0;
+        }
+        nameComponents.addAll(name.getNameComponents());
+
+        // We have no precise idea where the type name begins and the package name ends. According to the resolution
+        // rules specified in the JLS, however, the following should work.
+        int packageComponents = startIndex;
+        while (packageComponents < nameComponents.size())
+        {
+            StringBuilder sb = new StringBuilder();
+            for (int i = 0; i < nameComponents.size(); i++)
             {
-                if (sb.length() > 0)
+                if (i > 0)
                 {
-                    if (nameNode.getCategory(loader) == NameCategory.TYPE)
+                    if (i <= packageComponents)
                     {
-                        sb.insert(0, '$');
+                        sb.append('.');
                     } else
                     {
-                        sb.insert(0, '.');
+                        sb.append('$');
                     }
                 }
-
-                sb.insert(0, nameNode.getIdentifier().getIdentifier());
-
-                if (nameNode instanceof QualifiedNameNode)
-                {
-                    nameNode = ((QualifiedNameNode) nameNode).getBase();
-                } else
-                {
-                    nameNode = null;
-                }
+                sb.append(nameComponents.get(i));
             }
-        }
 
-        // Get the binary name
-        String binaryName = sb.toString();
+            // Get the binary name
+            String binaryName = sb.toString();
 
-        // Load the class by that name
-        try
-        {
-            ClassLoader classLoader = this.toolkit.getFileManager().getLocationManager(
-                    BsjCompilerLocation.METAPROGRAM_CLASSPATH).getClassLoader();
-            return classLoader.loadClass(binaryName);
-        } catch (ClassNotFoundException e)
-        {
-            return null;
+            // Load the class by that name
+            try
+            {
+                ClassLoader classLoader = this.toolkit.getFileManager().getLocationManager(
+                        BsjCompilerLocation.METAPROGRAM_CLASSPATH).getClassLoader();
+                return classLoader.loadClass(binaryName);
+            } catch (ClassNotFoundException e)
+            {
+            }
+
+            packageComponents++;
         }
+        return null;
     }
 
     /**
@@ -449,6 +415,7 @@ public class MetaAnnotationObjectInstantiator
             {
                 Object childValue = evaluateValueNode(childNode, type.getComponentType(), annotationClass, listener,
                         propertyName);
+                // TODO: if the childValue provided does not match the expect type, raise an appropriate diagnostic
                 Array.set(array, index++, childValue);
             }
             return array;

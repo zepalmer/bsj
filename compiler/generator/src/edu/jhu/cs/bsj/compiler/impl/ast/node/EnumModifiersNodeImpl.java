@@ -1,10 +1,10 @@
 package edu.jhu.cs.bsj.compiler.impl.ast.node;
 
 import java.util.Arrays;
-import java.util.EnumMap;
+import java.util.EnumSet;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
+import java.util.Set;
 
 import javax.annotation.Generated;
 
@@ -21,8 +21,10 @@ import edu.jhu.cs.bsj.compiler.ast.node.Node;
 import edu.jhu.cs.bsj.compiler.ast.node.list.AnnotationListNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaAnnotationListNode;
 import edu.jhu.cs.bsj.compiler.impl.ast.BsjNodeManager;
-import edu.jhu.cs.bsj.compiler.impl.ast.attribute.AttributeName;
-import edu.jhu.cs.bsj.compiler.impl.ast.attribute.ReadWriteAttribute;
+import edu.jhu.cs.bsj.compiler.impl.ast.BsjNodeProxyFactory;
+import edu.jhu.cs.bsj.compiler.impl.ast.delta.property.EnumModifiersNodeSetAccessPropertyEditScriptElementImpl;
+import edu.jhu.cs.bsj.compiler.impl.ast.delta.property.EnumModifiersNodeSetStrictfpFlagPropertyEditScriptElementImpl;
+import edu.jhu.cs.bsj.compiler.impl.ast.properties.EnumModifiersNodeProperties;
 
 @Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
 public class EnumModifiersNodeImpl extends ModifiersNodeImpl implements EnumModifiersNode
@@ -33,24 +35,11 @@ public class EnumModifiersNodeImpl extends ModifiersNodeImpl implements EnumModi
     /** Whether or not the associated enum uses strict floating-point. */
     private boolean strictfpFlag;
     
-    private Map<LocalAttribute,ReadWriteAttribute> localAttributes = new EnumMap<LocalAttribute,ReadWriteAttribute>(LocalAttribute.class);
-    private ReadWriteAttribute getAttribute(LocalAttribute attributeName)
-    {
-        ReadWriteAttribute attribute = localAttributes.get(attributeName);
-        if (attribute == null)
-        {
-            attribute = new ReadWriteAttribute(EnumModifiersNodeImpl.this, attributeName);
-            localAttributes.put(attributeName, attribute);
-        }
-        return attribute;
-    }
-    private static enum LocalAttribute implements AttributeName
-    {
-        /** Attribute identifier for the access property. */
-        ACCESS,
-        /** Attribute identifier for the strictfpFlag property. */
-        STRICTFP_FLAG,
-    }
+    /**
+     * A set of those properties which have been populated from the backing node.
+     * This field is <code>null</code> if <tt>backingNode</tt> is <code>null</code>.
+     */
+    private Set<EnumModifiersNodeProperties> populatedProperties;
     
     /** General constructor. */
     public EnumModifiersNodeImpl(
@@ -64,8 +53,50 @@ public class EnumModifiersNodeImpl extends ModifiersNodeImpl implements EnumModi
             boolean binary)
     {
         super(metaAnnotations, annotations, startLocation, stopLocation, manager, binary);
-        this.access = access;
-        this.strictfpFlag = strictfpFlag;
+        this.populatedProperties = null;
+        doSetAccess(access);
+        doSetStrictfpFlag(strictfpFlag);
+    }
+    
+    /** Proxy constructor. */
+    public EnumModifiersNodeImpl(BsjNodeManager manager, BsjNodeProxyFactory proxyFactory, EnumModifiersNode backingNode)
+    {
+        super(manager, proxyFactory, backingNode);
+        this.populatedProperties = EnumSet.noneOf(EnumModifiersNodeProperties.class);
+    }
+    
+    /** Retrieves this node's backing node (if one exists). */
+    protected EnumModifiersNode getBackingNode()
+    {
+        return (EnumModifiersNode)super.getBackingNode();
+    }
+    
+    /**
+     * Ensures that the access value has been populated from proxy.
+     * If this node is not backed by a proxy or if the value has already been
+     * populated, this method does nothing.
+     */
+    private void checkAccessWrapped()
+    {
+        if (this.populatedProperties == null || this.populatedProperties.contains(
+                EnumModifiersNodeProperties.ACCESS))
+            return;
+        this.populatedProperties.add(EnumModifiersNodeProperties.ACCESS);
+        this.access = this.getBackingNode().getAccess();
+    }
+    
+    /**
+     * Ensures that the strictfpFlag value has been populated from proxy.
+     * If this node is not backed by a proxy or if the value has already been
+     * populated, this method does nothing.
+     */
+    private void checkStrictfpFlagWrapped()
+    {
+        if (this.populatedProperties == null || this.populatedProperties.contains(
+                EnumModifiersNodeProperties.STRICTFP_FLAG))
+            return;
+        this.populatedProperties.add(EnumModifiersNodeProperties.STRICTFP_FLAG);
+        this.strictfpFlag = this.getBackingNode().getStrictfpFlag();
     }
     
     /**
@@ -74,7 +105,7 @@ public class EnumModifiersNodeImpl extends ModifiersNodeImpl implements EnumModi
      */
     public AccessModifier getAccess()
     {
-        getAttribute(LocalAttribute.ACCESS).recordAccess(ReadWriteAttribute.AccessType.READ);
+        checkAccessWrapped();
         return this.access;
     }
     
@@ -84,18 +115,15 @@ public class EnumModifiersNodeImpl extends ModifiersNodeImpl implements EnumModi
      */
     public void setAccess(AccessModifier access)
     {
-            setAccess(access, true);
-            getManager().notifyChange(this);
+        checkAccessWrapped();
+        this.getManager().assertMutatable(this);
+        this.doSetAccess(access);
+        if (this.getManager().isRecordingEdits())
+            super.recordEdit(new EnumModifiersNodeSetAccessPropertyEditScriptElementImpl(this.getManager().getCurrentMetaprogramId(), this.getUid(), access));
     }
     
-    private void setAccess(AccessModifier access, boolean checkPermissions)
+    private void doSetAccess(AccessModifier access)
     {
-        if (checkPermissions)
-        {
-            getManager().assertMutatable(this);
-            getAttribute(LocalAttribute.ACCESS).recordAccess(ReadWriteAttribute.AccessType.WRITE);
-        }
-        
         this.access = access;
     }
     
@@ -105,7 +133,7 @@ public class EnumModifiersNodeImpl extends ModifiersNodeImpl implements EnumModi
      */
     public boolean getStrictfpFlag()
     {
-        getAttribute(LocalAttribute.STRICTFP_FLAG).recordAccess(ReadWriteAttribute.AccessType.READ);
+        checkStrictfpFlagWrapped();
         return this.strictfpFlag;
     }
     
@@ -115,18 +143,15 @@ public class EnumModifiersNodeImpl extends ModifiersNodeImpl implements EnumModi
      */
     public void setStrictfpFlag(boolean strictfpFlag)
     {
-            setStrictfpFlag(strictfpFlag, true);
-            getManager().notifyChange(this);
+        checkStrictfpFlagWrapped();
+        this.getManager().assertMutatable(this);
+        this.doSetStrictfpFlag(strictfpFlag);
+        if (this.getManager().isRecordingEdits())
+            super.recordEdit(new EnumModifiersNodeSetStrictfpFlagPropertyEditScriptElementImpl(this.getManager().getCurrentMetaprogramId(), this.getUid(), strictfpFlag));
     }
     
-    private void setStrictfpFlag(boolean strictfpFlag, boolean checkPermissions)
+    private void doSetStrictfpFlag(boolean strictfpFlag)
     {
-        if (checkPermissions)
-        {
-            getManager().assertMutatable(this);
-            getAttribute(LocalAttribute.STRICTFP_FLAG).recordAccess(ReadWriteAttribute.AccessType.WRITE);
-        }
-        
         this.strictfpFlag = strictfpFlag;
     }
     
@@ -222,6 +247,8 @@ public class EnumModifiersNodeImpl extends ModifiersNodeImpl implements EnumModi
     {
         StringBuilder sb = new StringBuilder();
         sb.append(this.getClass().getSimpleName());
+        sb.append('#');
+        sb.append(this.getUid());
         sb.append('[');
         sb.append("access=");
         sb.append(String.valueOf(this.getAccess()) + ":" + (this.getAccess() != null ? this.getAccess().getClass().getSimpleName() : "null"));

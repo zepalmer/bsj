@@ -42,8 +42,5 @@ public class StripBsjNodesTask extends AbstractBsjCompilerTask
 				node.clear();
 			}
 		});
-
-		// Now serialize
-		context.registerTask(new SourceSerializationTask(node));
 	}
 }

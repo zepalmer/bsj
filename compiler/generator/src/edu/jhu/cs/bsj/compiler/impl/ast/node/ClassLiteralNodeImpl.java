@@ -1,10 +1,10 @@
 package edu.jhu.cs.bsj.compiler.impl.ast.node;
 
 import java.util.Arrays;
-import java.util.EnumMap;
+import java.util.EnumSet;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
+import java.util.Set;
 
 import javax.annotation.Generated;
 
@@ -19,9 +19,10 @@ import edu.jhu.cs.bsj.compiler.ast.node.ClassLiteralNode;
 import edu.jhu.cs.bsj.compiler.ast.node.LiteralizableTypeNode;
 import edu.jhu.cs.bsj.compiler.ast.node.Node;
 import edu.jhu.cs.bsj.compiler.impl.ast.BsjNodeManager;
+import edu.jhu.cs.bsj.compiler.impl.ast.BsjNodeProxyFactory;
 import edu.jhu.cs.bsj.compiler.impl.ast.NormalNodeUnion;
-import edu.jhu.cs.bsj.compiler.impl.ast.attribute.AttributeName;
-import edu.jhu.cs.bsj.compiler.impl.ast.attribute.ReadWriteAttribute;
+import edu.jhu.cs.bsj.compiler.impl.ast.delta.property.ClassLiteralNodeSetValuePropertyEditScriptElementImpl;
+import edu.jhu.cs.bsj.compiler.impl.ast.properties.ClassLiteralNodeProperties;
 
 @Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
 public class ClassLiteralNodeImpl extends NodeImpl implements ClassLiteralNode
@@ -29,22 +30,11 @@ public class ClassLiteralNodeImpl extends NodeImpl implements ClassLiteralNode
     /** The type for this literal. */
     private NodeUnion<? extends LiteralizableTypeNode> value;
     
-    private Map<LocalAttribute,ReadWriteAttribute> localAttributes = new EnumMap<LocalAttribute,ReadWriteAttribute>(LocalAttribute.class);
-    private ReadWriteAttribute getAttribute(LocalAttribute attributeName)
-    {
-        ReadWriteAttribute attribute = localAttributes.get(attributeName);
-        if (attribute == null)
-        {
-            attribute = new ReadWriteAttribute(ClassLiteralNodeImpl.this, attributeName);
-            localAttributes.put(attributeName, attribute);
-        }
-        return attribute;
-    }
-    private static enum LocalAttribute implements AttributeName
-    {
-        /** Attribute identifier for the value property. */
-        VALUE,
-    }
+    /**
+     * A set of those properties which have been populated from the backing node.
+     * This field is <code>null</code> if <tt>backingNode</tt> is <code>null</code>.
+     */
+    private Set<ClassLiteralNodeProperties> populatedProperties;
     
     /** General constructor. */
     public ClassLiteralNodeImpl(
@@ -55,7 +45,49 @@ public class ClassLiteralNodeImpl extends NodeImpl implements ClassLiteralNode
             boolean binary)
     {
         super(startLocation, stopLocation, manager, binary);
-        setUnionForValue(value, false);
+        this.populatedProperties = null;
+        doSetValue(value);
+    }
+    
+    /** Proxy constructor. */
+    public ClassLiteralNodeImpl(BsjNodeManager manager, BsjNodeProxyFactory proxyFactory, ClassLiteralNode backingNode)
+    {
+        super(manager, proxyFactory, backingNode);
+        this.populatedProperties = EnumSet.noneOf(ClassLiteralNodeProperties.class);
+    }
+    
+    /** Retrieves this node's backing node (if one exists). */
+    protected ClassLiteralNode getBackingNode()
+    {
+        return (ClassLiteralNode)super.getBackingNode();
+    }
+    
+    /**
+     * Ensures that the value value has been populated from proxy.
+     * If this node is not backed by a proxy or if the value has already been
+     * populated, this method does nothing.
+     */
+    private void checkValueWrapped()
+    {
+        if (this.populatedProperties == null || this.populatedProperties.contains(
+                ClassLiteralNodeProperties.VALUE))
+            return;
+        this.populatedProperties.add(ClassLiteralNodeProperties.VALUE);
+        NodeUnion<? extends LiteralizableTypeNode> union = this.getBackingNode().getUnionForValue();
+        switch (union.getType())
+        {
+            case NORMAL:
+                union = this.getProxyFactory().makeNormalNodeUnion(
+                        this.getProxyFactory().makeLiteralizableTypeNode(union.getNormalNode()));
+                break;
+            case SPLICE:
+                union = this.getProxyFactory().makeSpliceNodeUnion(
+                        this.getProxyFactory().makeSpliceNode(union.getSpliceNode()));
+                break;
+            default:
+                throw new IllegalStateException("Unrecognized union type: " + union.getType());
+        }
+        this.value = union;
     }
     
     /**
@@ -65,7 +97,7 @@ public class ClassLiteralNodeImpl extends NodeImpl implements ClassLiteralNode
      */
     public LiteralizableTypeNode getValue()
     {
-        getAttribute(LocalAttribute.VALUE).recordAccess(ReadWriteAttribute.AccessType.READ);
+        checkValueWrapped();
         if (this.value == null)
         {
             return null;
@@ -81,7 +113,7 @@ public class ClassLiteralNodeImpl extends NodeImpl implements ClassLiteralNode
      */
     public NodeUnion<? extends LiteralizableTypeNode> getUnionForValue()
     {
-        getAttribute(LocalAttribute.VALUE).recordAccess(ReadWriteAttribute.AccessType.READ);
+        checkValueWrapped();
         if (this.value == null)
         {
             this.value = new NormalNodeUnion<LiteralizableTypeNode>(null);
@@ -95,24 +127,8 @@ public class ClassLiteralNodeImpl extends NodeImpl implements ClassLiteralNode
      */
     public void setValue(LiteralizableTypeNode value)
     {
-            setValue(value, true);
-            getManager().notifyChange(this);
-    }
-    
-    private void setValue(LiteralizableTypeNode value, boolean checkPermissions)
-    {
-        if (checkPermissions)
-        {
-            getManager().assertMutatable(this);
-            getAttribute(LocalAttribute.VALUE).recordAccess(ReadWriteAttribute.AccessType.WRITE);
-        }
-        
-        if (this.value != null)
-        {
-            setAsChild(this.value.getNodeValue(), false);
-        }
-        this.value = new NormalNodeUnion<LiteralizableTypeNode>(value);
-        setAsChild(value, true);
+        checkValueWrapped();
+        this.setUnionForValue(new NormalNodeUnion<LiteralizableTypeNode>(value));
     }
     
     /**
@@ -121,18 +137,15 @@ public class ClassLiteralNodeImpl extends NodeImpl implements ClassLiteralNode
      */
     public void setUnionForValue(NodeUnion<? extends LiteralizableTypeNode> value)
     {
-            setUnionForValue(value, true);
-            getManager().notifyChange(this);
+        checkValueWrapped();
+        this.getManager().assertMutatable(this);
+        this.doSetValue(value);
+        if (this.getManager().isRecordingEdits())
+            super.recordEdit(new ClassLiteralNodeSetValuePropertyEditScriptElementImpl(this.getManager().getCurrentMetaprogramId(), this.getUid(), value.getNodeValue() == null ? null : value.getNodeValue().getUid()));
     }
     
-    private void setUnionForValue(NodeUnion<? extends LiteralizableTypeNode> value, boolean checkPermissions)
+    private void doSetValue(NodeUnion<? extends LiteralizableTypeNode> value)
     {
-        if (checkPermissions)
-        {
-            getManager().assertMutatable(this);
-            getAttribute(LocalAttribute.VALUE).recordAccess(ReadWriteAttribute.AccessType.WRITE);
-        }
-        
         if (value == null)
         {
             value = new NormalNodeUnion<LiteralizableTypeNode>(null);
@@ -156,9 +169,9 @@ public class ClassLiteralNodeImpl extends NodeImpl implements ClassLiteralNode
     protected void receiveToChildren(BsjNodeVisitor visitor)
     {
         super.receiveToChildren(visitor);
-        if (this.value.getNodeValue() != null)
+        if (this.getUnionForValue().getNodeValue() != null)
         {
-            this.value.getNodeValue().receive(visitor);
+            this.getUnionForValue().getNodeValue().receive(visitor);
         }
         Iterator<? extends Node> extras = getHiddenVisitorChildren();
         if (extras != null)
@@ -181,9 +194,9 @@ public class ClassLiteralNodeImpl extends NodeImpl implements ClassLiteralNode
     protected void receiveTypedToChildren(BsjTypedNodeVisitor visitor)
     {
         super.receiveTypedToChildren(visitor);
-        if (this.value.getNodeValue() != null)
+        if (this.getUnionForValue().getNodeValue() != null)
         {
-            this.value.getNodeValue().receiveTyped(visitor);
+            this.getUnionForValue().getNodeValue().receiveTyped(visitor);
         }
         Iterator<? extends Node> extras = getHiddenVisitorChildren();
         if (extras != null)
@@ -242,6 +255,8 @@ public class ClassLiteralNodeImpl extends NodeImpl implements ClassLiteralNode
     {
         StringBuilder sb = new StringBuilder();
         sb.append(this.getClass().getSimpleName());
+        sb.append('#');
+        sb.append(this.getUid());
         sb.append('[');
         sb.append("value=");
         sb.append(this.getUnionForValue().getNodeValue() == null? "null" : this.getUnionForValue().getNodeValue().getClass().getSimpleName());

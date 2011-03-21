@@ -1,10 +1,10 @@
 package edu.jhu.cs.bsj.compiler.impl.ast.node;
 
 import java.util.Arrays;
-import java.util.EnumMap;
+import java.util.EnumSet;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
+import java.util.Set;
 
 import javax.annotation.Generated;
 
@@ -21,8 +21,15 @@ import edu.jhu.cs.bsj.compiler.ast.node.Node;
 import edu.jhu.cs.bsj.compiler.ast.node.list.AnnotationListNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaAnnotationListNode;
 import edu.jhu.cs.bsj.compiler.impl.ast.BsjNodeManager;
-import edu.jhu.cs.bsj.compiler.impl.ast.attribute.AttributeName;
-import edu.jhu.cs.bsj.compiler.impl.ast.attribute.ReadWriteAttribute;
+import edu.jhu.cs.bsj.compiler.impl.ast.BsjNodeProxyFactory;
+import edu.jhu.cs.bsj.compiler.impl.ast.delta.property.MethodModifiersNodeSetAbstractFlagPropertyEditScriptElementImpl;
+import edu.jhu.cs.bsj.compiler.impl.ast.delta.property.MethodModifiersNodeSetAccessPropertyEditScriptElementImpl;
+import edu.jhu.cs.bsj.compiler.impl.ast.delta.property.MethodModifiersNodeSetFinalFlagPropertyEditScriptElementImpl;
+import edu.jhu.cs.bsj.compiler.impl.ast.delta.property.MethodModifiersNodeSetNativeFlagPropertyEditScriptElementImpl;
+import edu.jhu.cs.bsj.compiler.impl.ast.delta.property.MethodModifiersNodeSetStaticFlagPropertyEditScriptElementImpl;
+import edu.jhu.cs.bsj.compiler.impl.ast.delta.property.MethodModifiersNodeSetStrictfpFlagPropertyEditScriptElementImpl;
+import edu.jhu.cs.bsj.compiler.impl.ast.delta.property.MethodModifiersNodeSetSynchronizedFlagPropertyEditScriptElementImpl;
+import edu.jhu.cs.bsj.compiler.impl.ast.properties.MethodModifiersNodeProperties;
 
 @Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
 public class MethodModifiersNodeImpl extends ModifiersNodeImpl implements MethodModifiersNode
@@ -48,34 +55,11 @@ public class MethodModifiersNodeImpl extends ModifiersNodeImpl implements Method
     /** Whether or not the associated method uses strict floating-point. */
     private boolean strictfpFlag;
     
-    private Map<LocalAttribute,ReadWriteAttribute> localAttributes = new EnumMap<LocalAttribute,ReadWriteAttribute>(LocalAttribute.class);
-    private ReadWriteAttribute getAttribute(LocalAttribute attributeName)
-    {
-        ReadWriteAttribute attribute = localAttributes.get(attributeName);
-        if (attribute == null)
-        {
-            attribute = new ReadWriteAttribute(MethodModifiersNodeImpl.this, attributeName);
-            localAttributes.put(attributeName, attribute);
-        }
-        return attribute;
-    }
-    private static enum LocalAttribute implements AttributeName
-    {
-        /** Attribute identifier for the access property. */
-        ACCESS,
-        /** Attribute identifier for the abstractFlag property. */
-        ABSTRACT_FLAG,
-        /** Attribute identifier for the staticFlag property. */
-        STATIC_FLAG,
-        /** Attribute identifier for the finalFlag property. */
-        FINAL_FLAG,
-        /** Attribute identifier for the synchronizedFlag property. */
-        SYNCHRONIZED_FLAG,
-        /** Attribute identifier for the nativeFlag property. */
-        NATIVE_FLAG,
-        /** Attribute identifier for the strictfpFlag property. */
-        STRICTFP_FLAG,
-    }
+    /**
+     * A set of those properties which have been populated from the backing node.
+     * This field is <code>null</code> if <tt>backingNode</tt> is <code>null</code>.
+     */
+    private Set<MethodModifiersNodeProperties> populatedProperties;
     
     /** General constructor. */
     public MethodModifiersNodeImpl(
@@ -94,13 +78,125 @@ public class MethodModifiersNodeImpl extends ModifiersNodeImpl implements Method
             boolean binary)
     {
         super(metaAnnotations, annotations, startLocation, stopLocation, manager, binary);
-        this.access = access;
-        this.abstractFlag = abstractFlag;
-        this.staticFlag = staticFlag;
-        this.finalFlag = finalFlag;
-        this.synchronizedFlag = synchronizedFlag;
-        this.nativeFlag = nativeFlag;
-        this.strictfpFlag = strictfpFlag;
+        this.populatedProperties = null;
+        doSetAccess(access);
+        doSetAbstractFlag(abstractFlag);
+        doSetStaticFlag(staticFlag);
+        doSetFinalFlag(finalFlag);
+        doSetSynchronizedFlag(synchronizedFlag);
+        doSetNativeFlag(nativeFlag);
+        doSetStrictfpFlag(strictfpFlag);
+    }
+    
+    /** Proxy constructor. */
+    public MethodModifiersNodeImpl(BsjNodeManager manager, BsjNodeProxyFactory proxyFactory, MethodModifiersNode backingNode)
+    {
+        super(manager, proxyFactory, backingNode);
+        this.populatedProperties = EnumSet.noneOf(MethodModifiersNodeProperties.class);
+    }
+    
+    /** Retrieves this node's backing node (if one exists). */
+    protected MethodModifiersNode getBackingNode()
+    {
+        return (MethodModifiersNode)super.getBackingNode();
+    }
+    
+    /**
+     * Ensures that the access value has been populated from proxy.
+     * If this node is not backed by a proxy or if the value has already been
+     * populated, this method does nothing.
+     */
+    private void checkAccessWrapped()
+    {
+        if (this.populatedProperties == null || this.populatedProperties.contains(
+                MethodModifiersNodeProperties.ACCESS))
+            return;
+        this.populatedProperties.add(MethodModifiersNodeProperties.ACCESS);
+        this.access = this.getBackingNode().getAccess();
+    }
+    
+    /**
+     * Ensures that the abstractFlag value has been populated from proxy.
+     * If this node is not backed by a proxy or if the value has already been
+     * populated, this method does nothing.
+     */
+    private void checkAbstractFlagWrapped()
+    {
+        if (this.populatedProperties == null || this.populatedProperties.contains(
+                MethodModifiersNodeProperties.ABSTRACT_FLAG))
+            return;
+        this.populatedProperties.add(MethodModifiersNodeProperties.ABSTRACT_FLAG);
+        this.abstractFlag = this.getBackingNode().getAbstractFlag();
+    }
+    
+    /**
+     * Ensures that the staticFlag value has been populated from proxy.
+     * If this node is not backed by a proxy or if the value has already been
+     * populated, this method does nothing.
+     */
+    private void checkStaticFlagWrapped()
+    {
+        if (this.populatedProperties == null || this.populatedProperties.contains(
+                MethodModifiersNodeProperties.STATIC_FLAG))
+            return;
+        this.populatedProperties.add(MethodModifiersNodeProperties.STATIC_FLAG);
+        this.staticFlag = this.getBackingNode().getStaticFlag();
+    }
+    
+    /**
+     * Ensures that the finalFlag value has been populated from proxy.
+     * If this node is not backed by a proxy or if the value has already been
+     * populated, this method does nothing.
+     */
+    private void checkFinalFlagWrapped()
+    {
+        if (this.populatedProperties == null || this.populatedProperties.contains(
+                MethodModifiersNodeProperties.FINAL_FLAG))
+            return;
+        this.populatedProperties.add(MethodModifiersNodeProperties.FINAL_FLAG);
+        this.finalFlag = this.getBackingNode().getFinalFlag();
+    }
+    
+    /**
+     * Ensures that the synchronizedFlag value has been populated from proxy.
+     * If this node is not backed by a proxy or if the value has already been
+     * populated, this method does nothing.
+     */
+    private void checkSynchronizedFlagWrapped()
+    {
+        if (this.populatedProperties == null || this.populatedProperties.contains(
+                MethodModifiersNodeProperties.SYNCHRONIZED_FLAG))
+            return;
+        this.populatedProperties.add(MethodModifiersNodeProperties.SYNCHRONIZED_FLAG);
+        this.synchronizedFlag = this.getBackingNode().getSynchronizedFlag();
+    }
+    
+    /**
+     * Ensures that the nativeFlag value has been populated from proxy.
+     * If this node is not backed by a proxy or if the value has already been
+     * populated, this method does nothing.
+     */
+    private void checkNativeFlagWrapped()
+    {
+        if (this.populatedProperties == null || this.populatedProperties.contains(
+                MethodModifiersNodeProperties.NATIVE_FLAG))
+            return;
+        this.populatedProperties.add(MethodModifiersNodeProperties.NATIVE_FLAG);
+        this.nativeFlag = this.getBackingNode().getNativeFlag();
+    }
+    
+    /**
+     * Ensures that the strictfpFlag value has been populated from proxy.
+     * If this node is not backed by a proxy or if the value has already been
+     * populated, this method does nothing.
+     */
+    private void checkStrictfpFlagWrapped()
+    {
+        if (this.populatedProperties == null || this.populatedProperties.contains(
+                MethodModifiersNodeProperties.STRICTFP_FLAG))
+            return;
+        this.populatedProperties.add(MethodModifiersNodeProperties.STRICTFP_FLAG);
+        this.strictfpFlag = this.getBackingNode().getStrictfpFlag();
     }
     
     /**
@@ -109,7 +205,7 @@ public class MethodModifiersNodeImpl extends ModifiersNodeImpl implements Method
      */
     public AccessModifier getAccess()
     {
-        getAttribute(LocalAttribute.ACCESS).recordAccess(ReadWriteAttribute.AccessType.READ);
+        checkAccessWrapped();
         return this.access;
     }
     
@@ -119,18 +215,15 @@ public class MethodModifiersNodeImpl extends ModifiersNodeImpl implements Method
      */
     public void setAccess(AccessModifier access)
     {
-            setAccess(access, true);
-            getManager().notifyChange(this);
+        checkAccessWrapped();
+        this.getManager().assertMutatable(this);
+        this.doSetAccess(access);
+        if (this.getManager().isRecordingEdits())
+            super.recordEdit(new MethodModifiersNodeSetAccessPropertyEditScriptElementImpl(this.getManager().getCurrentMetaprogramId(), this.getUid(), access));
     }
     
-    private void setAccess(AccessModifier access, boolean checkPermissions)
+    private void doSetAccess(AccessModifier access)
     {
-        if (checkPermissions)
-        {
-            getManager().assertMutatable(this);
-            getAttribute(LocalAttribute.ACCESS).recordAccess(ReadWriteAttribute.AccessType.WRITE);
-        }
-        
         this.access = access;
     }
     
@@ -140,7 +233,7 @@ public class MethodModifiersNodeImpl extends ModifiersNodeImpl implements Method
      */
     public boolean getAbstractFlag()
     {
-        getAttribute(LocalAttribute.ABSTRACT_FLAG).recordAccess(ReadWriteAttribute.AccessType.READ);
+        checkAbstractFlagWrapped();
         return this.abstractFlag;
     }
     
@@ -150,18 +243,15 @@ public class MethodModifiersNodeImpl extends ModifiersNodeImpl implements Method
      */
     public void setAbstractFlag(boolean abstractFlag)
     {
-            setAbstractFlag(abstractFlag, true);
-            getManager().notifyChange(this);
+        checkAbstractFlagWrapped();
+        this.getManager().assertMutatable(this);
+        this.doSetAbstractFlag(abstractFlag);
+        if (this.getManager().isRecordingEdits())
+            super.recordEdit(new MethodModifiersNodeSetAbstractFlagPropertyEditScriptElementImpl(this.getManager().getCurrentMetaprogramId(), this.getUid(), abstractFlag));
     }
     
-    private void setAbstractFlag(boolean abstractFlag, boolean checkPermissions)
+    private void doSetAbstractFlag(boolean abstractFlag)
     {
-        if (checkPermissions)
-        {
-            getManager().assertMutatable(this);
-            getAttribute(LocalAttribute.ABSTRACT_FLAG).recordAccess(ReadWriteAttribute.AccessType.WRITE);
-        }
-        
         this.abstractFlag = abstractFlag;
     }
     
@@ -171,7 +261,7 @@ public class MethodModifiersNodeImpl extends ModifiersNodeImpl implements Method
      */
     public boolean getStaticFlag()
     {
-        getAttribute(LocalAttribute.STATIC_FLAG).recordAccess(ReadWriteAttribute.AccessType.READ);
+        checkStaticFlagWrapped();
         return this.staticFlag;
     }
     
@@ -181,18 +271,15 @@ public class MethodModifiersNodeImpl extends ModifiersNodeImpl implements Method
      */
     public void setStaticFlag(boolean staticFlag)
     {
-            setStaticFlag(staticFlag, true);
-            getManager().notifyChange(this);
+        checkStaticFlagWrapped();
+        this.getManager().assertMutatable(this);
+        this.doSetStaticFlag(staticFlag);
+        if (this.getManager().isRecordingEdits())
+            super.recordEdit(new MethodModifiersNodeSetStaticFlagPropertyEditScriptElementImpl(this.getManager().getCurrentMetaprogramId(), this.getUid(), staticFlag));
     }
     
-    private void setStaticFlag(boolean staticFlag, boolean checkPermissions)
+    private void doSetStaticFlag(boolean staticFlag)
     {
-        if (checkPermissions)
-        {
-            getManager().assertMutatable(this);
-            getAttribute(LocalAttribute.STATIC_FLAG).recordAccess(ReadWriteAttribute.AccessType.WRITE);
-        }
-        
         this.staticFlag = staticFlag;
     }
     
@@ -202,7 +289,7 @@ public class MethodModifiersNodeImpl extends ModifiersNodeImpl implements Method
      */
     public boolean getFinalFlag()
     {
-        getAttribute(LocalAttribute.FINAL_FLAG).recordAccess(ReadWriteAttribute.AccessType.READ);
+        checkFinalFlagWrapped();
         return this.finalFlag;
     }
     
@@ -212,18 +299,15 @@ public class MethodModifiersNodeImpl extends ModifiersNodeImpl implements Method
      */
     public void setFinalFlag(boolean finalFlag)
     {
-            setFinalFlag(finalFlag, true);
-            getManager().notifyChange(this);
+        checkFinalFlagWrapped();
+        this.getManager().assertMutatable(this);
+        this.doSetFinalFlag(finalFlag);
+        if (this.getManager().isRecordingEdits())
+            super.recordEdit(new MethodModifiersNodeSetFinalFlagPropertyEditScriptElementImpl(this.getManager().getCurrentMetaprogramId(), this.getUid(), finalFlag));
     }
     
-    private void setFinalFlag(boolean finalFlag, boolean checkPermissions)
+    private void doSetFinalFlag(boolean finalFlag)
     {
-        if (checkPermissions)
-        {
-            getManager().assertMutatable(this);
-            getAttribute(LocalAttribute.FINAL_FLAG).recordAccess(ReadWriteAttribute.AccessType.WRITE);
-        }
-        
         this.finalFlag = finalFlag;
     }
     
@@ -233,7 +317,7 @@ public class MethodModifiersNodeImpl extends ModifiersNodeImpl implements Method
      */
     public boolean getSynchronizedFlag()
     {
-        getAttribute(LocalAttribute.SYNCHRONIZED_FLAG).recordAccess(ReadWriteAttribute.AccessType.READ);
+        checkSynchronizedFlagWrapped();
         return this.synchronizedFlag;
     }
     
@@ -243,18 +327,15 @@ public class MethodModifiersNodeImpl extends ModifiersNodeImpl implements Method
      */
     public void setSynchronizedFlag(boolean synchronizedFlag)
     {
-            setSynchronizedFlag(synchronizedFlag, true);
-            getManager().notifyChange(this);
+        checkSynchronizedFlagWrapped();
+        this.getManager().assertMutatable(this);
+        this.doSetSynchronizedFlag(synchronizedFlag);
+        if (this.getManager().isRecordingEdits())
+            super.recordEdit(new MethodModifiersNodeSetSynchronizedFlagPropertyEditScriptElementImpl(this.getManager().getCurrentMetaprogramId(), this.getUid(), synchronizedFlag));
     }
     
-    private void setSynchronizedFlag(boolean synchronizedFlag, boolean checkPermissions)
+    private void doSetSynchronizedFlag(boolean synchronizedFlag)
     {
-        if (checkPermissions)
-        {
-            getManager().assertMutatable(this);
-            getAttribute(LocalAttribute.SYNCHRONIZED_FLAG).recordAccess(ReadWriteAttribute.AccessType.WRITE);
-        }
-        
         this.synchronizedFlag = synchronizedFlag;
     }
     
@@ -264,7 +345,7 @@ public class MethodModifiersNodeImpl extends ModifiersNodeImpl implements Method
      */
     public boolean getNativeFlag()
     {
-        getAttribute(LocalAttribute.NATIVE_FLAG).recordAccess(ReadWriteAttribute.AccessType.READ);
+        checkNativeFlagWrapped();
         return this.nativeFlag;
     }
     
@@ -274,18 +355,15 @@ public class MethodModifiersNodeImpl extends ModifiersNodeImpl implements Method
      */
     public void setNativeFlag(boolean nativeFlag)
     {
-            setNativeFlag(nativeFlag, true);
-            getManager().notifyChange(this);
+        checkNativeFlagWrapped();
+        this.getManager().assertMutatable(this);
+        this.doSetNativeFlag(nativeFlag);
+        if (this.getManager().isRecordingEdits())
+            super.recordEdit(new MethodModifiersNodeSetNativeFlagPropertyEditScriptElementImpl(this.getManager().getCurrentMetaprogramId(), this.getUid(), nativeFlag));
     }
     
-    private void setNativeFlag(boolean nativeFlag, boolean checkPermissions)
+    private void doSetNativeFlag(boolean nativeFlag)
     {
-        if (checkPermissions)
-        {
-            getManager().assertMutatable(this);
-            getAttribute(LocalAttribute.NATIVE_FLAG).recordAccess(ReadWriteAttribute.AccessType.WRITE);
-        }
-        
         this.nativeFlag = nativeFlag;
     }
     
@@ -295,7 +373,7 @@ public class MethodModifiersNodeImpl extends ModifiersNodeImpl implements Method
      */
     public boolean getStrictfpFlag()
     {
-        getAttribute(LocalAttribute.STRICTFP_FLAG).recordAccess(ReadWriteAttribute.AccessType.READ);
+        checkStrictfpFlagWrapped();
         return this.strictfpFlag;
     }
     
@@ -305,18 +383,15 @@ public class MethodModifiersNodeImpl extends ModifiersNodeImpl implements Method
      */
     public void setStrictfpFlag(boolean strictfpFlag)
     {
-            setStrictfpFlag(strictfpFlag, true);
-            getManager().notifyChange(this);
+        checkStrictfpFlagWrapped();
+        this.getManager().assertMutatable(this);
+        this.doSetStrictfpFlag(strictfpFlag);
+        if (this.getManager().isRecordingEdits())
+            super.recordEdit(new MethodModifiersNodeSetStrictfpFlagPropertyEditScriptElementImpl(this.getManager().getCurrentMetaprogramId(), this.getUid(), strictfpFlag));
     }
     
-    private void setStrictfpFlag(boolean strictfpFlag, boolean checkPermissions)
+    private void doSetStrictfpFlag(boolean strictfpFlag)
     {
-        if (checkPermissions)
-        {
-            getManager().assertMutatable(this);
-            getAttribute(LocalAttribute.STRICTFP_FLAG).recordAccess(ReadWriteAttribute.AccessType.WRITE);
-        }
-        
         this.strictfpFlag = strictfpFlag;
     }
     
@@ -415,6 +490,8 @@ public class MethodModifiersNodeImpl extends ModifiersNodeImpl implements Method
     {
         StringBuilder sb = new StringBuilder();
         sb.append(this.getClass().getSimpleName());
+        sb.append('#');
+        sb.append(this.getUid());
         sb.append('[');
         sb.append("access=");
         sb.append(String.valueOf(this.getAccess()) + ":" + (this.getAccess() != null ? this.getAccess().getClass().getSimpleName() : "null"));

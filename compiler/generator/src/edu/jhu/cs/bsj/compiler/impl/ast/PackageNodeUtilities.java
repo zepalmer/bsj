@@ -68,7 +68,8 @@ public final class PackageNodeUtilities
 			for (BsjFileObject file : fileManager.listFiles(BsjCompilerLocation.OBJECT_PROGRAM_CLASSPATH, pname,
 					Arrays.asList(Kind.CLASS), false))
 			{
-				// TODO: exclude class files which represent inner classes, etc.
+				// TODO: exclude class files which represent inner classes, etc. (instead ensuring that they are
+			    // properly represented as members of their enclosing class)
 				if (names.add(getCompilationUnitName(file)))
 				{
 					files.add(file);
@@ -78,7 +79,8 @@ public final class PackageNodeUtilities
 			for (BsjFileObject file : fileManager.listFiles(BsjCompilerLocation.OBJECT_PROGRAM_SYSTEM_CLASSPATH, pname,
 					Arrays.asList(Kind.CLASS), false))
 			{
-				// TODO: exclude class files which represent inner classes, etc.
+                // TODO: exclude class files which represent inner classes, etc. (instead ensuring that they are
+                // properly represented as members of their enclosing class)
 				if (names.add(getCompilationUnitName(file)))
 				{
 					files.add(file);

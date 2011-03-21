@@ -17,6 +17,7 @@ import edu.jhu.cs.bsj.compiler.ast.node.Node;
 import edu.jhu.cs.bsj.compiler.ast.node.UnparameterizedTypeNode;
 import edu.jhu.cs.bsj.compiler.ast.node.list.UnparameterizedTypeListNode;
 import edu.jhu.cs.bsj.compiler.impl.ast.BsjNodeManager;
+import edu.jhu.cs.bsj.compiler.impl.ast.BsjNodeProxyFactory;
 
 @Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
 public class UnparameterizedTypeListNodeImpl extends ListNodeImpl<UnparameterizedTypeNode> implements UnparameterizedTypeListNode
@@ -30,6 +31,18 @@ public class UnparameterizedTypeListNodeImpl extends ListNodeImpl<Unparameterize
             boolean binary)
     {
         super(children, startLocation, stopLocation, manager, binary);
+    }
+    
+    /** Proxy constructor. */
+    public UnparameterizedTypeListNodeImpl(BsjNodeManager manager, BsjNodeProxyFactory proxyFactory, UnparameterizedTypeListNode backingNode)
+    {
+        super(manager, proxyFactory, backingNode);
+    }
+    
+    /** Retrieves this node's backing node (if one exists). */
+    protected UnparameterizedTypeListNode getBackingNode()
+    {
+        return (UnparameterizedTypeListNode)super.getBackingNode();
     }
     
     /**
@@ -136,6 +149,8 @@ public class UnparameterizedTypeListNodeImpl extends ListNodeImpl<Unparameterize
     {
         StringBuilder sb = new StringBuilder();
         sb.append(this.getClass().getSimpleName());
+        sb.append('#');
+        sb.append(this.getUid());
         sb.append('[');
         sb.append("children=");
         sb.append(this.getUnionForChildren() == null? "null" : this.getUnionForChildren().getClass().getSimpleName());
@@ -227,6 +242,14 @@ public class UnparameterizedTypeListNodeImpl extends ListNodeImpl<Unparameterize
     public Class<UnparameterizedTypeNode> getElementType()
     {
         return UnparameterizedTypeNode.class;
+    }
+    
+    /**
+     * Wraps an element of this list's type.
+     */
+    protected UnparameterizedTypeNode wrapElement(UnparameterizedTypeNode element)
+    {
+        return getProxyFactory().makeUnparameterizedTypeNode(element);
     }
     
 }

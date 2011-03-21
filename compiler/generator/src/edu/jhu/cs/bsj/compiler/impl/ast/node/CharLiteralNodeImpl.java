@@ -1,10 +1,10 @@
 package edu.jhu.cs.bsj.compiler.impl.ast.node;
 
 import java.util.Arrays;
-import java.util.EnumMap;
+import java.util.EnumSet;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
+import java.util.Set;
 
 import javax.annotation.Generated;
 
@@ -17,8 +17,9 @@ import edu.jhu.cs.bsj.compiler.ast.BsjTypedNodeVisitor;
 import edu.jhu.cs.bsj.compiler.ast.node.CharLiteralNode;
 import edu.jhu.cs.bsj.compiler.ast.node.Node;
 import edu.jhu.cs.bsj.compiler.impl.ast.BsjNodeManager;
-import edu.jhu.cs.bsj.compiler.impl.ast.attribute.AttributeName;
-import edu.jhu.cs.bsj.compiler.impl.ast.attribute.ReadWriteAttribute;
+import edu.jhu.cs.bsj.compiler.impl.ast.BsjNodeProxyFactory;
+import edu.jhu.cs.bsj.compiler.impl.ast.delta.property.CharLiteralNodeSetValuePropertyEditScriptElementImpl;
+import edu.jhu.cs.bsj.compiler.impl.ast.properties.CharLiteralNodeProperties;
 
 @Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
 public class CharLiteralNodeImpl extends NodeImpl implements CharLiteralNode
@@ -26,22 +27,11 @@ public class CharLiteralNodeImpl extends NodeImpl implements CharLiteralNode
     /** The literal value for this node. */
     private Character value;
     
-    private Map<LocalAttribute,ReadWriteAttribute> localAttributes = new EnumMap<LocalAttribute,ReadWriteAttribute>(LocalAttribute.class);
-    private ReadWriteAttribute getAttribute(LocalAttribute attributeName)
-    {
-        ReadWriteAttribute attribute = localAttributes.get(attributeName);
-        if (attribute == null)
-        {
-            attribute = new ReadWriteAttribute(CharLiteralNodeImpl.this, attributeName);
-            localAttributes.put(attributeName, attribute);
-        }
-        return attribute;
-    }
-    private static enum LocalAttribute implements AttributeName
-    {
-        /** Attribute identifier for the value property. */
-        VALUE,
-    }
+    /**
+     * A set of those properties which have been populated from the backing node.
+     * This field is <code>null</code> if <tt>backingNode</tt> is <code>null</code>.
+     */
+    private Set<CharLiteralNodeProperties> populatedProperties;
     
     /** General constructor. */
     public CharLiteralNodeImpl(
@@ -52,7 +42,35 @@ public class CharLiteralNodeImpl extends NodeImpl implements CharLiteralNode
             boolean binary)
     {
         super(startLocation, stopLocation, manager, binary);
-        this.value = value;
+        this.populatedProperties = null;
+        doSetValue(value);
+    }
+    
+    /** Proxy constructor. */
+    public CharLiteralNodeImpl(BsjNodeManager manager, BsjNodeProxyFactory proxyFactory, CharLiteralNode backingNode)
+    {
+        super(manager, proxyFactory, backingNode);
+        this.populatedProperties = EnumSet.noneOf(CharLiteralNodeProperties.class);
+    }
+    
+    /** Retrieves this node's backing node (if one exists). */
+    protected CharLiteralNode getBackingNode()
+    {
+        return (CharLiteralNode)super.getBackingNode();
+    }
+    
+    /**
+     * Ensures that the value value has been populated from proxy.
+     * If this node is not backed by a proxy or if the value has already been
+     * populated, this method does nothing.
+     */
+    private void checkValueWrapped()
+    {
+        if (this.populatedProperties == null || this.populatedProperties.contains(
+                CharLiteralNodeProperties.VALUE))
+            return;
+        this.populatedProperties.add(CharLiteralNodeProperties.VALUE);
+        this.value = this.getBackingNode().getValue();
     }
     
     /**
@@ -61,7 +79,7 @@ public class CharLiteralNodeImpl extends NodeImpl implements CharLiteralNode
      */
     public Character getValue()
     {
-        getAttribute(LocalAttribute.VALUE).recordAccess(ReadWriteAttribute.AccessType.READ);
+        checkValueWrapped();
         return this.value;
     }
     
@@ -71,18 +89,15 @@ public class CharLiteralNodeImpl extends NodeImpl implements CharLiteralNode
      */
     public void setValue(Character value)
     {
-            setValue(value, true);
-            getManager().notifyChange(this);
+        checkValueWrapped();
+        this.getManager().assertMutatable(this);
+        this.doSetValue(value);
+        if (this.getManager().isRecordingEdits())
+            super.recordEdit(new CharLiteralNodeSetValuePropertyEditScriptElementImpl(this.getManager().getCurrentMetaprogramId(), this.getUid(), value));
     }
     
-    private void setValue(Character value, boolean checkPermissions)
+    private void doSetValue(Character value)
     {
-        if (checkPermissions)
-        {
-            getManager().assertMutatable(this);
-            getAttribute(LocalAttribute.VALUE).recordAccess(ReadWriteAttribute.AccessType.WRITE);
-        }
-        
         this.value = value;
     }
     
@@ -175,6 +190,8 @@ public class CharLiteralNodeImpl extends NodeImpl implements CharLiteralNode
     {
         StringBuilder sb = new StringBuilder();
         sb.append(this.getClass().getSimpleName());
+        sb.append('#');
+        sb.append(this.getUid());
         sb.append('[');
         sb.append("value=");
         sb.append(String.valueOf(this.getValue()) + ":" + (this.getValue() != null ? this.getValue().getClass().getSimpleName() : "null"));

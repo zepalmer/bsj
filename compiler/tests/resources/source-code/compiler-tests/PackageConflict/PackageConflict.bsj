@@ -1,0 +1,15 @@
+[:
+    context.getAnchor().getRootPackage().loadCompilationUnit("Loaded", context.getCompilationUnitLoadingInfo());
+:]
+
+[:
+    #mode packageInsert;
+    context.getAnchor().getRootPackage().addCompilationUnit(
+            context.getFactory().makeCompilationUnitNode(
+                    "Loaded",
+                    null,
+                    context.getFactory().makeMetaprogramImportListNode(),
+                    context.getFactory().makeImportListNode(),
+                    <: public class Loaded { } :>
+                    ));
+:]

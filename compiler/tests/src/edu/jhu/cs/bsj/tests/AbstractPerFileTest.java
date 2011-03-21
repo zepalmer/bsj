@@ -8,12 +8,15 @@ import org.junit.Assert;
 import org.junit.Assume;
 
 /**
- * Represents a test class which assumes operations will be performed on a per-file basis.
+ * Represents a test class which assumes operations will be performed on a series of Java source files.  Each file is
+ * tested individually.
  * @author Zachary Palmer
  */
 public abstract class AbstractPerFileTest extends AbstractTest
 {
-	/**
+    public static final File PER_FILE_SOURCE_DIR = new File(EXAMPLES + File.separator + "projects");
+
+    /**
 	 * Recursively find and test all java files in a directory.
 	 * 
 	 * @param dir the directory to search.

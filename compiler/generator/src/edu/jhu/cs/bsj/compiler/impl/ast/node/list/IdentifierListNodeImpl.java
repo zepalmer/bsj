@@ -17,6 +17,7 @@ import edu.jhu.cs.bsj.compiler.ast.node.IdentifierNode;
 import edu.jhu.cs.bsj.compiler.ast.node.Node;
 import edu.jhu.cs.bsj.compiler.ast.node.list.IdentifierListNode;
 import edu.jhu.cs.bsj.compiler.impl.ast.BsjNodeManager;
+import edu.jhu.cs.bsj.compiler.impl.ast.BsjNodeProxyFactory;
 
 @Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
 public class IdentifierListNodeImpl extends ListNodeImpl<IdentifierNode> implements IdentifierListNode
@@ -30,6 +31,18 @@ public class IdentifierListNodeImpl extends ListNodeImpl<IdentifierNode> impleme
             boolean binary)
     {
         super(children, startLocation, stopLocation, manager, binary);
+    }
+    
+    /** Proxy constructor. */
+    public IdentifierListNodeImpl(BsjNodeManager manager, BsjNodeProxyFactory proxyFactory, IdentifierListNode backingNode)
+    {
+        super(manager, proxyFactory, backingNode);
+    }
+    
+    /** Retrieves this node's backing node (if one exists). */
+    protected IdentifierListNode getBackingNode()
+    {
+        return (IdentifierListNode)super.getBackingNode();
     }
     
     /**
@@ -136,6 +149,8 @@ public class IdentifierListNodeImpl extends ListNodeImpl<IdentifierNode> impleme
     {
         StringBuilder sb = new StringBuilder();
         sb.append(this.getClass().getSimpleName());
+        sb.append('#');
+        sb.append(this.getUid());
         sb.append('[');
         sb.append("children=");
         sb.append(this.getUnionForChildren() == null? "null" : this.getUnionForChildren().getClass().getSimpleName());
@@ -227,6 +242,14 @@ public class IdentifierListNodeImpl extends ListNodeImpl<IdentifierNode> impleme
     public Class<IdentifierNode> getElementType()
     {
         return IdentifierNode.class;
+    }
+    
+    /**
+     * Wraps an element of this list's type.
+     */
+    protected IdentifierNode wrapElement(IdentifierNode element)
+    {
+        return getProxyFactory().makeIdentifierNode(element);
     }
     
 }

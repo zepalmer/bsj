@@ -9146,10 +9146,63 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
     @Override
     public NormalMetaAnnotationNode makeNormalMetaAnnotationNodeWithUnions(
             NodeUnion<? extends MetaAnnotationElementListNode> arguments,
-            NodeUnion<? extends UnparameterizedTypeNode> annotationType)
+            NodeUnion<? extends UnparameterizedTypeNode> annotationType,
+            MetaAnnotationMetaprogramAnchorNode metaprogramAnchor)
     {
         this.before();
-        NormalMetaAnnotationNode node = factory.makeNormalMetaAnnotationNodeWithUnions(arguments, annotationType);
+        NormalMetaAnnotationNode node = factory.makeNormalMetaAnnotationNodeWithUnions(arguments, annotationType, metaprogramAnchor);
+        this.after(node);
+        return node;
+    }
+    
+    /**
+     * Creates a NormalMetaAnnotationNode.
+     * The start and stop locations which have been set as properties of this factory are used.
+     */
+    @Override
+    public NormalMetaAnnotationNode makeNormalMetaAnnotationNode(
+            MetaAnnotationElementListNode arguments,
+            UnparameterizedTypeNode annotationType,
+            MetaAnnotationMetaprogramAnchorNode metaprogramAnchor)
+    {
+        this.before();
+        NormalMetaAnnotationNode node = factory.makeNormalMetaAnnotationNode(arguments, annotationType, metaprogramAnchor);
+        this.after(node);
+        return node;
+    }
+    
+    /**
+     * Creates a NormalMetaAnnotationNode.
+     * The specified start and stop locations are used.
+     */
+    @Override
+    public NormalMetaAnnotationNode makeNormalMetaAnnotationNodeWithUnions(
+            NodeUnion<? extends MetaAnnotationElementListNode> arguments,
+            NodeUnion<? extends UnparameterizedTypeNode> annotationType,
+            MetaAnnotationMetaprogramAnchorNode metaprogramAnchor,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation)
+    {
+        this.before();
+        NormalMetaAnnotationNode node = factory.makeNormalMetaAnnotationNodeWithUnions(arguments, annotationType, metaprogramAnchor, startLocation, stopLocation);
+        this.after(node);
+        return node;
+    }
+    
+    /**
+     * Creates a NormalMetaAnnotationNode.
+     * The specified start and stop locations are used.
+     */
+    @Override
+    public NormalMetaAnnotationNode makeNormalMetaAnnotationNode(
+            MetaAnnotationElementListNode arguments,
+            UnparameterizedTypeNode annotationType,
+            MetaAnnotationMetaprogramAnchorNode metaprogramAnchor,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation)
+    {
+        this.before();
+        NormalMetaAnnotationNode node = factory.makeNormalMetaAnnotationNode(arguments, annotationType, metaprogramAnchor, startLocation, stopLocation);
         this.after(node);
         return node;
     }
@@ -9165,23 +9218,6 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
     {
         this.before();
         NormalMetaAnnotationNode node = factory.makeNormalMetaAnnotationNode(arguments, annotationType);
-        this.after(node);
-        return node;
-    }
-    
-    /**
-     * Creates a NormalMetaAnnotationNode.
-     * The specified start and stop locations are used.
-     */
-    @Override
-    public NormalMetaAnnotationNode makeNormalMetaAnnotationNodeWithUnions(
-            NodeUnion<? extends MetaAnnotationElementListNode> arguments,
-            NodeUnion<? extends UnparameterizedTypeNode> annotationType,
-            BsjSourceLocation startLocation,
-            BsjSourceLocation stopLocation)
-    {
-        this.before();
-        NormalMetaAnnotationNode node = factory.makeNormalMetaAnnotationNodeWithUnions(arguments, annotationType, startLocation, stopLocation);
         this.after(node);
         return node;
     }
@@ -10131,10 +10167,63 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
     @Override
     public SingleElementMetaAnnotationNode makeSingleElementMetaAnnotationNodeWithUnions(
             NodeUnion<? extends MetaAnnotationValueNode> value,
-            NodeUnion<? extends UnparameterizedTypeNode> annotationType)
+            NodeUnion<? extends UnparameterizedTypeNode> annotationType,
+            MetaAnnotationMetaprogramAnchorNode metaprogramAnchor)
     {
         this.before();
-        SingleElementMetaAnnotationNode node = factory.makeSingleElementMetaAnnotationNodeWithUnions(value, annotationType);
+        SingleElementMetaAnnotationNode node = factory.makeSingleElementMetaAnnotationNodeWithUnions(value, annotationType, metaprogramAnchor);
+        this.after(node);
+        return node;
+    }
+    
+    /**
+     * Creates a SingleElementMetaAnnotationNode.
+     * The start and stop locations which have been set as properties of this factory are used.
+     */
+    @Override
+    public SingleElementMetaAnnotationNode makeSingleElementMetaAnnotationNode(
+            MetaAnnotationValueNode value,
+            UnparameterizedTypeNode annotationType,
+            MetaAnnotationMetaprogramAnchorNode metaprogramAnchor)
+    {
+        this.before();
+        SingleElementMetaAnnotationNode node = factory.makeSingleElementMetaAnnotationNode(value, annotationType, metaprogramAnchor);
+        this.after(node);
+        return node;
+    }
+    
+    /**
+     * Creates a SingleElementMetaAnnotationNode.
+     * The specified start and stop locations are used.
+     */
+    @Override
+    public SingleElementMetaAnnotationNode makeSingleElementMetaAnnotationNodeWithUnions(
+            NodeUnion<? extends MetaAnnotationValueNode> value,
+            NodeUnion<? extends UnparameterizedTypeNode> annotationType,
+            MetaAnnotationMetaprogramAnchorNode metaprogramAnchor,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation)
+    {
+        this.before();
+        SingleElementMetaAnnotationNode node = factory.makeSingleElementMetaAnnotationNodeWithUnions(value, annotationType, metaprogramAnchor, startLocation, stopLocation);
+        this.after(node);
+        return node;
+    }
+    
+    /**
+     * Creates a SingleElementMetaAnnotationNode.
+     * The specified start and stop locations are used.
+     */
+    @Override
+    public SingleElementMetaAnnotationNode makeSingleElementMetaAnnotationNode(
+            MetaAnnotationValueNode value,
+            UnparameterizedTypeNode annotationType,
+            MetaAnnotationMetaprogramAnchorNode metaprogramAnchor,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation)
+    {
+        this.before();
+        SingleElementMetaAnnotationNode node = factory.makeSingleElementMetaAnnotationNode(value, annotationType, metaprogramAnchor, startLocation, stopLocation);
         this.after(node);
         return node;
     }
@@ -10150,23 +10239,6 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
     {
         this.before();
         SingleElementMetaAnnotationNode node = factory.makeSingleElementMetaAnnotationNode(value, annotationType);
-        this.after(node);
-        return node;
-    }
-    
-    /**
-     * Creates a SingleElementMetaAnnotationNode.
-     * The specified start and stop locations are used.
-     */
-    @Override
-    public SingleElementMetaAnnotationNode makeSingleElementMetaAnnotationNodeWithUnions(
-            NodeUnion<? extends MetaAnnotationValueNode> value,
-            NodeUnion<? extends UnparameterizedTypeNode> annotationType,
-            BsjSourceLocation startLocation,
-            BsjSourceLocation stopLocation)
-    {
-        this.before();
-        SingleElementMetaAnnotationNode node = factory.makeSingleElementMetaAnnotationNodeWithUnions(value, annotationType, startLocation, stopLocation);
         this.after(node);
         return node;
     }

@@ -18,6 +18,7 @@ import edu.jhu.cs.bsj.compiler.ast.node.Node;
 import edu.jhu.cs.bsj.compiler.ast.node.list.AnnotationListNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaAnnotationListNode;
 import edu.jhu.cs.bsj.compiler.impl.ast.BsjNodeManager;
+import edu.jhu.cs.bsj.compiler.impl.ast.BsjNodeProxyFactory;
 
 @Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
 public class EnumConstantModifiersNodeImpl extends ModifiersNodeImpl implements EnumConstantModifiersNode
@@ -32,6 +33,18 @@ public class EnumConstantModifiersNodeImpl extends ModifiersNodeImpl implements 
             boolean binary)
     {
         super(metaAnnotations, annotations, startLocation, stopLocation, manager, binary);
+    }
+    
+    /** Proxy constructor. */
+    public EnumConstantModifiersNodeImpl(BsjNodeManager manager, BsjNodeProxyFactory proxyFactory, EnumConstantModifiersNode backingNode)
+    {
+        super(manager, proxyFactory, backingNode);
+    }
+    
+    /** Retrieves this node's backing node (if one exists). */
+    protected EnumConstantModifiersNode getBackingNode()
+    {
+        return (EnumConstantModifiersNode)super.getBackingNode();
     }
     
     /**
@@ -122,6 +135,8 @@ public class EnumConstantModifiersNodeImpl extends ModifiersNodeImpl implements 
     {
         StringBuilder sb = new StringBuilder();
         sb.append(this.getClass().getSimpleName());
+        sb.append('#');
+        sb.append(this.getUid());
         sb.append('[');
         sb.append("metaAnnotations=");
         sb.append(this.getUnionForMetaAnnotations().getNodeValue() == null? "null" : this.getUnionForMetaAnnotations().getNodeValue().getClass().getSimpleName());

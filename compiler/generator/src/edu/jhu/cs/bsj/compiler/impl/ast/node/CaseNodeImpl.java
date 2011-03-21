@@ -1,10 +1,10 @@
 package edu.jhu.cs.bsj.compiler.impl.ast.node;
 
 import java.util.Arrays;
-import java.util.EnumMap;
+import java.util.EnumSet;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
+import java.util.Set;
 
 import javax.annotation.Generated;
 
@@ -20,9 +20,11 @@ import edu.jhu.cs.bsj.compiler.ast.node.ExpressionNode;
 import edu.jhu.cs.bsj.compiler.ast.node.Node;
 import edu.jhu.cs.bsj.compiler.ast.node.list.BlockStatementListNode;
 import edu.jhu.cs.bsj.compiler.impl.ast.BsjNodeManager;
+import edu.jhu.cs.bsj.compiler.impl.ast.BsjNodeProxyFactory;
 import edu.jhu.cs.bsj.compiler.impl.ast.NormalNodeUnion;
-import edu.jhu.cs.bsj.compiler.impl.ast.attribute.AttributeName;
-import edu.jhu.cs.bsj.compiler.impl.ast.attribute.ReadWriteAttribute;
+import edu.jhu.cs.bsj.compiler.impl.ast.delta.property.CaseNodeSetExpressionPropertyEditScriptElementImpl;
+import edu.jhu.cs.bsj.compiler.impl.ast.delta.property.CaseNodeSetStatementsPropertyEditScriptElementImpl;
+import edu.jhu.cs.bsj.compiler.impl.ast.properties.CaseNodeProperties;
 
 @Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
 public class CaseNodeImpl extends NodeImpl implements CaseNode
@@ -33,24 +35,11 @@ public class CaseNodeImpl extends NodeImpl implements CaseNode
     /** The statements to execute in this case node. */
     private NodeUnion<? extends BlockStatementListNode> statements;
     
-    private Map<LocalAttribute,ReadWriteAttribute> localAttributes = new EnumMap<LocalAttribute,ReadWriteAttribute>(LocalAttribute.class);
-    private ReadWriteAttribute getAttribute(LocalAttribute attributeName)
-    {
-        ReadWriteAttribute attribute = localAttributes.get(attributeName);
-        if (attribute == null)
-        {
-            attribute = new ReadWriteAttribute(CaseNodeImpl.this, attributeName);
-            localAttributes.put(attributeName, attribute);
-        }
-        return attribute;
-    }
-    private static enum LocalAttribute implements AttributeName
-    {
-        /** Attribute identifier for the expression property. */
-        EXPRESSION,
-        /** Attribute identifier for the statements property. */
-        STATEMENTS,
-    }
+    /**
+     * A set of those properties which have been populated from the backing node.
+     * This field is <code>null</code> if <tt>backingNode</tt> is <code>null</code>.
+     */
+    private Set<CaseNodeProperties> populatedProperties;
     
     /** General constructor. */
     public CaseNodeImpl(
@@ -62,8 +51,78 @@ public class CaseNodeImpl extends NodeImpl implements CaseNode
             boolean binary)
     {
         super(startLocation, stopLocation, manager, binary);
-        setUnionForExpression(expression, false);
-        setUnionForStatements(statements, false);
+        this.populatedProperties = null;
+        doSetExpression(expression);
+        doSetStatements(statements);
+    }
+    
+    /** Proxy constructor. */
+    public CaseNodeImpl(BsjNodeManager manager, BsjNodeProxyFactory proxyFactory, CaseNode backingNode)
+    {
+        super(manager, proxyFactory, backingNode);
+        this.populatedProperties = EnumSet.noneOf(CaseNodeProperties.class);
+    }
+    
+    /** Retrieves this node's backing node (if one exists). */
+    protected CaseNode getBackingNode()
+    {
+        return (CaseNode)super.getBackingNode();
+    }
+    
+    /**
+     * Ensures that the expression value has been populated from proxy.
+     * If this node is not backed by a proxy or if the value has already been
+     * populated, this method does nothing.
+     */
+    private void checkExpressionWrapped()
+    {
+        if (this.populatedProperties == null || this.populatedProperties.contains(
+                CaseNodeProperties.EXPRESSION))
+            return;
+        this.populatedProperties.add(CaseNodeProperties.EXPRESSION);
+        NodeUnion<? extends ExpressionNode> union = this.getBackingNode().getUnionForExpression();
+        switch (union.getType())
+        {
+            case NORMAL:
+                union = this.getProxyFactory().makeNormalNodeUnion(
+                        this.getProxyFactory().makeExpressionNode(union.getNormalNode()));
+                break;
+            case SPLICE:
+                union = this.getProxyFactory().makeSpliceNodeUnion(
+                        this.getProxyFactory().makeSpliceNode(union.getSpliceNode()));
+                break;
+            default:
+                throw new IllegalStateException("Unrecognized union type: " + union.getType());
+        }
+        this.expression = union;
+    }
+    
+    /**
+     * Ensures that the statements value has been populated from proxy.
+     * If this node is not backed by a proxy or if the value has already been
+     * populated, this method does nothing.
+     */
+    private void checkStatementsWrapped()
+    {
+        if (this.populatedProperties == null || this.populatedProperties.contains(
+                CaseNodeProperties.STATEMENTS))
+            return;
+        this.populatedProperties.add(CaseNodeProperties.STATEMENTS);
+        NodeUnion<? extends BlockStatementListNode> union = this.getBackingNode().getUnionForStatements();
+        switch (union.getType())
+        {
+            case NORMAL:
+                union = this.getProxyFactory().makeNormalNodeUnion(
+                        this.getProxyFactory().makeBlockStatementListNode(union.getNormalNode()));
+                break;
+            case SPLICE:
+                union = this.getProxyFactory().makeSpliceNodeUnion(
+                        this.getProxyFactory().makeSpliceNode(union.getSpliceNode()));
+                break;
+            default:
+                throw new IllegalStateException("Unrecognized union type: " + union.getType());
+        }
+        this.statements = union;
     }
     
     /**
@@ -73,7 +132,7 @@ public class CaseNodeImpl extends NodeImpl implements CaseNode
      */
     public ExpressionNode getExpression()
     {
-        getAttribute(LocalAttribute.EXPRESSION).recordAccess(ReadWriteAttribute.AccessType.READ);
+        checkExpressionWrapped();
         if (this.expression == null)
         {
             return null;
@@ -89,7 +148,7 @@ public class CaseNodeImpl extends NodeImpl implements CaseNode
      */
     public NodeUnion<? extends ExpressionNode> getUnionForExpression()
     {
-        getAttribute(LocalAttribute.EXPRESSION).recordAccess(ReadWriteAttribute.AccessType.READ);
+        checkExpressionWrapped();
         if (this.expression == null)
         {
             this.expression = new NormalNodeUnion<ExpressionNode>(null);
@@ -103,24 +162,8 @@ public class CaseNodeImpl extends NodeImpl implements CaseNode
      */
     public void setExpression(ExpressionNode expression)
     {
-            setExpression(expression, true);
-            getManager().notifyChange(this);
-    }
-    
-    private void setExpression(ExpressionNode expression, boolean checkPermissions)
-    {
-        if (checkPermissions)
-        {
-            getManager().assertMutatable(this);
-            getAttribute(LocalAttribute.EXPRESSION).recordAccess(ReadWriteAttribute.AccessType.WRITE);
-        }
-        
-        if (this.expression != null)
-        {
-            setAsChild(this.expression.getNodeValue(), false);
-        }
-        this.expression = new NormalNodeUnion<ExpressionNode>(expression);
-        setAsChild(expression, true);
+        checkExpressionWrapped();
+        this.setUnionForExpression(new NormalNodeUnion<ExpressionNode>(expression));
     }
     
     /**
@@ -129,18 +172,15 @@ public class CaseNodeImpl extends NodeImpl implements CaseNode
      */
     public void setUnionForExpression(NodeUnion<? extends ExpressionNode> expression)
     {
-            setUnionForExpression(expression, true);
-            getManager().notifyChange(this);
+        checkExpressionWrapped();
+        this.getManager().assertMutatable(this);
+        this.doSetExpression(expression);
+        if (this.getManager().isRecordingEdits())
+            super.recordEdit(new CaseNodeSetExpressionPropertyEditScriptElementImpl(this.getManager().getCurrentMetaprogramId(), this.getUid(), expression.getNodeValue() == null ? null : expression.getNodeValue().getUid()));
     }
     
-    private void setUnionForExpression(NodeUnion<? extends ExpressionNode> expression, boolean checkPermissions)
+    private void doSetExpression(NodeUnion<? extends ExpressionNode> expression)
     {
-        if (checkPermissions)
-        {
-            getManager().assertMutatable(this);
-            getAttribute(LocalAttribute.EXPRESSION).recordAccess(ReadWriteAttribute.AccessType.WRITE);
-        }
-        
         if (expression == null)
         {
             expression = new NormalNodeUnion<ExpressionNode>(null);
@@ -160,7 +200,7 @@ public class CaseNodeImpl extends NodeImpl implements CaseNode
      */
     public BlockStatementListNode getStatements()
     {
-        getAttribute(LocalAttribute.STATEMENTS).recordAccess(ReadWriteAttribute.AccessType.READ);
+        checkStatementsWrapped();
         if (this.statements == null)
         {
             return null;
@@ -176,7 +216,7 @@ public class CaseNodeImpl extends NodeImpl implements CaseNode
      */
     public NodeUnion<? extends BlockStatementListNode> getUnionForStatements()
     {
-        getAttribute(LocalAttribute.STATEMENTS).recordAccess(ReadWriteAttribute.AccessType.READ);
+        checkStatementsWrapped();
         if (this.statements == null)
         {
             this.statements = new NormalNodeUnion<BlockStatementListNode>(null);
@@ -190,24 +230,8 @@ public class CaseNodeImpl extends NodeImpl implements CaseNode
      */
     public void setStatements(BlockStatementListNode statements)
     {
-            setStatements(statements, true);
-            getManager().notifyChange(this);
-    }
-    
-    private void setStatements(BlockStatementListNode statements, boolean checkPermissions)
-    {
-        if (checkPermissions)
-        {
-            getManager().assertMutatable(this);
-            getAttribute(LocalAttribute.STATEMENTS).recordAccess(ReadWriteAttribute.AccessType.WRITE);
-        }
-        
-        if (this.statements != null)
-        {
-            setAsChild(this.statements.getNodeValue(), false);
-        }
-        this.statements = new NormalNodeUnion<BlockStatementListNode>(statements);
-        setAsChild(statements, true);
+        checkStatementsWrapped();
+        this.setUnionForStatements(new NormalNodeUnion<BlockStatementListNode>(statements));
     }
     
     /**
@@ -216,18 +240,15 @@ public class CaseNodeImpl extends NodeImpl implements CaseNode
      */
     public void setUnionForStatements(NodeUnion<? extends BlockStatementListNode> statements)
     {
-            setUnionForStatements(statements, true);
-            getManager().notifyChange(this);
+        checkStatementsWrapped();
+        this.getManager().assertMutatable(this);
+        this.doSetStatements(statements);
+        if (this.getManager().isRecordingEdits())
+            super.recordEdit(new CaseNodeSetStatementsPropertyEditScriptElementImpl(this.getManager().getCurrentMetaprogramId(), this.getUid(), statements.getNodeValue() == null ? null : statements.getNodeValue().getUid()));
     }
     
-    private void setUnionForStatements(NodeUnion<? extends BlockStatementListNode> statements, boolean checkPermissions)
+    private void doSetStatements(NodeUnion<? extends BlockStatementListNode> statements)
     {
-        if (checkPermissions)
-        {
-            getManager().assertMutatable(this);
-            getAttribute(LocalAttribute.STATEMENTS).recordAccess(ReadWriteAttribute.AccessType.WRITE);
-        }
-        
         if (statements == null)
         {
             statements = new NormalNodeUnion<BlockStatementListNode>(null);
@@ -251,13 +272,13 @@ public class CaseNodeImpl extends NodeImpl implements CaseNode
     protected void receiveToChildren(BsjNodeVisitor visitor)
     {
         super.receiveToChildren(visitor);
-        if (this.expression.getNodeValue() != null)
+        if (this.getUnionForExpression().getNodeValue() != null)
         {
-            this.expression.getNodeValue().receive(visitor);
+            this.getUnionForExpression().getNodeValue().receive(visitor);
         }
-        if (this.statements.getNodeValue() != null)
+        if (this.getUnionForStatements().getNodeValue() != null)
         {
-            this.statements.getNodeValue().receive(visitor);
+            this.getUnionForStatements().getNodeValue().receive(visitor);
         }
         Iterator<? extends Node> extras = getHiddenVisitorChildren();
         if (extras != null)
@@ -280,13 +301,13 @@ public class CaseNodeImpl extends NodeImpl implements CaseNode
     protected void receiveTypedToChildren(BsjTypedNodeVisitor visitor)
     {
         super.receiveTypedToChildren(visitor);
-        if (this.expression.getNodeValue() != null)
+        if (this.getUnionForExpression().getNodeValue() != null)
         {
-            this.expression.getNodeValue().receiveTyped(visitor);
+            this.getUnionForExpression().getNodeValue().receiveTyped(visitor);
         }
-        if (this.statements.getNodeValue() != null)
+        if (this.getUnionForStatements().getNodeValue() != null)
         {
-            this.statements.getNodeValue().receiveTyped(visitor);
+            this.getUnionForStatements().getNodeValue().receiveTyped(visitor);
         }
         Iterator<? extends Node> extras = getHiddenVisitorChildren();
         if (extras != null)
@@ -344,6 +365,8 @@ public class CaseNodeImpl extends NodeImpl implements CaseNode
     {
         StringBuilder sb = new StringBuilder();
         sb.append(this.getClass().getSimpleName());
+        sb.append('#');
+        sb.append(this.getUid());
         sb.append('[');
         sb.append("expression=");
         sb.append(this.getUnionForExpression().getNodeValue() == null? "null" : this.getUnionForExpression().getNodeValue().getClass().getSimpleName());

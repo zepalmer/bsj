@@ -1,8 +1,5 @@
 package edu.jhu.cs.bsj.tests.compiler.tool.compiler;
 
-import java.util.Arrays;
-import java.util.Collections;
-
 import org.junit.Test;
 
 import edu.jhu.cs.bsj.compiler.diagnostic.compiler.MetaprogramEmptyDependencyDiagnostic;
@@ -14,16 +11,15 @@ import edu.jhu.cs.bsj.compiler.diagnostic.compiler.MetaprogramEmptyDependencyDia
  */
 public class WeakDependencyTest extends AbstractBsjCompilerTest
 {
-	@Test
-	public void testWeakDependencySuccess() throws Exception
-	{
-		performTest(SPECIFIC_SOURCE_DIR, "WeakDependencySuccess");
-	}
+    @Test
+    public void testWeakDependencySuccess() throws Exception
+    {
+        performTest("WeakDependencySuccess");
+    }
 
-	@Test
-	public void testStrongDependencyFailure() throws Exception
-	{
-		performTest(SPECIFIC_SOURCE_DIR, Arrays.asList("StrongDependencyFailure"),
-				Collections.singletonList(MetaprogramEmptyDependencyDiagnostic.class));
-	}
+    @Test
+    public void testStrongDependencyFailure() throws Exception
+    {
+        performTest("StrongDependencyFailure", MetaprogramEmptyDependencyDiagnostic.class);
+    }
 }

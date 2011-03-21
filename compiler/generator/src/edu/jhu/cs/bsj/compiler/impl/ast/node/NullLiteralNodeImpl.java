@@ -1,10 +1,10 @@
 package edu.jhu.cs.bsj.compiler.impl.ast.node;
 
 import java.util.Arrays;
-import java.util.EnumMap;
+import java.util.EnumSet;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
+import java.util.Set;
 
 import javax.annotation.Generated;
 
@@ -17,8 +17,9 @@ import edu.jhu.cs.bsj.compiler.ast.BsjTypedNodeVisitor;
 import edu.jhu.cs.bsj.compiler.ast.node.Node;
 import edu.jhu.cs.bsj.compiler.ast.node.NullLiteralNode;
 import edu.jhu.cs.bsj.compiler.impl.ast.BsjNodeManager;
-import edu.jhu.cs.bsj.compiler.impl.ast.attribute.AttributeName;
-import edu.jhu.cs.bsj.compiler.impl.ast.attribute.ReadWriteAttribute;
+import edu.jhu.cs.bsj.compiler.impl.ast.BsjNodeProxyFactory;
+import edu.jhu.cs.bsj.compiler.impl.ast.delta.property.NullLiteralNodeSetValuePropertyEditScriptElementImpl;
+import edu.jhu.cs.bsj.compiler.impl.ast.properties.NullLiteralNodeProperties;
 
 @Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
 public class NullLiteralNodeImpl extends NodeImpl implements NullLiteralNode
@@ -26,22 +27,11 @@ public class NullLiteralNodeImpl extends NodeImpl implements NullLiteralNode
     /** The literal value for this node. */
     private Void value;
     
-    private Map<LocalAttribute,ReadWriteAttribute> localAttributes = new EnumMap<LocalAttribute,ReadWriteAttribute>(LocalAttribute.class);
-    private ReadWriteAttribute getAttribute(LocalAttribute attributeName)
-    {
-        ReadWriteAttribute attribute = localAttributes.get(attributeName);
-        if (attribute == null)
-        {
-            attribute = new ReadWriteAttribute(NullLiteralNodeImpl.this, attributeName);
-            localAttributes.put(attributeName, attribute);
-        }
-        return attribute;
-    }
-    private static enum LocalAttribute implements AttributeName
-    {
-        /** Attribute identifier for the value property. */
-        VALUE,
-    }
+    /**
+     * A set of those properties which have been populated from the backing node.
+     * This field is <code>null</code> if <tt>backingNode</tt> is <code>null</code>.
+     */
+    private Set<NullLiteralNodeProperties> populatedProperties;
     
     /** General constructor. */
     public NullLiteralNodeImpl(
@@ -52,7 +42,35 @@ public class NullLiteralNodeImpl extends NodeImpl implements NullLiteralNode
             boolean binary)
     {
         super(startLocation, stopLocation, manager, binary);
-        this.value = value;
+        this.populatedProperties = null;
+        doSetValue(value);
+    }
+    
+    /** Proxy constructor. */
+    public NullLiteralNodeImpl(BsjNodeManager manager, BsjNodeProxyFactory proxyFactory, NullLiteralNode backingNode)
+    {
+        super(manager, proxyFactory, backingNode);
+        this.populatedProperties = EnumSet.noneOf(NullLiteralNodeProperties.class);
+    }
+    
+    /** Retrieves this node's backing node (if one exists). */
+    protected NullLiteralNode getBackingNode()
+    {
+        return (NullLiteralNode)super.getBackingNode();
+    }
+    
+    /**
+     * Ensures that the value value has been populated from proxy.
+     * If this node is not backed by a proxy or if the value has already been
+     * populated, this method does nothing.
+     */
+    private void checkValueWrapped()
+    {
+        if (this.populatedProperties == null || this.populatedProperties.contains(
+                NullLiteralNodeProperties.VALUE))
+            return;
+        this.populatedProperties.add(NullLiteralNodeProperties.VALUE);
+        this.value = this.getBackingNode().getValue();
     }
     
     /**
@@ -61,7 +79,7 @@ public class NullLiteralNodeImpl extends NodeImpl implements NullLiteralNode
      */
     public Void getValue()
     {
-        getAttribute(LocalAttribute.VALUE).recordAccess(ReadWriteAttribute.AccessType.READ);
+        checkValueWrapped();
         return this.value;
     }
     
@@ -71,18 +89,15 @@ public class NullLiteralNodeImpl extends NodeImpl implements NullLiteralNode
      */
     public void setValue(Void value)
     {
-            setValue(value, true);
-            getManager().notifyChange(this);
+        checkValueWrapped();
+        this.getManager().assertMutatable(this);
+        this.doSetValue(value);
+        if (this.getManager().isRecordingEdits())
+            super.recordEdit(new NullLiteralNodeSetValuePropertyEditScriptElementImpl(this.getManager().getCurrentMetaprogramId(), this.getUid(), value));
     }
     
-    private void setValue(Void value, boolean checkPermissions)
+    private void doSetValue(Void value)
     {
-        if (checkPermissions)
-        {
-            getManager().assertMutatable(this);
-            getAttribute(LocalAttribute.VALUE).recordAccess(ReadWriteAttribute.AccessType.WRITE);
-        }
-        
         this.value = value;
     }
     
@@ -175,6 +190,8 @@ public class NullLiteralNodeImpl extends NodeImpl implements NullLiteralNode
     {
         StringBuilder sb = new StringBuilder();
         sb.append(this.getClass().getSimpleName());
+        sb.append('#');
+        sb.append(this.getUid());
         sb.append('[');
         sb.append("value=");
         sb.append(String.valueOf(this.getValue()) + ":" + (this.getValue() != null ? this.getValue().getClass().getSimpleName() : "null"));

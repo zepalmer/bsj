@@ -1,12 +1,15 @@
 package edu.jhu.cs.bsj.compiler.impl.tool.compiler;
 
+import java.util.Map;
+
 import javax.tools.DiagnosticListener;
 
 import edu.jhu.cs.bsj.compiler.ast.BsjSourceLocation;
+import edu.jhu.cs.bsj.compiler.ast.node.Node;
 import edu.jhu.cs.bsj.compiler.ast.node.PackageNode;
-import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramAnchorNode;
 import edu.jhu.cs.bsj.compiler.impl.ast.BsjNodeManager;
 import edu.jhu.cs.bsj.compiler.impl.tool.compiler.dependency.DependencyManager;
+import edu.jhu.cs.bsj.compiler.impl.tool.compiler.extraction.ExplicitMetaprogramCompilationCache;
 import edu.jhu.cs.bsj.compiler.impl.tool.compiler.task.BsjCompilerTask;
 import edu.jhu.cs.bsj.compiler.tool.BsjToolkit;
 import edu.jhu.cs.bsj.compiler.tool.filemanager.BsjFileObject;
@@ -71,9 +74,15 @@ public class MetacompilationContextProxy implements MetacompilationContext
 		this.context.registerTask(task);
 	}
 
-	@Override
-	public boolean addObservedAnchor(MetaprogramAnchorNode<?> anchor)
-	{
-		return this.context.addObservedAnchor(anchor);
-	}
+    @Override
+    public Map<Long, Node> getIdMap()
+    {
+        return this.context.getIdMap();
+    }
+
+    @Override
+    public ExplicitMetaprogramCompilationCache getExplicitMetaprogramCompilationCache()
+    {
+        return this.context.getExplicitMetaprogramCompilationCache();
+    }
 }

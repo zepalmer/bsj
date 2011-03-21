@@ -1,0 +1,28 @@
+public class OrderedListConflict
+{
+    public int foo()
+    {
+        [:
+            BlockStatementListNode list = context.getAnchor().<BlockStatementListNode>getNearestAncestorOfType(BlockStatementListNode.class);
+            BsjNodeFactory factory = context.getFactory();
+            list.add(
+                    list.size()-1,
+                    factory.makeExpressionStatementNode(
+                            factory.makeUnaryStatementExpressionNode(
+                                    factory.makeVariableAccessNode(factory.makeIdentifierNode("x")),
+                                    UnaryStatementOperator.POSTFIX_INCREMENT)));
+        :]
+        [:
+            BlockStatementListNode list = context.getAnchor().<BlockStatementListNode>getNearestAncestorOfType(BlockStatementListNode.class);
+            BsjNodeFactory factory = context.getFactory();
+            list.add(
+                    list.size()-1,
+                    factory.makeExpressionStatementNode(
+                            factory.makeUnaryStatementExpressionNode(
+                                    factory.makeVariableAccessNode(factory.makeIdentifierNode("x")),
+                                    UnaryStatementOperator.POSTFIX_INCREMENT)));
+        :]
+        int x = 0;
+        return x;
+    }
+}

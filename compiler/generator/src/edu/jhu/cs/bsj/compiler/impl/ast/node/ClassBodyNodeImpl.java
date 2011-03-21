@@ -1,10 +1,10 @@
 package edu.jhu.cs.bsj.compiler.impl.ast.node;
 
 import java.util.Arrays;
-import java.util.EnumMap;
+import java.util.EnumSet;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
+import java.util.Set;
 
 import javax.annotation.Generated;
 
@@ -19,9 +19,10 @@ import edu.jhu.cs.bsj.compiler.ast.node.ClassBodyNode;
 import edu.jhu.cs.bsj.compiler.ast.node.Node;
 import edu.jhu.cs.bsj.compiler.ast.node.list.ClassMemberListNode;
 import edu.jhu.cs.bsj.compiler.impl.ast.BsjNodeManager;
+import edu.jhu.cs.bsj.compiler.impl.ast.BsjNodeProxyFactory;
 import edu.jhu.cs.bsj.compiler.impl.ast.NormalNodeUnion;
-import edu.jhu.cs.bsj.compiler.impl.ast.attribute.AttributeName;
-import edu.jhu.cs.bsj.compiler.impl.ast.attribute.ReadWriteAttribute;
+import edu.jhu.cs.bsj.compiler.impl.ast.delta.property.ClassBodyNodeSetMembersPropertyEditScriptElementImpl;
+import edu.jhu.cs.bsj.compiler.impl.ast.properties.ClassBodyNodeProperties;
 
 @Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
 public class ClassBodyNodeImpl extends NodeImpl implements ClassBodyNode
@@ -29,22 +30,11 @@ public class ClassBodyNodeImpl extends NodeImpl implements ClassBodyNode
     /** The members of this class body. */
     private NodeUnion<? extends ClassMemberListNode> members;
     
-    private Map<LocalAttribute,ReadWriteAttribute> localAttributes = new EnumMap<LocalAttribute,ReadWriteAttribute>(LocalAttribute.class);
-    private ReadWriteAttribute getAttribute(LocalAttribute attributeName)
-    {
-        ReadWriteAttribute attribute = localAttributes.get(attributeName);
-        if (attribute == null)
-        {
-            attribute = new ReadWriteAttribute(ClassBodyNodeImpl.this, attributeName);
-            localAttributes.put(attributeName, attribute);
-        }
-        return attribute;
-    }
-    private static enum LocalAttribute implements AttributeName
-    {
-        /** Attribute identifier for the members property. */
-        MEMBERS,
-    }
+    /**
+     * A set of those properties which have been populated from the backing node.
+     * This field is <code>null</code> if <tt>backingNode</tt> is <code>null</code>.
+     */
+    private Set<ClassBodyNodeProperties> populatedProperties;
     
     /** General constructor. */
     public ClassBodyNodeImpl(
@@ -55,7 +45,49 @@ public class ClassBodyNodeImpl extends NodeImpl implements ClassBodyNode
             boolean binary)
     {
         super(startLocation, stopLocation, manager, binary);
-        setUnionForMembers(members, false);
+        this.populatedProperties = null;
+        doSetMembers(members);
+    }
+    
+    /** Proxy constructor. */
+    public ClassBodyNodeImpl(BsjNodeManager manager, BsjNodeProxyFactory proxyFactory, ClassBodyNode backingNode)
+    {
+        super(manager, proxyFactory, backingNode);
+        this.populatedProperties = EnumSet.noneOf(ClassBodyNodeProperties.class);
+    }
+    
+    /** Retrieves this node's backing node (if one exists). */
+    protected ClassBodyNode getBackingNode()
+    {
+        return (ClassBodyNode)super.getBackingNode();
+    }
+    
+    /**
+     * Ensures that the members value has been populated from proxy.
+     * If this node is not backed by a proxy or if the value has already been
+     * populated, this method does nothing.
+     */
+    private void checkMembersWrapped()
+    {
+        if (this.populatedProperties == null || this.populatedProperties.contains(
+                ClassBodyNodeProperties.MEMBERS))
+            return;
+        this.populatedProperties.add(ClassBodyNodeProperties.MEMBERS);
+        NodeUnion<? extends ClassMemberListNode> union = this.getBackingNode().getUnionForMembers();
+        switch (union.getType())
+        {
+            case NORMAL:
+                union = this.getProxyFactory().makeNormalNodeUnion(
+                        this.getProxyFactory().makeClassMemberListNode(union.getNormalNode()));
+                break;
+            case SPLICE:
+                union = this.getProxyFactory().makeSpliceNodeUnion(
+                        this.getProxyFactory().makeSpliceNode(union.getSpliceNode()));
+                break;
+            default:
+                throw new IllegalStateException("Unrecognized union type: " + union.getType());
+        }
+        this.members = union;
     }
     
     /**
@@ -65,7 +97,7 @@ public class ClassBodyNodeImpl extends NodeImpl implements ClassBodyNode
      */
     public ClassMemberListNode getMembers()
     {
-        getAttribute(LocalAttribute.MEMBERS).recordAccess(ReadWriteAttribute.AccessType.READ);
+        checkMembersWrapped();
         if (this.members == null)
         {
             return null;
@@ -81,7 +113,7 @@ public class ClassBodyNodeImpl extends NodeImpl implements ClassBodyNode
      */
     public NodeUnion<? extends ClassMemberListNode> getUnionForMembers()
     {
-        getAttribute(LocalAttribute.MEMBERS).recordAccess(ReadWriteAttribute.AccessType.READ);
+        checkMembersWrapped();
         if (this.members == null)
         {
             this.members = new NormalNodeUnion<ClassMemberListNode>(null);
@@ -95,24 +127,8 @@ public class ClassBodyNodeImpl extends NodeImpl implements ClassBodyNode
      */
     public void setMembers(ClassMemberListNode members)
     {
-            setMembers(members, true);
-            getManager().notifyChange(this);
-    }
-    
-    private void setMembers(ClassMemberListNode members, boolean checkPermissions)
-    {
-        if (checkPermissions)
-        {
-            getManager().assertMutatable(this);
-            getAttribute(LocalAttribute.MEMBERS).recordAccess(ReadWriteAttribute.AccessType.WRITE);
-        }
-        
-        if (this.members != null)
-        {
-            setAsChild(this.members.getNodeValue(), false);
-        }
-        this.members = new NormalNodeUnion<ClassMemberListNode>(members);
-        setAsChild(members, true);
+        checkMembersWrapped();
+        this.setUnionForMembers(new NormalNodeUnion<ClassMemberListNode>(members));
     }
     
     /**
@@ -121,18 +137,15 @@ public class ClassBodyNodeImpl extends NodeImpl implements ClassBodyNode
      */
     public void setUnionForMembers(NodeUnion<? extends ClassMemberListNode> members)
     {
-            setUnionForMembers(members, true);
-            getManager().notifyChange(this);
+        checkMembersWrapped();
+        this.getManager().assertMutatable(this);
+        this.doSetMembers(members);
+        if (this.getManager().isRecordingEdits())
+            super.recordEdit(new ClassBodyNodeSetMembersPropertyEditScriptElementImpl(this.getManager().getCurrentMetaprogramId(), this.getUid(), members.getNodeValue() == null ? null : members.getNodeValue().getUid()));
     }
     
-    private void setUnionForMembers(NodeUnion<? extends ClassMemberListNode> members, boolean checkPermissions)
+    private void doSetMembers(NodeUnion<? extends ClassMemberListNode> members)
     {
-        if (checkPermissions)
-        {
-            getManager().assertMutatable(this);
-            getAttribute(LocalAttribute.MEMBERS).recordAccess(ReadWriteAttribute.AccessType.WRITE);
-        }
-        
         if (members == null)
         {
             members = new NormalNodeUnion<ClassMemberListNode>(null);
@@ -156,9 +169,9 @@ public class ClassBodyNodeImpl extends NodeImpl implements ClassBodyNode
     protected void receiveToChildren(BsjNodeVisitor visitor)
     {
         super.receiveToChildren(visitor);
-        if (this.members.getNodeValue() != null)
+        if (this.getUnionForMembers().getNodeValue() != null)
         {
-            this.members.getNodeValue().receive(visitor);
+            this.getUnionForMembers().getNodeValue().receive(visitor);
         }
         Iterator<? extends Node> extras = getHiddenVisitorChildren();
         if (extras != null)
@@ -181,9 +194,9 @@ public class ClassBodyNodeImpl extends NodeImpl implements ClassBodyNode
     protected void receiveTypedToChildren(BsjTypedNodeVisitor visitor)
     {
         super.receiveTypedToChildren(visitor);
-        if (this.members.getNodeValue() != null)
+        if (this.getUnionForMembers().getNodeValue() != null)
         {
-            this.members.getNodeValue().receiveTyped(visitor);
+            this.getUnionForMembers().getNodeValue().receiveTyped(visitor);
         }
         Iterator<? extends Node> extras = getHiddenVisitorChildren();
         if (extras != null)
@@ -242,6 +255,8 @@ public class ClassBodyNodeImpl extends NodeImpl implements ClassBodyNode
     {
         StringBuilder sb = new StringBuilder();
         sb.append(this.getClass().getSimpleName());
+        sb.append('#');
+        sb.append(this.getUid());
         sb.append('[');
         sb.append("members=");
         sb.append(this.getUnionForMembers().getNodeValue() == null? "null" : this.getUnionForMembers().getNodeValue().getClass().getSimpleName());

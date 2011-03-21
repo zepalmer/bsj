@@ -4,19 +4,14 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
-import java.util.Stack;
 
 import javax.tools.DiagnosticListener;
-
-import org.apache.log4j.Logger;
 
 import edu.jhu.cs.bsj.compiler.ast.BsjSourceLocation;
 import edu.jhu.cs.bsj.compiler.ast.NameCategory;
 import edu.jhu.cs.bsj.compiler.ast.NodePermission;
 import edu.jhu.cs.bsj.compiler.ast.exception.InsufficientPermissionException;
 import edu.jhu.cs.bsj.compiler.ast.exception.MetaAnnotationInstantiationFailureException;
-import edu.jhu.cs.bsj.compiler.ast.exception.MetaprogramConflictException;
-import edu.jhu.cs.bsj.compiler.ast.node.CompilationUnitNode;
 import edu.jhu.cs.bsj.compiler.ast.node.InvokableNameBindingNode;
 import edu.jhu.cs.bsj.compiler.ast.node.NameNode;
 import edu.jhu.cs.bsj.compiler.ast.node.Node;
@@ -25,14 +20,10 @@ import edu.jhu.cs.bsj.compiler.ast.node.QualifiedNameNode;
 import edu.jhu.cs.bsj.compiler.ast.node.SimpleNameNode;
 import edu.jhu.cs.bsj.compiler.ast.node.TypeNameBindingNode;
 import edu.jhu.cs.bsj.compiler.ast.node.VariableNameBindingNode;
-import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaAnnotationMetaprogramAnchorNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaAnnotationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramAnchorNode;
-import edu.jhu.cs.bsj.compiler.impl.ast.attribute.AccessType;
-import edu.jhu.cs.bsj.compiler.impl.ast.attribute.Attribute;
-import edu.jhu.cs.bsj.compiler.impl.ast.conflict.MetaprogramOrderingRecord;
+import edu.jhu.cs.bsj.compiler.impl.ast.delta.EditScriptElement;
 import edu.jhu.cs.bsj.compiler.impl.ast.exception.InsufficientPermissionExceptionImpl;
-import edu.jhu.cs.bsj.compiler.impl.ast.exception.MetaprogramAttributeConflictExceptionImpl;
 import edu.jhu.cs.bsj.compiler.impl.diagnostic.NoOperationDiagnosticListener;
 import edu.jhu.cs.bsj.compiler.impl.metaprogram.CompilationUnitLoader;
 import edu.jhu.cs.bsj.compiler.impl.metaprogram.PermissionPolicyManager;
@@ -56,10 +47,16 @@ import edu.jhu.cs.bsj.compiler.tool.BsjToolkit;
  * 
  * @author Zachary Palmer
  */
-public class BsjNodeManager implements MetaprogramOrderingRecord
+public class BsjNodeManager
 {
-    /** A logger for this object. */
-    private Logger LOGGER = Logger.getLogger(this.getClass());
+    /*
+     * TODO: clean up. It is possible to imagine this class as a delegating proxy for a number of interfaces:
+     * PackageNodeManager, MetaAnnotationObjectInstantiator, and a few other interfaces yet to be established.
+     * (Currently, the aforementioned are classes; an interface abstraction would need to be introduced.) Upon doing so,
+     * the individual modules could be varied by instantiating different BsjNodeManagers and giving them some components
+     * in common and leaving others distinct. This would be cleaner than the current approach because it would reduce
+     * coupling; this current level of coupling, for instance, makes parallel execution of metaprograms impossible.
+     */
 
     /**
      * The meta-annotation object instantiator used by this manager.
@@ -70,24 +67,13 @@ public class BsjNodeManager implements MetaprogramOrderingRecord
      */
     private PackageNodeManager packageNodeManager;
     /**
-     * The current dependency manager.
-     */
-    private DependencyManager dependencyManager;
-    /**
      * A module containing logic for compilation unit loading.
      */
     private CompilationUnitLoader compilationUnitLoader;
-
     /**
-     * The stack of running metaprograms. This is specifically in place to permit code to temporarily suspend the
-     * running metaprograms' effects (by pushing <code>null</code> onto the stack).
+     * The module for tracking metaprogram execution state.
      */
-    private Stack<MetaprogramProfile<?, ?>> metaprogramStack;
-    /**
-     * The stack of permission policy managers for nodes. If this manager is <code>null</code>, any mutation is
-     * permitted.
-     */
-    private Stack<PermissionPolicyManager> permissionPolicyStack;
+    private MetaprogramExecutionStack metaprogramExecutionStack;
 
     /**
      * The toolkit over which this node manager is operating.
@@ -99,108 +85,12 @@ public class BsjNodeManager implements MetaprogramOrderingRecord
      */
     public BsjNodeManager(BsjToolkit toolkit)
     {
-        this.metaprogramStack = new Stack<MetaprogramProfile<?, ?>>();
-        this.permissionPolicyStack = new Stack<PermissionPolicyManager>();
         this.packageNodeManager = new PackageNodeManager(toolkit);
         this.instantiator = new MetaAnnotationObjectInstantiator(toolkit);
         this.compilationUnitLoader = new CompilationUnitLoader(toolkit, this);
+        this.metaprogramExecutionStack = new MetaprogramExecutionStack();
 
         this.toolkit = toolkit;
-
-        this.packageNodeManager.addListener(new PackageNodeListener()
-        {
-
-            @Override
-            public void subpackageAdded(PackageNode packageNode, PackageNode subPackageNode)
-            {
-                BsjNodeManager.this.notifyChange(packageNode);
-            }
-
-            @Override
-            public void compilationUnitInjected(CompilationUnitNode compilationUnitNode)
-            {
-                BsjNodeManager.this.notifyChange(compilationUnitNode.getParent());
-            }
-
-            @Override
-            public void compilationUnitAdded(PackageNode packageNode, CompilationUnitNode compilationUnitNode,
-                    boolean purelyInjected)
-            {
-                BsjNodeManager.this.notifyChange(packageNode);
-            }
-        });
-    }
-
-    // *** Permission policy management methods
-
-    public PermissionPolicyManager getPermissionPolicyManager()
-    {
-        if (this.permissionPolicyStack.isEmpty())
-        {
-            return null;
-        } else
-        {
-            return permissionPolicyStack.peek();
-        }
-    }
-
-    public void pushPermissionPolicyManager(PermissionPolicyManager permissionPolicyManager)
-    {
-        this.permissionPolicyStack.push(permissionPolicyManager);
-        if (LOGGER.isTraceEnabled())
-        {
-            LOGGER.trace("Permission policy push - stack = " + this.permissionPolicyStack.toString());
-        }
-    }
-
-    public void popPermissionPolicyManager()
-    {
-        this.permissionPolicyStack.pop();
-        if (LOGGER.isTraceEnabled())
-        {
-            LOGGER.trace("Permission policy pop - stack = " + this.permissionPolicyStack.toString());
-        }
-    }
-
-    // *** Dependency management methods
-
-    public DependencyManager getDependencyManager()
-    {
-        return this.dependencyManager;
-    }
-
-    public void setDependencyManager(DependencyManager dependencyManager)
-    {
-        this.dependencyManager = dependencyManager;
-    }
-
-    // *** Active metaprogram tracking methods
-
-    public MetaprogramProfile<?, ?> getCurrentMetaprogram()
-    {
-        if (metaprogramStack.isEmpty())
-        {
-            return null;
-        } else
-        {
-            return metaprogramStack.peek();
-        }
-    }
-
-    public void pushCurrentMetaprogram(MetaprogramProfile<?, ?> metaprogram)
-    {
-        this.metaprogramStack.push(metaprogram);
-    }
-
-    public void popCurrentMetaprogram()
-    {
-        this.metaprogramStack.pop();
-    }
-
-    public Integer getCurrentMetaprogramId()
-    {
-        MetaprogramProfile<?, ?> metaprogram = getCurrentMetaprogram();
-        return metaprogram == null ? null : metaprogram.getMetaprogram().getID();
     }
 
     // *** Submodule access methods
@@ -215,26 +105,49 @@ public class BsjNodeManager implements MetaprogramOrderingRecord
         return compilationUnitLoader;
     }
 
-    // *** Other methods
-
-    /**
-     * Pushes the state of all metaprogram value stacks with a <code>null</code> value. This is used internally by the
-     * compiler to perform privileged, unrecorded operations while being called on behalf of a metaprogram.
-     */
-    public void pushNull()
+    public MetaprogramExecutionStack getMetaprogramExecutionStack()
     {
-        this.pushCurrentMetaprogram(null);
-        this.pushPermissionPolicyManager(null);
+        return metaprogramExecutionStack;
+    }
+    
+    // *** Execution stack delegation methods
+    
+    public DependencyManager getDependencyManager()
+    {
+        return this.metaprogramExecutionStack.getDependencyManager();
     }
 
-    /**
-     * Pops the state of all metaprogram value stacks. This is used internally by the compiler to pop values associated
-     * with an execution context (such as that created by {@link #pushNull()}.
-     */
-    public void popAll()
+    public PermissionPolicyManager getPermissionPolicyManager()
     {
-        this.popCurrentMetaprogram();
-        this.popPermissionPolicyManager();
+        return this.metaprogramExecutionStack.getPermissionPolicyManager();
+    }
+    
+    public MetaprogramProfile<?, ?> getCurrentMetaprogram()
+    {
+        return this.metaprogramExecutionStack.getCurrentMetaprogram();
+    }
+    
+    public boolean isRecordingEdits()
+    {
+        return this.metaprogramExecutionStack.isRecordingEdits();
+    }
+    
+    public void recordEdit(EditScriptElement element)
+    {
+        this.metaprogramExecutionStack.recordEdit(element);
+    }
+    
+    public BsjNodeProxyFactory getProxyFactory()
+    {
+        return this.metaprogramExecutionStack.getProxyFactory();
+    }
+
+    // *** Other methods
+
+    public Integer getCurrentMetaprogramId()
+    {
+        MetaprogramProfile<?, ?> metaprogram = this.metaprogramExecutionStack.getCurrentMetaprogram();
+        return metaprogram == null ? null : metaprogram.getMetaprogram().getID();
     }
 
     /**
@@ -314,9 +227,10 @@ public class BsjNodeManager implements MetaprogramOrderingRecord
         MetaprogramProfile<?, ?> profile = this.getDependencyManager().getMetaprogramProfileByID(id);
         return profile == null ? null : profile.getAnchor();
     }
-    
+
     /**
      * Determines whether or not two metaprograms are ordered.
+     * 
      * @param id1 The first metaprogram's ID.
      * @param id2 The second metaprogram's ID.
      * @return <code>true</code> if the metaprograms are ordered; <code>false</code> if they are not.
@@ -327,7 +241,8 @@ public class BsjNodeManager implements MetaprogramOrderingRecord
     }
 
     /**
-     * Determines whether or not the metaprogram with the specified ID is ordered with respect to the current metaprogram.
+     * Determines whether or not the metaprogram with the specified ID is ordered with respect to the current
+     * metaprogram.
      * 
      * @param id The ID of the metaprogram to check.
      * @return <code>true</code> if the metaprograms are ordered; <code>false</code> if they do not.
@@ -338,47 +253,6 @@ public class BsjNodeManager implements MetaprogramOrderingRecord
             return true;
 
         return checkOrdering(id, getCurrentMetaprogramId());
-    }
-
-    /**
-     * Asserts that the metaprogram with the specified ID is ordered with respect to the current metaprogram.
-     * 
-     * @param id The ID of the metaprogram to check.
-     * @param node The node that the two metaprograms are modifying.
-     * @param attribute The attribute over which we are asserting ordering.
-     * @param ourAccess The access performed by the current metaprogram.
-     * @param theirAccess The access performed by the metaprogram whose ID was specified.
-     * @throws MetaprogramConflictException If the metaprogram with the specified ID is not ordered with respect to the current
-     *             metaprogram.
-     */
-    public <T extends AccessType<T>> void assertOrdering(int id, Node node, Attribute<T> attribute, T ourAccess,
-            T theirAccess) throws MetaprogramConflictException
-    {
-        if (!hasOrdering(id))
-        {
-            if (LOGGER.isDebugEnabled())
-            {
-                LOGGER.debug("Attempted to assert ordering between " + id + " and " + getCurrentMetaprogramId()
-                        + " over node " + node.getUid() + " and failed.");
-            }
-            throw new MetaprogramAttributeConflictExceptionImpl(this.getDependencyManager().getMetaprogramProfileByID(
-                    id).getAnchor(),
-                    this.getDependencyManager().getMetaprogramProfileByID(getCurrentMetaprogramId()).getAnchor(), node,
-                    attribute.getName(), ourAccess.toString(), theirAccess.toString());
-        }
-    }
-
-    /**
-     * Creates a new meta-annotation metaprogram anchor. This functionality is provided here to prevent nodes from
-     * needing access to a factory. It is intended to be used by the {@link MetaAnnotationNode} when an anchor is
-     * required to support its annotation object.
-     * 
-     * @param node The node for which the anchor is being created.
-     * @return A new meta-annotation metaprogram anchor.
-     */
-    public MetaAnnotationMetaprogramAnchorNode instantiateMetaAnnotationMetaprogramAnchor(Node node)
-    {
-        return this.instantiator.instantiateMetaAnnotationMetaprogramAnchor(node);
     }
 
     /**

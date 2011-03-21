@@ -17,6 +17,7 @@ import edu.jhu.cs.bsj.compiler.ast.node.BlockStatementNode;
 import edu.jhu.cs.bsj.compiler.ast.node.Node;
 import edu.jhu.cs.bsj.compiler.ast.node.list.BlockStatementListNode;
 import edu.jhu.cs.bsj.compiler.impl.ast.BsjNodeManager;
+import edu.jhu.cs.bsj.compiler.impl.ast.BsjNodeProxyFactory;
 
 @Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
 public class BlockStatementListNodeImpl extends ListNodeImpl<BlockStatementNode> implements BlockStatementListNode
@@ -30,6 +31,18 @@ public class BlockStatementListNodeImpl extends ListNodeImpl<BlockStatementNode>
             boolean binary)
     {
         super(children, startLocation, stopLocation, manager, binary);
+    }
+    
+    /** Proxy constructor. */
+    public BlockStatementListNodeImpl(BsjNodeManager manager, BsjNodeProxyFactory proxyFactory, BlockStatementListNode backingNode)
+    {
+        super(manager, proxyFactory, backingNode);
+    }
+    
+    /** Retrieves this node's backing node (if one exists). */
+    protected BlockStatementListNode getBackingNode()
+    {
+        return (BlockStatementListNode)super.getBackingNode();
     }
     
     /**
@@ -136,6 +149,8 @@ public class BlockStatementListNodeImpl extends ListNodeImpl<BlockStatementNode>
     {
         StringBuilder sb = new StringBuilder();
         sb.append(this.getClass().getSimpleName());
+        sb.append('#');
+        sb.append(this.getUid());
         sb.append('[');
         sb.append("children=");
         sb.append(this.getUnionForChildren() == null? "null" : this.getUnionForChildren().getClass().getSimpleName());
@@ -227,6 +242,14 @@ public class BlockStatementListNodeImpl extends ListNodeImpl<BlockStatementNode>
     public Class<BlockStatementNode> getElementType()
     {
         return BlockStatementNode.class;
+    }
+    
+    /**
+     * Wraps an element of this list's type.
+     */
+    protected BlockStatementNode wrapElement(BlockStatementNode element)
+    {
+        return getProxyFactory().makeBlockStatementNode(element);
     }
     
 }

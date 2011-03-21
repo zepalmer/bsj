@@ -1,10 +1,10 @@
 package edu.jhu.cs.bsj.compiler.impl.ast.node.meta;
 
 import java.util.Arrays;
-import java.util.EnumMap;
+import java.util.EnumSet;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
+import java.util.Set;
 
 import javax.annotation.Generated;
 
@@ -20,10 +20,12 @@ import edu.jhu.cs.bsj.compiler.ast.node.list.BlockStatementListNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramPreambleNode;
 import edu.jhu.cs.bsj.compiler.impl.ast.BsjNodeManager;
+import edu.jhu.cs.bsj.compiler.impl.ast.BsjNodeProxyFactory;
 import edu.jhu.cs.bsj.compiler.impl.ast.NormalNodeUnion;
-import edu.jhu.cs.bsj.compiler.impl.ast.attribute.AttributeName;
-import edu.jhu.cs.bsj.compiler.impl.ast.attribute.ReadWriteAttribute;
+import edu.jhu.cs.bsj.compiler.impl.ast.delta.property.MetaprogramNodeSetBodyPropertyEditScriptElementImpl;
+import edu.jhu.cs.bsj.compiler.impl.ast.delta.property.MetaprogramNodeSetPreamblePropertyEditScriptElementImpl;
 import edu.jhu.cs.bsj.compiler.impl.ast.node.NodeImpl;
+import edu.jhu.cs.bsj.compiler.impl.ast.properties.MetaprogramNodeProperties;
 
 @Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
 public class MetaprogramNodeImpl extends NodeImpl implements MetaprogramNode
@@ -34,24 +36,11 @@ public class MetaprogramNodeImpl extends NodeImpl implements MetaprogramNode
     /** The list of statements in the metaprogram's body. */
     private NodeUnion<? extends BlockStatementListNode> body;
     
-    private Map<LocalAttribute,ReadWriteAttribute> localAttributes = new EnumMap<LocalAttribute,ReadWriteAttribute>(LocalAttribute.class);
-    private ReadWriteAttribute getAttribute(LocalAttribute attributeName)
-    {
-        ReadWriteAttribute attribute = localAttributes.get(attributeName);
-        if (attribute == null)
-        {
-            attribute = new ReadWriteAttribute(MetaprogramNodeImpl.this, attributeName);
-            localAttributes.put(attributeName, attribute);
-        }
-        return attribute;
-    }
-    private static enum LocalAttribute implements AttributeName
-    {
-        /** Attribute identifier for the preamble property. */
-        PREAMBLE,
-        /** Attribute identifier for the body property. */
-        BODY,
-    }
+    /**
+     * A set of those properties which have been populated from the backing node.
+     * This field is <code>null</code> if <tt>backingNode</tt> is <code>null</code>.
+     */
+    private Set<MetaprogramNodeProperties> populatedProperties;
     
     /** General constructor. */
     public MetaprogramNodeImpl(
@@ -63,8 +52,78 @@ public class MetaprogramNodeImpl extends NodeImpl implements MetaprogramNode
             boolean binary)
     {
         super(startLocation, stopLocation, manager, binary);
-        setUnionForPreamble(preamble, false);
-        setUnionForBody(body, false);
+        this.populatedProperties = null;
+        doSetPreamble(preamble);
+        doSetBody(body);
+    }
+    
+    /** Proxy constructor. */
+    public MetaprogramNodeImpl(BsjNodeManager manager, BsjNodeProxyFactory proxyFactory, MetaprogramNode backingNode)
+    {
+        super(manager, proxyFactory, backingNode);
+        this.populatedProperties = EnumSet.noneOf(MetaprogramNodeProperties.class);
+    }
+    
+    /** Retrieves this node's backing node (if one exists). */
+    protected MetaprogramNode getBackingNode()
+    {
+        return (MetaprogramNode)super.getBackingNode();
+    }
+    
+    /**
+     * Ensures that the preamble value has been populated from proxy.
+     * If this node is not backed by a proxy or if the value has already been
+     * populated, this method does nothing.
+     */
+    private void checkPreambleWrapped()
+    {
+        if (this.populatedProperties == null || this.populatedProperties.contains(
+                MetaprogramNodeProperties.PREAMBLE))
+            return;
+        this.populatedProperties.add(MetaprogramNodeProperties.PREAMBLE);
+        NodeUnion<? extends MetaprogramPreambleNode> union = this.getBackingNode().getUnionForPreamble();
+        switch (union.getType())
+        {
+            case NORMAL:
+                union = this.getProxyFactory().makeNormalNodeUnion(
+                        this.getProxyFactory().makeMetaprogramPreambleNode(union.getNormalNode()));
+                break;
+            case SPLICE:
+                union = this.getProxyFactory().makeSpliceNodeUnion(
+                        this.getProxyFactory().makeSpliceNode(union.getSpliceNode()));
+                break;
+            default:
+                throw new IllegalStateException("Unrecognized union type: " + union.getType());
+        }
+        this.preamble = union;
+    }
+    
+    /**
+     * Ensures that the body value has been populated from proxy.
+     * If this node is not backed by a proxy or if the value has already been
+     * populated, this method does nothing.
+     */
+    private void checkBodyWrapped()
+    {
+        if (this.populatedProperties == null || this.populatedProperties.contains(
+                MetaprogramNodeProperties.BODY))
+            return;
+        this.populatedProperties.add(MetaprogramNodeProperties.BODY);
+        NodeUnion<? extends BlockStatementListNode> union = this.getBackingNode().getUnionForBody();
+        switch (union.getType())
+        {
+            case NORMAL:
+                union = this.getProxyFactory().makeNormalNodeUnion(
+                        this.getProxyFactory().makeBlockStatementListNode(union.getNormalNode()));
+                break;
+            case SPLICE:
+                union = this.getProxyFactory().makeSpliceNodeUnion(
+                        this.getProxyFactory().makeSpliceNode(union.getSpliceNode()));
+                break;
+            default:
+                throw new IllegalStateException("Unrecognized union type: " + union.getType());
+        }
+        this.body = union;
     }
     
     /**
@@ -74,7 +133,7 @@ public class MetaprogramNodeImpl extends NodeImpl implements MetaprogramNode
      */
     public MetaprogramPreambleNode getPreamble()
     {
-        getAttribute(LocalAttribute.PREAMBLE).recordAccess(ReadWriteAttribute.AccessType.READ);
+        checkPreambleWrapped();
         if (this.preamble == null)
         {
             return null;
@@ -90,7 +149,7 @@ public class MetaprogramNodeImpl extends NodeImpl implements MetaprogramNode
      */
     public NodeUnion<? extends MetaprogramPreambleNode> getUnionForPreamble()
     {
-        getAttribute(LocalAttribute.PREAMBLE).recordAccess(ReadWriteAttribute.AccessType.READ);
+        checkPreambleWrapped();
         if (this.preamble == null)
         {
             this.preamble = new NormalNodeUnion<MetaprogramPreambleNode>(null);
@@ -104,24 +163,8 @@ public class MetaprogramNodeImpl extends NodeImpl implements MetaprogramNode
      */
     public void setPreamble(MetaprogramPreambleNode preamble)
     {
-            setPreamble(preamble, true);
-            getManager().notifyChange(this);
-    }
-    
-    private void setPreamble(MetaprogramPreambleNode preamble, boolean checkPermissions)
-    {
-        if (checkPermissions)
-        {
-            getManager().assertMutatable(this);
-            getAttribute(LocalAttribute.PREAMBLE).recordAccess(ReadWriteAttribute.AccessType.WRITE);
-        }
-        
-        if (this.preamble != null)
-        {
-            setAsChild(this.preamble.getNodeValue(), false);
-        }
-        this.preamble = new NormalNodeUnion<MetaprogramPreambleNode>(preamble);
-        setAsChild(preamble, true);
+        checkPreambleWrapped();
+        this.setUnionForPreamble(new NormalNodeUnion<MetaprogramPreambleNode>(preamble));
     }
     
     /**
@@ -130,18 +173,15 @@ public class MetaprogramNodeImpl extends NodeImpl implements MetaprogramNode
      */
     public void setUnionForPreamble(NodeUnion<? extends MetaprogramPreambleNode> preamble)
     {
-            setUnionForPreamble(preamble, true);
-            getManager().notifyChange(this);
+        checkPreambleWrapped();
+        this.getManager().assertMutatable(this);
+        this.doSetPreamble(preamble);
+        if (this.getManager().isRecordingEdits())
+            super.recordEdit(new MetaprogramNodeSetPreamblePropertyEditScriptElementImpl(this.getManager().getCurrentMetaprogramId(), this.getUid(), preamble.getNodeValue() == null ? null : preamble.getNodeValue().getUid()));
     }
     
-    private void setUnionForPreamble(NodeUnion<? extends MetaprogramPreambleNode> preamble, boolean checkPermissions)
+    private void doSetPreamble(NodeUnion<? extends MetaprogramPreambleNode> preamble)
     {
-        if (checkPermissions)
-        {
-            getManager().assertMutatable(this);
-            getAttribute(LocalAttribute.PREAMBLE).recordAccess(ReadWriteAttribute.AccessType.WRITE);
-        }
-        
         if (preamble == null)
         {
             preamble = new NormalNodeUnion<MetaprogramPreambleNode>(null);
@@ -161,7 +201,7 @@ public class MetaprogramNodeImpl extends NodeImpl implements MetaprogramNode
      */
     public BlockStatementListNode getBody()
     {
-        getAttribute(LocalAttribute.BODY).recordAccess(ReadWriteAttribute.AccessType.READ);
+        checkBodyWrapped();
         if (this.body == null)
         {
             return null;
@@ -177,7 +217,7 @@ public class MetaprogramNodeImpl extends NodeImpl implements MetaprogramNode
      */
     public NodeUnion<? extends BlockStatementListNode> getUnionForBody()
     {
-        getAttribute(LocalAttribute.BODY).recordAccess(ReadWriteAttribute.AccessType.READ);
+        checkBodyWrapped();
         if (this.body == null)
         {
             this.body = new NormalNodeUnion<BlockStatementListNode>(null);
@@ -191,24 +231,8 @@ public class MetaprogramNodeImpl extends NodeImpl implements MetaprogramNode
      */
     public void setBody(BlockStatementListNode body)
     {
-            setBody(body, true);
-            getManager().notifyChange(this);
-    }
-    
-    private void setBody(BlockStatementListNode body, boolean checkPermissions)
-    {
-        if (checkPermissions)
-        {
-            getManager().assertMutatable(this);
-            getAttribute(LocalAttribute.BODY).recordAccess(ReadWriteAttribute.AccessType.WRITE);
-        }
-        
-        if (this.body != null)
-        {
-            setAsChild(this.body.getNodeValue(), false);
-        }
-        this.body = new NormalNodeUnion<BlockStatementListNode>(body);
-        setAsChild(body, true);
+        checkBodyWrapped();
+        this.setUnionForBody(new NormalNodeUnion<BlockStatementListNode>(body));
     }
     
     /**
@@ -217,18 +241,15 @@ public class MetaprogramNodeImpl extends NodeImpl implements MetaprogramNode
      */
     public void setUnionForBody(NodeUnion<? extends BlockStatementListNode> body)
     {
-            setUnionForBody(body, true);
-            getManager().notifyChange(this);
+        checkBodyWrapped();
+        this.getManager().assertMutatable(this);
+        this.doSetBody(body);
+        if (this.getManager().isRecordingEdits())
+            super.recordEdit(new MetaprogramNodeSetBodyPropertyEditScriptElementImpl(this.getManager().getCurrentMetaprogramId(), this.getUid(), body.getNodeValue() == null ? null : body.getNodeValue().getUid()));
     }
     
-    private void setUnionForBody(NodeUnion<? extends BlockStatementListNode> body, boolean checkPermissions)
+    private void doSetBody(NodeUnion<? extends BlockStatementListNode> body)
     {
-        if (checkPermissions)
-        {
-            getManager().assertMutatable(this);
-            getAttribute(LocalAttribute.BODY).recordAccess(ReadWriteAttribute.AccessType.WRITE);
-        }
-        
         if (body == null)
         {
             body = new NormalNodeUnion<BlockStatementListNode>(null);
@@ -252,13 +273,13 @@ public class MetaprogramNodeImpl extends NodeImpl implements MetaprogramNode
     protected void receiveToChildren(BsjNodeVisitor visitor)
     {
         super.receiveToChildren(visitor);
-        if (this.preamble.getNodeValue() != null)
+        if (this.getUnionForPreamble().getNodeValue() != null)
         {
-            this.preamble.getNodeValue().receive(visitor);
+            this.getUnionForPreamble().getNodeValue().receive(visitor);
         }
-        if (this.body.getNodeValue() != null)
+        if (this.getUnionForBody().getNodeValue() != null)
         {
-            this.body.getNodeValue().receive(visitor);
+            this.getUnionForBody().getNodeValue().receive(visitor);
         }
         Iterator<? extends Node> extras = getHiddenVisitorChildren();
         if (extras != null)
@@ -281,13 +302,13 @@ public class MetaprogramNodeImpl extends NodeImpl implements MetaprogramNode
     protected void receiveTypedToChildren(BsjTypedNodeVisitor visitor)
     {
         super.receiveTypedToChildren(visitor);
-        if (this.preamble.getNodeValue() != null)
+        if (this.getUnionForPreamble().getNodeValue() != null)
         {
-            this.preamble.getNodeValue().receiveTyped(visitor);
+            this.getUnionForPreamble().getNodeValue().receiveTyped(visitor);
         }
-        if (this.body.getNodeValue() != null)
+        if (this.getUnionForBody().getNodeValue() != null)
         {
-            this.body.getNodeValue().receiveTyped(visitor);
+            this.getUnionForBody().getNodeValue().receiveTyped(visitor);
         }
         Iterator<? extends Node> extras = getHiddenVisitorChildren();
         if (extras != null)
@@ -345,6 +366,8 @@ public class MetaprogramNodeImpl extends NodeImpl implements MetaprogramNode
     {
         StringBuilder sb = new StringBuilder();
         sb.append(this.getClass().getSimpleName());
+        sb.append('#');
+        sb.append(this.getUid());
         sb.append('[');
         sb.append("preamble=");
         sb.append(this.getUnionForPreamble().getNodeValue() == null? "null" : this.getUnionForPreamble().getNodeValue().getClass().getSimpleName());

@@ -1,0 +1,38 @@
+public class ListNodeFilterChangeConflict
+{
+    [:
+        ClassMemberListNode members = context.getAnchor().<ClassMemberListNode>getNearestAncestorOfType(ClassMemberListNode.class);
+        for (Node n : members.filter(new NodeFilter<ClassMemberNode>()
+                {
+                    public boolean filter(ClassMemberNode n)
+                    {
+                        if (n instanceof MethodDeclarationNode)
+                        {
+                            MethodDeclarationNode decl = (MethodDeclarationNode)n;
+                            return decl.getIdentifier().getIdentifier().equals("foo");
+                        } else
+                        {
+                            return false;
+                        }
+                    }
+                }))
+        {
+            System.out.println("### method ID " + n.getUid());
+        }
+    :]
+    
+    [:
+        #mode mutate;
+        ClassMemberListNode members = context.getAnchor().<ClassMemberListNode>getNearestAncestorOfType(ClassMemberListNode.class);
+        BsjNodeFactory factory = context.getFactory();
+        MethodDeclarationNode decl = factory.makeMethodDeclarationNode(
+                factory.makeBlockStatementListNode(),
+                factory.makeMethodModifiersNode(AccessModifier.PUBLIC),
+                factory.makeIdentifierNode("bar"),
+                factory.makeVariableListNode(),
+                factory.makeVoidTypeNode(),
+                null);
+        members.add(decl);
+        decl.setIdentifier(factory.makeIdentifierNode("foo"));
+    :]
+}

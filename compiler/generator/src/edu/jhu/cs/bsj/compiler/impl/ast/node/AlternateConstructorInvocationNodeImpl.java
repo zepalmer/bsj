@@ -18,6 +18,7 @@ import edu.jhu.cs.bsj.compiler.ast.node.Node;
 import edu.jhu.cs.bsj.compiler.ast.node.list.ExpressionListNode;
 import edu.jhu.cs.bsj.compiler.ast.node.list.ReferenceTypeListNode;
 import edu.jhu.cs.bsj.compiler.impl.ast.BsjNodeManager;
+import edu.jhu.cs.bsj.compiler.impl.ast.BsjNodeProxyFactory;
 
 @Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
 public class AlternateConstructorInvocationNodeImpl extends ConstructorInvocationNodeImpl implements AlternateConstructorInvocationNode
@@ -32,6 +33,18 @@ public class AlternateConstructorInvocationNodeImpl extends ConstructorInvocatio
             boolean binary)
     {
         super(arguments, typeArguments, startLocation, stopLocation, manager, binary);
+    }
+    
+    /** Proxy constructor. */
+    public AlternateConstructorInvocationNodeImpl(BsjNodeManager manager, BsjNodeProxyFactory proxyFactory, AlternateConstructorInvocationNode backingNode)
+    {
+        super(manager, proxyFactory, backingNode);
+    }
+    
+    /** Retrieves this node's backing node (if one exists). */
+    protected AlternateConstructorInvocationNode getBackingNode()
+    {
+        return (AlternateConstructorInvocationNode)super.getBackingNode();
     }
     
     /**
@@ -122,6 +135,8 @@ public class AlternateConstructorInvocationNodeImpl extends ConstructorInvocatio
     {
         StringBuilder sb = new StringBuilder();
         sb.append(this.getClass().getSimpleName());
+        sb.append('#');
+        sb.append(this.getUid());
         sb.append('[');
         sb.append("arguments=");
         sb.append(this.getUnionForArguments().getNodeValue() == null? "null" : this.getUnionForArguments().getNodeValue().getClass().getSimpleName());

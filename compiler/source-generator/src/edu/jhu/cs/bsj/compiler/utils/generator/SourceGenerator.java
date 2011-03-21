@@ -14,8 +14,10 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.ListIterator;
 import java.util.Map;
 import java.util.Set;
 import java.util.regex.Matcher;
@@ -25,6 +27,7 @@ import javax.xml.parsers.ParserConfigurationException;
 
 import org.xml.sax.SAXException;
 
+import edu.jhu.cs.bsj.compiler.impl.utils.CollectionUtilities;
 import edu.jhu.cs.bsj.compiler.impl.utils.CompoundIterable;
 import edu.jhu.cs.bsj.compiler.impl.utils.ConcatenatingIterable;
 import edu.jhu.cs.bsj.compiler.impl.utils.MapBuilder;
@@ -88,6 +91,27 @@ public class SourceGenerator
      */
     private static final Set<String> CLONEABLE_NAMES = Collections.unmodifiableSet(new HashSet<String>(
             Arrays.<String> asList()));
+
+    private static final Map<String, String> PRIMITIVE_TO_CONTAINER_MAP;
+    private static final Map<String, String> CONTAINER_TO_PRIMITIVE_MAP;
+    static
+    {
+        Map<String, String> map = new HashMap<String, String>();
+        for (String s : PRIMITIVE_TYPES)
+        {
+            map.put(s, capFirst(s));
+        }
+        map.put("int", "Integer");
+        map.put("char", "Character");
+        PRIMITIVE_TO_CONTAINER_MAP = Collections.unmodifiableMap(map);
+
+        map = new HashMap<String, String>();
+        for (Map.Entry<String, String> entry : PRIMITIVE_TO_CONTAINER_MAP.entrySet())
+        {
+            map.put(entry.getValue(), entry.getKey());
+        }
+        CONTAINER_TO_PRIMITIVE_MAP = Collections.unmodifiableMap(map);
+    }
 
     /* @formatter:off */
     /**
@@ -231,10 +255,9 @@ public class SourceGenerator
         return f;
     }
 
-    public static File getSupplementDir(Project p, SupplementCategory category)
+    public static File getJavaSupplementDir()
     {
-        File f = new File(SUPPLEMENTS_DIR.getAbsolutePath() + File.separator + category.getSubdirSuffix()
-                + File.separator + p.getResourceDirName());
+        File f = new File(SUPPLEMENTS_DIR.getAbsolutePath() + File.separator + "java");
         return f;
     }
 
@@ -319,6 +342,32 @@ public class SourceGenerator
     }
 
     /**
+     * Performs a source file body inclusion if the targeted file exists.
+     * 
+     * @param filename The filename (without extension) to use.
+     * @param ps The {@link PrintStream} to which to write lines that need to be copied.
+     */
+    private static void includeBody(String filename, PrintStream ps) throws IOException
+    {
+        File f = new File(getJavaSupplementDir() + File.separator + filename + ".java");
+        if (f.exists())
+            includeBody(f, ps);
+    }
+
+    /**
+     * Performs a source file import inclusion if the targeted file exists.
+     * 
+     * @param filename The filename (without extension) to use.
+     * @param ps The {@link PrintStream} to which to write lines that need to be copied.
+     */
+    private static void includeImports(String filename, PrintStream ps) throws IOException
+    {
+        File f = new File(getJavaSupplementDir() + File.separator + filename + ".java");
+        if (f.exists())
+            includeImports(f, ps);
+    }
+
+    /**
      * Performs a source file body inclusion.
      * 
      * @param f The {@link File} to include.
@@ -338,42 +387,6 @@ public class SourceGenerator
     private static void includeImports(File f, PrintStream ps) throws IOException
     {
         includeFileParts(f, ps, "headerstart", "headerstop");
-    }
-
-    /**
-     * Performs a source file body inclusion.
-     * 
-     * @param ps The {@link PrintStream} to which to write lines that need to be copied.
-     * @param names The names of the include files.
-     * @param project The project where the includes are stored.
-     * @param category The category of includes to use.
-     */
-    private static void includeAllBodies(PrintStream ps, Iterable<String> names, Project project,
-            SupplementCategory category) throws IOException
-    {
-        for (String name : names)
-        {
-            File f = new File(getSupplementDir(project, category).getPath() + File.separator + name);
-            includeBody(f, ps);
-        }
-    }
-
-    /**
-     * Performs a source file body inclusion.
-     * 
-     * @param ps The {@link PrintStream} to which to write lines that need to be copied.
-     * @param names The names of the include files.
-     * @param project The project where the includes are stored.
-     * @param category The category of includes to use.
-     */
-    private static void includeAllImports(PrintStream ps, Iterable<String> names, Project project,
-            SupplementCategory category) throws IOException
-    {
-        for (String name : names)
-        {
-            File f = new File(getSupplementDir(project, category).getPath() + File.separator + name);
-            includeImports(f, ps);
-        }
     }
 
     /**
@@ -404,7 +417,6 @@ public class SourceGenerator
             boolean skipMake, boolean nodeUnionTypes)
     {
         boolean first = true;
-        ps.print("(");
         if (props.size() > 0)
         {
             ps.println();
@@ -425,7 +437,6 @@ public class SourceGenerator
             }
             ps.decPrependCount(2);
         }
-        ps.print(")");
     }
 
     /**
@@ -578,7 +589,7 @@ public class SourceGenerator
 
             // imports
             printImports(ps, project);
-            includeAllImports(ps, def.getIncludes(), project, SupplementCategory.NODE);
+            includeImports(def.getBaseName(), ps);
 
             ps.println("/**");
             ps.println(" * " + def.getDocString().replaceAll("\n", "\n * "));
@@ -725,7 +736,7 @@ public class SourceGenerator
 
             // write bodies
             ps.decPrependCount();
-            includeAllBodies(ps, def.getIncludes(), project, SupplementCategory.NODE);
+            includeBody(def.getBaseName(), ps);
             ps.println("}");
         }
     }
@@ -779,8 +790,8 @@ public class SourceGenerator
          * @throws IOException If an I/O error occurs.
          */
         protected PrependablePrintStream createOutputFile(String pkg, TypeDefinition.Mode mode, Project project,
-                SupplementCategory category, String type, boolean includes, String headerString, String extendsName,
-                String... implementsNames) throws IOException
+                String type, boolean includes, String headerString, String extendsName, String... implementsNames)
+                throws IOException
         {
             String name;
             if (type.indexOf('<') != -1)
@@ -790,6 +801,7 @@ public class SourceGenerator
             {
                 name = type;
             }
+            final String basename = name;
             name = name + ".java";
 
             File f = new File(getTargetDir(project).getAbsolutePath() + File.separator
@@ -802,7 +814,7 @@ public class SourceGenerator
             printImports(ret, project);
             if (includes)
             {
-                includeAllImports(ret, Collections.singleton(name), project, SupplementCategory.GENERAL);
+                includeImports(basename, ret);
             }
             if (headerString != null)
             {
@@ -819,6 +831,9 @@ public class SourceGenerator
             } else if (mode == TypeDefinition.Mode.INTERFACE)
             {
                 ret.print("interface");
+            } else if (mode == TypeDefinition.Mode.ENUM)
+            {
+                ret.print("enum");
             }
             ret.print(" " + type);
             if (extendsName != null)
@@ -844,7 +859,7 @@ public class SourceGenerator
             ret.println("{");
             if (includes)
             {
-                includeAllBodies(ret, Collections.singleton(name), project, SupplementCategory.GENERAL);
+                includeBody(basename, ret);
             }
             return ret;
         }
@@ -889,7 +904,7 @@ public class SourceGenerator
             defNames.add(def.getBaseName());
         }
 
-        public void finish() throws IOException
+        protected List<TypeDefinition> getDefList()
         {
             List<TypeDefinition> defList;
             if (mode == ReviewMode.ALPHABETICAL)
@@ -914,6 +929,12 @@ public class SourceGenerator
             {
                 throw new IllegalStateException("Unrecognized review mode: " + mode);
             }
+            return defList;
+        }
+
+        public void finish() throws IOException
+        {
+            List<TypeDefinition> defList = getDefList();
             for (TypeDefinition def : defList)
             {
                 useDefinition(def);
@@ -930,11 +951,10 @@ public class SourceGenerator
             return new TypeDefinition(name, specialDef.getTypeParameter(), specialDef.getSuperName(),
                     specialDef.getSuperTypeArg(), specialDef.getConstructorFooter(), specialDef.getProfile(),
                     specialDef.getInterfaces(), specialDef.getTags(), specialDef.getConstants(),
-                    specialDef.getProperties(), specialDef.getIncludes(), specialDef.getDocString(),
-                    specialDef.getToStringLines(), specialDef.getFactoryOverrideMap(),
-                    specialDef.getConstructorOverrideMap(), specialDef.isGenConstructor(), specialDef.isGenChildren(),
-                    specialDef.isGenReplace(), specialDef.getFactoryMethods(), specialDef.getMode(),
-                    specialDef.isBsjSpecific());
+                    specialDef.getProperties(), specialDef.getDocString(), specialDef.getToStringLines(),
+                    specialDef.getFactoryOverrideMap(), specialDef.getConstructorOverrideMap(),
+                    specialDef.isGenConstructor(), specialDef.isGenChildren(), specialDef.isGenReplace(),
+                    specialDef.getFactoryMethods(), specialDef.getMode(), specialDef.isBsjSpecific());
         }
 
         protected boolean typeExistsAsProperty(String typeBaseName)
@@ -1298,11 +1318,10 @@ public class SourceGenerator
             ps.println("");
 
             printImports(ps, Project.GENERATOR);
-            includeAllImports(ps, def.getIncludes(), Project.GENERATOR, SupplementCategory.NODE);
+            includeImports(def.getBaseName() + "Impl", ps);
             for (TagReferenceDefinition tag : def.getTags())
             {
-                includeAllImports(ps, def.getNamespaceMap().get(tag.getName()).getIncludes(), Project.GENERATOR,
-                        SupplementCategory.NODE);
+                includeImports(tag.getName() + "Impl", ps);
             }
 
             printGeneratedClause(ps);
@@ -1339,49 +1358,61 @@ public class SourceGenerator
                 }
             }
 
-            // gen properties
+            List<PropertyDefinition> recProps = def.getRecursiveProperties();
+            List<PropertyDefinition> respProps = def.getResponsibleProperties(false);
+
+            int nonListProperties = 0;
             for (ModalPropertyDefinition<?> p : def.getResponsibleProperties(false))
+            {
+                if (!p.isNodeListType())
+                    nonListProperties++;
+            }
+
+            // gen properties
+            for (ModalPropertyDefinition<?> p : respProps)
             {
                 ps.println("/** " + capFirst(p.getDescription()) + ". */");
                 ps.println("private " + p.getWrappedType() + " " + p.getName() + ";");
                 ps.println();
             }
 
-            // gen attributes enum
-            if (def.getResponsibleProperties(false).size() > 0)
+            // gen property enum
+            if (nonListProperties > 0)
             {
-                ps.println("private Map<LocalAttribute,ReadWriteAttribute> localAttributes = new EnumMap<LocalAttribute,ReadWriteAttribute>(LocalAttribute.class);");
-                ps.println("private ReadWriteAttribute getAttribute(LocalAttribute attributeName)");
-                ps.println("{");
-                ps.println("    ReadWriteAttribute attribute = localAttributes.get(attributeName);");
-                ps.println("    if (attribute == null)");
-                ps.println("    {");
-                ps.println("        attribute = new ReadWriteAttribute(" + rawclassname + ".this, attributeName);");
-                ps.println("        localAttributes.put(attributeName, attribute);");
-                ps.println("    }");
-                ps.println("    return attribute;");
-                ps.println("}");
-                ps.println("private static enum LocalAttribute implements AttributeName");
-                ps.println("{");
-                ps.incPrependCount();
-                for (ModalPropertyDefinition<?> p : def.getResponsibleProperties(false))
+                PrependablePrintStream eps = createOutputFile("edu.jhu.cs.bsj.compiler.impl.ast.properties",
+                        TypeDefinition.Mode.ENUM, Project.GENERATOR, def.getName() + "Properties", true, "", null,
+                        "NodeProperty");
+                eps.incPrependCount();
+                for (ModalPropertyDefinition<?> p : respProps)
                 {
-                    ps.println("/** Attribute identifier for the " + p.getName() + " property. */");
-                    ps.println(StringUtilities.convertCamelCaseToUpperCase(p.getName()) + ",");
+                    if (p.isNodeListType())
+                        continue;
+                    eps.println(StringUtilities.convertCamelCaseToUpperCase(p.getName()) + ",");
                 }
-                ps.decPrependCount();
-                ps.println("}");
+                eps.decPrependCount();
+                eps.println("}");
+                eps.close();
+            }
+
+            // gen population record
+            if (nonListProperties > 0)
+            {
+                ps.println("/**");
+                ps.println(" * A set of those properties which have been populated from the backing node.");
+                ps.println(" * This field is <code>null</code> if <tt>backingNode</tt> is <code>null</code>.");
+                ps.println(" */");
+                ps.println("private Set<" + def.getName() + "Properties> populatedProperties;");
                 ps.println();
             }
 
-            // gen constructor
+            // gen data constructor
             ps.println("/** General constructor. */");
             if (!def.isGenConstructor())
                 ps.println("/* (not generating constructor)"); // nogen logic
-            ps.print((def.getMode() == TypeDefinition.Mode.CONCRETE ? "public" : "protected") + " " + rawclassname);
-            List<PropertyDefinition> recProps = def.getRecursiveProperties();
+            ps.print((def.getMode() == TypeDefinition.Mode.CONCRETE ? "public" : "protected") + " " + rawclassname
+                    + "(");
             printParameterList(ps, recProps, false, true);
-            ps.println();
+            ps.println(")");
             ps.println("{");
             ps.incPrependCount();
             ps.print("super");
@@ -1392,7 +1423,9 @@ public class SourceGenerator
                     : superDef.getRecursiveProperties();
             printArgumentList(ps, superProps, def.getConstructorOverrideMap());
             ps.println(";");
-            for (ModalPropertyDefinition<?> p : def.getResponsibleProperties(false))
+            if (nonListProperties > 0)
+                ps.println("this.populatedProperties = null;");
+            for (ModalPropertyDefinition<?> p : respProps)
             {
                 String expr;
                 if (def.getConstructorOverrideMap().containsKey(p.getName()))
@@ -1402,12 +1435,16 @@ public class SourceGenerator
                 {
                     expr = p.getName();
                 }
-                if (p.isWrappable() && !p.isReadOnly())
+                if (p.isHide())
                 {
-                    ps.println("setUnionFor" + capFirst(p.getName()) + "(" + expr + ", false);");
+                    ps.println("this." + p.getName() + " = " + p.getName() + ";");
+                    if (p.isNodeType())
+                    {
+                        ps.println("setAsChild(" + p.getName() + ", true);");
+                    }
                 } else
                 {
-                    ps.println("this." + p.getName() + " = " + expr + ";");
+                    ps.println("doSet" + capFirst(p.getName()) + "(" + expr + ");");
                 }
             }
             if (def.getConstructorFooter() != null)
@@ -1422,6 +1459,51 @@ public class SourceGenerator
             if (!def.isGenConstructor())
                 ps.print("*/"); // nogen logic
             ps.println();
+
+            // gen proxy constructor
+            ps.println("/** Proxy constructor. */");
+            if (!def.isGenConstructor())
+                ps.println("/* (not generating constructor)"); // nogen logic
+            ps.print((def.getMode() == TypeDefinition.Mode.CONCRETE ? "public" : "protected") + " " + rawclassname);
+            ps.println("(BsjNodeManager manager, BsjNodeProxyFactory proxyFactory, " + def.getNameWithTypeParameters()
+                    + " backingNode)");
+            ps.println("{");
+            ps.incPrependCount();
+            if (def.getSuperName() != null)
+            {
+                ps.println("super(manager, proxyFactory, backingNode);");
+            } else
+            {
+                ps.println("super();");
+                ps.println("this.manager = manager;");
+                ps.println("this.proxyFactory = proxyFactory;");
+                ps.println("this.backingNode = backingNode;");
+            }
+            if (nonListProperties > 0)
+                ps.println("this.populatedProperties = EnumSet.noneOf(" + def.getName() + "Properties.class);");
+            ps.decPrependCount();
+            ps.println("}");
+            if (!def.isGenConstructor())
+                ps.print("*/"); // nogen logic
+            ps.println();
+
+            // gen backing node getter (for proxying)
+            if (def.getSuperName() != null)
+            {
+                ps.println("/** Retrieves this node's backing node (if one exists). */");
+                if (def.getTypeParameter() != null && def.getSuperTypeArg() == null)
+                {
+                    ps.println("// This SuppressWarnings is always safe because backingNode is set by the node");
+                    ps.println("// constructor and never changed.  This is equivalent to a read-only value");
+                    ps.println("// defined by a type parameter without complicating the type reference site.");
+                    ps.println("@SuppressWarnings(\"unchecked\")");
+                }
+                ps.println("protected " + def.getNameWithTypeParameters() + " getBackingNode()");
+                ps.println("{");
+                ps.println("    return (" + def.getNameWithTypeParameters() + ")super.getBackingNode();");
+                ps.println("}");
+                ps.println();
+            }
 
             // gen constant methods
             for (ConstantDefinition c : def.getConstants())
@@ -1443,8 +1525,124 @@ public class SourceGenerator
                 ps.println();
             }
 
+            // gen proxy population methods
+            for (ModalPropertyDefinition<?> p : respProps)
+            {
+                if (p.isHide())
+                    continue;
+                if (p.isNodeType())
+                {
+                    ps.println("/**");
+                    ps.println(" * Ensures that the " + p.getName() + " value has been populated from proxy.");
+                    ps.println(" * If this node is not backed by a proxy or if the value has already been");
+                    ps.println(" * populated, this method does nothing.");
+                    ps.println(" */");
+                    ps.println("private void check" + capFirst(p.getName()) + "Wrapped()");
+                    ps.println("{");
+                    ps.incPrependCount();
+                    ps.println("if (this.populatedProperties == null || this.populatedProperties.contains(");
+                    ps.println("        " + def.getName() + "Properties."
+                            + StringUtilities.convertCamelCaseToUpperCase(p.getName()) + "))");
+                    ps.println("    return;");
+                    ps.println("this.populatedProperties.add(" + def.getName() + "Properties."
+                            + StringUtilities.convertCamelCaseToUpperCase(p.getName()) + ");");
+
+                    final String propertyBound;
+                    if (def.getTypeParameter() != null && def.getUnboundedTypeParameter().equals(p.getBaseType()))
+                    {
+                        propertyBound = def.getTypeParameterUpperBound();
+                    } else
+                    {
+                        propertyBound = null;
+                    }
+
+                    if (p.isWrappable())
+                    {
+                        ps.println("NodeUnion<? extends " + p.getFullType()
+                                + "> union = this.getBackingNode().getUnionFor" + capFirst(p.getName()) + "();");
+                        ps.println("switch (union.getType())");
+                        ps.println("{");
+                        ps.incPrependCount();
+                        for (String unionTypeComponent : UNION_TYPE_COMPONENTS)
+                        {
+                            ps.println("case " + unionTypeComponent.toUpperCase() + ":");
+                            ps.incPrependCount();
+                            if (unionTypeComponent.equals("Normal"))
+                            {
+                                if (propertyBound == null)
+                                {
+                                    ps.println("union = this.getProxyFactory().make" + unionTypeComponent
+                                            + "NodeUnion(");
+                                    ps.println("        this.getProxyFactory().make" + p.getBaseType()
+                                            + "(union.getNormalNode()));");
+                                } else
+                                {
+                                    ps.incPrependCount(2);
+                                    ps.println("// The following @SuppressWarnings is safe as long as the proxy");
+                                    ps.println("// factory is not exposed (because we can ensure that the parameter");
+                                    ps.println("// is bounded from below by an API type).");
+                                    ps.println("@SuppressWarnings(\"unchecked\")");
+                                    ps.println("final NodeUnion<? extends " + p.getBaseType()
+                                            + "> val = (NodeUnion<? extends " + p.getBaseType() + ">)");
+                                    ps.incPrependCount(2);
+                                    ps.println("this.getProxyFactory().makeNormalNodeUnion(");
+                                    ps.incPrependCount(2);
+                                    ps.println("this.getProxyFactory().make" + def.getTypeParameterUpperBound()
+                                            + "(union.getNormalNode()));");
+                                    ps.decPrependCount(4);
+                                    ps.println("union = val;");
+                                    ps.decPrependCount(2);
+                                }
+                            } else
+                            {
+                                ps.println("union = this.getProxyFactory().make" + unionTypeComponent + "NodeUnion(");
+                                ps.println("        this.getProxyFactory().make" + unionTypeComponent
+                                        + "Node(union.get" + unionTypeComponent + "Node()));");
+                            }
+                            ps.println("break;");
+                            ps.decPrependCount();
+                        }
+                        ps.println("default:");
+                        ps.println("    throw new IllegalStateException(\"Unrecognized union type: \" + union.getType());");
+                        ps.decPrependCount();
+                        ps.println("}");
+                        ps.println("this." + p.getName() + " = union;");
+                    } else
+                    {
+                        ps.println("this." + p.getName() + " = this.getProxyFactory().make" + p.getBaseType() + "(");
+                        ps.println("        this.getBackingNode().get" + capFirst(p.getName()) + "());");
+                    }
+                    ps.decPrependCount();
+                    ps.println("}");
+                    ps.println();
+                } else if (p.isNodeListType())
+                {
+                    // We're letting node list stuff be manually defined.
+                } else
+                {
+                    ps.println("/**");
+                    ps.println(" * Ensures that the " + p.getName() + " value has been populated from proxy.");
+                    ps.println(" * If this node is not backed by a proxy or if the value has already been");
+                    ps.println(" * populated, this method does nothing.");
+                    ps.println(" */");
+                    ps.println("private void check" + capFirst(p.getName()) + "Wrapped()");
+                    ps.println("{");
+                    ps.incPrependCount();
+                    ps.println("if (this.populatedProperties == null || this.populatedProperties.contains(");
+                    ps.println("        " + def.getName() + "Properties."
+                            + StringUtilities.convertCamelCaseToUpperCase(p.getName()) + "))");
+                    ps.println("    return;");
+                    ps.println("this.populatedProperties.add(" + def.getName() + "Properties."
+                            + StringUtilities.convertCamelCaseToUpperCase(p.getName()) + ");");
+                    ps.println("this." + p.getName() + " = this.getBackingNode().get" + capFirst(p.getName()) + "();");
+                    ps.decPrependCount();
+                    ps.println("}");
+                    ps.println();
+                }
+            }
+
             // gen getters and setters
-            for (ModalPropertyDefinition<?> p : def.getResponsibleProperties(false))
+            for (PropertyDefinition p : respProps)
             {
                 if (!p.isHide())
                 {
@@ -1459,9 +1657,7 @@ public class SourceGenerator
                         ps.println("public " + p.getFullType() + " get" + capFirst(p.getName()) + "()");
                         ps.println("{");
                         ps.incPrependCount();
-                        ps.println("getAttribute(LocalAttribute."
-                                + StringUtilities.convertCamelCaseToUpperCase(p.getName()) + ")"
-                                + ".recordAccess(ReadWriteAttribute.AccessType.READ);");
+                        ps.println("check" + capFirst(p.getName()) + "Wrapped();");
                         ps.println("if (this." + p.getName() + " == null)");
                         ps.println("{");
                         ps.println("    return null;");
@@ -1481,9 +1677,7 @@ public class SourceGenerator
                                 + capFirst(p.getName()) + "()");
                         ps.println("{");
                         ps.incPrependCount();
-                        ps.println("getAttribute(LocalAttribute."
-                                + StringUtilities.convertCamelCaseToUpperCase(p.getName()) + ")"
-                                + ".recordAccess(ReadWriteAttribute.AccessType.READ);");
+                        ps.println("check" + capFirst(p.getName()) + "Wrapped();");
                         ps.println("if (this." + p.getName() + " == null)");
                         ps.println("{");
                         ps.println("    this." + p.getName() + " = new NormalNodeUnion<" + p.getFullType() + ">(null);");
@@ -1502,9 +1696,7 @@ public class SourceGenerator
                         ps.println("public " + p.getFullType() + " get" + capFirst(p.getName()) + "()");
                         ps.println("{");
                         ps.incPrependCount();
-                        ps.println("getAttribute(LocalAttribute."
-                                + StringUtilities.convertCamelCaseToUpperCase(p.getName()) + ")"
-                                + ".recordAccess(ReadWriteAttribute.AccessType.READ);");
+                        ps.println("check" + capFirst(p.getName()) + "Wrapped();");
                         ps.println("if (this." + p.getName() + " == null)");
                         ps.println("{");
                         ps.println("    return null;");
@@ -1542,9 +1734,7 @@ public class SourceGenerator
                         ps.println("public " + p.getWrappedType() + " getUnionFor" + capFirst(p.getName()) + "()");
                         ps.println("{");
                         ps.incPrependCount();
-                        ps.println("getAttribute(LocalAttribute."
-                                + StringUtilities.convertCamelCaseToUpperCase(p.getName()) + ")"
-                                + ".recordAccess(ReadWriteAttribute.AccessType.READ);");
+                        ps.println("check" + capFirst(p.getName()) + "Wrapped();");
                         ps.println("return this." + p.getName() + ";");
                         ps.decPrependCount();
                         ps.println("}");
@@ -1557,26 +1747,15 @@ public class SourceGenerator
                         ps.println(" */");
                         ps.println("public " + p.getFullType() + " get" + capFirst(p.getName()) + "()");
                         ps.println("{");
-                        ps.println("    getAttribute(LocalAttribute."
-                                + StringUtilities.convertCamelCaseToUpperCase(p.getName()) + ")"
-                                + ".recordAccess(ReadWriteAttribute.AccessType.READ);");
+                        ps.println("    check" + capFirst(p.getName()) + "Wrapped();");
                         ps.println("    return this." + p.getName() + ";");
                         ps.println("}");
                         ps.println();
                     }
 
+                    // now the setters
                     if (!p.isReadOnly())
                     {
-                        // @formatter:off
-                        final String checkPermissionsStanza = "if (checkPermissions)\n" +
-                            "{\n" +
-                            "    getManager().assertMutatable(this);\n" +
-                            "    getAttribute(LocalAttribute." +
-                                StringUtilities.convertCamelCaseToUpperCase(p.getName()) +
-                                ").recordAccess(ReadWriteAttribute.AccessType.WRITE);\n" +
-                            "}\n";
-                        // @formatter:on
-
                         ps.println("/**");
                         ps.println(" * Changes " + p.getDescription() + ".");
                         ps.println(" * @param " + p.getName() + " " + capFirst(p.getDescription()) + ".");
@@ -1585,31 +1764,21 @@ public class SourceGenerator
                                 + p.getName() + ")");
                         ps.println("{");
                         ps.incPrependCount();
-                        ps.println("    set" + capFirst(p.getName()) + "(" + p.getName() + ", true);");
-                        ps.println("    getManager().notifyChange(this);");
-                        ps.decPrependCount();
-                        ps.println("}");
-                        ps.println();
-
-                        // this separation is necessary to allow the constructor to use every aspect of the setter
-                        // method except for the permission check
-                        ps.println("private void set" + capFirst(p.getName()) + "(" + p.getFullType() + " "
-                                + p.getName() + ", boolean checkPermissions)");
-                        ps.println("{");
-                        ps.incPrependCount();
-                        ps.println(checkPermissionsStanza);
+                        ps.println("check" + capFirst(p.getName()) + "Wrapped();");
                         if (p.isWrappable())
                         {
-                            ps.println("if (this." + p.getName() + " != null)");
-                            ps.println("{");
-                            ps.println("    setAsChild(this." + p.getName() + ".getNodeValue(), false);");
-                            ps.println("}");
-                            ps.println("this." + p.getName() + " = new NormalNodeUnion<" + p.getFullType() + ">("
-                                    + p.getName() + ");");
-                            ps.println("setAsChild(" + p.getName() + ", true);");
+                            ps.println("this.setUnionFor" + capFirst(p.getName()) + "(new NormalNodeUnion<"
+                                    + p.getFullType() + ">(" + p.getName() + "));");
                         } else
                         {
-                            ps.println("this." + p.getName() + " = " + p.getName() + ";");
+                            ps.println("this.getManager().assertMutatable(this);");
+                            ps.println("this.doSet" + capFirst(p.getName()) + "(" + p.getName() + ");");
+                            final String suffix = (p.isNodeType() ? ".getUid()" : "");
+                            ps.println("if (this.getManager().isRecordingEdits())");
+                            ps.println("    super.recordEdit(new "
+                                    + EditScriptElementWriter.getEditScriptElementTypeName(def, p)
+                                    + "(this.getManager().getCurrentMetaprogramId(), this.getUid(), " + p.getName()
+                                    + suffix + "));");
                         }
                         ps.decPrependCount();
                         ps.println("}");
@@ -1621,43 +1790,70 @@ public class SourceGenerator
                             ps.println(" * Changes " + p.getDescription() + ".");
                             ps.println(" * @param " + p.getName() + " " + capFirst(p.getDescription()) + ".");
                             ps.println(" */");
-                            ps.println("public void setUnionFor" + capFirst(p.getName()) + "(NodeUnion<? extends "
-                                    + p.getFullType() + "> " + p.getName() + ")");
+                            ps.println("public void setUnionFor" + capFirst(p.getName()) + "(" + p.getWrappedType()
+                                    + " " + p.getName() + ")");
                             ps.println("{");
                             ps.incPrependCount();
-                            ps.println("    setUnionFor" + capFirst(p.getName()) + "(" + p.getName() + ", true);");
-                            ps.println("    getManager().notifyChange(this);");
-                            ps.decPrependCount();
-                            ps.println("}");
-                            ps.println();
-
-                            // this separation is necessary to allow the constructor to use every aspect of the setter
-                            // method except for the permission check
-                            ps.println("private void setUnionFor" + capFirst(p.getName()) + "(NodeUnion<? extends "
-                                    + p.getFullType() + "> " + p.getName() + ", boolean checkPermissions)");
-                            ps.println("{");
-                            ps.incPrependCount();
-                            ps.println(checkPermissionsStanza);
-                            ps.println("if (" + p.getName() + " == null)");
-                            ps.println("{");
-                            ps.println("    " + p.getName() + " = new NormalNodeUnion<" + p.getFullType() + ">(null);");
-                            ps.println("}");
-                            ps.println("if (this." + p.getName() + " != null)");
-                            ps.println("{");
-                            ps.println("    setAsChild(this." + p.getName() + ".getNodeValue(), false);");
-                            ps.println("}");
-                            ps.println("this." + p.getName() + " = " + p.getName() + ";");
-                            ps.println("setAsChild(" + p.getName() + ".getNodeValue(), true);");
+                            ps.println("check" + capFirst(p.getName()) + "Wrapped();");
+                            ps.println("this.getManager().assertMutatable(this);");
+                            ps.println("this.doSet" + capFirst(p.getName()) + "(" + p.getName() + ");");
+                            ps.println("if (this.getManager().isRecordingEdits())");
+                            ps.println("    super.recordEdit(new "
+                                    + EditScriptElementWriter.getEditScriptElementTypeName(def, p)
+                                    + "(this.getManager().getCurrentMetaprogramId(), this.getUid(), " + p.getName()
+                                    + ".getNodeValue() == null ? null : " + p.getName() + ".getNodeValue().getUid()));");
                             ps.decPrependCount();
                             ps.println("}");
                             ps.println();
                         }
                     }
+
+                    // doSet is for constructor and for setter support
+                    if (p.isWrappable() && p.isNodeType())
+                    {
+                        ps.println("private void doSet" + capFirst(p.getName()) + "(" + p.getWrappedType() + " "
+                                + p.getName() + ")");
+                        ps.println("{");
+                        ps.incPrependCount();
+                        ps.println("if (" + p.getName() + " == null)");
+                        ps.println("{");
+                        ps.println("    " + p.getName() + " = new NormalNodeUnion<" + p.getFullType() + ">(null);");
+                        ps.println("}");
+                        ps.println("if (this." + p.getName() + " != null)");
+                        ps.println("{");
+                        ps.println("    setAsChild(this." + p.getName() + ".getNodeValue(), false);");
+                        ps.println("}");
+                        ps.println("this." + p.getName() + " = " + p.getName() + ";");
+                        ps.println("setAsChild(" + p.getName() + ".getNodeValue(), true);");
+                        ps.decPrependCount();
+                        ps.println("}");
+                        ps.println();
+                    } else
+                    {
+                        ps.println("private void doSet" + capFirst(p.getName()) + "(" + p.getWrappedType() + " "
+                                + p.getName() + ")");
+                        ps.println("{");
+                        ps.incPrependCount();
+                        if (p.isNodeType())
+                        {
+                            ps.println("if (this." + p.getName() + " != null)");
+                            ps.println("    setAsChild(this." + p.getName() + ", false);");
+                        }
+                        ps.println("this." + p.getName() + " = " + p.getName() + ";");
+                        if (p.isNodeType())
+                        {
+                            ps.println("if (this." + p.getName() + " != null)");
+                            ps.println("    setAsChild(this." + p.getName() + ", true);");
+                        }
+                        ps.decPrependCount();
+                        ps.println("}");
+                        ps.println();
+                    }
                 }
             }
 
             // add getter and setter support methods from concrete classes
-            for (ModalPropertyDefinition<?> p : def.getRecursiveProperties())
+            for (ModalPropertyDefinition<?> p : recProps)
             {
                 if (p.isWrappable() && p.isNodeListType())
                 {
@@ -1696,21 +1892,22 @@ public class SourceGenerator
             {
                 ps.println("super.receiveToChildren(visitor);");
             }
-            for (ModalPropertyDefinition<?> p : def.getResponsibleProperties(false))
+            for (ModalPropertyDefinition<?> p : respProps)
             {
                 if (p.isWrappable())
                 {
                     if (p.isNodeType())
                     {
-                        ps.println("if (this." + p.getName() + ".getNodeValue() != null)");
+                        ps.println("if (this.getUnionFor" + capFirst(p.getName()) + "().getNodeValue() != null)");
                         ps.println("{");
-                        ps.println("    this." + p.getName() + ".getNodeValue().receive(visitor);");
+                        ps.println("    this.getUnionFor" + capFirst(p.getName())
+                                + "().getNodeValue().receive(visitor);");
                         ps.println("}");
                     } else if (p.isNodeListType())
                     {
-                        ps.println("if (this." + p.getName() + " != null)");
+                        ps.println("if (this.get" + capFirst(p.getName()) + "() != null)");
                         ps.println("{");
-                        ps.println("    for (NodeUnion<?> nodeUnion : this." + p.getName() + ")");
+                        ps.println("    for (NodeUnion<?> nodeUnion : this.getUnionFor" + capFirst(p.getName()) + "())");
                         ps.println("    {");
                         ps.println("        nodeUnion.getNodeValue().receive(visitor);");
                         ps.println("    }");
@@ -1721,9 +1918,9 @@ public class SourceGenerator
                     }
                 } else if (p.isNodeType())
                 {
-                    ps.println("if (this." + p.getName() + " != null)");
+                    ps.println("if (this.get" + capFirst(p.getName()) + "() != null)");
                     ps.println("{");
-                    ps.println("    this." + p.getName() + ".receive(visitor);");
+                    ps.println("    this.get" + capFirst(p.getName()) + "().receive(visitor);");
                     ps.println("}");
                 }
             }
@@ -1760,21 +1957,22 @@ public class SourceGenerator
             {
                 ps.println("super.receiveTypedToChildren(visitor);");
             }
-            for (ModalPropertyDefinition<?> p : def.getResponsibleProperties(false))
+            for (ModalPropertyDefinition<?> p : respProps)
             {
                 if (p.isWrappable())
                 {
                     if (p.isNodeType())
                     {
-                        ps.println("if (this." + p.getName() + ".getNodeValue() != null)");
+                        ps.println("if (this.getUnionFor" + capFirst(p.getName()) + "().getNodeValue() != null)");
                         ps.println("{");
-                        ps.println("    this." + p.getName() + ".getNodeValue().receiveTyped(visitor);");
+                        ps.println("    this.getUnionFor" + capFirst(p.getName())
+                                + "().getNodeValue().receiveTyped(visitor);");
                         ps.println("}");
                     } else if (p.isNodeListType())
                     {
-                        ps.println("if (this." + p.getName() + " != null)");
+                        ps.println("if (this.get" + capFirst(p.getName()) + "() != null)");
                         ps.println("{");
-                        ps.println("    for (NodeUnion<?> nodeUnion : this." + p.getName() + ")");
+                        ps.println("    for (NodeUnion<?> nodeUnion : this.getUnionFor" + capFirst(p.getName()) + "())");
                         ps.println("    {");
                         ps.println("        nodeUnion.getNodeValue().receiveTyped(visitor);");
                         ps.println("    }");
@@ -1785,9 +1983,9 @@ public class SourceGenerator
                     }
                 } else if (p.isNodeType())
                 {
-                    ps.println("if (this." + p.getName() + " != null)");
+                    ps.println("if (this.get" + capFirst(p.getName()) + "() != null)");
                     ps.println("{");
-                    ps.println("    this." + p.getName() + ".receiveTyped(visitor);");
+                    ps.println("    this.get" + capFirst(p.getName()) + "().receiveTyped(visitor);");
                     ps.println("}");
                 }
             }
@@ -1959,7 +2157,7 @@ public class SourceGenerator
                             first = false;
                         }
                     };
-                    for (PropertyDefinition p : def.getRecursiveProperties())
+                    for (PropertyDefinition p : recProps)
                     {
                         if (p.isHide())
                             continue;
@@ -1983,6 +2181,8 @@ public class SourceGenerator
             if (def.getToStringLines() == null || def.getToStringLines().size() == 0)
             {
                 ps.println("    sb.append(this.getClass().getSimpleName());");
+                ps.println("    sb.append('#');");
+                ps.println("    sb.append(this.getUid());");
                 ps.println("    sb.append('[');");
                 boolean firstProp = true;
                 for (ModalPropertyDefinition<?> p : recProps)
@@ -2091,7 +2291,7 @@ public class SourceGenerator
                 ps.println("if (before==null)");
                 ps.println("    throw new IllegalArgumentException(\"Cannot replace node with before value of null.\");");
                 ps.println();
-                for (ModalPropertyDefinition<?> p : def.getRecursiveProperties())
+                for (ModalPropertyDefinition<?> p : recProps)
                 {
                     if (p.isNodeType())
                     {
@@ -2178,19 +2378,545 @@ public class SourceGenerator
                 ps.println("    return " + def.getSuperTypeArg() + ".class;");
                 ps.println("}");
                 ps.println();
+
+                ps.println("/**");
+                ps.println(" * Wraps an element of this list's type.");
+                ps.println(" */");
+                ps.println("protected " + def.getSuperTypeArg() + " wrapElement(" + def.getSuperTypeArg() + " element)");
+                ps.println("{");
+                ps.println("    return getProxyFactory().make" + def.getSuperTypeArg() + "(element);");
+                ps.println("}");
+                ps.println();
             }
 
             ps.decPrependCount();
 
             // add supplements
-            includeAllBodies(ps, def.getIncludes(), Project.GENERATOR, SupplementCategory.NODE);
+            includeBody(def.getBaseName() + "Impl", ps);
             for (TagReferenceDefinition tag : def.getTags())
             {
-                includeAllBodies(ps, def.getNamespaceMap().get(tag.getName()).getIncludes(), Project.GENERATOR,
-                        SupplementCategory.NODE);
+                includeBody(tag.getName() + "Impl", ps);
             }
 
             ps.println("}");
+        }
+    }
+
+    /**
+     * Writes the AST edit script elements for each property.
+     */
+    static class EditScriptElementWriter extends AbstractDefinitionHandler
+    {
+        private static final String DELTA_PACKAGE = "edu.jhu.cs.bsj.compiler.impl.ast.delta";
+        private static final String DELTA_PROPERTY_PACKAGE = DELTA_PACKAGE + ".property";
+        private static final String DELTA_CREATE_PACKAGE = DELTA_PACKAGE + ".create";
+
+        public static String getEditScriptElementTypeName(TypeDefinition def, PropertyDefinition p)
+        {
+            return def.getName() + "Set" + capFirst(p.getName()) + "PropertyEditScriptElementImpl";
+        }
+
+        @Override
+        public void init() throws IOException
+        {
+        }
+
+        @Override
+        public void handleTypeDefinition(TypeDefinition def) throws IOException
+        {
+            if (def.getMode() == TypeDefinition.Mode.INTERFACE)
+            {
+                return;
+            }
+
+            if (def.getMode() == TypeDefinition.Mode.CONCRETE)
+            {
+                writeCreationEditScriptElement(def);
+            }
+
+            for (PropertyDefinition p : def.getResponsibleProperties(false))
+            {
+                // If this property is read-only, no edit script can be created for it.
+                if (p.isReadOnly())
+                    continue;
+                if (p.isNodeType())
+                {
+                    writeNodePropertyEditScriptElement(def, p);
+                } else if (p.isNodeListType())
+                {
+                    // Do nothing - these are written manually
+                } else
+                {
+                    writeNonNodePropertyEditScriptElement(def, p);
+                }
+            }
+        }
+
+        private void writeCreationEditScriptElement(TypeDefinition def) throws IOException
+        {
+            final String type = "Create" + def.getBaseName() + "EditScriptElementImpl";
+            PrependablePrintStream ps = createOutputFile(DELTA_CREATE_PACKAGE, TypeDefinition.Mode.CONCRETE,
+                    Project.GENERATOR, type, true, "", "AbstractCreateEditScriptElementImpl");
+            ps.incPrependCount();
+
+            // calculate relevant properties
+            List<PropertyDefinition> props = def.getRecursiveProperties();
+            final boolean hasUnions;
+            {
+                Iterator<PropertyDefinition> it = props.iterator();
+                boolean hasUnionsTemp = false;
+                while (it.hasNext())
+                {
+                    PropertyDefinition p = it.next();
+                    if (p.isHide() || def.getFactoryOverrideMap().containsKey(p.getName()))
+                    {
+                        it.remove();
+                    } else
+                    {
+                        hasUnionsTemp |= p.isWrappable();
+                    }
+                }
+                hasUnions = hasUnionsTemp;
+            }
+
+            // variables
+            for (PropertyDefinition p : props)
+            {
+                ps.println("private final " + p.getEditScriptType() + " " + p.getName() + ";");
+            }
+            ps.println();
+
+            // constructor
+            ps.println("public " + type + "(");
+            ps.incPrependCount(2);
+            ps.println("int metaprogramId,");
+            ps.print("long targetId");
+            for (PropertyDefinition p : props)
+            {
+                ps.println(",");
+                ps.print(p.getEditScriptType() + " " + p.getName());
+            }
+            ps.println(")");
+            ps.decPrependCount(2);
+            ps.println("{");
+            ps.incPrependCount();
+            ps.println("super(metaprogramId, targetId);");
+            for (PropertyDefinition p : props)
+            {
+                ps.println("this." + p.getName() + " = " + p.getName() + ";");
+            }
+            ps.println();
+            ps.decPrependCount();
+            ps.println("}");
+            ps.println();
+
+            // apply method
+            ps.println("@Override");
+            ps.println("public void apply(PatchState patchState)");
+            ps.println("{");
+            ps.incPrependCount();
+            for (PropertyDefinition p : props)
+            {
+                if (p.isNodeType())
+                {
+                    // TODO: warning suppression?
+                    ps.println("final " + p.getFullType() + " " + p.getName() + "Node = ");
+                    ps.println("        (" + p.getFullType() + ")patchState.getNode(this." + p.getName() + ");");
+                    if (p.isWrappable())
+                    {
+                        ps.println("final " + p.getWrappedType() + " " + p.getName() + ";");
+                        ps.println("{");
+                        ps.incPrependCount();
+                        writeWrappedUnionFromNodeMap(def, p, ps, p.getName() + "Node");
+                        ps.println(p.getName() + " = union;");
+                        ps.decPrependCount();
+                        ps.println("}");
+                    } else
+                    {
+                        ps.println("final " + p.getFullType() + " " + p.getName() + " = " + p.getName() + "Node;");
+                    }
+                } else if (p.isNodeListType())
+                {
+                    ps.println("final " + p.getWrappedType() + " " + p.getName() + " = new Array" + p.getWrappedType()
+                            + "();");
+                    ps.println("for (long uid : this." + p.getName() + ")");
+                    ps.println("{");
+                    ps.incPrependCount();
+                    ps.println("final " + p.getTypeArg() + " elementNode = ");
+                    ps.println("        (" + p.getTypeArg() + ")patchState.getNode(uid);");
+                    if (p.isWrappable())
+                    {
+                        final String wrappedType = "NodeUnion<? extends " + p.getTypeArg() + ">";
+                        final String typeArg = (p.getTypeArg().indexOf("<") == -1) ? null : (p.getTypeArg().substring(
+                                p.getTypeArg().indexOf("<"), p.getTypeArg().length() - 1));
+                        ps.println("final " + wrappedType + " element;");
+                        ps.println("{");
+                        ps.incPrependCount();
+                        writeWrappedUnionFromNodeMap(def, ps, "elementNode", wrappedType, p.getTypeArg(), typeArg);
+                        ps.println("element = union;");
+                        ps.decPrependCount();
+                        ps.println("}");
+                    } else
+                    {
+                        ps.println("final " + p.getTypeArg() + " element = elementNode");
+                    }
+                    ps.println(p.getName() + ".add(element);");
+                    ps.decPrependCount();
+                    ps.println("}");
+                } else
+                {
+                    ps.println("final " + p.getFullType() + " " + p.getName() + " = this." + p.getName() + ";");
+                }
+            }
+            ps.print(def.getFullName() + " createdNode = patchState.getNodeFactory().make" + def.getBaseName()
+                    + (hasUnions ? "WithUnions" : "") + "(");
+            ps.incPrependCount(2);
+            {
+                boolean first = true;
+                for (PropertyDefinition p : props)
+                {
+                    if (!first)
+                        ps.println(",");
+                    first = false;
+                    ps.print(p.getName());
+                }
+            }
+            ps.println(");");
+            ps.decPrependCount(2);
+            ps.println("patchState.addNode(getTargetId(), createdNode);");
+            ps.decPrependCount();
+            ps.println("}");
+            ps.println();
+
+            // getCreateType
+            ps.println("@Override");
+            ps.println("public Class<" + def.getBaseName() + "> getCreateType()");
+            ps.println("{");
+            ps.println("    return " + def.getBaseName() + ".class;");
+            ps.println("}");
+            ps.println();
+
+            // toString
+            ps.println("@Override");
+            ps.println("public String toString()");
+            ps.println("{");
+            ps.print("    return \"[\" + getMetaprogramId() + \"]+#\" + getTargetId() + \":" + def.getFullName()
+                    + "(\"");
+            {
+                boolean first = true;
+                for (PropertyDefinition p : props)
+                {
+                    if (!first)
+                    {
+                        ps.print(" + \",\"");
+                    }
+                    first = false;
+                    ps.print(" + \"" + p.getName() + "=\" + ");
+                    if (p.isNodeType())
+                    {
+                        ps.print("\"#\" + " + p.getName());
+                    } else if (p.isNodeListType())
+                    {
+                        ps.print("\"[\" + StringUtilities.join(" + p.getName() + ", \",\", \"#\", \"\") + \"]\"");
+                    } else
+                    {
+                        ps.print("\"{\" + " + p.getName() + " + \"}\"");
+                    }
+                }
+            }
+            ps.println(" + \")\";");
+            ps.println("}");
+            ps.println();
+
+            // translate method
+            ps.println("public EditScriptElement translate(TranslationState translationState) throws IllegalArgumentException");
+            ps.println("{");
+            ps.incPrependCount();
+            ps.println("translationState.getInstantiations().add(getTargetId());");
+            ps.println("return new " + type + "(");
+            ps.incPrependCount(2);
+            ps.println("getMetaprogramId(),");
+            ps.print("getTargetId()");
+            {
+                for (PropertyDefinition p : props)
+                {
+                    ps.println(",");
+                    if (p.isNodeType())
+                    {
+                        ps.print("translateUid(translationState, this." + p.getName() + ")");
+                    } else
+                    {
+                        ps.print("this." + p.getName());
+                    }
+                }
+            }
+            ps.decPrependCount(2);
+            ps.println(");");
+            ps.decPrependCount();
+            ps.println("}");
+            ps.println();
+
+            // finish up
+            ps.decPrependCount();
+            ps.println("}");
+            ps.close();
+        }
+
+        private void writeNodePropertyEditScriptElement(TypeDefinition def, PropertyDefinition p) throws IOException
+        {
+            final String type = getEditScriptElementTypeName(def, p);
+            PrependablePrintStream ps = createOutputFile(DELTA_PROPERTY_PACKAGE, TypeDefinition.Mode.CONCRETE,
+                    Project.GENERATOR, type, true, "", "AbstractNodePropertyEditScriptElementImpl");
+            ps.incPrependCount();
+
+            // constructor
+            ps.println("public " + type + "(int metaprogramId, long targetId, Long valueId)");
+            ps.println("{");
+            ps.println("    super(metaprogramId, targetId, valueId);");
+            ps.println("}");
+            ps.println();
+
+            // property description method
+            writePropertyDescriptionMethod(p, ps);
+
+            // delta method
+            writeApplyHeader(def, ps);
+            ps.println("{");
+            ps.incPrependCount();
+            ps.println("updateProperty(patchState);");
+            ps.println("Node value = (this.getValueId() == null) ? null : patchState.getNode(this.getValueId());");
+            if (def.getTypeParameter() != null)
+            {
+                ps.println("// This @SupressWarnings is safe as long as the map is coherent.  This is to");
+                ps.println("// say that every mapping from an ID to a node need not necessarily map to a");
+                ps.println("// node of that ID but it must share the same type as the node of that ID.");
+                ps.println("@SuppressWarnings(\"unchecked\")");
+            }
+            ps.println(def.getNameWithTypeParameters() + " target = (" + def.getNameWithTypeParameters()
+                    + ")patchState.getNode(this.getTargetId());");
+            if (p.isWrappable())
+            {
+                writeWrappedUnionFromNodeMap(def, p, ps, "value");
+                ps.println("target.setUnionFor" + capFirst(p.getName()) + "(union);");
+            } else
+            {
+                if (p.getFullType().equals(def.getUnboundedTypeParameter()) || p.getTypeArg() != null)
+                {
+                    ps.println("// This @SupressWarnings is safe as long as the map is coherent.  This is to");
+                    ps.println("// say that every mapping from an ID to a node need not necessarily map to a");
+                    ps.println("// node of that ID but it must share the same type as the node of that ID.");
+                    ps.println("@SuppressWarnings(\"unchecked\")");
+                }
+                ps.println("target.set" + capFirst(p.getName()) + "((" + p.getFullType() + ")value);");
+            }
+            ps.decPrependCount();
+            ps.println("}");
+            ps.println();
+
+            // toString
+            writeToStringMethod(p, ps, "(getValueId() == null ? \"null\" : \"#\" + getValueId())");
+
+            // getProperty
+            writeGetPropertyMethod(def, p, ps);
+
+            // translate
+            ps.println("public EditScriptElement translate(TranslationState translationState) throws IllegalArgumentException");
+            ps.println("{");
+            ps.incPrependCount();
+            ps.println("return new " + type + "(getMetaprogramId(), translateUid(translationState, getTargetId()),");
+            ps.println("        translateUid(translationState, getValueId()));");
+            ps.decPrependCount();
+            ps.println("}");
+            ps.println();
+
+            // finish up
+            ps.decPrependCount();
+            ps.println("}");
+            ps.close();
+        }
+
+        private void writeNonNodePropertyEditScriptElement(TypeDefinition def, PropertyDefinition p) throws IOException
+        {
+            final String type = getEditScriptElementTypeName(def, p);
+            final String supertypeArg;
+            final boolean upperBound;
+            if (PRIMITIVE_TO_CONTAINER_MAP.containsKey(p.getBaseType()))
+            {
+                supertypeArg = PRIMITIVE_TO_CONTAINER_MAP.get(p.getBaseType());
+                upperBound = false;
+            } else if (def.getUnboundedTypeParameter() != null
+                    && def.getUnboundedTypeParameter().equals(p.getBaseType()))
+            {
+                supertypeArg = def.getTypeParameterUpperBound() == null ? "Object" : def.getTypeParameterUpperBound();
+                upperBound = true;
+            } else
+            {
+                supertypeArg = p.getFullType();
+                upperBound = false;
+            }
+            PrependablePrintStream ps = createOutputFile(DELTA_PROPERTY_PACKAGE, TypeDefinition.Mode.CONCRETE,
+                    Project.GENERATOR, type, true, "", "AbstractNonNodePropertyEditScriptElementImpl<" + supertypeArg
+                            + ">");
+            ps.incPrependCount();
+
+            // constructor
+            ps.println("public " + type + "(int metaprogramId, long targetId, " + supertypeArg + " value)");
+            ps.println("{");
+            ps.println("    super(metaprogramId, targetId, value);");
+            ps.println("}");
+            ps.println();
+
+            // property description method
+            writePropertyDescriptionMethod(p, ps);
+
+            // delta method
+            writeApplyHeader(def, ps);
+            ps.println("{");
+            ps.incPrependCount();
+            ps.println("updateProperty(patchState);");
+            if (def.getTypeParameter() != null && def.getSuperTypeArg() == null)
+            {
+                ps.println("// This @SupressWarnings is safe as long as the map is coherent.  This is to");
+                ps.println("// say that every mapping from an ID to a node need not necessarily map to a");
+                ps.println("// node of that ID but it must share the same type as the node of that ID.");
+                ps.println("@SuppressWarnings(\"unchecked\")");
+            }
+            ps.println(def.getNameWithTypeParameters() + " target = (" + def.getNameWithTypeParameters()
+                    + ")patchState.getNode(this.getTargetId());");
+            if (upperBound)
+            {
+                ps.println("// This @SupressWarnings is safe as long as the map is coherent.  This is to");
+                ps.println("// say that every mapping from an ID to a node need not necessarily map to a");
+                ps.println("// node of that ID but it must share the same type as the node of that ID.");
+                ps.println("@SuppressWarnings(\"unchecked\")");
+                ps.println("target.set" + capFirst(p.getName()) + "((" + p.getFullType() + ")this.getValue());");
+            } else
+            {
+                ps.println("target.set" + capFirst(p.getName()) + "(this.getValue());");
+            }
+            ps.decPrependCount();
+            ps.println("}");
+            ps.println();
+
+            // toString
+            writeToStringMethod(p, ps, "getValue()");
+
+            // getProperty
+            writeGetPropertyMethod(def, p, ps);
+
+            // translate
+            ps.println("public EditScriptElement translate(TranslationState translationState) throws IllegalArgumentException");
+            ps.println("{");
+            ps.incPrependCount();
+            ps.println("return new " + type
+                    + "(getMetaprogramId(), translateUid(translationState, getTargetId()), getValue());");
+            ps.decPrependCount();
+            ps.println("}");
+            ps.println();
+
+            // finish up
+            ps.decPrependCount();
+            ps.println("}");
+            ps.close();
+        }
+
+        private void writeWrappedUnionFromNodeMap(TypeDefinition def, PropertyDefinition p, PrependablePrintStream ps,
+                String nodeName)
+        {
+            String propWrappedType = p.getWrappedType();
+            String propFullType = p.getFullType();
+            String propTypeArg = p.getTypeArg();
+            writeWrappedUnionFromNodeMap(def, ps, nodeName, propWrappedType, propFullType, propTypeArg);
+        }
+
+        private void writeWrappedUnionFromNodeMap(TypeDefinition def, PrependablePrintStream ps, String nodeName,
+                String propWrappedType, String propFullType, String propTypeArg)
+        {
+            ps.println("final " + propWrappedType + " union;");
+            boolean first = true;
+            for (String typeComponent : UNION_TYPE_COMPONENTS)
+            {
+                if (typeComponent.equals("Normal"))
+                    continue;
+                if (!first)
+                    ps.print(" else ");
+                ps.println("if (" + nodeName + " instanceof " + typeComponent + "Node)");
+                ps.println("{");
+                ps.println("    union = new " + typeComponent + "NodeUnion<" + propFullType + ">((" + typeComponent
+                        + "Node)" + nodeName + ");");
+                ps.print("}");
+                first = false;
+            }
+            ps.println(" else ");
+            ps.println("{");
+            ps.incPrependCount();
+            final String unionExpr = "new NormalNodeUnion<" + propFullType + ">((" + propFullType + ")" + nodeName
+                    + ")";
+            if (propFullType.equals(def.getUnboundedTypeParameter()) || propTypeArg != null)
+            {
+                ps.println("// This @SupressWarnings is safe as long as the map is coherent.  This is to");
+                ps.println("// say that every mapping from an ID to a node need not necessarily map to a");
+                ps.println("// node of that ID but it must share the same type as the node of that ID.");
+                ps.println("@SuppressWarnings(\"unchecked\")");
+                ps.println("final " + propWrappedType + " temp = " + unionExpr + ";");
+                ps.println("union = temp;");
+            } else
+            {
+                ps.println("union = " + unionExpr + ";");
+            }
+            ps.decPrependCount();
+            ps.println("}");
+        }
+
+        protected void writeToStringMethod(PropertyDefinition p, PrependablePrintStream ps, String valueExpr)
+        {
+            ps.println("@Override");
+            ps.println("public String toString()");
+            ps.println("{");
+            ps.println("    return \"[\" + getMetaprogramId() + \"]#\" + getTargetId() + \"." + p.getName()
+                    + " := \" + " + valueExpr + ";");
+            ps.println("}");
+            ps.println();
+        }
+
+        private void writePropertyDescriptionMethod(PropertyDefinition p, PrependablePrintStream ps)
+        {
+            ps.println("@Override");
+            ps.println("public String getPropertyName()");
+            ps.println("{");
+            ps.println("    return \"" + p.getName() + "\";");
+            ps.println("}");
+            ps.println();
+        }
+
+        private void writeApplyHeader(TypeDefinition def, PrependablePrintStream ps)
+        {
+            ps.println("@Override");
+            ps.println("public void apply(PatchState patchState)");
+            if (def.getTypeParameter() != null)
+            {
+                ps.println("{");
+                ps.println("    this.applyActual(patchState);");
+                ps.println("}");
+                ps.println();
+                ps.println("private <" + def.getTypeParameter() + "> void applyActual(PatchState patchState)");
+            }
+        }
+
+        private void writeGetPropertyMethod(TypeDefinition def, PropertyDefinition p, PrependablePrintStream ps)
+        {
+            ps.println("@Override");
+            ps.println("public NodeProperty getProperty()");
+            ps.println("{");
+            ps.println("    return " + def.getName() + "Properties."
+                    + StringUtilities.convertCamelCaseToUpperCase(p.getName()) + ";");
+            ps.println("}");
+            ps.println();
+        }
+
+        @Override
+        public void finish() throws IOException
+        {
         }
     }
 
@@ -2254,14 +2980,14 @@ public class SourceGenerator
 
             // Write interface
             PrintStream ps = createOutputFile("edu.jhu.cs.bsj.compiler.ast", TypeDefinition.Mode.INTERFACE,
-                    Project.API, SupplementCategory.GENERAL, "BsjTypedNodeVisitor", true, null, null);
+                    Project.API, "BsjTypedNodeVisitor", true, null, null);
             writeTypeBody(ps, false, sortedNames, concreteTypeNameSet);
             ps.println("}");
             ps.close();
 
             // Write default implementation
             ps = createOutputFile("edu.jhu.cs.bsj.compiler.ast.util", TypeDefinition.Mode.CONCRETE, Project.API,
-                    SupplementCategory.GENERAL, "BsjTypedNodeNoOpVisitor", true, null, null, "BsjTypedNodeVisitor");
+                    "BsjTypedNodeNoOpVisitor", true, null, null, "BsjTypedNodeVisitor");
             writeTypeBody(ps, true, sortedNames, concreteTypeNameSet);
             ps.println("}");
             ps.close();
@@ -2317,9 +3043,217 @@ public class SourceGenerator
     }
 
     /**
+     * An abstract supertype for factory class writers.
+     */
+    static abstract class AbstractFactoryWriter extends ClassHierarchyBuildingHandler
+    {
+        /** A mapping from factory type names to their print streams. */
+        private Map<String, PrependablePrintStream> mapping;
+
+        @Override
+        public void init() throws IOException
+        {
+            super.init();
+            mapping = new HashMap<String, PrependablePrintStream>();
+        }
+
+        protected void ensureStream(String name, TypeDefinition.Mode mode, Project project, String superclassName,
+                String interfaceName) throws IOException
+        {
+            if (name != null && !mapping.containsKey(name))
+            {
+                final String typeName = StringUtilities.getSuffix(name, '.');
+                final String packageName = StringUtilities.removeSuffix(name, '.');
+                final String[] interfaces;
+                if (interfaceName != null)
+                {
+                    interfaces = new String[] { interfaceName };
+                } else
+                {
+                    interfaces = new String[0];
+                }
+                PrependablePrintStream pps = createOutputFile(packageName, mode, project, typeName, true, null,
+                        superclassName, interfaces);
+                pps.incPrependCount();
+                mapping.put(name, pps);
+            }
+        }
+
+        protected PrependablePrintStream getStream(String typeName)
+        {
+            PrependablePrintStream pps = mapping.get(typeName);
+            if (pps == null)
+            {
+                pps = new PrependablePrintStream(new NullOutputStream());
+            }
+            return pps;
+        }
+
+        @Override
+        public void finish() throws IOException
+        {
+            super.finish();
+
+            for (PrependablePrintStream pps : this.mapping.values())
+            {
+                pps.decPrependCount();
+                pps.println("}");
+                pps.close();
+            }
+        }
+
+        protected void writeUnionInterfaceMethod(PrependablePrintStream ips, String typeComponent)
+        {
+            ips.println("/**");
+            ips.println(" * Creates a {@link NodeUnion} value containing a " + typeComponent.toLowerCase() + " node.");
+            ips.println(" * @param node The node to use.");
+            ips.println(" * @return The resulting node union.");
+            ips.println(" */");
+            ips.println("public <T extends Node> NodeUnion<T> make" + typeComponent + "NodeUnion("
+                    + getUnionComponentTypeString(typeComponent) + " node);");
+            ips.println();
+        }
+
+        protected void writeUnionBackingMethod(PrependablePrintStream cps, String typeComponent)
+        {
+            cps.println("/**");
+            cps.println(" * {@inheritDoc}");
+            cps.println(" */");
+            cps.println("public <T extends Node> NodeUnion<T> make" + typeComponent + "NodeUnion("
+                    + getUnionComponentTypeString(typeComponent) + " node)");
+            cps.println("{");
+            cps.println("    return new " + typeComponent + "NodeUnion<T>(node);");
+            cps.println("}");
+            cps.println();
+        }
+    }
+
+    /**
+     * Writes the BSJ AST node proxy factory interface and implementation.
+     */
+    static class ProxyFactoryWriter extends AbstractFactoryWriter
+    {
+        private static final String INTERFACE_NAME = "edu.jhu.cs.bsj.compiler.impl.ast.BsjNodeProxyFactory";
+        private static final String SUPERCLASS_NAME = null;// "edu.jhu.cs.bsj.compiler.impl.ast.AbstractBsjNodeProxyFactoryImpl";
+        private static final String CLASS_NAME = "edu.jhu.cs.bsj.compiler.impl.ast.BsjNodeProxyFactoryImpl";
+
+        /** Decides if union methods have been written yet. */
+        private boolean unionMethodsWritten;
+
+        @Override
+        public void init() throws IOException
+        {
+            super.init();
+            unionMethodsWritten = false;
+        }
+
+        private void ensureStreams() throws IOException
+        {
+            ensureStream(INTERFACE_NAME, TypeDefinition.Mode.INTERFACE, Project.GENERATOR, null, null);
+            ensureStream(CLASS_NAME, TypeDefinition.Mode.CONCRETE, Project.GENERATOR, SUPERCLASS_NAME, INTERFACE_NAME);
+        }
+
+        private void ensureUnionMethodsWritten(PrependablePrintStream ips, PrependablePrintStream cps)
+        {
+            if (!this.unionMethodsWritten)
+            {
+                this.unionMethodsWritten = true;
+                for (String typeComponent : UNION_TYPE_COMPONENTS)
+                {
+                    writeUnionInterfaceMethod(ips, typeComponent);
+                    writeUnionBackingMethod(cps, typeComponent);
+                }
+            }
+        }
+
+        @Override
+        public void useDefinition(TypeDefinition def) throws IOException
+        {
+            ensureStreams();
+
+            PrependablePrintStream ips = getStream(INTERFACE_NAME);
+            PrependablePrintStream cps = getStream(CLASS_NAME);
+            ensureUnionMethodsWritten(ips, cps);
+
+            final String typeParamDecl = (def.getTypeParameter() == null) ? ""
+                    : (def.getTypeParameterWithDelimiters() + " ");
+
+            ips.println("/**");
+            ips.println(" * Creates a proxy for a " + def.getName() + ".");
+            ips.println(" * @param node The node to use.");
+            ips.println(" * @return The resulting proxy node.");
+            ips.println(" */");
+            ips.println("public " + typeParamDecl + def.getNameWithTypeParameters() + " make" + def.getName() + "("
+                    + def.getNameWithTypeParameters() + " node);");
+            ips.println();
+
+            if (def.getTypeParameter() != null)
+            {
+                cps.println("// this suppression is safe as long as the type parameter value is never implementation-specific");
+                cps.println("@SuppressWarnings(\"unchecked\")");
+            }
+            cps.println("public " + typeParamDecl + def.getNameWithTypeParameters() + " make" + def.getName() + "("
+                    + def.getNameWithTypeParameters() + " node)");
+            cps.println("{");
+            cps.incPrependCount();
+            cps.println("if (node == null)");
+            cps.println("    return null;");
+            cps.println("final " + def.getNameWithTypeParameters() + " ret;");
+            cps.println("if (this.proxyCache.containsKey(node.getUid()))");
+            cps.println("{");
+            cps.println("    ret = (" + def.getNameWithTypeParameters() + ")this.proxyCache.get(node.getUid());");
+            cps.println("} else");
+            cps.println("{");
+            cps.println("    ret = (" + def.getNameWithTypeParameters() + ")(node.executeOperation(WRAPPER, null));");
+            cps.println("    this.proxyCache.put(node.getUid(), ret);");
+            cps.println("    this.proxyIdMap.put(ret.getUid(), node.getUid());");
+            cps.println("}");
+            cps.println("return ret;");
+            cps.decPrependCount();
+            cps.println("}");
+            cps.println();
+        }
+
+        @Override
+        public void finish() throws IOException
+        {
+            ensureStreams();
+
+            PrependablePrintStream cps = getStream(CLASS_NAME);
+            cps.println("private class ProxyWrappingOperation implements BsjNodeOperation<Void,Node>");
+            cps.println("{");
+            cps.incPrependCount();
+
+            for (TypeDefinition def : getDefList())
+            {
+                if (def.getMode() == TypeDefinition.Mode.CONCRETE)
+                {
+                    cps.println("@Override");
+                    cps.println("public " + def.getName() + " execute" + def.getName() + "(" + def.getName()
+                            + " node, Void p)");
+                    cps.println("{");
+                    cps.println("    if (node == null)");
+                    cps.println("        return null;");
+                    cps.println("    return new " + def.getName() + "Impl(" + CLASS_NAME + ".this.manager, "
+                            + CLASS_NAME + ".this, node);");
+                    cps.println("}");
+                    cps.println();
+                }
+            }
+
+            cps.decPrependCount();
+            cps.println("}");
+            cps.println();
+            cps.println("private final ProxyWrappingOperation WRAPPER = new ProxyWrappingOperation();");
+
+            super.finish();
+        }
+    }
+
+    /**
      * Writes the BSJ AST node factory interface and implementation.
      */
-    static class FactoryWriter extends ClassHierarchyBuildingHandler
+    static class FactoryWriter extends AbstractFactoryWriter
     {
         /** A mapping from factory type names to their print streams. */
         private Map<String, PrependablePrintStream> mapping;
@@ -2342,7 +3276,7 @@ public class SourceGenerator
                 String typeName = StringUtilities.getSuffix(interfaceName, '.');
                 String packageName = StringUtilities.removeSuffix(interfaceName, '.');
                 PrependablePrintStream ips = createOutputFile(packageName, TypeDefinition.Mode.INTERFACE, Project.API,
-                        SupplementCategory.GENERAL, typeName, true, null, null);
+                        typeName, true, null, null);
                 mapping.put(interfaceName, ips);
             }
             String className = generationProfile.getProperty(GenerationProfile.FACTORY_CLASS_NAME);
@@ -2352,7 +3286,7 @@ public class SourceGenerator
                 String packageName = StringUtilities.removeSuffix(className, '.');
                 String ifaceName = interfaceName != null ? StringUtilities.getSuffix(interfaceName, '.') : null;
                 PrependablePrintStream cps = createOutputFile(packageName, TypeDefinition.Mode.CONCRETE,
-                        Project.GENERATOR, SupplementCategory.GENERAL, typeName, true, null, null, ifaceName);
+                        Project.GENERATOR, typeName, true, null, null, ifaceName);
                 mapping.put(className, cps);
             }
             String decoratorClassName = generationProfile.getProperty(GenerationProfile.FACTORY_DECORATOR_CLASS_NAME);
@@ -2362,7 +3296,7 @@ public class SourceGenerator
                 String packageName = StringUtilities.removeSuffix(decoratorClassName, '.');
                 String ifaceName = interfaceName != null ? StringUtilities.getSuffix(interfaceName, '.') : null;
                 PrependablePrintStream dps = createOutputFile(packageName, TypeDefinition.Mode.ABSTRACT, Project.API,
-                        SupplementCategory.GENERAL, typeName, true, null, null, ifaceName);
+                        typeName, true, null, null, ifaceName);
                 mapping.put(decoratorClassName, dps);
             }
         }
@@ -2581,16 +3515,16 @@ public class SourceGenerator
                         null, ModalPropertyDefinition.Mode.NORMAL, "", listDef.getDefaultExpression(), false));
 
                 // Write interface method description
-                ips.print("public " + typeName + " make" + def.getBaseName());
+                ips.print("public " + typeName + " make" + def.getBaseName() + "(");
                 printParameterList(ips, fakeProps, skipMake);
-                ips.println(";");
+                ips.println(");");
                 ips.println();
 
                 // Write backing class implementation
                 cps.println("@Override");
-                cps.print("public " + typeName + " make" + def.getBaseName());
+                cps.print("public " + typeName + " make" + def.getBaseName() + "(");
                 printParameterList(cps, fakeProps, skipMake);
-                cps.println();
+                cps.println(")");
                 cps.println("{");
                 cps.incPrependCount();
                 cps.println("List<" + listDef.getTypeArg() + "> " + listDef.getName() + " = Arrays.asList("
@@ -2604,9 +3538,9 @@ public class SourceGenerator
 
                 // Write decorator implementation
                 dps.println("@Override");
-                dps.print("public " + typeName + " make" + def.getBaseName());
+                dps.print("public " + typeName + " make" + def.getBaseName() + "(");
                 printParameterList(dps, fakeProps, skipMake);
-                dps.println();
+                dps.println(")");
                 dps.println("{");
                 dps.println("    this.before();");
                 dps.print("    " + typeName + " node = factory.make" + def.getBaseName());
@@ -2649,22 +3583,31 @@ public class SourceGenerator
             final String methodName = "make" + def.getBaseName() + (nodeUnionType && useUnionName ? "WithUnions" : "");
 
             // Write interface method description
-            ips.print("public " + typeParamS + typeName + " " + methodName);
+            ips.print("public " + typeParamS + typeName + " " + methodName + "(");
             printParameterList(ips, argProps, skipMake, nodeUnionType);
-            ips.println(";");
+            ips.println(");");
             ips.println();
 
             // Write backing class implementation
             cps.println("@Override");
-            cps.print("public " + typeParamS + typeName + " " + methodName);
+            cps.print("public " + typeParamS + typeName + " " + methodName + "(");
             printParameterList(cps, argProps, skipMake, nodeUnionType);
-            cps.println();
+            cps.println(")");
             cps.println("{");
             cps.incPrependCount();
             String classname = def.getBaseName() + "Impl" + typeArg;
-            cps.print(typeName + " ret = new " + classname);
+            cps.print(typeName + " ret = new " + classname + "(");
             printFactoryArgumentList(cps, recProps, factoryOverrideMap, methodDefinition, def, !nodeUnionType);
-            cps.println(";");
+            cps.println(");");
+            cps.println("if (this.manager.isRecordingEdits())");
+            cps.println("{");
+            cps.incPrependCount();
+            cps.print("this.manager.recordEdit(new Create" + def.getBaseName() + "EditScriptElementImpl(");
+            printEditScriptArgumentList(cps, factoryOverrideMap, recProps, nodeUnionType, factoryOverrideMap,
+                    methodDefinition);
+            cps.println("));");
+            cps.decPrependCount();
+            cps.println("}");
             cps.println("return ret;");
             cps.decPrependCount();
             cps.println("}");
@@ -2672,9 +3615,9 @@ public class SourceGenerator
 
             // Write decorator implementation
             dps.println("@Override");
-            dps.print("public " + typeParamS + typeName + " " + methodName);
+            dps.print("public " + typeParamS + typeName + " " + methodName + "(");
             printParameterList(dps, argProps, skipMake, nodeUnionType);
-            dps.println();
+            dps.println(")");
             dps.println("{");
             dps.incPrependCount();
             dps.println("this.before();");
@@ -2688,12 +3631,60 @@ public class SourceGenerator
             dps.println();
         }
 
+        private void printEditScriptArgumentList(PrependablePrintStream ps, Map<String, String> overrideMap,
+                List<PropertyDefinition> props, boolean nodeUnionType, Map<String, String> factoryOverrideMap,
+                FactoryMethodDefinition methodDefinition)
+        {
+            ps.print("this.manager.getCurrentMetaprogramId(), ret.getUid()");
+            for (PropertyDefinition p : props)
+            {
+                if (p.isHide() || overrideMap.containsKey(p.getName()))
+                {
+                    continue;
+                }
+                ps.print(", ");
+                final String varExpr;
+                if (!overrideMap.containsKey(p.getName()) && !methodDefinition.isVisible(p.getName())
+                        && p.getDefaultExpression() != null)
+                {
+                    varExpr = "ret.get" + (p.isWrappable() && nodeUnionType ? "UnionFor" : "") + capFirst(p.getName())
+                            + "()";
+                } else
+                {
+                    varExpr = p.getName();
+                }
+
+                if (p.isNodeType())
+                {
+                    if (p.isWrappable() && nodeUnionType)
+                    {
+                        ps.print(varExpr + " == null ? null : (" + varExpr + ".getNodeValue() == null ? null : "
+                                + varExpr + ".getNodeValue().getUid())");
+                    } else
+                    {
+                        ps.print(varExpr + " == null ? null : " + varExpr + ".getUid()");
+                    }
+                } else if (p.isNodeListType())
+                {
+                    if (p.isWrappable() && nodeUnionType)
+                    {
+                        ps.print("EditScriptUtilities.getNodeUnionUids(" + varExpr + ")");
+                    } else
+                    {
+                        ps.print("EditScriptUtilities.getNodeUids(" + varExpr + ")");
+                    }
+                } else
+                {
+                    ps.print(varExpr);
+                }
+            }
+        }
+
         private void printFactoryArgumentList(PrintStream ps, List<PropertyDefinition> props,
                 Map<String, String> overrideMap, FactoryMethodDefinition methodDefinition, TypeDefinition def,
                 boolean nodeUnionType)
         {
             boolean first = true;
-            ps.print("(");
             for (ModalPropertyDefinition<?> p : props)
             {
                 if (!first)
@@ -2742,7 +3733,6 @@ public class SourceGenerator
                     ps.print(")");
                 }
             }
-            ps.print(")");
         }
     }
 
@@ -3006,26 +3996,24 @@ public class SourceGenerator
                 // @formatter:on
 
                 PrependablePrintStream ips = createOutputFile("edu.jhu.cs.bsj.compiler.ast",
-                        TypeDefinition.Mode.INTERFACE, Project.API, SupplementCategory.GENERAL,
-                        "BsjAbortableNodeOperation" + suffix + typeParamDecl, false, bsjNodeOperationHeader, null);
+                        TypeDefinition.Mode.INTERFACE, Project.API, "BsjAbortableNodeOperation" + suffix
+                                + typeParamDecl, false, bsjNodeOperationHeader, null);
                 PrependablePrintStream nps = createOutputFile("edu.jhu.cs.bsj.compiler.ast.util",
-                        TypeDefinition.Mode.CONCRETE, Project.API, SupplementCategory.GENERAL,
-                        "BsjAbortableNodeNoOpOperation" + suffix + typeParamDecl, false, bsjNoOpNodeOperationHeader,
-                        null, "BsjAbortableNodeOperation" + suffix + typeParamNoBoundsDecl);
+                        TypeDefinition.Mode.CONCRETE, Project.API, "BsjAbortableNodeNoOpOperation" + suffix
+                                + typeParamDecl, false, bsjNoOpNodeOperationHeader, null, "BsjAbortableNodeOperation"
+                                + suffix + typeParamNoBoundsDecl);
                 PrependablePrintStream pps = createOutputFile("edu.jhu.cs.bsj.compiler.ast.util",
-                        TypeDefinition.Mode.ABSTRACT, Project.API, SupplementCategory.GENERAL,
-                        "BsjAbortableNodeOperationProxy" + suffix + proxyTypeParamsDecl, false,
-                        bsjNodeOperationProxyHeader, null, "BsjAbortableNodeOperation" + suffix
-                                + newTypeParamsNoBoundsDecl);
+                        TypeDefinition.Mode.ABSTRACT, Project.API, "BsjAbortableNodeOperationProxy" + suffix
+                                + proxyTypeParamsDecl, false, bsjNodeOperationProxyHeader, null,
+                        "BsjAbortableNodeOperation" + suffix + newTypeParamsNoBoundsDecl);
                 PrependablePrintStream dps = createOutputFile("edu.jhu.cs.bsj.compiler.ast.util",
-                        TypeDefinition.Mode.ABSTRACT, Project.API, SupplementCategory.GENERAL,
-                        "BsjAbortableDefaultNodeOperation" + suffix + typeParamDecl, false,
-                        bsjDefaultNodeOperationHeader, null, "BsjAbortableNodeOperation" + suffix
-                                + typeParamNoBoundsDecl);
-                PrependablePrintStream jps = createOutputFile("edu.jhu.cs.bsj.compiler.ast.util",
-                        TypeDefinition.Mode.ABSTRACT, Project.API, SupplementCategory.GENERAL,
-                        "JavaAbortableNodeOperation" + suffix + typeParamDecl, false, javaNodeOperationHeader, null,
+                        TypeDefinition.Mode.ABSTRACT, Project.API, "BsjAbortableDefaultNodeOperation" + suffix
+                                + typeParamDecl, false, bsjDefaultNodeOperationHeader, null,
                         "BsjAbortableNodeOperation" + suffix + typeParamNoBoundsDecl);
+                PrependablePrintStream jps = createOutputFile("edu.jhu.cs.bsj.compiler.ast.util",
+                        TypeDefinition.Mode.ABSTRACT, Project.API, "JavaAbortableNodeOperation" + suffix
+                                + typeParamDecl, false, javaNodeOperationHeader, null, "BsjAbortableNodeOperation"
+                                + suffix + typeParamNoBoundsDecl);
 
                 ipsList.add(ips);
                 npsList.add(nps);
@@ -3153,8 +4141,8 @@ public class SourceGenerator
             final String supertypeName = name + strings.suffix + "<" + superTypeArgs + ">";
             final String[] superinterfaceNames = superInterfaceArgs == null ? new String[0]
                     : new String[] { "BsjNodeOperation" + strings.suffix + "<" + superInterfaceArgs + ">" };
-            PrependablePrintStream pps = createOutputFile(pkg, mode, Project.API, SupplementCategory.GENERAL, typeName,
-                    false, headerString, supertypeName, superinterfaceNames);
+            PrependablePrintStream pps = createOutputFile(pkg, mode, Project.API, typeName, false, headerString,
+                    supertypeName, superinterfaceNames);
             if (emptyBody)
             {
                 pps.decPrependCount();
@@ -3328,7 +4316,7 @@ public class SourceGenerator
         {
             super.init();
             ps = createOutputFile("edu.jhu.cs.bsj.compiler.impl.tool.compiler", TypeDefinition.Mode.CONCRETE,
-                    Project.GENERATOR, SupplementCategory.GENERAL, "BsjTreeLifter", true, null, null,
+                    Project.GENERATOR, "BsjTreeLifter", true, null, null,
                     "BsjNodeOperation<ExpressionNode,ExpressionNode>");
             ps.incPrependCount();
             ps.println("private BsjNodeFactory factory;");
@@ -3733,17 +4721,15 @@ public class SourceGenerator
             String interfacePackage = def.getProfile().getProperty(GenerationProfile.GENERATED_INTERFACE_PACKAGE_NAME);
             Project ifaceProject = def.getProfile().getProperty(GenerationProfile.INTERFACE_PROJECT);
             Project classProject = def.getProfile().getProperty(GenerationProfile.IMPLEMENTATION_PROJECT);
-            ifacePs = createOutputFile(interfacePackage, Mode.INTERFACE, ifaceProject, SupplementCategory.GENERAL,
-                    def.getFullName(), false,
+            ifacePs = createOutputFile(interfacePackage, Mode.INTERFACE, ifaceProject, def.getFullName(), false,
                     INTERFACE_IMPORTS + "\n/**\n * " + def.getDocString().replaceAll("\n", "\n * ") + "\n */",
                     def.getFullSuper());
             ifacePs.incPrependCount();
 
             String classPackage = def.getProfile().getProperty(GenerationProfile.GENERATED_CLASS_PACKAGE_NAME);
             classPs = createOutputFile(classPackage, def.getCode() == null ? Mode.ABSTRACT : Mode.CONCRETE,
-                    classProject, SupplementCategory.GENERAL,
-                    def.getName() + "Impl" + def.getTypeParameterWithDelimiters(), false, CLASS_IMPORTS + "import "
-                            + interfacePackage + ".*;\n" + "\n\n/**\n * "
+                    classProject, def.getName() + "Impl" + def.getTypeParameterWithDelimiters(), false,
+                    CLASS_IMPORTS + "import " + interfacePackage + ".*;\n" + "\n\n/**\n * "
                             + def.getDocString().replaceAll("\n", "\n * ") + "\n */",
                     def.getFullSuper().replaceAll(def.getSuperName(), def.getSuperName() + "Impl"),
                     def.getNameWithTypeParameters());
@@ -3771,9 +4757,9 @@ public class SourceGenerator
             superParams.removeAll(def.getProperties());
 
             // Write constructor
-            classPs.print("public " + def.getName() + "Impl");
+            classPs.print("public " + def.getName() + "Impl(");
             printParameterList(classPs, consParams, true);
-            classPs.println();
+            classPs.println(")");
             classPs.println("{");
             classPs.incPrependCount();
             classPs.print("super");
@@ -3978,11 +4964,16 @@ public class SourceGenerator
                 // Then create a constructor for this type based on the exception's values
                 if (def.getCode() != null)
                 {
-                    classPs.println("public " + def.getName() + "Impl(" + "BsjSourceLocation source, "
+                    ByteArrayOutputStream buffer = new ByteArrayOutputStream();
+                    PrependablePrintStream ps = new PrependablePrintStream(buffer, "    ", 0);
+
+                    boolean cast = false;
+
+                    ps.println("public " + def.getName() + "Impl(" + "BsjSourceLocation source, "
                             + def.getName().replaceAll("Diagnostic", "Exception") + " exception)");
-                    classPs.println("{");
-                    classPs.incPrependCount();
-                    classPs.print("this(source, ");
+                    ps.println("{");
+                    ps.incPrependCount();
+                    ps.print("this(source, ");
                     boolean first = true;
                     for (ModalPropertyDefinition<?> prop : def.getRecursiveProperties(true))
                     {
@@ -3991,20 +4982,38 @@ public class SourceGenerator
                             first = false;
                         } else
                         {
-                            classPs.print(", ");
+                            ps.print(", ");
                         }
                         if (prop.getName().equals(def.getException().getProperty()))
                         {
-                            classPs.print("exception");
+                            ps.print("exception");
                         } else
                         {
-                            classPs.print("exception.get" + capFirst(prop.getName()) + "()");
+                            if (prop.getBaseType().equals(def.getUnboundedTypeParameter()))
+                            {
+                                cast = true;
+                                ps.print("(" + def.getUnboundedTypeParameter() + ")");
+                            } else if (prop.getTypeArg() != null
+                                    && prop.getTypeArg().equals(def.getUnboundedTypeParameter()))
+                            {
+                                cast = true;
+                                ps.print("(" + prop.getBaseType() + "<" + def.getUnboundedTypeParameter() + ">)");
+                            }
+                            ps.print("exception.get" + capFirst(prop.getName()) + "()");
                         }
                     }
-                    classPs.println(");");
-                    classPs.decPrependCount();
-                    classPs.println("}");
-                    classPs.println();
+                    ps.println(");");
+                    ps.decPrependCount();
+                    ps.println("}");
+                    ps.close();
+
+                    if (cast)
+                    {
+                        classPs.println("// The following is safe because we have control over how these exceptions ");
+                        classPs.println("// are constructed.");
+                        classPs.println("@SuppressWarnings(\"unchecked\")");
+                    }
+                    classPs.println(buffer.toString());
                 }
             }
         }
@@ -4046,15 +5055,55 @@ public class SourceGenerator
             Project ifaceProject = def.getProfile().getProperty(GenerationProfile.INTERFACE_PROJECT);
             Project classProject = def.getProfile().getProperty(GenerationProfile.IMPLEMENTATION_PROJECT);
 
-            PrependablePrintStream ps = createOutputFile(exceptionPackage, Mode.ABSTRACT, ifaceProject,
-                    SupplementCategory.GENERAL, typeName, false, imports + "\n" + docString, supertypeName);
+            PrependablePrintStream ps = createOutputFile(exceptionPackage, Mode.ABSTRACT, ifaceProject, typeName,
+                    false, imports + "\n" + docString, supertypeName);
             ps.incPrependCount();
 
             ps.println("private static final long serialVersionUID = 1L;");
             ps.println();
 
+            // Prepare property lists
+            List<DiagnosticPropertyDefinition> props = new ArrayList<DiagnosticPropertyDefinition>(
+                    def.getRecursiveProperties(true));
+            List<DiagnosticPropertyDefinition> ourProps = new ArrayList<DiagnosticPropertyDefinition>(
+                    def.getResponsibleProperties(true));
+            List<DiagnosticPropertyDefinition> superProps = new ArrayList<DiagnosticPropertyDefinition>(props);
+            superProps.removeAll(ourProps);
+
+            ListIterator<DiagnosticPropertyDefinition> propIt = props.listIterator();
+            while (propIt.hasNext())
+            {
+                DiagnosticPropertyDefinition prop = propIt.next();
+                if (prop.getName().equals(def.getException().getProperty()))
+                {
+                    propIt.remove();
+                    ourProps.remove(prop);
+                    superProps.remove(prop);
+                } else if (prop.getBaseType().equals(def.getUnboundedTypeParameter())
+                        || (prop.getTypeArg() != null && prop.getTypeArg().equals(def.getUnboundedTypeParameter())))
+                {
+                    DiagnosticPropertyDefinition newProp;
+                    if (prop.getBaseType().equals(def.getUnboundedTypeParameter()))
+                    {
+                        newProp = prop.deriveWithBaseType(def.getTypeParameterUpperBound());
+                    } else if (prop.getTypeArg() != null && prop.getTypeArg().equals(def.getUnboundedTypeParameter()))
+                    {
+                        newProp = prop.deriveWithTypeArg("? extends " + def.getTypeParameterUpperBound());
+                    } else
+                    {
+                        throw new IllegalStateException("Inconsistent code");
+                    }
+                    propIt.set(newProp);
+                    for (List<DiagnosticPropertyDefinition> list : CollectionUtilities.listOf(ourProps, superProps))
+                    {
+                        if (list.indexOf(prop) != -1)
+                            list.set(list.indexOf(prop), newProp);
+                    }
+                }
+            }
+
             // Write properties
-            for (DiagnosticPropertyDefinition prop : def.getProperties())
+            for (DiagnosticPropertyDefinition prop : ourProps)
             {
                 if (def.getException().getProperty().equals(prop.getName()))
                 {
@@ -4065,27 +5114,10 @@ public class SourceGenerator
                 ps.println();
             }
 
-            // Prepare property lists
-            List<DiagnosticPropertyDefinition> props = def.getRecursiveProperties(true);
-            List<DiagnosticPropertyDefinition> ourProps = def.getResponsibleProperties(true);
-            List<DiagnosticPropertyDefinition> superProps = new ArrayList<DiagnosticPropertyDefinition>(props);
-            superProps.removeAll(ourProps);
-
-            for (DiagnosticPropertyDefinition prop : props)
-            {
-                if (prop.getName().equals(def.getException().getProperty()))
-                {
-                    props.remove(prop);
-                    ourProps.remove(prop);
-                    superProps.remove(prop);
-                    break;
-                }
-            }
-
             // Write constructor
-            ps.print("public " + typeName);
+            ps.print("public " + typeName + "(");
             printParameterList(ps, props, true);
-            ps.println();
+            ps.println(")");
             ps.println("{");
             ps.incPrependCount();
             ps.print("super");
@@ -4110,7 +5142,7 @@ public class SourceGenerator
             ps.println();
 
             // Write class getters
-            for (DiagnosticPropertyDefinition prop : def.getProperties())
+            for (DiagnosticPropertyDefinition prop : ourProps)
             {
                 if (def.getException().getProperty().equals(prop.getName()))
                 {
@@ -4145,17 +5177,16 @@ public class SourceGenerator
             String implImports = imports + "import edu.jhu.cs.bsj.compiler.impl.diagnostic.*;\n"
                     + "import edu.jhu.cs.bsj.compiler.impl.diagnostic.compiler.*;\n";
             ps = createOutputFile(exceptionImplPackage, def.getCode() != null ? Mode.CONCRETE : Mode.ABSTRACT,
-                    classProject, SupplementCategory.GENERAL, typeName + "Impl", false, implImports
-                            + "\n/*\n * {@inheritDoc}\n */\n", typeName);
+                    classProject, typeName + "Impl", false, implImports + "\n/*\n * {@inheritDoc}\n */\n", typeName);
             ps.incPrependCount();
 
             ps.println("private static final long serialVersionUID = 1L;");
             ps.println();
 
             // Create the constructor
-            ps.print("public " + typeName + "Impl");
+            ps.print("public " + typeName + "Impl(");
             printParameterList(ps, props, true);
-            ps.println();
+            ps.println(")");
             ps.println("{");
             ps.incPrependCount();
             ps.print("super");
@@ -4171,7 +5202,9 @@ public class SourceGenerator
                 ps.println("public " + def.getName() + (def.getTypeParameter() != null ? "<?>" : "")
                         + " getDiagnostic(BsjSourceLocation source)");
                 ps.println("{");
-                ps.println("    return new " + def.getName() + "Impl(source, this);");
+                ps.println("    return new " + def.getName() + "Impl"
+                        + (def.getTypeParameter() != null ? "<" + def.getTypeParameterUpperBound() + ">" : "")
+                        + "(source, this);");
                 ps.println("}");
                 ps.println();
             }
@@ -4241,10 +5274,10 @@ public class SourceGenerator
             parseRuleDefinitions = new ArrayList<ParseRuleDefinition>();
 
             protoEnumPs = createOutputFile("edu.jhu.cs.bsj.compiler.tool.parser", Mode.CONCRETE, Project.API,
-                    SupplementCategory.GENERAL, "ParseRule<T extends Node>", true, null, null);
+                    "ParseRule<T extends Node>", true, null, null);
 
             parserUtilities = createOutputFile("edu.jhu.cs.bsj.compiler.impl.tool.parser.antlr.util", Mode.CONCRETE,
-                    Project.PARSER, SupplementCategory.GENERAL, "ParserGeneratedUtilities", false,
+                    Project.PARSER, "ParserGeneratedUtilities", false,
                     "import org.antlr.runtime.RecognitionException;\n\n" + "/**\n"
                             + " * Contains a number of utility functions for parsing operations.  These\n"
                             + " * operations are separated solely because the source for them is generated.\n" + " */",
@@ -4468,7 +5501,7 @@ public class SourceGenerator
                     + " * @param <T> The type of normal node that this union represents if it represents a normal node.\n"
                     + " */\n";
             PrependablePrintStream ps = createOutputFile("edu.jhu.cs.bsj.compiler.ast", Mode.INTERFACE, Project.API,
-                    SupplementCategory.GENERAL, "NodeUnion<T extends Node>", false, javadoc, null);
+                    "NodeUnion<T extends Node>", false, javadoc, null);
             ps.incPrependCount();
 
             ps.println("/**");
@@ -4536,8 +5569,8 @@ public class SourceGenerator
             {
                 final String typeComponent = UNION_TYPE_COMPONENTS[i];
                 PrependablePrintStream ps = createOutputFile("edu.jhu.cs.bsj.compiler.impl.ast", Mode.CONCRETE,
-                        Project.GENERATOR, SupplementCategory.GENERAL, typeComponent + "NodeUnion<T extends Node>",
-                        false, "/**\n * Represents a {@link NodeUnion} containing a " + typeComponent.toLowerCase()
+                        Project.GENERATOR, typeComponent + "NodeUnion<T extends Node>", false,
+                        "/**\n * Represents a {@link NodeUnion} containing a " + typeComponent.toLowerCase()
                                 + " value.\n */\n", null, "NodeUnion<T>");
                 ps.incPrependCount();
 
@@ -4599,6 +5632,13 @@ public class SourceGenerator
                 ps.println("public Type getType()");
                 ps.println("{");
                 ps.println("    return Type." + typeComponent.toUpperCase() + ";");
+                ps.println("}");
+                ps.println();
+
+                ps.println("@Override");
+                ps.println("public String toString()");
+                ps.println("{");
+                ps.println("    return \"" + typeComponent + "NodeUnion(\" + String.valueOf(getNodeValue()) + \")\";");
                 ps.println("}");
                 ps.println();
 

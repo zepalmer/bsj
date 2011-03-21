@@ -1,10 +1,10 @@
 package edu.jhu.cs.bsj.compiler.impl.ast.node;
 
 import java.util.Arrays;
-import java.util.EnumMap;
+import java.util.EnumSet;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
+import java.util.Set;
 
 import javax.annotation.Generated;
 
@@ -19,9 +19,10 @@ import edu.jhu.cs.bsj.compiler.ast.node.ForInitializerExpressionNode;
 import edu.jhu.cs.bsj.compiler.ast.node.Node;
 import edu.jhu.cs.bsj.compiler.ast.node.list.StatementExpressionListNode;
 import edu.jhu.cs.bsj.compiler.impl.ast.BsjNodeManager;
+import edu.jhu.cs.bsj.compiler.impl.ast.BsjNodeProxyFactory;
 import edu.jhu.cs.bsj.compiler.impl.ast.NormalNodeUnion;
-import edu.jhu.cs.bsj.compiler.impl.ast.attribute.AttributeName;
-import edu.jhu.cs.bsj.compiler.impl.ast.attribute.ReadWriteAttribute;
+import edu.jhu.cs.bsj.compiler.impl.ast.delta.property.ForInitializerExpressionNodeSetExpressionsPropertyEditScriptElementImpl;
+import edu.jhu.cs.bsj.compiler.impl.ast.properties.ForInitializerExpressionNodeProperties;
 
 @Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
 public class ForInitializerExpressionNodeImpl extends NodeImpl implements ForInitializerExpressionNode
@@ -29,22 +30,11 @@ public class ForInitializerExpressionNodeImpl extends NodeImpl implements ForIni
     /** The expressions used in this initializer. */
     private NodeUnion<? extends StatementExpressionListNode> expressions;
     
-    private Map<LocalAttribute,ReadWriteAttribute> localAttributes = new EnumMap<LocalAttribute,ReadWriteAttribute>(LocalAttribute.class);
-    private ReadWriteAttribute getAttribute(LocalAttribute attributeName)
-    {
-        ReadWriteAttribute attribute = localAttributes.get(attributeName);
-        if (attribute == null)
-        {
-            attribute = new ReadWriteAttribute(ForInitializerExpressionNodeImpl.this, attributeName);
-            localAttributes.put(attributeName, attribute);
-        }
-        return attribute;
-    }
-    private static enum LocalAttribute implements AttributeName
-    {
-        /** Attribute identifier for the expressions property. */
-        EXPRESSIONS,
-    }
+    /**
+     * A set of those properties which have been populated from the backing node.
+     * This field is <code>null</code> if <tt>backingNode</tt> is <code>null</code>.
+     */
+    private Set<ForInitializerExpressionNodeProperties> populatedProperties;
     
     /** General constructor. */
     public ForInitializerExpressionNodeImpl(
@@ -55,7 +45,49 @@ public class ForInitializerExpressionNodeImpl extends NodeImpl implements ForIni
             boolean binary)
     {
         super(startLocation, stopLocation, manager, binary);
-        setUnionForExpressions(expressions, false);
+        this.populatedProperties = null;
+        doSetExpressions(expressions);
+    }
+    
+    /** Proxy constructor. */
+    public ForInitializerExpressionNodeImpl(BsjNodeManager manager, BsjNodeProxyFactory proxyFactory, ForInitializerExpressionNode backingNode)
+    {
+        super(manager, proxyFactory, backingNode);
+        this.populatedProperties = EnumSet.noneOf(ForInitializerExpressionNodeProperties.class);
+    }
+    
+    /** Retrieves this node's backing node (if one exists). */
+    protected ForInitializerExpressionNode getBackingNode()
+    {
+        return (ForInitializerExpressionNode)super.getBackingNode();
+    }
+    
+    /**
+     * Ensures that the expressions value has been populated from proxy.
+     * If this node is not backed by a proxy or if the value has already been
+     * populated, this method does nothing.
+     */
+    private void checkExpressionsWrapped()
+    {
+        if (this.populatedProperties == null || this.populatedProperties.contains(
+                ForInitializerExpressionNodeProperties.EXPRESSIONS))
+            return;
+        this.populatedProperties.add(ForInitializerExpressionNodeProperties.EXPRESSIONS);
+        NodeUnion<? extends StatementExpressionListNode> union = this.getBackingNode().getUnionForExpressions();
+        switch (union.getType())
+        {
+            case NORMAL:
+                union = this.getProxyFactory().makeNormalNodeUnion(
+                        this.getProxyFactory().makeStatementExpressionListNode(union.getNormalNode()));
+                break;
+            case SPLICE:
+                union = this.getProxyFactory().makeSpliceNodeUnion(
+                        this.getProxyFactory().makeSpliceNode(union.getSpliceNode()));
+                break;
+            default:
+                throw new IllegalStateException("Unrecognized union type: " + union.getType());
+        }
+        this.expressions = union;
     }
     
     /**
@@ -65,7 +97,7 @@ public class ForInitializerExpressionNodeImpl extends NodeImpl implements ForIni
      */
     public StatementExpressionListNode getExpressions()
     {
-        getAttribute(LocalAttribute.EXPRESSIONS).recordAccess(ReadWriteAttribute.AccessType.READ);
+        checkExpressionsWrapped();
         if (this.expressions == null)
         {
             return null;
@@ -81,7 +113,7 @@ public class ForInitializerExpressionNodeImpl extends NodeImpl implements ForIni
      */
     public NodeUnion<? extends StatementExpressionListNode> getUnionForExpressions()
     {
-        getAttribute(LocalAttribute.EXPRESSIONS).recordAccess(ReadWriteAttribute.AccessType.READ);
+        checkExpressionsWrapped();
         if (this.expressions == null)
         {
             this.expressions = new NormalNodeUnion<StatementExpressionListNode>(null);
@@ -95,24 +127,8 @@ public class ForInitializerExpressionNodeImpl extends NodeImpl implements ForIni
      */
     public void setExpressions(StatementExpressionListNode expressions)
     {
-            setExpressions(expressions, true);
-            getManager().notifyChange(this);
-    }
-    
-    private void setExpressions(StatementExpressionListNode expressions, boolean checkPermissions)
-    {
-        if (checkPermissions)
-        {
-            getManager().assertMutatable(this);
-            getAttribute(LocalAttribute.EXPRESSIONS).recordAccess(ReadWriteAttribute.AccessType.WRITE);
-        }
-        
-        if (this.expressions != null)
-        {
-            setAsChild(this.expressions.getNodeValue(), false);
-        }
-        this.expressions = new NormalNodeUnion<StatementExpressionListNode>(expressions);
-        setAsChild(expressions, true);
+        checkExpressionsWrapped();
+        this.setUnionForExpressions(new NormalNodeUnion<StatementExpressionListNode>(expressions));
     }
     
     /**
@@ -121,18 +137,15 @@ public class ForInitializerExpressionNodeImpl extends NodeImpl implements ForIni
      */
     public void setUnionForExpressions(NodeUnion<? extends StatementExpressionListNode> expressions)
     {
-            setUnionForExpressions(expressions, true);
-            getManager().notifyChange(this);
+        checkExpressionsWrapped();
+        this.getManager().assertMutatable(this);
+        this.doSetExpressions(expressions);
+        if (this.getManager().isRecordingEdits())
+            super.recordEdit(new ForInitializerExpressionNodeSetExpressionsPropertyEditScriptElementImpl(this.getManager().getCurrentMetaprogramId(), this.getUid(), expressions.getNodeValue() == null ? null : expressions.getNodeValue().getUid()));
     }
     
-    private void setUnionForExpressions(NodeUnion<? extends StatementExpressionListNode> expressions, boolean checkPermissions)
+    private void doSetExpressions(NodeUnion<? extends StatementExpressionListNode> expressions)
     {
-        if (checkPermissions)
-        {
-            getManager().assertMutatable(this);
-            getAttribute(LocalAttribute.EXPRESSIONS).recordAccess(ReadWriteAttribute.AccessType.WRITE);
-        }
-        
         if (expressions == null)
         {
             expressions = new NormalNodeUnion<StatementExpressionListNode>(null);
@@ -156,9 +169,9 @@ public class ForInitializerExpressionNodeImpl extends NodeImpl implements ForIni
     protected void receiveToChildren(BsjNodeVisitor visitor)
     {
         super.receiveToChildren(visitor);
-        if (this.expressions.getNodeValue() != null)
+        if (this.getUnionForExpressions().getNodeValue() != null)
         {
-            this.expressions.getNodeValue().receive(visitor);
+            this.getUnionForExpressions().getNodeValue().receive(visitor);
         }
         Iterator<? extends Node> extras = getHiddenVisitorChildren();
         if (extras != null)
@@ -181,9 +194,9 @@ public class ForInitializerExpressionNodeImpl extends NodeImpl implements ForIni
     protected void receiveTypedToChildren(BsjTypedNodeVisitor visitor)
     {
         super.receiveTypedToChildren(visitor);
-        if (this.expressions.getNodeValue() != null)
+        if (this.getUnionForExpressions().getNodeValue() != null)
         {
-            this.expressions.getNodeValue().receiveTyped(visitor);
+            this.getUnionForExpressions().getNodeValue().receiveTyped(visitor);
         }
         Iterator<? extends Node> extras = getHiddenVisitorChildren();
         if (extras != null)
@@ -242,6 +255,8 @@ public class ForInitializerExpressionNodeImpl extends NodeImpl implements ForIni
     {
         StringBuilder sb = new StringBuilder();
         sb.append(this.getClass().getSimpleName());
+        sb.append('#');
+        sb.append(this.getUid());
         sb.append('[');
         sb.append("expressions=");
         sb.append(this.getUnionForExpressions().getNodeValue() == null? "null" : this.getUnionForExpressions().getNodeValue().getClass().getSimpleName());

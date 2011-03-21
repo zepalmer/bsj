@@ -1,10 +1,10 @@
 package edu.jhu.cs.bsj.compiler.impl.ast.node.meta;
 
 import java.util.Arrays;
-import java.util.EnumMap;
+import java.util.EnumSet;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
+import java.util.Set;
 
 import javax.annotation.Generated;
 
@@ -21,9 +21,10 @@ import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaAnnotationElementListNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaAnnotationMetaprogramAnchorNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.NormalMetaAnnotationNode;
 import edu.jhu.cs.bsj.compiler.impl.ast.BsjNodeManager;
+import edu.jhu.cs.bsj.compiler.impl.ast.BsjNodeProxyFactory;
 import edu.jhu.cs.bsj.compiler.impl.ast.NormalNodeUnion;
-import edu.jhu.cs.bsj.compiler.impl.ast.attribute.AttributeName;
-import edu.jhu.cs.bsj.compiler.impl.ast.attribute.ReadWriteAttribute;
+import edu.jhu.cs.bsj.compiler.impl.ast.delta.property.NormalMetaAnnotationNodeSetArgumentsPropertyEditScriptElementImpl;
+import edu.jhu.cs.bsj.compiler.impl.ast.properties.NormalMetaAnnotationNodeProperties;
 
 @Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
 public class NormalMetaAnnotationNodeImpl extends MetaAnnotationNodeImpl implements NormalMetaAnnotationNode
@@ -31,22 +32,11 @@ public class NormalMetaAnnotationNodeImpl extends MetaAnnotationNodeImpl impleme
     /** The arguments. */
     private NodeUnion<? extends MetaAnnotationElementListNode> arguments;
     
-    private Map<LocalAttribute,ReadWriteAttribute> localAttributes = new EnumMap<LocalAttribute,ReadWriteAttribute>(LocalAttribute.class);
-    private ReadWriteAttribute getAttribute(LocalAttribute attributeName)
-    {
-        ReadWriteAttribute attribute = localAttributes.get(attributeName);
-        if (attribute == null)
-        {
-            attribute = new ReadWriteAttribute(NormalMetaAnnotationNodeImpl.this, attributeName);
-            localAttributes.put(attributeName, attribute);
-        }
-        return attribute;
-    }
-    private static enum LocalAttribute implements AttributeName
-    {
-        /** Attribute identifier for the arguments property. */
-        ARGUMENTS,
-    }
+    /**
+     * A set of those properties which have been populated from the backing node.
+     * This field is <code>null</code> if <tt>backingNode</tt> is <code>null</code>.
+     */
+    private Set<NormalMetaAnnotationNodeProperties> populatedProperties;
     
     /** General constructor. */
     public NormalMetaAnnotationNodeImpl(
@@ -59,7 +49,49 @@ public class NormalMetaAnnotationNodeImpl extends MetaAnnotationNodeImpl impleme
             boolean binary)
     {
         super(annotationType, metaprogramAnchor, startLocation, stopLocation, manager, binary);
-        setUnionForArguments(arguments, false);
+        this.populatedProperties = null;
+        doSetArguments(arguments);
+    }
+    
+    /** Proxy constructor. */
+    public NormalMetaAnnotationNodeImpl(BsjNodeManager manager, BsjNodeProxyFactory proxyFactory, NormalMetaAnnotationNode backingNode)
+    {
+        super(manager, proxyFactory, backingNode);
+        this.populatedProperties = EnumSet.noneOf(NormalMetaAnnotationNodeProperties.class);
+    }
+    
+    /** Retrieves this node's backing node (if one exists). */
+    protected NormalMetaAnnotationNode getBackingNode()
+    {
+        return (NormalMetaAnnotationNode)super.getBackingNode();
+    }
+    
+    /**
+     * Ensures that the arguments value has been populated from proxy.
+     * If this node is not backed by a proxy or if the value has already been
+     * populated, this method does nothing.
+     */
+    private void checkArgumentsWrapped()
+    {
+        if (this.populatedProperties == null || this.populatedProperties.contains(
+                NormalMetaAnnotationNodeProperties.ARGUMENTS))
+            return;
+        this.populatedProperties.add(NormalMetaAnnotationNodeProperties.ARGUMENTS);
+        NodeUnion<? extends MetaAnnotationElementListNode> union = this.getBackingNode().getUnionForArguments();
+        switch (union.getType())
+        {
+            case NORMAL:
+                union = this.getProxyFactory().makeNormalNodeUnion(
+                        this.getProxyFactory().makeMetaAnnotationElementListNode(union.getNormalNode()));
+                break;
+            case SPLICE:
+                union = this.getProxyFactory().makeSpliceNodeUnion(
+                        this.getProxyFactory().makeSpliceNode(union.getSpliceNode()));
+                break;
+            default:
+                throw new IllegalStateException("Unrecognized union type: " + union.getType());
+        }
+        this.arguments = union;
     }
     
     /**
@@ -69,7 +101,7 @@ public class NormalMetaAnnotationNodeImpl extends MetaAnnotationNodeImpl impleme
      */
     public MetaAnnotationElementListNode getArguments()
     {
-        getAttribute(LocalAttribute.ARGUMENTS).recordAccess(ReadWriteAttribute.AccessType.READ);
+        checkArgumentsWrapped();
         if (this.arguments == null)
         {
             return null;
@@ -85,7 +117,7 @@ public class NormalMetaAnnotationNodeImpl extends MetaAnnotationNodeImpl impleme
      */
     public NodeUnion<? extends MetaAnnotationElementListNode> getUnionForArguments()
     {
-        getAttribute(LocalAttribute.ARGUMENTS).recordAccess(ReadWriteAttribute.AccessType.READ);
+        checkArgumentsWrapped();
         if (this.arguments == null)
         {
             this.arguments = new NormalNodeUnion<MetaAnnotationElementListNode>(null);
@@ -99,24 +131,8 @@ public class NormalMetaAnnotationNodeImpl extends MetaAnnotationNodeImpl impleme
      */
     public void setArguments(MetaAnnotationElementListNode arguments)
     {
-            setArguments(arguments, true);
-            getManager().notifyChange(this);
-    }
-    
-    private void setArguments(MetaAnnotationElementListNode arguments, boolean checkPermissions)
-    {
-        if (checkPermissions)
-        {
-            getManager().assertMutatable(this);
-            getAttribute(LocalAttribute.ARGUMENTS).recordAccess(ReadWriteAttribute.AccessType.WRITE);
-        }
-        
-        if (this.arguments != null)
-        {
-            setAsChild(this.arguments.getNodeValue(), false);
-        }
-        this.arguments = new NormalNodeUnion<MetaAnnotationElementListNode>(arguments);
-        setAsChild(arguments, true);
+        checkArgumentsWrapped();
+        this.setUnionForArguments(new NormalNodeUnion<MetaAnnotationElementListNode>(arguments));
     }
     
     /**
@@ -125,18 +141,15 @@ public class NormalMetaAnnotationNodeImpl extends MetaAnnotationNodeImpl impleme
      */
     public void setUnionForArguments(NodeUnion<? extends MetaAnnotationElementListNode> arguments)
     {
-            setUnionForArguments(arguments, true);
-            getManager().notifyChange(this);
+        checkArgumentsWrapped();
+        this.getManager().assertMutatable(this);
+        this.doSetArguments(arguments);
+        if (this.getManager().isRecordingEdits())
+            super.recordEdit(new NormalMetaAnnotationNodeSetArgumentsPropertyEditScriptElementImpl(this.getManager().getCurrentMetaprogramId(), this.getUid(), arguments.getNodeValue() == null ? null : arguments.getNodeValue().getUid()));
     }
     
-    private void setUnionForArguments(NodeUnion<? extends MetaAnnotationElementListNode> arguments, boolean checkPermissions)
+    private void doSetArguments(NodeUnion<? extends MetaAnnotationElementListNode> arguments)
     {
-        if (checkPermissions)
-        {
-            getManager().assertMutatable(this);
-            getAttribute(LocalAttribute.ARGUMENTS).recordAccess(ReadWriteAttribute.AccessType.WRITE);
-        }
-        
         if (arguments == null)
         {
             arguments = new NormalNodeUnion<MetaAnnotationElementListNode>(null);
@@ -160,9 +173,9 @@ public class NormalMetaAnnotationNodeImpl extends MetaAnnotationNodeImpl impleme
     protected void receiveToChildren(BsjNodeVisitor visitor)
     {
         super.receiveToChildren(visitor);
-        if (this.arguments.getNodeValue() != null)
+        if (this.getUnionForArguments().getNodeValue() != null)
         {
-            this.arguments.getNodeValue().receive(visitor);
+            this.getUnionForArguments().getNodeValue().receive(visitor);
         }
         Iterator<? extends Node> extras = getHiddenVisitorChildren();
         if (extras != null)
@@ -185,9 +198,9 @@ public class NormalMetaAnnotationNodeImpl extends MetaAnnotationNodeImpl impleme
     protected void receiveTypedToChildren(BsjTypedNodeVisitor visitor)
     {
         super.receiveTypedToChildren(visitor);
-        if (this.arguments.getNodeValue() != null)
+        if (this.getUnionForArguments().getNodeValue() != null)
         {
-            this.arguments.getNodeValue().receiveTyped(visitor);
+            this.getUnionForArguments().getNodeValue().receiveTyped(visitor);
         }
         Iterator<? extends Node> extras = getHiddenVisitorChildren();
         if (extras != null)
@@ -246,6 +259,8 @@ public class NormalMetaAnnotationNodeImpl extends MetaAnnotationNodeImpl impleme
     {
         StringBuilder sb = new StringBuilder();
         sb.append(this.getClass().getSimpleName());
+        sb.append('#');
+        sb.append(this.getUid());
         sb.append('[');
         sb.append("arguments=");
         sb.append(this.getUnionForArguments().getNodeValue() == null? "null" : this.getUnionForArguments().getNodeValue().getClass().getSimpleName());
@@ -346,9 +361,13 @@ public class NormalMetaAnnotationNodeImpl extends MetaAnnotationNodeImpl impleme
             default:
                 throw new IllegalStateException("Unrecognized union component type: " + getUnionForAnnotationType().getType());
         }
+        MetaAnnotationMetaprogramAnchorNode metaprogramAnchorCopy = getMetaprogramAnchor();
+        if (metaprogramAnchorCopy != null)
+            metaprogramAnchorCopy = metaprogramAnchorCopy.deepCopy(factory);
         return factory.makeNormalMetaAnnotationNodeWithUnions(
                 argumentsCopy,
                 annotationTypeCopy,
+                metaprogramAnchorCopy,
                 getStartLocation(),
                 getStopLocation());
     }

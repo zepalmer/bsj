@@ -1,10 +1,10 @@
 package edu.jhu.cs.bsj.compiler.impl.ast.node.meta;
 
 import java.util.Arrays;
-import java.util.EnumMap;
+import java.util.EnumSet;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
+import java.util.Set;
 
 import javax.annotation.Generated;
 
@@ -19,10 +19,11 @@ import edu.jhu.cs.bsj.compiler.ast.node.ImportNode;
 import edu.jhu.cs.bsj.compiler.ast.node.Node;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramImportNode;
 import edu.jhu.cs.bsj.compiler.impl.ast.BsjNodeManager;
+import edu.jhu.cs.bsj.compiler.impl.ast.BsjNodeProxyFactory;
 import edu.jhu.cs.bsj.compiler.impl.ast.NormalNodeUnion;
-import edu.jhu.cs.bsj.compiler.impl.ast.attribute.AttributeName;
-import edu.jhu.cs.bsj.compiler.impl.ast.attribute.ReadWriteAttribute;
+import edu.jhu.cs.bsj.compiler.impl.ast.delta.property.MetaprogramImportNodeSetImportNodePropertyEditScriptElementImpl;
 import edu.jhu.cs.bsj.compiler.impl.ast.node.NodeImpl;
+import edu.jhu.cs.bsj.compiler.impl.ast.properties.MetaprogramImportNodeProperties;
 
 @Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
 public class MetaprogramImportNodeImpl extends NodeImpl implements MetaprogramImportNode
@@ -30,22 +31,11 @@ public class MetaprogramImportNodeImpl extends NodeImpl implements MetaprogramIm
     /** The import for the metaprogram. */
     private NodeUnion<? extends ImportNode> importNode;
     
-    private Map<LocalAttribute,ReadWriteAttribute> localAttributes = new EnumMap<LocalAttribute,ReadWriteAttribute>(LocalAttribute.class);
-    private ReadWriteAttribute getAttribute(LocalAttribute attributeName)
-    {
-        ReadWriteAttribute attribute = localAttributes.get(attributeName);
-        if (attribute == null)
-        {
-            attribute = new ReadWriteAttribute(MetaprogramImportNodeImpl.this, attributeName);
-            localAttributes.put(attributeName, attribute);
-        }
-        return attribute;
-    }
-    private static enum LocalAttribute implements AttributeName
-    {
-        /** Attribute identifier for the importNode property. */
-        IMPORT_NODE,
-    }
+    /**
+     * A set of those properties which have been populated from the backing node.
+     * This field is <code>null</code> if <tt>backingNode</tt> is <code>null</code>.
+     */
+    private Set<MetaprogramImportNodeProperties> populatedProperties;
     
     /** General constructor. */
     public MetaprogramImportNodeImpl(
@@ -56,7 +46,49 @@ public class MetaprogramImportNodeImpl extends NodeImpl implements MetaprogramIm
             boolean binary)
     {
         super(startLocation, stopLocation, manager, binary);
-        setUnionForImportNode(importNode, false);
+        this.populatedProperties = null;
+        doSetImportNode(importNode);
+    }
+    
+    /** Proxy constructor. */
+    public MetaprogramImportNodeImpl(BsjNodeManager manager, BsjNodeProxyFactory proxyFactory, MetaprogramImportNode backingNode)
+    {
+        super(manager, proxyFactory, backingNode);
+        this.populatedProperties = EnumSet.noneOf(MetaprogramImportNodeProperties.class);
+    }
+    
+    /** Retrieves this node's backing node (if one exists). */
+    protected MetaprogramImportNode getBackingNode()
+    {
+        return (MetaprogramImportNode)super.getBackingNode();
+    }
+    
+    /**
+     * Ensures that the importNode value has been populated from proxy.
+     * If this node is not backed by a proxy or if the value has already been
+     * populated, this method does nothing.
+     */
+    private void checkImportNodeWrapped()
+    {
+        if (this.populatedProperties == null || this.populatedProperties.contains(
+                MetaprogramImportNodeProperties.IMPORT_NODE))
+            return;
+        this.populatedProperties.add(MetaprogramImportNodeProperties.IMPORT_NODE);
+        NodeUnion<? extends ImportNode> union = this.getBackingNode().getUnionForImportNode();
+        switch (union.getType())
+        {
+            case NORMAL:
+                union = this.getProxyFactory().makeNormalNodeUnion(
+                        this.getProxyFactory().makeImportNode(union.getNormalNode()));
+                break;
+            case SPLICE:
+                union = this.getProxyFactory().makeSpliceNodeUnion(
+                        this.getProxyFactory().makeSpliceNode(union.getSpliceNode()));
+                break;
+            default:
+                throw new IllegalStateException("Unrecognized union type: " + union.getType());
+        }
+        this.importNode = union;
     }
     
     /**
@@ -66,7 +98,7 @@ public class MetaprogramImportNodeImpl extends NodeImpl implements MetaprogramIm
      */
     public ImportNode getImportNode()
     {
-        getAttribute(LocalAttribute.IMPORT_NODE).recordAccess(ReadWriteAttribute.AccessType.READ);
+        checkImportNodeWrapped();
         if (this.importNode == null)
         {
             return null;
@@ -82,7 +114,7 @@ public class MetaprogramImportNodeImpl extends NodeImpl implements MetaprogramIm
      */
     public NodeUnion<? extends ImportNode> getUnionForImportNode()
     {
-        getAttribute(LocalAttribute.IMPORT_NODE).recordAccess(ReadWriteAttribute.AccessType.READ);
+        checkImportNodeWrapped();
         if (this.importNode == null)
         {
             this.importNode = new NormalNodeUnion<ImportNode>(null);
@@ -96,24 +128,8 @@ public class MetaprogramImportNodeImpl extends NodeImpl implements MetaprogramIm
      */
     public void setImportNode(ImportNode importNode)
     {
-            setImportNode(importNode, true);
-            getManager().notifyChange(this);
-    }
-    
-    private void setImportNode(ImportNode importNode, boolean checkPermissions)
-    {
-        if (checkPermissions)
-        {
-            getManager().assertMutatable(this);
-            getAttribute(LocalAttribute.IMPORT_NODE).recordAccess(ReadWriteAttribute.AccessType.WRITE);
-        }
-        
-        if (this.importNode != null)
-        {
-            setAsChild(this.importNode.getNodeValue(), false);
-        }
-        this.importNode = new NormalNodeUnion<ImportNode>(importNode);
-        setAsChild(importNode, true);
+        checkImportNodeWrapped();
+        this.setUnionForImportNode(new NormalNodeUnion<ImportNode>(importNode));
     }
     
     /**
@@ -122,18 +138,15 @@ public class MetaprogramImportNodeImpl extends NodeImpl implements MetaprogramIm
      */
     public void setUnionForImportNode(NodeUnion<? extends ImportNode> importNode)
     {
-            setUnionForImportNode(importNode, true);
-            getManager().notifyChange(this);
+        checkImportNodeWrapped();
+        this.getManager().assertMutatable(this);
+        this.doSetImportNode(importNode);
+        if (this.getManager().isRecordingEdits())
+            super.recordEdit(new MetaprogramImportNodeSetImportNodePropertyEditScriptElementImpl(this.getManager().getCurrentMetaprogramId(), this.getUid(), importNode.getNodeValue() == null ? null : importNode.getNodeValue().getUid()));
     }
     
-    private void setUnionForImportNode(NodeUnion<? extends ImportNode> importNode, boolean checkPermissions)
+    private void doSetImportNode(NodeUnion<? extends ImportNode> importNode)
     {
-        if (checkPermissions)
-        {
-            getManager().assertMutatable(this);
-            getAttribute(LocalAttribute.IMPORT_NODE).recordAccess(ReadWriteAttribute.AccessType.WRITE);
-        }
-        
         if (importNode == null)
         {
             importNode = new NormalNodeUnion<ImportNode>(null);
@@ -157,9 +170,9 @@ public class MetaprogramImportNodeImpl extends NodeImpl implements MetaprogramIm
     protected void receiveToChildren(BsjNodeVisitor visitor)
     {
         super.receiveToChildren(visitor);
-        if (this.importNode.getNodeValue() != null)
+        if (this.getUnionForImportNode().getNodeValue() != null)
         {
-            this.importNode.getNodeValue().receive(visitor);
+            this.getUnionForImportNode().getNodeValue().receive(visitor);
         }
         Iterator<? extends Node> extras = getHiddenVisitorChildren();
         if (extras != null)
@@ -182,9 +195,9 @@ public class MetaprogramImportNodeImpl extends NodeImpl implements MetaprogramIm
     protected void receiveTypedToChildren(BsjTypedNodeVisitor visitor)
     {
         super.receiveTypedToChildren(visitor);
-        if (this.importNode.getNodeValue() != null)
+        if (this.getUnionForImportNode().getNodeValue() != null)
         {
-            this.importNode.getNodeValue().receiveTyped(visitor);
+            this.getUnionForImportNode().getNodeValue().receiveTyped(visitor);
         }
         Iterator<? extends Node> extras = getHiddenVisitorChildren();
         if (extras != null)
@@ -241,6 +254,8 @@ public class MetaprogramImportNodeImpl extends NodeImpl implements MetaprogramIm
     {
         StringBuilder sb = new StringBuilder();
         sb.append(this.getClass().getSimpleName());
+        sb.append('#');
+        sb.append(this.getUid());
         sb.append('[');
         sb.append("importNode=");
         sb.append(this.getUnionForImportNode().getNodeValue() == null? "null" : this.getUnionForImportNode().getNodeValue().getClass().getSimpleName());

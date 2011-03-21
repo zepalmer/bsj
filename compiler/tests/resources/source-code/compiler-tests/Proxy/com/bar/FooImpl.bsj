@@ -1,0 +1,61 @@
+package com.bar;
+
+public class FooImpl implements Foo{
+	
+	
+	public void getFoo1(){
+		System.out.println("ingetFoo7");
+	}
+	public void getFoo2(){
+		System.out.println("ingetFoo7");
+	}
+	public void getFoo3(){
+		System.out.println("ingetFoo7");
+	}
+	public void getFoo4(){
+		System.out.println("ingetFoo7");
+	}
+	public void getFoo5(){
+		System.out.println("ingetFoo7");
+	}
+	public void getFoo6(){
+		System.out.println("ingetFoo7");
+	}
+	public void getFoo8(){
+		System.out.println("ingetFoo7");
+	}
+	public void getFoo9(){
+		System.out.println("ingetFoo7");
+	}
+	public void getFoo10(){
+		System.out.println("ingetFoo7");
+	}
+	public void getFoo11(){
+		System.out.println("ingetFoo7");
+	}
+	public void getFoo12(){
+		System.out.println("ingetFoo7");
+	}
+	public void getFoo13(){
+		System.out.println("ingetFoo7");
+	}
+	public void getFoo14(){
+		System.out.println("ingetFoo7");
+	}
+	public void getFoo15(){
+		System.out.println("ingetFoo7");
+	}
+	public void getFoo16(){
+		System.out.println("ingetFoo7");
+	}
+	public void getFoo17(){
+		System.out.println("ingetFoo7");
+	}
+	public void getFoo18(){
+		System.out.println("ingetFoo7");
+	}
+
+	public void getFoo7(){
+		System.out.println("ingetFoo7");
+	}
+}

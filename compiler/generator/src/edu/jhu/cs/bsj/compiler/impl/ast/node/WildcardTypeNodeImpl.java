@@ -1,10 +1,10 @@
 package edu.jhu.cs.bsj.compiler.impl.ast.node;
 
 import java.util.Arrays;
-import java.util.EnumMap;
+import java.util.EnumSet;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
+import java.util.Set;
 
 import javax.annotation.Generated;
 
@@ -19,9 +19,11 @@ import edu.jhu.cs.bsj.compiler.ast.node.Node;
 import edu.jhu.cs.bsj.compiler.ast.node.ReferenceTypeNode;
 import edu.jhu.cs.bsj.compiler.ast.node.WildcardTypeNode;
 import edu.jhu.cs.bsj.compiler.impl.ast.BsjNodeManager;
+import edu.jhu.cs.bsj.compiler.impl.ast.BsjNodeProxyFactory;
 import edu.jhu.cs.bsj.compiler.impl.ast.NormalNodeUnion;
-import edu.jhu.cs.bsj.compiler.impl.ast.attribute.AttributeName;
-import edu.jhu.cs.bsj.compiler.impl.ast.attribute.ReadWriteAttribute;
+import edu.jhu.cs.bsj.compiler.impl.ast.delta.property.WildcardTypeNodeSetBoundPropertyEditScriptElementImpl;
+import edu.jhu.cs.bsj.compiler.impl.ast.delta.property.WildcardTypeNodeSetUpperBoundPropertyEditScriptElementImpl;
+import edu.jhu.cs.bsj.compiler.impl.ast.properties.WildcardTypeNodeProperties;
 
 @Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
 public class WildcardTypeNodeImpl extends NodeImpl implements WildcardTypeNode
@@ -32,24 +34,11 @@ public class WildcardTypeNodeImpl extends NodeImpl implements WildcardTypeNode
     /** Whether or not the wildcard's bound is an upper (<tt>extends</tt>) bound. */
     private boolean upperBound;
     
-    private Map<LocalAttribute,ReadWriteAttribute> localAttributes = new EnumMap<LocalAttribute,ReadWriteAttribute>(LocalAttribute.class);
-    private ReadWriteAttribute getAttribute(LocalAttribute attributeName)
-    {
-        ReadWriteAttribute attribute = localAttributes.get(attributeName);
-        if (attribute == null)
-        {
-            attribute = new ReadWriteAttribute(WildcardTypeNodeImpl.this, attributeName);
-            localAttributes.put(attributeName, attribute);
-        }
-        return attribute;
-    }
-    private static enum LocalAttribute implements AttributeName
-    {
-        /** Attribute identifier for the bound property. */
-        BOUND,
-        /** Attribute identifier for the upperBound property. */
-        UPPER_BOUND,
-    }
+    /**
+     * A set of those properties which have been populated from the backing node.
+     * This field is <code>null</code> if <tt>backingNode</tt> is <code>null</code>.
+     */
+    private Set<WildcardTypeNodeProperties> populatedProperties;
     
     /** General constructor. */
     public WildcardTypeNodeImpl(
@@ -61,8 +50,64 @@ public class WildcardTypeNodeImpl extends NodeImpl implements WildcardTypeNode
             boolean binary)
     {
         super(startLocation, stopLocation, manager, binary);
-        setUnionForBound(bound, false);
-        this.upperBound = upperBound;
+        this.populatedProperties = null;
+        doSetBound(bound);
+        doSetUpperBound(upperBound);
+    }
+    
+    /** Proxy constructor. */
+    public WildcardTypeNodeImpl(BsjNodeManager manager, BsjNodeProxyFactory proxyFactory, WildcardTypeNode backingNode)
+    {
+        super(manager, proxyFactory, backingNode);
+        this.populatedProperties = EnumSet.noneOf(WildcardTypeNodeProperties.class);
+    }
+    
+    /** Retrieves this node's backing node (if one exists). */
+    protected WildcardTypeNode getBackingNode()
+    {
+        return (WildcardTypeNode)super.getBackingNode();
+    }
+    
+    /**
+     * Ensures that the bound value has been populated from proxy.
+     * If this node is not backed by a proxy or if the value has already been
+     * populated, this method does nothing.
+     */
+    private void checkBoundWrapped()
+    {
+        if (this.populatedProperties == null || this.populatedProperties.contains(
+                WildcardTypeNodeProperties.BOUND))
+            return;
+        this.populatedProperties.add(WildcardTypeNodeProperties.BOUND);
+        NodeUnion<? extends ReferenceTypeNode> union = this.getBackingNode().getUnionForBound();
+        switch (union.getType())
+        {
+            case NORMAL:
+                union = this.getProxyFactory().makeNormalNodeUnion(
+                        this.getProxyFactory().makeReferenceTypeNode(union.getNormalNode()));
+                break;
+            case SPLICE:
+                union = this.getProxyFactory().makeSpliceNodeUnion(
+                        this.getProxyFactory().makeSpliceNode(union.getSpliceNode()));
+                break;
+            default:
+                throw new IllegalStateException("Unrecognized union type: " + union.getType());
+        }
+        this.bound = union;
+    }
+    
+    /**
+     * Ensures that the upperBound value has been populated from proxy.
+     * If this node is not backed by a proxy or if the value has already been
+     * populated, this method does nothing.
+     */
+    private void checkUpperBoundWrapped()
+    {
+        if (this.populatedProperties == null || this.populatedProperties.contains(
+                WildcardTypeNodeProperties.UPPER_BOUND))
+            return;
+        this.populatedProperties.add(WildcardTypeNodeProperties.UPPER_BOUND);
+        this.upperBound = this.getBackingNode().getUpperBound();
     }
     
     /**
@@ -72,7 +117,7 @@ public class WildcardTypeNodeImpl extends NodeImpl implements WildcardTypeNode
      */
     public ReferenceTypeNode getBound()
     {
-        getAttribute(LocalAttribute.BOUND).recordAccess(ReadWriteAttribute.AccessType.READ);
+        checkBoundWrapped();
         if (this.bound == null)
         {
             return null;
@@ -88,7 +133,7 @@ public class WildcardTypeNodeImpl extends NodeImpl implements WildcardTypeNode
      */
     public NodeUnion<? extends ReferenceTypeNode> getUnionForBound()
     {
-        getAttribute(LocalAttribute.BOUND).recordAccess(ReadWriteAttribute.AccessType.READ);
+        checkBoundWrapped();
         if (this.bound == null)
         {
             this.bound = new NormalNodeUnion<ReferenceTypeNode>(null);
@@ -102,24 +147,8 @@ public class WildcardTypeNodeImpl extends NodeImpl implements WildcardTypeNode
      */
     public void setBound(ReferenceTypeNode bound)
     {
-            setBound(bound, true);
-            getManager().notifyChange(this);
-    }
-    
-    private void setBound(ReferenceTypeNode bound, boolean checkPermissions)
-    {
-        if (checkPermissions)
-        {
-            getManager().assertMutatable(this);
-            getAttribute(LocalAttribute.BOUND).recordAccess(ReadWriteAttribute.AccessType.WRITE);
-        }
-        
-        if (this.bound != null)
-        {
-            setAsChild(this.bound.getNodeValue(), false);
-        }
-        this.bound = new NormalNodeUnion<ReferenceTypeNode>(bound);
-        setAsChild(bound, true);
+        checkBoundWrapped();
+        this.setUnionForBound(new NormalNodeUnion<ReferenceTypeNode>(bound));
     }
     
     /**
@@ -128,18 +157,15 @@ public class WildcardTypeNodeImpl extends NodeImpl implements WildcardTypeNode
      */
     public void setUnionForBound(NodeUnion<? extends ReferenceTypeNode> bound)
     {
-            setUnionForBound(bound, true);
-            getManager().notifyChange(this);
+        checkBoundWrapped();
+        this.getManager().assertMutatable(this);
+        this.doSetBound(bound);
+        if (this.getManager().isRecordingEdits())
+            super.recordEdit(new WildcardTypeNodeSetBoundPropertyEditScriptElementImpl(this.getManager().getCurrentMetaprogramId(), this.getUid(), bound.getNodeValue() == null ? null : bound.getNodeValue().getUid()));
     }
     
-    private void setUnionForBound(NodeUnion<? extends ReferenceTypeNode> bound, boolean checkPermissions)
+    private void doSetBound(NodeUnion<? extends ReferenceTypeNode> bound)
     {
-        if (checkPermissions)
-        {
-            getManager().assertMutatable(this);
-            getAttribute(LocalAttribute.BOUND).recordAccess(ReadWriteAttribute.AccessType.WRITE);
-        }
-        
         if (bound == null)
         {
             bound = new NormalNodeUnion<ReferenceTypeNode>(null);
@@ -158,7 +184,7 @@ public class WildcardTypeNodeImpl extends NodeImpl implements WildcardTypeNode
      */
     public boolean getUpperBound()
     {
-        getAttribute(LocalAttribute.UPPER_BOUND).recordAccess(ReadWriteAttribute.AccessType.READ);
+        checkUpperBoundWrapped();
         return this.upperBound;
     }
     
@@ -168,18 +194,15 @@ public class WildcardTypeNodeImpl extends NodeImpl implements WildcardTypeNode
      */
     public void setUpperBound(boolean upperBound)
     {
-            setUpperBound(upperBound, true);
-            getManager().notifyChange(this);
+        checkUpperBoundWrapped();
+        this.getManager().assertMutatable(this);
+        this.doSetUpperBound(upperBound);
+        if (this.getManager().isRecordingEdits())
+            super.recordEdit(new WildcardTypeNodeSetUpperBoundPropertyEditScriptElementImpl(this.getManager().getCurrentMetaprogramId(), this.getUid(), upperBound));
     }
     
-    private void setUpperBound(boolean upperBound, boolean checkPermissions)
+    private void doSetUpperBound(boolean upperBound)
     {
-        if (checkPermissions)
-        {
-            getManager().assertMutatable(this);
-            getAttribute(LocalAttribute.UPPER_BOUND).recordAccess(ReadWriteAttribute.AccessType.WRITE);
-        }
-        
         this.upperBound = upperBound;
     }
     
@@ -194,9 +217,9 @@ public class WildcardTypeNodeImpl extends NodeImpl implements WildcardTypeNode
     protected void receiveToChildren(BsjNodeVisitor visitor)
     {
         super.receiveToChildren(visitor);
-        if (this.bound.getNodeValue() != null)
+        if (this.getUnionForBound().getNodeValue() != null)
         {
-            this.bound.getNodeValue().receive(visitor);
+            this.getUnionForBound().getNodeValue().receive(visitor);
         }
         Iterator<? extends Node> extras = getHiddenVisitorChildren();
         if (extras != null)
@@ -219,9 +242,9 @@ public class WildcardTypeNodeImpl extends NodeImpl implements WildcardTypeNode
     protected void receiveTypedToChildren(BsjTypedNodeVisitor visitor)
     {
         super.receiveTypedToChildren(visitor);
-        if (this.bound.getNodeValue() != null)
+        if (this.getUnionForBound().getNodeValue() != null)
         {
-            this.bound.getNodeValue().receiveTyped(visitor);
+            this.getUnionForBound().getNodeValue().receiveTyped(visitor);
         }
         Iterator<? extends Node> extras = getHiddenVisitorChildren();
         if (extras != null)
@@ -281,6 +304,8 @@ public class WildcardTypeNodeImpl extends NodeImpl implements WildcardTypeNode
     {
         StringBuilder sb = new StringBuilder();
         sb.append(this.getClass().getSimpleName());
+        sb.append('#');
+        sb.append(this.getUid());
         sb.append('[');
         sb.append("bound=");
         sb.append(this.getUnionForBound().getNodeValue() == null? "null" : this.getUnionForBound().getNodeValue().getClass().getSimpleName());

@@ -17,6 +17,7 @@ import edu.jhu.cs.bsj.compiler.ast.node.Node;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaAnnotationValueListNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaAnnotationValueNode;
 import edu.jhu.cs.bsj.compiler.impl.ast.BsjNodeManager;
+import edu.jhu.cs.bsj.compiler.impl.ast.BsjNodeProxyFactory;
 import edu.jhu.cs.bsj.compiler.impl.ast.node.list.ListNodeImpl;
 
 @Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
@@ -31,6 +32,18 @@ public class MetaAnnotationValueListNodeImpl extends ListNodeImpl<MetaAnnotation
             boolean binary)
     {
         super(children, startLocation, stopLocation, manager, binary);
+    }
+    
+    /** Proxy constructor. */
+    public MetaAnnotationValueListNodeImpl(BsjNodeManager manager, BsjNodeProxyFactory proxyFactory, MetaAnnotationValueListNode backingNode)
+    {
+        super(manager, proxyFactory, backingNode);
+    }
+    
+    /** Retrieves this node's backing node (if one exists). */
+    protected MetaAnnotationValueListNode getBackingNode()
+    {
+        return (MetaAnnotationValueListNode)super.getBackingNode();
     }
     
     /**
@@ -137,6 +150,8 @@ public class MetaAnnotationValueListNodeImpl extends ListNodeImpl<MetaAnnotation
     {
         StringBuilder sb = new StringBuilder();
         sb.append(this.getClass().getSimpleName());
+        sb.append('#');
+        sb.append(this.getUid());
         sb.append('[');
         sb.append("children=");
         sb.append(this.getUnionForChildren() == null? "null" : this.getUnionForChildren().getClass().getSimpleName());
@@ -228,6 +243,14 @@ public class MetaAnnotationValueListNodeImpl extends ListNodeImpl<MetaAnnotation
     public Class<MetaAnnotationValueNode> getElementType()
     {
         return MetaAnnotationValueNode.class;
+    }
+    
+    /**
+     * Wraps an element of this list's type.
+     */
+    protected MetaAnnotationValueNode wrapElement(MetaAnnotationValueNode element)
+    {
+        return getProxyFactory().makeMetaAnnotationValueNode(element);
     }
     
 }

@@ -6,6 +6,7 @@ import java.util.Set;
 import edu.jhu.cs.bsj.compiler.ast.BsjNodeFactory;
 import edu.jhu.cs.bsj.compiler.ast.node.CompilationUnitNode;
 import edu.jhu.cs.bsj.compiler.ast.node.PackageNode;
+import edu.jhu.cs.bsj.compiler.impl.utils.BijectiveMap;
 import edu.jhu.cs.bsj.compiler.impl.utils.StringUtilities;
 import edu.jhu.cs.bsj.compiler.tool.BsjToolkit;
 import edu.jhu.cs.bsj.compiler.tool.filemanager.BsjFileObject;
@@ -41,27 +42,11 @@ public class PackageNodeManager
 	}
 
 	public void fireCompilationUnitAdded(PackageNode packageNode, CompilationUnitNode compilationUnitNode,
-			boolean purelyInjected)
+			BijectiveMap<Long,Long> canonicalLookupMap)
 	{
 		for (PackageNodeListener listener : this.listeners)
 		{
-			listener.compilationUnitAdded(packageNode, compilationUnitNode, purelyInjected);
-		}
-	}
-
-	public void fireSubpackageAdded(PackageNode packageNode, PackageNode subPackageNode)
-	{
-		for (PackageNodeListener listener : this.listeners)
-		{
-			listener.subpackageAdded(packageNode, subPackageNode);
-		}
-	}
-
-	public void fireRegisterAsInjector(CompilationUnitNode compilationUnitNode)
-	{
-		for (PackageNodeListener listener : this.listeners)
-		{
-			listener.compilationUnitInjected(compilationUnitNode);
+			listener.compilationUnitLoaded(packageNode, compilationUnitNode, canonicalLookupMap);
 		}
 	}
 

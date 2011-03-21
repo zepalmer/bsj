@@ -1,0 +1,47 @@
+public class MetaprogramUseDependence
+{
+    
+}
+
+[:
+    #target a;
+    BsjNodeFactory factory = context.getFactory();
+    ClassDeclarationNode cdn = (ClassDeclarationNode)context.getAnchor().
+            <TypeDeclarationListNode>getNearestAncestorOfType(TypeDeclarationListNode.class).get(0);
+    ClassMemberListNode members = cdn.getBody().getMembers();
+    // members.add(<:public int foo() { int x = 0; return x; } :>);
+    MethodDeclarationNode fooDecl =
+        factory.makeMethodDeclarationNode(
+                factory.makeBlockStatementListNode(
+                        factory.makeLocalVariableDeclarationNode(
+                                factory.makePrimitiveTypeNode(PrimitiveType.INT),
+                                factory.makeVariableDeclaratorListNode(
+                                        factory.makeVariableDeclaratorNode(
+                                                factory.makeIdentifierNode("x"),
+                                                factory.makeIntLiteralNode(0)))),
+                        factory.makeReturnNode(
+                                factory.makeVariableAccessNode(
+                                        factory.makeIdentifierNode("x")))),
+                                   factory.makeMethodModifiersNode(AccessModifier.PUBLIC),
+                                   factory.makeIdentifierNode("foo"),
+                                   factory.makeVariableListNode(),
+                                   factory.makePrimitiveTypeNode(PrimitiveType.INT),
+                                   null);
+    members.add(fooDecl);
+:]
+
+[:
+    #depends a;
+    BsjNodeFactory factory = context.getFactory();
+    ClassDeclarationNode cdn = (ClassDeclarationNode)context.getAnchor().
+            <TypeDeclarationListNode>getNearestAncestorOfType(TypeDeclarationListNode.class).get(0);
+    ClassMemberListNode members = cdn.getBody().getMembers();
+    BlockStatementListNode body = ((MethodDeclarationNode)members.get(0)).getBody();
+    // body.add(1, <:x++;:>);
+    BlockStatementNode incNode =
+        factory.makeExpressionStatementNode(
+                factory.makeUnaryStatementExpressionNode(
+                        factory.makeVariableAccessNode(
+                                factory.makeIdentifierNode("x")), UnaryStatementOperator.POSTFIX_INCREMENT));
+    body.add(1, incNode);
+:]

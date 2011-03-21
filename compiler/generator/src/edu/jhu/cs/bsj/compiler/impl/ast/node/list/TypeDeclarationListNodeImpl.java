@@ -17,6 +17,7 @@ import edu.jhu.cs.bsj.compiler.ast.node.Node;
 import edu.jhu.cs.bsj.compiler.ast.node.TypeDeclarationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.list.TypeDeclarationListNode;
 import edu.jhu.cs.bsj.compiler.impl.ast.BsjNodeManager;
+import edu.jhu.cs.bsj.compiler.impl.ast.BsjNodeProxyFactory;
 
 @Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
 public class TypeDeclarationListNodeImpl extends ListNodeImpl<TypeDeclarationNode> implements TypeDeclarationListNode
@@ -30,6 +31,18 @@ public class TypeDeclarationListNodeImpl extends ListNodeImpl<TypeDeclarationNod
             boolean binary)
     {
         super(children, startLocation, stopLocation, manager, binary);
+    }
+    
+    /** Proxy constructor. */
+    public TypeDeclarationListNodeImpl(BsjNodeManager manager, BsjNodeProxyFactory proxyFactory, TypeDeclarationListNode backingNode)
+    {
+        super(manager, proxyFactory, backingNode);
+    }
+    
+    /** Retrieves this node's backing node (if one exists). */
+    protected TypeDeclarationListNode getBackingNode()
+    {
+        return (TypeDeclarationListNode)super.getBackingNode();
     }
     
     /**
@@ -136,6 +149,8 @@ public class TypeDeclarationListNodeImpl extends ListNodeImpl<TypeDeclarationNod
     {
         StringBuilder sb = new StringBuilder();
         sb.append(this.getClass().getSimpleName());
+        sb.append('#');
+        sb.append(this.getUid());
         sb.append('[');
         sb.append("children=");
         sb.append(this.getUnionForChildren() == null? "null" : this.getUnionForChildren().getClass().getSimpleName());
@@ -227,6 +242,14 @@ public class TypeDeclarationListNodeImpl extends ListNodeImpl<TypeDeclarationNod
     public Class<TypeDeclarationNode> getElementType()
     {
         return TypeDeclarationNode.class;
+    }
+    
+    /**
+     * Wraps an element of this list's type.
+     */
+    protected TypeDeclarationNode wrapElement(TypeDeclarationNode element)
+    {
+        return getProxyFactory().makeTypeDeclarationNode(element);
     }
     
 }

@@ -11,18 +11,19 @@ import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramAnchorNode;
 import edu.jhu.cs.bsj.compiler.impl.operations.EnclosingNameNodeOperation;
 import edu.jhu.cs.bsj.compiler.impl.tool.compiler.MetacompilationContext;
 import edu.jhu.cs.bsj.compiler.impl.tool.compiler.MetaprogramProfile;
+import edu.jhu.cs.bsj.compiler.impl.tool.compiler.task.data.InjectionInfo;
 
 public abstract class AbstractMetaprogramProfileBuildingTask<A extends MetaprogramAnchorNode<B>, B extends Node> extends
 		AbstractBsjCompilerTask
 {
 	/** A field containing the factory which should be used as this task is executing. */
-	protected BsjNodeFactory factory;
+	private BsjNodeFactory factory;
 	/** A field containing the metacompilation context which should be used as this task is executing. */
-	protected MetacompilationContext metacompilationContext;
+	private MetacompilationContext metacompilationContext;
 	/** A field containing the anchor of the metaprogram to extract. */
-	protected A anchor;
+	private A anchor;
 	/** A field containing the injection information for this metaprogram or <code>null</code> if it was not injected. */
-	protected InjectionInfo injectionInfo;
+	private InjectionInfo injectionInfo;
 
 	public AbstractMetaprogramProfileBuildingTask(TaskPriority priority, A anchor, InjectionInfo injectionInfo)
 	{
@@ -94,4 +95,24 @@ public abstract class AbstractMetaprogramProfileBuildingTask<A extends Metaprogr
 	 * @throws IOException If an I/O error occurs.
 	 */
 	protected abstract MetaprogramProfile<A,B> buildProfile(MetacompilationContext context) throws IOException;
+
+    protected BsjNodeFactory getFactory()
+    {
+        return factory;
+    }
+
+    protected MetacompilationContext getMetacompilationContext()
+    {
+        return metacompilationContext;
+    }
+
+    protected A getAnchor()
+    {
+        return anchor;
+    }
+
+    protected InjectionInfo getInjectionInfo()
+    {
+        return injectionInfo;
+    }
 }

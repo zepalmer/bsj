@@ -1,10 +1,10 @@
 package edu.jhu.cs.bsj.compiler.impl.ast.node;
 
 import java.util.Arrays;
-import java.util.EnumMap;
+import java.util.EnumSet;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
+import java.util.Set;
 
 import javax.annotation.Generated;
 
@@ -20,9 +20,11 @@ import edu.jhu.cs.bsj.compiler.ast.node.Node;
 import edu.jhu.cs.bsj.compiler.ast.node.VariableNode;
 import edu.jhu.cs.bsj.compiler.ast.node.list.BlockStatementListNode;
 import edu.jhu.cs.bsj.compiler.impl.ast.BsjNodeManager;
+import edu.jhu.cs.bsj.compiler.impl.ast.BsjNodeProxyFactory;
 import edu.jhu.cs.bsj.compiler.impl.ast.NormalNodeUnion;
-import edu.jhu.cs.bsj.compiler.impl.ast.attribute.AttributeName;
-import edu.jhu.cs.bsj.compiler.impl.ast.attribute.ReadWriteAttribute;
+import edu.jhu.cs.bsj.compiler.impl.ast.delta.property.CatchNodeSetBodyPropertyEditScriptElementImpl;
+import edu.jhu.cs.bsj.compiler.impl.ast.delta.property.CatchNodeSetParameterPropertyEditScriptElementImpl;
+import edu.jhu.cs.bsj.compiler.impl.ast.properties.CatchNodeProperties;
 
 @Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
 public class CatchNodeImpl extends NodeImpl implements CatchNode
@@ -33,24 +35,11 @@ public class CatchNodeImpl extends NodeImpl implements CatchNode
     /** This catch block's exception variable. */
     private NodeUnion<? extends VariableNode> parameter;
     
-    private Map<LocalAttribute,ReadWriteAttribute> localAttributes = new EnumMap<LocalAttribute,ReadWriteAttribute>(LocalAttribute.class);
-    private ReadWriteAttribute getAttribute(LocalAttribute attributeName)
-    {
-        ReadWriteAttribute attribute = localAttributes.get(attributeName);
-        if (attribute == null)
-        {
-            attribute = new ReadWriteAttribute(CatchNodeImpl.this, attributeName);
-            localAttributes.put(attributeName, attribute);
-        }
-        return attribute;
-    }
-    private static enum LocalAttribute implements AttributeName
-    {
-        /** Attribute identifier for the body property. */
-        BODY,
-        /** Attribute identifier for the parameter property. */
-        PARAMETER,
-    }
+    /**
+     * A set of those properties which have been populated from the backing node.
+     * This field is <code>null</code> if <tt>backingNode</tt> is <code>null</code>.
+     */
+    private Set<CatchNodeProperties> populatedProperties;
     
     /** General constructor. */
     public CatchNodeImpl(
@@ -62,8 +51,78 @@ public class CatchNodeImpl extends NodeImpl implements CatchNode
             boolean binary)
     {
         super(startLocation, stopLocation, manager, binary);
-        setUnionForBody(body, false);
-        setUnionForParameter(parameter, false);
+        this.populatedProperties = null;
+        doSetBody(body);
+        doSetParameter(parameter);
+    }
+    
+    /** Proxy constructor. */
+    public CatchNodeImpl(BsjNodeManager manager, BsjNodeProxyFactory proxyFactory, CatchNode backingNode)
+    {
+        super(manager, proxyFactory, backingNode);
+        this.populatedProperties = EnumSet.noneOf(CatchNodeProperties.class);
+    }
+    
+    /** Retrieves this node's backing node (if one exists). */
+    protected CatchNode getBackingNode()
+    {
+        return (CatchNode)super.getBackingNode();
+    }
+    
+    /**
+     * Ensures that the body value has been populated from proxy.
+     * If this node is not backed by a proxy or if the value has already been
+     * populated, this method does nothing.
+     */
+    private void checkBodyWrapped()
+    {
+        if (this.populatedProperties == null || this.populatedProperties.contains(
+                CatchNodeProperties.BODY))
+            return;
+        this.populatedProperties.add(CatchNodeProperties.BODY);
+        NodeUnion<? extends BlockStatementListNode> union = this.getBackingNode().getUnionForBody();
+        switch (union.getType())
+        {
+            case NORMAL:
+                union = this.getProxyFactory().makeNormalNodeUnion(
+                        this.getProxyFactory().makeBlockStatementListNode(union.getNormalNode()));
+                break;
+            case SPLICE:
+                union = this.getProxyFactory().makeSpliceNodeUnion(
+                        this.getProxyFactory().makeSpliceNode(union.getSpliceNode()));
+                break;
+            default:
+                throw new IllegalStateException("Unrecognized union type: " + union.getType());
+        }
+        this.body = union;
+    }
+    
+    /**
+     * Ensures that the parameter value has been populated from proxy.
+     * If this node is not backed by a proxy or if the value has already been
+     * populated, this method does nothing.
+     */
+    private void checkParameterWrapped()
+    {
+        if (this.populatedProperties == null || this.populatedProperties.contains(
+                CatchNodeProperties.PARAMETER))
+            return;
+        this.populatedProperties.add(CatchNodeProperties.PARAMETER);
+        NodeUnion<? extends VariableNode> union = this.getBackingNode().getUnionForParameter();
+        switch (union.getType())
+        {
+            case NORMAL:
+                union = this.getProxyFactory().makeNormalNodeUnion(
+                        this.getProxyFactory().makeVariableNode(union.getNormalNode()));
+                break;
+            case SPLICE:
+                union = this.getProxyFactory().makeSpliceNodeUnion(
+                        this.getProxyFactory().makeSpliceNode(union.getSpliceNode()));
+                break;
+            default:
+                throw new IllegalStateException("Unrecognized union type: " + union.getType());
+        }
+        this.parameter = union;
     }
     
     /**
@@ -73,7 +132,7 @@ public class CatchNodeImpl extends NodeImpl implements CatchNode
      */
     public BlockStatementListNode getBody()
     {
-        getAttribute(LocalAttribute.BODY).recordAccess(ReadWriteAttribute.AccessType.READ);
+        checkBodyWrapped();
         if (this.body == null)
         {
             return null;
@@ -89,7 +148,7 @@ public class CatchNodeImpl extends NodeImpl implements CatchNode
      */
     public NodeUnion<? extends BlockStatementListNode> getUnionForBody()
     {
-        getAttribute(LocalAttribute.BODY).recordAccess(ReadWriteAttribute.AccessType.READ);
+        checkBodyWrapped();
         if (this.body == null)
         {
             this.body = new NormalNodeUnion<BlockStatementListNode>(null);
@@ -103,24 +162,8 @@ public class CatchNodeImpl extends NodeImpl implements CatchNode
      */
     public void setBody(BlockStatementListNode body)
     {
-            setBody(body, true);
-            getManager().notifyChange(this);
-    }
-    
-    private void setBody(BlockStatementListNode body, boolean checkPermissions)
-    {
-        if (checkPermissions)
-        {
-            getManager().assertMutatable(this);
-            getAttribute(LocalAttribute.BODY).recordAccess(ReadWriteAttribute.AccessType.WRITE);
-        }
-        
-        if (this.body != null)
-        {
-            setAsChild(this.body.getNodeValue(), false);
-        }
-        this.body = new NormalNodeUnion<BlockStatementListNode>(body);
-        setAsChild(body, true);
+        checkBodyWrapped();
+        this.setUnionForBody(new NormalNodeUnion<BlockStatementListNode>(body));
     }
     
     /**
@@ -129,18 +172,15 @@ public class CatchNodeImpl extends NodeImpl implements CatchNode
      */
     public void setUnionForBody(NodeUnion<? extends BlockStatementListNode> body)
     {
-            setUnionForBody(body, true);
-            getManager().notifyChange(this);
+        checkBodyWrapped();
+        this.getManager().assertMutatable(this);
+        this.doSetBody(body);
+        if (this.getManager().isRecordingEdits())
+            super.recordEdit(new CatchNodeSetBodyPropertyEditScriptElementImpl(this.getManager().getCurrentMetaprogramId(), this.getUid(), body.getNodeValue() == null ? null : body.getNodeValue().getUid()));
     }
     
-    private void setUnionForBody(NodeUnion<? extends BlockStatementListNode> body, boolean checkPermissions)
+    private void doSetBody(NodeUnion<? extends BlockStatementListNode> body)
     {
-        if (checkPermissions)
-        {
-            getManager().assertMutatable(this);
-            getAttribute(LocalAttribute.BODY).recordAccess(ReadWriteAttribute.AccessType.WRITE);
-        }
-        
         if (body == null)
         {
             body = new NormalNodeUnion<BlockStatementListNode>(null);
@@ -160,7 +200,7 @@ public class CatchNodeImpl extends NodeImpl implements CatchNode
      */
     public VariableNode getParameter()
     {
-        getAttribute(LocalAttribute.PARAMETER).recordAccess(ReadWriteAttribute.AccessType.READ);
+        checkParameterWrapped();
         if (this.parameter == null)
         {
             return null;
@@ -176,7 +216,7 @@ public class CatchNodeImpl extends NodeImpl implements CatchNode
      */
     public NodeUnion<? extends VariableNode> getUnionForParameter()
     {
-        getAttribute(LocalAttribute.PARAMETER).recordAccess(ReadWriteAttribute.AccessType.READ);
+        checkParameterWrapped();
         if (this.parameter == null)
         {
             this.parameter = new NormalNodeUnion<VariableNode>(null);
@@ -190,24 +230,8 @@ public class CatchNodeImpl extends NodeImpl implements CatchNode
      */
     public void setParameter(VariableNode parameter)
     {
-            setParameter(parameter, true);
-            getManager().notifyChange(this);
-    }
-    
-    private void setParameter(VariableNode parameter, boolean checkPermissions)
-    {
-        if (checkPermissions)
-        {
-            getManager().assertMutatable(this);
-            getAttribute(LocalAttribute.PARAMETER).recordAccess(ReadWriteAttribute.AccessType.WRITE);
-        }
-        
-        if (this.parameter != null)
-        {
-            setAsChild(this.parameter.getNodeValue(), false);
-        }
-        this.parameter = new NormalNodeUnion<VariableNode>(parameter);
-        setAsChild(parameter, true);
+        checkParameterWrapped();
+        this.setUnionForParameter(new NormalNodeUnion<VariableNode>(parameter));
     }
     
     /**
@@ -216,18 +240,15 @@ public class CatchNodeImpl extends NodeImpl implements CatchNode
      */
     public void setUnionForParameter(NodeUnion<? extends VariableNode> parameter)
     {
-            setUnionForParameter(parameter, true);
-            getManager().notifyChange(this);
+        checkParameterWrapped();
+        this.getManager().assertMutatable(this);
+        this.doSetParameter(parameter);
+        if (this.getManager().isRecordingEdits())
+            super.recordEdit(new CatchNodeSetParameterPropertyEditScriptElementImpl(this.getManager().getCurrentMetaprogramId(), this.getUid(), parameter.getNodeValue() == null ? null : parameter.getNodeValue().getUid()));
     }
     
-    private void setUnionForParameter(NodeUnion<? extends VariableNode> parameter, boolean checkPermissions)
+    private void doSetParameter(NodeUnion<? extends VariableNode> parameter)
     {
-        if (checkPermissions)
-        {
-            getManager().assertMutatable(this);
-            getAttribute(LocalAttribute.PARAMETER).recordAccess(ReadWriteAttribute.AccessType.WRITE);
-        }
-        
         if (parameter == null)
         {
             parameter = new NormalNodeUnion<VariableNode>(null);
@@ -251,13 +272,13 @@ public class CatchNodeImpl extends NodeImpl implements CatchNode
     protected void receiveToChildren(BsjNodeVisitor visitor)
     {
         super.receiveToChildren(visitor);
-        if (this.body.getNodeValue() != null)
+        if (this.getUnionForBody().getNodeValue() != null)
         {
-            this.body.getNodeValue().receive(visitor);
+            this.getUnionForBody().getNodeValue().receive(visitor);
         }
-        if (this.parameter.getNodeValue() != null)
+        if (this.getUnionForParameter().getNodeValue() != null)
         {
-            this.parameter.getNodeValue().receive(visitor);
+            this.getUnionForParameter().getNodeValue().receive(visitor);
         }
         Iterator<? extends Node> extras = getHiddenVisitorChildren();
         if (extras != null)
@@ -280,13 +301,13 @@ public class CatchNodeImpl extends NodeImpl implements CatchNode
     protected void receiveTypedToChildren(BsjTypedNodeVisitor visitor)
     {
         super.receiveTypedToChildren(visitor);
-        if (this.body.getNodeValue() != null)
+        if (this.getUnionForBody().getNodeValue() != null)
         {
-            this.body.getNodeValue().receiveTyped(visitor);
+            this.getUnionForBody().getNodeValue().receiveTyped(visitor);
         }
-        if (this.parameter.getNodeValue() != null)
+        if (this.getUnionForParameter().getNodeValue() != null)
         {
-            this.parameter.getNodeValue().receiveTyped(visitor);
+            this.getUnionForParameter().getNodeValue().receiveTyped(visitor);
         }
         Iterator<? extends Node> extras = getHiddenVisitorChildren();
         if (extras != null)
@@ -344,6 +365,8 @@ public class CatchNodeImpl extends NodeImpl implements CatchNode
     {
         StringBuilder sb = new StringBuilder();
         sb.append(this.getClass().getSimpleName());
+        sb.append('#');
+        sb.append(this.getUid());
         sb.append('[');
         sb.append("body=");
         sb.append(this.getUnionForBody().getNodeValue() == null? "null" : this.getUnionForBody().getNodeValue().getClass().getSimpleName());

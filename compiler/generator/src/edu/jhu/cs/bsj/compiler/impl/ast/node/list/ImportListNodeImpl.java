@@ -17,6 +17,7 @@ import edu.jhu.cs.bsj.compiler.ast.node.ImportNode;
 import edu.jhu.cs.bsj.compiler.ast.node.Node;
 import edu.jhu.cs.bsj.compiler.ast.node.list.ImportListNode;
 import edu.jhu.cs.bsj.compiler.impl.ast.BsjNodeManager;
+import edu.jhu.cs.bsj.compiler.impl.ast.BsjNodeProxyFactory;
 
 @Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
 public class ImportListNodeImpl extends ListNodeImpl<ImportNode> implements ImportListNode
@@ -30,6 +31,18 @@ public class ImportListNodeImpl extends ListNodeImpl<ImportNode> implements Impo
             boolean binary)
     {
         super(children, startLocation, stopLocation, manager, binary);
+    }
+    
+    /** Proxy constructor. */
+    public ImportListNodeImpl(BsjNodeManager manager, BsjNodeProxyFactory proxyFactory, ImportListNode backingNode)
+    {
+        super(manager, proxyFactory, backingNode);
+    }
+    
+    /** Retrieves this node's backing node (if one exists). */
+    protected ImportListNode getBackingNode()
+    {
+        return (ImportListNode)super.getBackingNode();
     }
     
     /**
@@ -136,6 +149,8 @@ public class ImportListNodeImpl extends ListNodeImpl<ImportNode> implements Impo
     {
         StringBuilder sb = new StringBuilder();
         sb.append(this.getClass().getSimpleName());
+        sb.append('#');
+        sb.append(this.getUid());
         sb.append('[');
         sb.append("children=");
         sb.append(this.getUnionForChildren() == null? "null" : this.getUnionForChildren().getClass().getSimpleName());
@@ -227,6 +242,14 @@ public class ImportListNodeImpl extends ListNodeImpl<ImportNode> implements Impo
     public Class<ImportNode> getElementType()
     {
         return ImportNode.class;
+    }
+    
+    /**
+     * Wraps an element of this list's type.
+     */
+    protected ImportNode wrapElement(ImportNode element)
+    {
+        return getProxyFactory().makeImportNode(element);
     }
     
 }

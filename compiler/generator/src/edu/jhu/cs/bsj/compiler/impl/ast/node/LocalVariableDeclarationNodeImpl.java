@@ -1,10 +1,10 @@
 package edu.jhu.cs.bsj.compiler.impl.ast.node;
 
 import java.util.Arrays;
-import java.util.EnumMap;
+import java.util.EnumSet;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
+import java.util.Set;
 
 import javax.annotation.Generated;
 
@@ -21,9 +21,12 @@ import edu.jhu.cs.bsj.compiler.ast.node.TypeNode;
 import edu.jhu.cs.bsj.compiler.ast.node.VariableModifiersNode;
 import edu.jhu.cs.bsj.compiler.ast.node.list.VariableDeclaratorListNode;
 import edu.jhu.cs.bsj.compiler.impl.ast.BsjNodeManager;
+import edu.jhu.cs.bsj.compiler.impl.ast.BsjNodeProxyFactory;
 import edu.jhu.cs.bsj.compiler.impl.ast.NormalNodeUnion;
-import edu.jhu.cs.bsj.compiler.impl.ast.attribute.AttributeName;
-import edu.jhu.cs.bsj.compiler.impl.ast.attribute.ReadWriteAttribute;
+import edu.jhu.cs.bsj.compiler.impl.ast.delta.property.LocalVariableDeclarationNodeSetDeclaratorsPropertyEditScriptElementImpl;
+import edu.jhu.cs.bsj.compiler.impl.ast.delta.property.LocalVariableDeclarationNodeSetModifiersPropertyEditScriptElementImpl;
+import edu.jhu.cs.bsj.compiler.impl.ast.delta.property.LocalVariableDeclarationNodeSetTypePropertyEditScriptElementImpl;
+import edu.jhu.cs.bsj.compiler.impl.ast.properties.LocalVariableDeclarationNodeProperties;
 
 @Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
 public class LocalVariableDeclarationNodeImpl extends NodeImpl implements LocalVariableDeclarationNode
@@ -37,26 +40,11 @@ public class LocalVariableDeclarationNodeImpl extends NodeImpl implements LocalV
     /** The variable declarators for this node. */
     private NodeUnion<? extends VariableDeclaratorListNode> declarators;
     
-    private Map<LocalAttribute,ReadWriteAttribute> localAttributes = new EnumMap<LocalAttribute,ReadWriteAttribute>(LocalAttribute.class);
-    private ReadWriteAttribute getAttribute(LocalAttribute attributeName)
-    {
-        ReadWriteAttribute attribute = localAttributes.get(attributeName);
-        if (attribute == null)
-        {
-            attribute = new ReadWriteAttribute(LocalVariableDeclarationNodeImpl.this, attributeName);
-            localAttributes.put(attributeName, attribute);
-        }
-        return attribute;
-    }
-    private static enum LocalAttribute implements AttributeName
-    {
-        /** Attribute identifier for the modifiers property. */
-        MODIFIERS,
-        /** Attribute identifier for the type property. */
-        TYPE,
-        /** Attribute identifier for the declarators property. */
-        DECLARATORS,
-    }
+    /**
+     * A set of those properties which have been populated from the backing node.
+     * This field is <code>null</code> if <tt>backingNode</tt> is <code>null</code>.
+     */
+    private Set<LocalVariableDeclarationNodeProperties> populatedProperties;
     
     /** General constructor. */
     public LocalVariableDeclarationNodeImpl(
@@ -69,9 +57,107 @@ public class LocalVariableDeclarationNodeImpl extends NodeImpl implements LocalV
             boolean binary)
     {
         super(startLocation, stopLocation, manager, binary);
-        setUnionForModifiers(modifiers, false);
-        setUnionForType(type, false);
-        setUnionForDeclarators(declarators, false);
+        this.populatedProperties = null;
+        doSetModifiers(modifiers);
+        doSetType(type);
+        doSetDeclarators(declarators);
+    }
+    
+    /** Proxy constructor. */
+    public LocalVariableDeclarationNodeImpl(BsjNodeManager manager, BsjNodeProxyFactory proxyFactory, LocalVariableDeclarationNode backingNode)
+    {
+        super(manager, proxyFactory, backingNode);
+        this.populatedProperties = EnumSet.noneOf(LocalVariableDeclarationNodeProperties.class);
+    }
+    
+    /** Retrieves this node's backing node (if one exists). */
+    protected LocalVariableDeclarationNode getBackingNode()
+    {
+        return (LocalVariableDeclarationNode)super.getBackingNode();
+    }
+    
+    /**
+     * Ensures that the modifiers value has been populated from proxy.
+     * If this node is not backed by a proxy or if the value has already been
+     * populated, this method does nothing.
+     */
+    private void checkModifiersWrapped()
+    {
+        if (this.populatedProperties == null || this.populatedProperties.contains(
+                LocalVariableDeclarationNodeProperties.MODIFIERS))
+            return;
+        this.populatedProperties.add(LocalVariableDeclarationNodeProperties.MODIFIERS);
+        NodeUnion<? extends VariableModifiersNode> union = this.getBackingNode().getUnionForModifiers();
+        switch (union.getType())
+        {
+            case NORMAL:
+                union = this.getProxyFactory().makeNormalNodeUnion(
+                        this.getProxyFactory().makeVariableModifiersNode(union.getNormalNode()));
+                break;
+            case SPLICE:
+                union = this.getProxyFactory().makeSpliceNodeUnion(
+                        this.getProxyFactory().makeSpliceNode(union.getSpliceNode()));
+                break;
+            default:
+                throw new IllegalStateException("Unrecognized union type: " + union.getType());
+        }
+        this.modifiers = union;
+    }
+    
+    /**
+     * Ensures that the type value has been populated from proxy.
+     * If this node is not backed by a proxy or if the value has already been
+     * populated, this method does nothing.
+     */
+    private void checkTypeWrapped()
+    {
+        if (this.populatedProperties == null || this.populatedProperties.contains(
+                LocalVariableDeclarationNodeProperties.TYPE))
+            return;
+        this.populatedProperties.add(LocalVariableDeclarationNodeProperties.TYPE);
+        NodeUnion<? extends TypeNode> union = this.getBackingNode().getUnionForType();
+        switch (union.getType())
+        {
+            case NORMAL:
+                union = this.getProxyFactory().makeNormalNodeUnion(
+                        this.getProxyFactory().makeTypeNode(union.getNormalNode()));
+                break;
+            case SPLICE:
+                union = this.getProxyFactory().makeSpliceNodeUnion(
+                        this.getProxyFactory().makeSpliceNode(union.getSpliceNode()));
+                break;
+            default:
+                throw new IllegalStateException("Unrecognized union type: " + union.getType());
+        }
+        this.type = union;
+    }
+    
+    /**
+     * Ensures that the declarators value has been populated from proxy.
+     * If this node is not backed by a proxy or if the value has already been
+     * populated, this method does nothing.
+     */
+    private void checkDeclaratorsWrapped()
+    {
+        if (this.populatedProperties == null || this.populatedProperties.contains(
+                LocalVariableDeclarationNodeProperties.DECLARATORS))
+            return;
+        this.populatedProperties.add(LocalVariableDeclarationNodeProperties.DECLARATORS);
+        NodeUnion<? extends VariableDeclaratorListNode> union = this.getBackingNode().getUnionForDeclarators();
+        switch (union.getType())
+        {
+            case NORMAL:
+                union = this.getProxyFactory().makeNormalNodeUnion(
+                        this.getProxyFactory().makeVariableDeclaratorListNode(union.getNormalNode()));
+                break;
+            case SPLICE:
+                union = this.getProxyFactory().makeSpliceNodeUnion(
+                        this.getProxyFactory().makeSpliceNode(union.getSpliceNode()));
+                break;
+            default:
+                throw new IllegalStateException("Unrecognized union type: " + union.getType());
+        }
+        this.declarators = union;
     }
     
     /**
@@ -81,7 +167,7 @@ public class LocalVariableDeclarationNodeImpl extends NodeImpl implements LocalV
      */
     public VariableModifiersNode getModifiers()
     {
-        getAttribute(LocalAttribute.MODIFIERS).recordAccess(ReadWriteAttribute.AccessType.READ);
+        checkModifiersWrapped();
         if (this.modifiers == null)
         {
             return null;
@@ -97,7 +183,7 @@ public class LocalVariableDeclarationNodeImpl extends NodeImpl implements LocalV
      */
     public NodeUnion<? extends VariableModifiersNode> getUnionForModifiers()
     {
-        getAttribute(LocalAttribute.MODIFIERS).recordAccess(ReadWriteAttribute.AccessType.READ);
+        checkModifiersWrapped();
         if (this.modifiers == null)
         {
             this.modifiers = new NormalNodeUnion<VariableModifiersNode>(null);
@@ -111,24 +197,8 @@ public class LocalVariableDeclarationNodeImpl extends NodeImpl implements LocalV
      */
     public void setModifiers(VariableModifiersNode modifiers)
     {
-            setModifiers(modifiers, true);
-            getManager().notifyChange(this);
-    }
-    
-    private void setModifiers(VariableModifiersNode modifiers, boolean checkPermissions)
-    {
-        if (checkPermissions)
-        {
-            getManager().assertMutatable(this);
-            getAttribute(LocalAttribute.MODIFIERS).recordAccess(ReadWriteAttribute.AccessType.WRITE);
-        }
-        
-        if (this.modifiers != null)
-        {
-            setAsChild(this.modifiers.getNodeValue(), false);
-        }
-        this.modifiers = new NormalNodeUnion<VariableModifiersNode>(modifiers);
-        setAsChild(modifiers, true);
+        checkModifiersWrapped();
+        this.setUnionForModifiers(new NormalNodeUnion<VariableModifiersNode>(modifiers));
     }
     
     /**
@@ -137,18 +207,15 @@ public class LocalVariableDeclarationNodeImpl extends NodeImpl implements LocalV
      */
     public void setUnionForModifiers(NodeUnion<? extends VariableModifiersNode> modifiers)
     {
-            setUnionForModifiers(modifiers, true);
-            getManager().notifyChange(this);
+        checkModifiersWrapped();
+        this.getManager().assertMutatable(this);
+        this.doSetModifiers(modifiers);
+        if (this.getManager().isRecordingEdits())
+            super.recordEdit(new LocalVariableDeclarationNodeSetModifiersPropertyEditScriptElementImpl(this.getManager().getCurrentMetaprogramId(), this.getUid(), modifiers.getNodeValue() == null ? null : modifiers.getNodeValue().getUid()));
     }
     
-    private void setUnionForModifiers(NodeUnion<? extends VariableModifiersNode> modifiers, boolean checkPermissions)
+    private void doSetModifiers(NodeUnion<? extends VariableModifiersNode> modifiers)
     {
-        if (checkPermissions)
-        {
-            getManager().assertMutatable(this);
-            getAttribute(LocalAttribute.MODIFIERS).recordAccess(ReadWriteAttribute.AccessType.WRITE);
-        }
-        
         if (modifiers == null)
         {
             modifiers = new NormalNodeUnion<VariableModifiersNode>(null);
@@ -168,7 +235,7 @@ public class LocalVariableDeclarationNodeImpl extends NodeImpl implements LocalV
      */
     public TypeNode getType()
     {
-        getAttribute(LocalAttribute.TYPE).recordAccess(ReadWriteAttribute.AccessType.READ);
+        checkTypeWrapped();
         if (this.type == null)
         {
             return null;
@@ -184,7 +251,7 @@ public class LocalVariableDeclarationNodeImpl extends NodeImpl implements LocalV
      */
     public NodeUnion<? extends TypeNode> getUnionForType()
     {
-        getAttribute(LocalAttribute.TYPE).recordAccess(ReadWriteAttribute.AccessType.READ);
+        checkTypeWrapped();
         if (this.type == null)
         {
             this.type = new NormalNodeUnion<TypeNode>(null);
@@ -198,24 +265,8 @@ public class LocalVariableDeclarationNodeImpl extends NodeImpl implements LocalV
      */
     public void setType(TypeNode type)
     {
-            setType(type, true);
-            getManager().notifyChange(this);
-    }
-    
-    private void setType(TypeNode type, boolean checkPermissions)
-    {
-        if (checkPermissions)
-        {
-            getManager().assertMutatable(this);
-            getAttribute(LocalAttribute.TYPE).recordAccess(ReadWriteAttribute.AccessType.WRITE);
-        }
-        
-        if (this.type != null)
-        {
-            setAsChild(this.type.getNodeValue(), false);
-        }
-        this.type = new NormalNodeUnion<TypeNode>(type);
-        setAsChild(type, true);
+        checkTypeWrapped();
+        this.setUnionForType(new NormalNodeUnion<TypeNode>(type));
     }
     
     /**
@@ -224,18 +275,15 @@ public class LocalVariableDeclarationNodeImpl extends NodeImpl implements LocalV
      */
     public void setUnionForType(NodeUnion<? extends TypeNode> type)
     {
-            setUnionForType(type, true);
-            getManager().notifyChange(this);
+        checkTypeWrapped();
+        this.getManager().assertMutatable(this);
+        this.doSetType(type);
+        if (this.getManager().isRecordingEdits())
+            super.recordEdit(new LocalVariableDeclarationNodeSetTypePropertyEditScriptElementImpl(this.getManager().getCurrentMetaprogramId(), this.getUid(), type.getNodeValue() == null ? null : type.getNodeValue().getUid()));
     }
     
-    private void setUnionForType(NodeUnion<? extends TypeNode> type, boolean checkPermissions)
+    private void doSetType(NodeUnion<? extends TypeNode> type)
     {
-        if (checkPermissions)
-        {
-            getManager().assertMutatable(this);
-            getAttribute(LocalAttribute.TYPE).recordAccess(ReadWriteAttribute.AccessType.WRITE);
-        }
-        
         if (type == null)
         {
             type = new NormalNodeUnion<TypeNode>(null);
@@ -255,7 +303,7 @@ public class LocalVariableDeclarationNodeImpl extends NodeImpl implements LocalV
      */
     public VariableDeclaratorListNode getDeclarators()
     {
-        getAttribute(LocalAttribute.DECLARATORS).recordAccess(ReadWriteAttribute.AccessType.READ);
+        checkDeclaratorsWrapped();
         if (this.declarators == null)
         {
             return null;
@@ -271,7 +319,7 @@ public class LocalVariableDeclarationNodeImpl extends NodeImpl implements LocalV
      */
     public NodeUnion<? extends VariableDeclaratorListNode> getUnionForDeclarators()
     {
-        getAttribute(LocalAttribute.DECLARATORS).recordAccess(ReadWriteAttribute.AccessType.READ);
+        checkDeclaratorsWrapped();
         if (this.declarators == null)
         {
             this.declarators = new NormalNodeUnion<VariableDeclaratorListNode>(null);
@@ -285,24 +333,8 @@ public class LocalVariableDeclarationNodeImpl extends NodeImpl implements LocalV
      */
     public void setDeclarators(VariableDeclaratorListNode declarators)
     {
-            setDeclarators(declarators, true);
-            getManager().notifyChange(this);
-    }
-    
-    private void setDeclarators(VariableDeclaratorListNode declarators, boolean checkPermissions)
-    {
-        if (checkPermissions)
-        {
-            getManager().assertMutatable(this);
-            getAttribute(LocalAttribute.DECLARATORS).recordAccess(ReadWriteAttribute.AccessType.WRITE);
-        }
-        
-        if (this.declarators != null)
-        {
-            setAsChild(this.declarators.getNodeValue(), false);
-        }
-        this.declarators = new NormalNodeUnion<VariableDeclaratorListNode>(declarators);
-        setAsChild(declarators, true);
+        checkDeclaratorsWrapped();
+        this.setUnionForDeclarators(new NormalNodeUnion<VariableDeclaratorListNode>(declarators));
     }
     
     /**
@@ -311,18 +343,15 @@ public class LocalVariableDeclarationNodeImpl extends NodeImpl implements LocalV
      */
     public void setUnionForDeclarators(NodeUnion<? extends VariableDeclaratorListNode> declarators)
     {
-            setUnionForDeclarators(declarators, true);
-            getManager().notifyChange(this);
+        checkDeclaratorsWrapped();
+        this.getManager().assertMutatable(this);
+        this.doSetDeclarators(declarators);
+        if (this.getManager().isRecordingEdits())
+            super.recordEdit(new LocalVariableDeclarationNodeSetDeclaratorsPropertyEditScriptElementImpl(this.getManager().getCurrentMetaprogramId(), this.getUid(), declarators.getNodeValue() == null ? null : declarators.getNodeValue().getUid()));
     }
     
-    private void setUnionForDeclarators(NodeUnion<? extends VariableDeclaratorListNode> declarators, boolean checkPermissions)
+    private void doSetDeclarators(NodeUnion<? extends VariableDeclaratorListNode> declarators)
     {
-        if (checkPermissions)
-        {
-            getManager().assertMutatable(this);
-            getAttribute(LocalAttribute.DECLARATORS).recordAccess(ReadWriteAttribute.AccessType.WRITE);
-        }
-        
         if (declarators == null)
         {
             declarators = new NormalNodeUnion<VariableDeclaratorListNode>(null);
@@ -346,17 +375,17 @@ public class LocalVariableDeclarationNodeImpl extends NodeImpl implements LocalV
     protected void receiveToChildren(BsjNodeVisitor visitor)
     {
         super.receiveToChildren(visitor);
-        if (this.modifiers.getNodeValue() != null)
+        if (this.getUnionForModifiers().getNodeValue() != null)
         {
-            this.modifiers.getNodeValue().receive(visitor);
+            this.getUnionForModifiers().getNodeValue().receive(visitor);
         }
-        if (this.type.getNodeValue() != null)
+        if (this.getUnionForType().getNodeValue() != null)
         {
-            this.type.getNodeValue().receive(visitor);
+            this.getUnionForType().getNodeValue().receive(visitor);
         }
-        if (this.declarators.getNodeValue() != null)
+        if (this.getUnionForDeclarators().getNodeValue() != null)
         {
-            this.declarators.getNodeValue().receive(visitor);
+            this.getUnionForDeclarators().getNodeValue().receive(visitor);
         }
         Iterator<? extends Node> extras = getHiddenVisitorChildren();
         if (extras != null)
@@ -379,17 +408,17 @@ public class LocalVariableDeclarationNodeImpl extends NodeImpl implements LocalV
     protected void receiveTypedToChildren(BsjTypedNodeVisitor visitor)
     {
         super.receiveTypedToChildren(visitor);
-        if (this.modifiers.getNodeValue() != null)
+        if (this.getUnionForModifiers().getNodeValue() != null)
         {
-            this.modifiers.getNodeValue().receiveTyped(visitor);
+            this.getUnionForModifiers().getNodeValue().receiveTyped(visitor);
         }
-        if (this.type.getNodeValue() != null)
+        if (this.getUnionForType().getNodeValue() != null)
         {
-            this.type.getNodeValue().receiveTyped(visitor);
+            this.getUnionForType().getNodeValue().receiveTyped(visitor);
         }
-        if (this.declarators.getNodeValue() != null)
+        if (this.getUnionForDeclarators().getNodeValue() != null)
         {
-            this.declarators.getNodeValue().receiveTyped(visitor);
+            this.getUnionForDeclarators().getNodeValue().receiveTyped(visitor);
         }
         Iterator<? extends Node> extras = getHiddenVisitorChildren();
         if (extras != null)
@@ -456,6 +485,8 @@ public class LocalVariableDeclarationNodeImpl extends NodeImpl implements LocalV
     {
         StringBuilder sb = new StringBuilder();
         sb.append(this.getClass().getSimpleName());
+        sb.append('#');
+        sb.append(this.getUid());
         sb.append('[');
         sb.append("modifiers=");
         sb.append(this.getUnionForModifiers().getNodeValue() == null? "null" : this.getUnionForModifiers().getNodeValue().getClass().getSimpleName());

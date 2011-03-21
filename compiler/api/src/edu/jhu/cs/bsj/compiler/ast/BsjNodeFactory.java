@@ -5243,7 +5243,8 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node);
      */
     public NormalMetaAnnotationNode makeNormalMetaAnnotationNodeWithUnions(
             NodeUnion<? extends MetaAnnotationElementListNode> arguments,
-            NodeUnion<? extends UnparameterizedTypeNode> annotationType);
+            NodeUnion<? extends UnparameterizedTypeNode> annotationType,
+            MetaAnnotationMetaprogramAnchorNode metaprogramAnchor);
     
     /**
      * Creates a NormalMetaAnnotationNode.
@@ -5251,7 +5252,8 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node);
      */
     public NormalMetaAnnotationNode makeNormalMetaAnnotationNode(
             MetaAnnotationElementListNode arguments,
-            UnparameterizedTypeNode annotationType);
+            UnparameterizedTypeNode annotationType,
+            MetaAnnotationMetaprogramAnchorNode metaprogramAnchor);
     
     /**
      * Creates a NormalMetaAnnotationNode.
@@ -5260,8 +5262,28 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node);
     public NormalMetaAnnotationNode makeNormalMetaAnnotationNodeWithUnions(
             NodeUnion<? extends MetaAnnotationElementListNode> arguments,
             NodeUnion<? extends UnparameterizedTypeNode> annotationType,
+            MetaAnnotationMetaprogramAnchorNode metaprogramAnchor,
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation);
+    
+    /**
+     * Creates a NormalMetaAnnotationNode.
+     * The specified start and stop locations are used.
+     */
+    public NormalMetaAnnotationNode makeNormalMetaAnnotationNode(
+            MetaAnnotationElementListNode arguments,
+            UnparameterizedTypeNode annotationType,
+            MetaAnnotationMetaprogramAnchorNode metaprogramAnchor,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation);
+    
+    /**
+     * Creates a NormalMetaAnnotationNode.
+     * The start and stop locations which have been set as properties of this factory are used.
+     */
+    public NormalMetaAnnotationNode makeNormalMetaAnnotationNode(
+            MetaAnnotationElementListNode arguments,
+            UnparameterizedTypeNode annotationType);
     
     /**
      * Creates a NormalMetaAnnotationNode.
@@ -5794,7 +5816,8 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node);
      */
     public SingleElementMetaAnnotationNode makeSingleElementMetaAnnotationNodeWithUnions(
             NodeUnion<? extends MetaAnnotationValueNode> value,
-            NodeUnion<? extends UnparameterizedTypeNode> annotationType);
+            NodeUnion<? extends UnparameterizedTypeNode> annotationType,
+            MetaAnnotationMetaprogramAnchorNode metaprogramAnchor);
     
     /**
      * Creates a SingleElementMetaAnnotationNode.
@@ -5802,7 +5825,8 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node);
      */
     public SingleElementMetaAnnotationNode makeSingleElementMetaAnnotationNode(
             MetaAnnotationValueNode value,
-            UnparameterizedTypeNode annotationType);
+            UnparameterizedTypeNode annotationType,
+            MetaAnnotationMetaprogramAnchorNode metaprogramAnchor);
     
     /**
      * Creates a SingleElementMetaAnnotationNode.
@@ -5811,8 +5835,28 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node);
     public SingleElementMetaAnnotationNode makeSingleElementMetaAnnotationNodeWithUnions(
             NodeUnion<? extends MetaAnnotationValueNode> value,
             NodeUnion<? extends UnparameterizedTypeNode> annotationType,
+            MetaAnnotationMetaprogramAnchorNode metaprogramAnchor,
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation);
+    
+    /**
+     * Creates a SingleElementMetaAnnotationNode.
+     * The specified start and stop locations are used.
+     */
+    public SingleElementMetaAnnotationNode makeSingleElementMetaAnnotationNode(
+            MetaAnnotationValueNode value,
+            UnparameterizedTypeNode annotationType,
+            MetaAnnotationMetaprogramAnchorNode metaprogramAnchor,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation);
+    
+    /**
+     * Creates a SingleElementMetaAnnotationNode.
+     * The start and stop locations which have been set as properties of this factory are used.
+     */
+    public SingleElementMetaAnnotationNode makeSingleElementMetaAnnotationNode(
+            MetaAnnotationValueNode value,
+            UnparameterizedTypeNode annotationType);
     
     /**
      * Creates a SingleElementMetaAnnotationNode.

@@ -1,10 +1,10 @@
 package edu.jhu.cs.bsj.compiler.impl.ast.node;
 
 import java.util.Arrays;
-import java.util.EnumMap;
+import java.util.EnumSet;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
+import java.util.Set;
 
 import javax.annotation.Generated;
 
@@ -25,9 +25,14 @@ import edu.jhu.cs.bsj.compiler.ast.node.Node;
 import edu.jhu.cs.bsj.compiler.ast.node.PackageNode;
 import edu.jhu.cs.bsj.compiler.ast.node.list.DeclaredTypeListNode;
 import edu.jhu.cs.bsj.compiler.impl.ast.BsjNodeManager;
+import edu.jhu.cs.bsj.compiler.impl.ast.BsjNodeProxyFactory;
 import edu.jhu.cs.bsj.compiler.impl.ast.NormalNodeUnion;
-import edu.jhu.cs.bsj.compiler.impl.ast.attribute.AttributeName;
-import edu.jhu.cs.bsj.compiler.impl.ast.attribute.ReadWriteAttribute;
+import edu.jhu.cs.bsj.compiler.impl.ast.delta.property.EnumDeclarationNodeSetBodyPropertyEditScriptElementImpl;
+import edu.jhu.cs.bsj.compiler.impl.ast.delta.property.EnumDeclarationNodeSetIdentifierPropertyEditScriptElementImpl;
+import edu.jhu.cs.bsj.compiler.impl.ast.delta.property.EnumDeclarationNodeSetImplementsClausePropertyEditScriptElementImpl;
+import edu.jhu.cs.bsj.compiler.impl.ast.delta.property.EnumDeclarationNodeSetJavadocPropertyEditScriptElementImpl;
+import edu.jhu.cs.bsj.compiler.impl.ast.delta.property.EnumDeclarationNodeSetModifiersPropertyEditScriptElementImpl;
+import edu.jhu.cs.bsj.compiler.impl.ast.properties.EnumDeclarationNodeProperties;
 
 @Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
 public class EnumDeclarationNodeImpl extends NodeImpl implements EnumDeclarationNode
@@ -47,30 +52,11 @@ public class EnumDeclarationNodeImpl extends NodeImpl implements EnumDeclaration
     /** The associated javadoc comment for this node. */
     private NodeUnion<? extends JavadocNode> javadoc;
     
-    private Map<LocalAttribute,ReadWriteAttribute> localAttributes = new EnumMap<LocalAttribute,ReadWriteAttribute>(LocalAttribute.class);
-    private ReadWriteAttribute getAttribute(LocalAttribute attributeName)
-    {
-        ReadWriteAttribute attribute = localAttributes.get(attributeName);
-        if (attribute == null)
-        {
-            attribute = new ReadWriteAttribute(EnumDeclarationNodeImpl.this, attributeName);
-            localAttributes.put(attributeName, attribute);
-        }
-        return attribute;
-    }
-    private static enum LocalAttribute implements AttributeName
-    {
-        /** Attribute identifier for the modifiers property. */
-        MODIFIERS,
-        /** Attribute identifier for the implementsClause property. */
-        IMPLEMENTS_CLAUSE,
-        /** Attribute identifier for the body property. */
-        BODY,
-        /** Attribute identifier for the identifier property. */
-        IDENTIFIER,
-        /** Attribute identifier for the javadoc property. */
-        JAVADOC,
-    }
+    /**
+     * A set of those properties which have been populated from the backing node.
+     * This field is <code>null</code> if <tt>backingNode</tt> is <code>null</code>.
+     */
+    private Set<EnumDeclarationNodeProperties> populatedProperties;
     
     /** General constructor. */
     public EnumDeclarationNodeImpl(
@@ -85,11 +71,165 @@ public class EnumDeclarationNodeImpl extends NodeImpl implements EnumDeclaration
             boolean binary)
     {
         super(startLocation, stopLocation, manager, binary);
-        setUnionForModifiers(modifiers, false);
-        setUnionForImplementsClause(implementsClause, false);
-        setUnionForBody(body, false);
-        setUnionForIdentifier(identifier, false);
-        setUnionForJavadoc(javadoc, false);
+        this.populatedProperties = null;
+        doSetModifiers(modifiers);
+        doSetImplementsClause(implementsClause);
+        doSetBody(body);
+        doSetIdentifier(identifier);
+        doSetJavadoc(javadoc);
+    }
+    
+    /** Proxy constructor. */
+    public EnumDeclarationNodeImpl(BsjNodeManager manager, BsjNodeProxyFactory proxyFactory, EnumDeclarationNode backingNode)
+    {
+        super(manager, proxyFactory, backingNode);
+        this.populatedProperties = EnumSet.noneOf(EnumDeclarationNodeProperties.class);
+    }
+    
+    /** Retrieves this node's backing node (if one exists). */
+    protected EnumDeclarationNode getBackingNode()
+    {
+        return (EnumDeclarationNode)super.getBackingNode();
+    }
+    
+    /**
+     * Ensures that the modifiers value has been populated from proxy.
+     * If this node is not backed by a proxy or if the value has already been
+     * populated, this method does nothing.
+     */
+    private void checkModifiersWrapped()
+    {
+        if (this.populatedProperties == null || this.populatedProperties.contains(
+                EnumDeclarationNodeProperties.MODIFIERS))
+            return;
+        this.populatedProperties.add(EnumDeclarationNodeProperties.MODIFIERS);
+        NodeUnion<? extends EnumModifiersNode> union = this.getBackingNode().getUnionForModifiers();
+        switch (union.getType())
+        {
+            case NORMAL:
+                union = this.getProxyFactory().makeNormalNodeUnion(
+                        this.getProxyFactory().makeEnumModifiersNode(union.getNormalNode()));
+                break;
+            case SPLICE:
+                union = this.getProxyFactory().makeSpliceNodeUnion(
+                        this.getProxyFactory().makeSpliceNode(union.getSpliceNode()));
+                break;
+            default:
+                throw new IllegalStateException("Unrecognized union type: " + union.getType());
+        }
+        this.modifiers = union;
+    }
+    
+    /**
+     * Ensures that the implementsClause value has been populated from proxy.
+     * If this node is not backed by a proxy or if the value has already been
+     * populated, this method does nothing.
+     */
+    private void checkImplementsClauseWrapped()
+    {
+        if (this.populatedProperties == null || this.populatedProperties.contains(
+                EnumDeclarationNodeProperties.IMPLEMENTS_CLAUSE))
+            return;
+        this.populatedProperties.add(EnumDeclarationNodeProperties.IMPLEMENTS_CLAUSE);
+        NodeUnion<? extends DeclaredTypeListNode> union = this.getBackingNode().getUnionForImplementsClause();
+        switch (union.getType())
+        {
+            case NORMAL:
+                union = this.getProxyFactory().makeNormalNodeUnion(
+                        this.getProxyFactory().makeDeclaredTypeListNode(union.getNormalNode()));
+                break;
+            case SPLICE:
+                union = this.getProxyFactory().makeSpliceNodeUnion(
+                        this.getProxyFactory().makeSpliceNode(union.getSpliceNode()));
+                break;
+            default:
+                throw new IllegalStateException("Unrecognized union type: " + union.getType());
+        }
+        this.implementsClause = union;
+    }
+    
+    /**
+     * Ensures that the body value has been populated from proxy.
+     * If this node is not backed by a proxy or if the value has already been
+     * populated, this method does nothing.
+     */
+    private void checkBodyWrapped()
+    {
+        if (this.populatedProperties == null || this.populatedProperties.contains(
+                EnumDeclarationNodeProperties.BODY))
+            return;
+        this.populatedProperties.add(EnumDeclarationNodeProperties.BODY);
+        NodeUnion<? extends EnumBodyNode> union = this.getBackingNode().getUnionForBody();
+        switch (union.getType())
+        {
+            case NORMAL:
+                union = this.getProxyFactory().makeNormalNodeUnion(
+                        this.getProxyFactory().makeEnumBodyNode(union.getNormalNode()));
+                break;
+            case SPLICE:
+                union = this.getProxyFactory().makeSpliceNodeUnion(
+                        this.getProxyFactory().makeSpliceNode(union.getSpliceNode()));
+                break;
+            default:
+                throw new IllegalStateException("Unrecognized union type: " + union.getType());
+        }
+        this.body = union;
+    }
+    
+    /**
+     * Ensures that the identifier value has been populated from proxy.
+     * If this node is not backed by a proxy or if the value has already been
+     * populated, this method does nothing.
+     */
+    private void checkIdentifierWrapped()
+    {
+        if (this.populatedProperties == null || this.populatedProperties.contains(
+                EnumDeclarationNodeProperties.IDENTIFIER))
+            return;
+        this.populatedProperties.add(EnumDeclarationNodeProperties.IDENTIFIER);
+        NodeUnion<? extends IdentifierNode> union = this.getBackingNode().getUnionForIdentifier();
+        switch (union.getType())
+        {
+            case NORMAL:
+                union = this.getProxyFactory().makeNormalNodeUnion(
+                        this.getProxyFactory().makeIdentifierNode(union.getNormalNode()));
+                break;
+            case SPLICE:
+                union = this.getProxyFactory().makeSpliceNodeUnion(
+                        this.getProxyFactory().makeSpliceNode(union.getSpliceNode()));
+                break;
+            default:
+                throw new IllegalStateException("Unrecognized union type: " + union.getType());
+        }
+        this.identifier = union;
+    }
+    
+    /**
+     * Ensures that the javadoc value has been populated from proxy.
+     * If this node is not backed by a proxy or if the value has already been
+     * populated, this method does nothing.
+     */
+    private void checkJavadocWrapped()
+    {
+        if (this.populatedProperties == null || this.populatedProperties.contains(
+                EnumDeclarationNodeProperties.JAVADOC))
+            return;
+        this.populatedProperties.add(EnumDeclarationNodeProperties.JAVADOC);
+        NodeUnion<? extends JavadocNode> union = this.getBackingNode().getUnionForJavadoc();
+        switch (union.getType())
+        {
+            case NORMAL:
+                union = this.getProxyFactory().makeNormalNodeUnion(
+                        this.getProxyFactory().makeJavadocNode(union.getNormalNode()));
+                break;
+            case SPLICE:
+                union = this.getProxyFactory().makeSpliceNodeUnion(
+                        this.getProxyFactory().makeSpliceNode(union.getSpliceNode()));
+                break;
+            default:
+                throw new IllegalStateException("Unrecognized union type: " + union.getType());
+        }
+        this.javadoc = union;
     }
     
     /**
@@ -99,7 +239,7 @@ public class EnumDeclarationNodeImpl extends NodeImpl implements EnumDeclaration
      */
     public EnumModifiersNode getModifiers()
     {
-        getAttribute(LocalAttribute.MODIFIERS).recordAccess(ReadWriteAttribute.AccessType.READ);
+        checkModifiersWrapped();
         if (this.modifiers == null)
         {
             return null;
@@ -115,7 +255,7 @@ public class EnumDeclarationNodeImpl extends NodeImpl implements EnumDeclaration
      */
     public NodeUnion<? extends EnumModifiersNode> getUnionForModifiers()
     {
-        getAttribute(LocalAttribute.MODIFIERS).recordAccess(ReadWriteAttribute.AccessType.READ);
+        checkModifiersWrapped();
         if (this.modifiers == null)
         {
             this.modifiers = new NormalNodeUnion<EnumModifiersNode>(null);
@@ -129,24 +269,8 @@ public class EnumDeclarationNodeImpl extends NodeImpl implements EnumDeclaration
      */
     public void setModifiers(EnumModifiersNode modifiers)
     {
-            setModifiers(modifiers, true);
-            getManager().notifyChange(this);
-    }
-    
-    private void setModifiers(EnumModifiersNode modifiers, boolean checkPermissions)
-    {
-        if (checkPermissions)
-        {
-            getManager().assertMutatable(this);
-            getAttribute(LocalAttribute.MODIFIERS).recordAccess(ReadWriteAttribute.AccessType.WRITE);
-        }
-        
-        if (this.modifiers != null)
-        {
-            setAsChild(this.modifiers.getNodeValue(), false);
-        }
-        this.modifiers = new NormalNodeUnion<EnumModifiersNode>(modifiers);
-        setAsChild(modifiers, true);
+        checkModifiersWrapped();
+        this.setUnionForModifiers(new NormalNodeUnion<EnumModifiersNode>(modifiers));
     }
     
     /**
@@ -155,18 +279,15 @@ public class EnumDeclarationNodeImpl extends NodeImpl implements EnumDeclaration
      */
     public void setUnionForModifiers(NodeUnion<? extends EnumModifiersNode> modifiers)
     {
-            setUnionForModifiers(modifiers, true);
-            getManager().notifyChange(this);
+        checkModifiersWrapped();
+        this.getManager().assertMutatable(this);
+        this.doSetModifiers(modifiers);
+        if (this.getManager().isRecordingEdits())
+            super.recordEdit(new EnumDeclarationNodeSetModifiersPropertyEditScriptElementImpl(this.getManager().getCurrentMetaprogramId(), this.getUid(), modifiers.getNodeValue() == null ? null : modifiers.getNodeValue().getUid()));
     }
     
-    private void setUnionForModifiers(NodeUnion<? extends EnumModifiersNode> modifiers, boolean checkPermissions)
+    private void doSetModifiers(NodeUnion<? extends EnumModifiersNode> modifiers)
     {
-        if (checkPermissions)
-        {
-            getManager().assertMutatable(this);
-            getAttribute(LocalAttribute.MODIFIERS).recordAccess(ReadWriteAttribute.AccessType.WRITE);
-        }
-        
         if (modifiers == null)
         {
             modifiers = new NormalNodeUnion<EnumModifiersNode>(null);
@@ -186,7 +307,7 @@ public class EnumDeclarationNodeImpl extends NodeImpl implements EnumDeclaration
      */
     public DeclaredTypeListNode getImplementsClause()
     {
-        getAttribute(LocalAttribute.IMPLEMENTS_CLAUSE).recordAccess(ReadWriteAttribute.AccessType.READ);
+        checkImplementsClauseWrapped();
         if (this.implementsClause == null)
         {
             return null;
@@ -202,7 +323,7 @@ public class EnumDeclarationNodeImpl extends NodeImpl implements EnumDeclaration
      */
     public NodeUnion<? extends DeclaredTypeListNode> getUnionForImplementsClause()
     {
-        getAttribute(LocalAttribute.IMPLEMENTS_CLAUSE).recordAccess(ReadWriteAttribute.AccessType.READ);
+        checkImplementsClauseWrapped();
         if (this.implementsClause == null)
         {
             this.implementsClause = new NormalNodeUnion<DeclaredTypeListNode>(null);
@@ -216,24 +337,8 @@ public class EnumDeclarationNodeImpl extends NodeImpl implements EnumDeclaration
      */
     public void setImplementsClause(DeclaredTypeListNode implementsClause)
     {
-            setImplementsClause(implementsClause, true);
-            getManager().notifyChange(this);
-    }
-    
-    private void setImplementsClause(DeclaredTypeListNode implementsClause, boolean checkPermissions)
-    {
-        if (checkPermissions)
-        {
-            getManager().assertMutatable(this);
-            getAttribute(LocalAttribute.IMPLEMENTS_CLAUSE).recordAccess(ReadWriteAttribute.AccessType.WRITE);
-        }
-        
-        if (this.implementsClause != null)
-        {
-            setAsChild(this.implementsClause.getNodeValue(), false);
-        }
-        this.implementsClause = new NormalNodeUnion<DeclaredTypeListNode>(implementsClause);
-        setAsChild(implementsClause, true);
+        checkImplementsClauseWrapped();
+        this.setUnionForImplementsClause(new NormalNodeUnion<DeclaredTypeListNode>(implementsClause));
     }
     
     /**
@@ -242,18 +347,15 @@ public class EnumDeclarationNodeImpl extends NodeImpl implements EnumDeclaration
      */
     public void setUnionForImplementsClause(NodeUnion<? extends DeclaredTypeListNode> implementsClause)
     {
-            setUnionForImplementsClause(implementsClause, true);
-            getManager().notifyChange(this);
+        checkImplementsClauseWrapped();
+        this.getManager().assertMutatable(this);
+        this.doSetImplementsClause(implementsClause);
+        if (this.getManager().isRecordingEdits())
+            super.recordEdit(new EnumDeclarationNodeSetImplementsClausePropertyEditScriptElementImpl(this.getManager().getCurrentMetaprogramId(), this.getUid(), implementsClause.getNodeValue() == null ? null : implementsClause.getNodeValue().getUid()));
     }
     
-    private void setUnionForImplementsClause(NodeUnion<? extends DeclaredTypeListNode> implementsClause, boolean checkPermissions)
+    private void doSetImplementsClause(NodeUnion<? extends DeclaredTypeListNode> implementsClause)
     {
-        if (checkPermissions)
-        {
-            getManager().assertMutatable(this);
-            getAttribute(LocalAttribute.IMPLEMENTS_CLAUSE).recordAccess(ReadWriteAttribute.AccessType.WRITE);
-        }
-        
         if (implementsClause == null)
         {
             implementsClause = new NormalNodeUnion<DeclaredTypeListNode>(null);
@@ -273,7 +375,7 @@ public class EnumDeclarationNodeImpl extends NodeImpl implements EnumDeclaration
      */
     public EnumBodyNode getBody()
     {
-        getAttribute(LocalAttribute.BODY).recordAccess(ReadWriteAttribute.AccessType.READ);
+        checkBodyWrapped();
         if (this.body == null)
         {
             return null;
@@ -289,7 +391,7 @@ public class EnumDeclarationNodeImpl extends NodeImpl implements EnumDeclaration
      */
     public NodeUnion<? extends EnumBodyNode> getUnionForBody()
     {
-        getAttribute(LocalAttribute.BODY).recordAccess(ReadWriteAttribute.AccessType.READ);
+        checkBodyWrapped();
         if (this.body == null)
         {
             this.body = new NormalNodeUnion<EnumBodyNode>(null);
@@ -303,24 +405,8 @@ public class EnumDeclarationNodeImpl extends NodeImpl implements EnumDeclaration
      */
     public void setBody(EnumBodyNode body)
     {
-            setBody(body, true);
-            getManager().notifyChange(this);
-    }
-    
-    private void setBody(EnumBodyNode body, boolean checkPermissions)
-    {
-        if (checkPermissions)
-        {
-            getManager().assertMutatable(this);
-            getAttribute(LocalAttribute.BODY).recordAccess(ReadWriteAttribute.AccessType.WRITE);
-        }
-        
-        if (this.body != null)
-        {
-            setAsChild(this.body.getNodeValue(), false);
-        }
-        this.body = new NormalNodeUnion<EnumBodyNode>(body);
-        setAsChild(body, true);
+        checkBodyWrapped();
+        this.setUnionForBody(new NormalNodeUnion<EnumBodyNode>(body));
     }
     
     /**
@@ -329,18 +415,15 @@ public class EnumDeclarationNodeImpl extends NodeImpl implements EnumDeclaration
      */
     public void setUnionForBody(NodeUnion<? extends EnumBodyNode> body)
     {
-            setUnionForBody(body, true);
-            getManager().notifyChange(this);
+        checkBodyWrapped();
+        this.getManager().assertMutatable(this);
+        this.doSetBody(body);
+        if (this.getManager().isRecordingEdits())
+            super.recordEdit(new EnumDeclarationNodeSetBodyPropertyEditScriptElementImpl(this.getManager().getCurrentMetaprogramId(), this.getUid(), body.getNodeValue() == null ? null : body.getNodeValue().getUid()));
     }
     
-    private void setUnionForBody(NodeUnion<? extends EnumBodyNode> body, boolean checkPermissions)
+    private void doSetBody(NodeUnion<? extends EnumBodyNode> body)
     {
-        if (checkPermissions)
-        {
-            getManager().assertMutatable(this);
-            getAttribute(LocalAttribute.BODY).recordAccess(ReadWriteAttribute.AccessType.WRITE);
-        }
-        
         if (body == null)
         {
             body = new NormalNodeUnion<EnumBodyNode>(null);
@@ -360,7 +443,7 @@ public class EnumDeclarationNodeImpl extends NodeImpl implements EnumDeclaration
      */
     public IdentifierNode getIdentifier()
     {
-        getAttribute(LocalAttribute.IDENTIFIER).recordAccess(ReadWriteAttribute.AccessType.READ);
+        checkIdentifierWrapped();
         if (this.identifier == null)
         {
             return null;
@@ -376,7 +459,7 @@ public class EnumDeclarationNodeImpl extends NodeImpl implements EnumDeclaration
      */
     public NodeUnion<? extends IdentifierNode> getUnionForIdentifier()
     {
-        getAttribute(LocalAttribute.IDENTIFIER).recordAccess(ReadWriteAttribute.AccessType.READ);
+        checkIdentifierWrapped();
         if (this.identifier == null)
         {
             this.identifier = new NormalNodeUnion<IdentifierNode>(null);
@@ -390,24 +473,8 @@ public class EnumDeclarationNodeImpl extends NodeImpl implements EnumDeclaration
      */
     public void setIdentifier(IdentifierNode identifier)
     {
-            setIdentifier(identifier, true);
-            getManager().notifyChange(this);
-    }
-    
-    private void setIdentifier(IdentifierNode identifier, boolean checkPermissions)
-    {
-        if (checkPermissions)
-        {
-            getManager().assertMutatable(this);
-            getAttribute(LocalAttribute.IDENTIFIER).recordAccess(ReadWriteAttribute.AccessType.WRITE);
-        }
-        
-        if (this.identifier != null)
-        {
-            setAsChild(this.identifier.getNodeValue(), false);
-        }
-        this.identifier = new NormalNodeUnion<IdentifierNode>(identifier);
-        setAsChild(identifier, true);
+        checkIdentifierWrapped();
+        this.setUnionForIdentifier(new NormalNodeUnion<IdentifierNode>(identifier));
     }
     
     /**
@@ -416,18 +483,15 @@ public class EnumDeclarationNodeImpl extends NodeImpl implements EnumDeclaration
      */
     public void setUnionForIdentifier(NodeUnion<? extends IdentifierNode> identifier)
     {
-            setUnionForIdentifier(identifier, true);
-            getManager().notifyChange(this);
+        checkIdentifierWrapped();
+        this.getManager().assertMutatable(this);
+        this.doSetIdentifier(identifier);
+        if (this.getManager().isRecordingEdits())
+            super.recordEdit(new EnumDeclarationNodeSetIdentifierPropertyEditScriptElementImpl(this.getManager().getCurrentMetaprogramId(), this.getUid(), identifier.getNodeValue() == null ? null : identifier.getNodeValue().getUid()));
     }
     
-    private void setUnionForIdentifier(NodeUnion<? extends IdentifierNode> identifier, boolean checkPermissions)
+    private void doSetIdentifier(NodeUnion<? extends IdentifierNode> identifier)
     {
-        if (checkPermissions)
-        {
-            getManager().assertMutatable(this);
-            getAttribute(LocalAttribute.IDENTIFIER).recordAccess(ReadWriteAttribute.AccessType.WRITE);
-        }
-        
         if (identifier == null)
         {
             identifier = new NormalNodeUnion<IdentifierNode>(null);
@@ -447,7 +511,7 @@ public class EnumDeclarationNodeImpl extends NodeImpl implements EnumDeclaration
      */
     public JavadocNode getJavadoc()
     {
-        getAttribute(LocalAttribute.JAVADOC).recordAccess(ReadWriteAttribute.AccessType.READ);
+        checkJavadocWrapped();
         if (this.javadoc == null)
         {
             return null;
@@ -463,7 +527,7 @@ public class EnumDeclarationNodeImpl extends NodeImpl implements EnumDeclaration
      */
     public NodeUnion<? extends JavadocNode> getUnionForJavadoc()
     {
-        getAttribute(LocalAttribute.JAVADOC).recordAccess(ReadWriteAttribute.AccessType.READ);
+        checkJavadocWrapped();
         if (this.javadoc == null)
         {
             this.javadoc = new NormalNodeUnion<JavadocNode>(null);
@@ -477,24 +541,8 @@ public class EnumDeclarationNodeImpl extends NodeImpl implements EnumDeclaration
      */
     public void setJavadoc(JavadocNode javadoc)
     {
-            setJavadoc(javadoc, true);
-            getManager().notifyChange(this);
-    }
-    
-    private void setJavadoc(JavadocNode javadoc, boolean checkPermissions)
-    {
-        if (checkPermissions)
-        {
-            getManager().assertMutatable(this);
-            getAttribute(LocalAttribute.JAVADOC).recordAccess(ReadWriteAttribute.AccessType.WRITE);
-        }
-        
-        if (this.javadoc != null)
-        {
-            setAsChild(this.javadoc.getNodeValue(), false);
-        }
-        this.javadoc = new NormalNodeUnion<JavadocNode>(javadoc);
-        setAsChild(javadoc, true);
+        checkJavadocWrapped();
+        this.setUnionForJavadoc(new NormalNodeUnion<JavadocNode>(javadoc));
     }
     
     /**
@@ -503,18 +551,15 @@ public class EnumDeclarationNodeImpl extends NodeImpl implements EnumDeclaration
      */
     public void setUnionForJavadoc(NodeUnion<? extends JavadocNode> javadoc)
     {
-            setUnionForJavadoc(javadoc, true);
-            getManager().notifyChange(this);
+        checkJavadocWrapped();
+        this.getManager().assertMutatable(this);
+        this.doSetJavadoc(javadoc);
+        if (this.getManager().isRecordingEdits())
+            super.recordEdit(new EnumDeclarationNodeSetJavadocPropertyEditScriptElementImpl(this.getManager().getCurrentMetaprogramId(), this.getUid(), javadoc.getNodeValue() == null ? null : javadoc.getNodeValue().getUid()));
     }
     
-    private void setUnionForJavadoc(NodeUnion<? extends JavadocNode> javadoc, boolean checkPermissions)
+    private void doSetJavadoc(NodeUnion<? extends JavadocNode> javadoc)
     {
-        if (checkPermissions)
-        {
-            getManager().assertMutatable(this);
-            getAttribute(LocalAttribute.JAVADOC).recordAccess(ReadWriteAttribute.AccessType.WRITE);
-        }
-        
         if (javadoc == null)
         {
             javadoc = new NormalNodeUnion<JavadocNode>(null);
@@ -538,25 +583,25 @@ public class EnumDeclarationNodeImpl extends NodeImpl implements EnumDeclaration
     protected void receiveToChildren(BsjNodeVisitor visitor)
     {
         super.receiveToChildren(visitor);
-        if (this.modifiers.getNodeValue() != null)
+        if (this.getUnionForModifiers().getNodeValue() != null)
         {
-            this.modifiers.getNodeValue().receive(visitor);
+            this.getUnionForModifiers().getNodeValue().receive(visitor);
         }
-        if (this.implementsClause.getNodeValue() != null)
+        if (this.getUnionForImplementsClause().getNodeValue() != null)
         {
-            this.implementsClause.getNodeValue().receive(visitor);
+            this.getUnionForImplementsClause().getNodeValue().receive(visitor);
         }
-        if (this.body.getNodeValue() != null)
+        if (this.getUnionForBody().getNodeValue() != null)
         {
-            this.body.getNodeValue().receive(visitor);
+            this.getUnionForBody().getNodeValue().receive(visitor);
         }
-        if (this.identifier.getNodeValue() != null)
+        if (this.getUnionForIdentifier().getNodeValue() != null)
         {
-            this.identifier.getNodeValue().receive(visitor);
+            this.getUnionForIdentifier().getNodeValue().receive(visitor);
         }
-        if (this.javadoc.getNodeValue() != null)
+        if (this.getUnionForJavadoc().getNodeValue() != null)
         {
-            this.javadoc.getNodeValue().receive(visitor);
+            this.getUnionForJavadoc().getNodeValue().receive(visitor);
         }
         Iterator<? extends Node> extras = getHiddenVisitorChildren();
         if (extras != null)
@@ -579,25 +624,25 @@ public class EnumDeclarationNodeImpl extends NodeImpl implements EnumDeclaration
     protected void receiveTypedToChildren(BsjTypedNodeVisitor visitor)
     {
         super.receiveTypedToChildren(visitor);
-        if (this.modifiers.getNodeValue() != null)
+        if (this.getUnionForModifiers().getNodeValue() != null)
         {
-            this.modifiers.getNodeValue().receiveTyped(visitor);
+            this.getUnionForModifiers().getNodeValue().receiveTyped(visitor);
         }
-        if (this.implementsClause.getNodeValue() != null)
+        if (this.getUnionForImplementsClause().getNodeValue() != null)
         {
-            this.implementsClause.getNodeValue().receiveTyped(visitor);
+            this.getUnionForImplementsClause().getNodeValue().receiveTyped(visitor);
         }
-        if (this.body.getNodeValue() != null)
+        if (this.getUnionForBody().getNodeValue() != null)
         {
-            this.body.getNodeValue().receiveTyped(visitor);
+            this.getUnionForBody().getNodeValue().receiveTyped(visitor);
         }
-        if (this.identifier.getNodeValue() != null)
+        if (this.getUnionForIdentifier().getNodeValue() != null)
         {
-            this.identifier.getNodeValue().receiveTyped(visitor);
+            this.getUnionForIdentifier().getNodeValue().receiveTyped(visitor);
         }
-        if (this.javadoc.getNodeValue() != null)
+        if (this.getUnionForJavadoc().getNodeValue() != null)
         {
-            this.javadoc.getNodeValue().receiveTyped(visitor);
+            this.getUnionForJavadoc().getNodeValue().receiveTyped(visitor);
         }
         Iterator<? extends Node> extras = getHiddenVisitorChildren();
         if (extras != null)
@@ -662,6 +707,8 @@ public class EnumDeclarationNodeImpl extends NodeImpl implements EnumDeclaration
     {
         StringBuilder sb = new StringBuilder();
         sb.append(this.getClass().getSimpleName());
+        sb.append('#');
+        sb.append(this.getUid());
         sb.append('[');
         sb.append("modifiers=");
         sb.append(this.getUnionForModifiers().getNodeValue() == null? "null" : this.getUnionForModifiers().getNodeValue().getClass().getSimpleName());

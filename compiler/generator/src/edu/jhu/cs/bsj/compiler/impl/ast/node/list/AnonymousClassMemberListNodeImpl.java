@@ -17,6 +17,7 @@ import edu.jhu.cs.bsj.compiler.ast.node.AnonymousClassMemberNode;
 import edu.jhu.cs.bsj.compiler.ast.node.Node;
 import edu.jhu.cs.bsj.compiler.ast.node.list.AnonymousClassMemberListNode;
 import edu.jhu.cs.bsj.compiler.impl.ast.BsjNodeManager;
+import edu.jhu.cs.bsj.compiler.impl.ast.BsjNodeProxyFactory;
 
 @Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
 public class AnonymousClassMemberListNodeImpl extends ListNodeImpl<AnonymousClassMemberNode> implements AnonymousClassMemberListNode
@@ -30,6 +31,18 @@ public class AnonymousClassMemberListNodeImpl extends ListNodeImpl<AnonymousClas
             boolean binary)
     {
         super(children, startLocation, stopLocation, manager, binary);
+    }
+    
+    /** Proxy constructor. */
+    public AnonymousClassMemberListNodeImpl(BsjNodeManager manager, BsjNodeProxyFactory proxyFactory, AnonymousClassMemberListNode backingNode)
+    {
+        super(manager, proxyFactory, backingNode);
+    }
+    
+    /** Retrieves this node's backing node (if one exists). */
+    protected AnonymousClassMemberListNode getBackingNode()
+    {
+        return (AnonymousClassMemberListNode)super.getBackingNode();
     }
     
     /**
@@ -136,6 +149,8 @@ public class AnonymousClassMemberListNodeImpl extends ListNodeImpl<AnonymousClas
     {
         StringBuilder sb = new StringBuilder();
         sb.append(this.getClass().getSimpleName());
+        sb.append('#');
+        sb.append(this.getUid());
         sb.append('[');
         sb.append("children=");
         sb.append(this.getUnionForChildren() == null? "null" : this.getUnionForChildren().getClass().getSimpleName());
@@ -227,6 +242,14 @@ public class AnonymousClassMemberListNodeImpl extends ListNodeImpl<AnonymousClas
     public Class<AnonymousClassMemberNode> getElementType()
     {
         return AnonymousClassMemberNode.class;
+    }
+    
+    /**
+     * Wraps an element of this list's type.
+     */
+    protected AnonymousClassMemberNode wrapElement(AnonymousClassMemberNode element)
+    {
+        return getProxyFactory().makeAnonymousClassMemberNode(element);
     }
     
 }

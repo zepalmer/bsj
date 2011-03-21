@@ -150,6 +150,25 @@ public abstract class AbstractPropertyDefinition<T extends AbstractPropertyDefin
 			return this.getFullType();
 		}
 	}
+	
+	/**
+	 * Retrieves a type representing this property in edit scripts.  If this property has a node type, the node's UID
+	 * is used.  If it is a list of nodes, a list of UIDs is used.
+	 * @return The edit script type of this property.
+	 */
+	public String getEditScriptType()
+	{
+        if (isNodeType())
+        {
+            return "Long";
+        } else if (isNodeListType())
+        {
+            return "List<Long>";
+        } else
+        {
+            return getFullType();
+        }
+	}
 
 	public boolean isWrappable()
 	{

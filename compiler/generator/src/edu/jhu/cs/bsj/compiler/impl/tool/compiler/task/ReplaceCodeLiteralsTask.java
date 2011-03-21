@@ -116,7 +116,7 @@ public class ReplaceCodeLiteralsTask extends AbstractBsjCompilerTask
                         @Override
                         public String getMessage(Locale locale)
                         {
-                            StringBuilder sb = new StringBuilder("<<internal typechecking error>> ");
+                            StringBuilder sb = new StringBuilder("<<typechecking error (temporary diagnostic stub)>> ");
                             sb.append(e.getMessage() + ":\n");
                             for (StackTraceElement element : e.getStackTrace())
                             {

@@ -17,6 +17,7 @@ import edu.jhu.cs.bsj.compiler.ast.node.ExpressionNode;
 import edu.jhu.cs.bsj.compiler.ast.node.Node;
 import edu.jhu.cs.bsj.compiler.ast.node.list.ExpressionListNode;
 import edu.jhu.cs.bsj.compiler.impl.ast.BsjNodeManager;
+import edu.jhu.cs.bsj.compiler.impl.ast.BsjNodeProxyFactory;
 
 @Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
 public class ExpressionListNodeImpl extends ListNodeImpl<ExpressionNode> implements ExpressionListNode
@@ -30,6 +31,18 @@ public class ExpressionListNodeImpl extends ListNodeImpl<ExpressionNode> impleme
             boolean binary)
     {
         super(children, startLocation, stopLocation, manager, binary);
+    }
+    
+    /** Proxy constructor. */
+    public ExpressionListNodeImpl(BsjNodeManager manager, BsjNodeProxyFactory proxyFactory, ExpressionListNode backingNode)
+    {
+        super(manager, proxyFactory, backingNode);
+    }
+    
+    /** Retrieves this node's backing node (if one exists). */
+    protected ExpressionListNode getBackingNode()
+    {
+        return (ExpressionListNode)super.getBackingNode();
     }
     
     /**
@@ -136,6 +149,8 @@ public class ExpressionListNodeImpl extends ListNodeImpl<ExpressionNode> impleme
     {
         StringBuilder sb = new StringBuilder();
         sb.append(this.getClass().getSimpleName());
+        sb.append('#');
+        sb.append(this.getUid());
         sb.append('[');
         sb.append("children=");
         sb.append(this.getUnionForChildren() == null? "null" : this.getUnionForChildren().getClass().getSimpleName());
@@ -227,6 +242,14 @@ public class ExpressionListNodeImpl extends ListNodeImpl<ExpressionNode> impleme
     public Class<ExpressionNode> getElementType()
     {
         return ExpressionNode.class;
+    }
+    
+    /**
+     * Wraps an element of this list's type.
+     */
+    protected ExpressionNode wrapElement(ExpressionNode element)
+    {
+        return getProxyFactory().makeExpressionNode(element);
     }
     
 }

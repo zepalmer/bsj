@@ -1,0 +1,18 @@
+public class OldName
+{
+    [:
+        #mode mutate;
+        ClassDeclarationNode n = context.getAnchor().<ClassDeclarationNode>getNearestAncestorOfType(ClassDeclarationNode.class);
+        n.setIdentifier(context.getFactory().makeIdentifierNode("ReadWriteOkay"));
+    :]
+    
+    [:
+        #mode mutate;
+        ClassDeclarationNode n = context.getAnchor().<ClassDeclarationNode>getNearestAncestorOfType(ClassDeclarationNode.class);
+        String s = n.getIdentifier().getIdentifier();
+        if (!s.equals("OldName"))
+        {
+            throw new MetaprogramExecutionFailureException("Class declaration had wrong name!  (Expected OldName, was " + s + ")");
+        }
+    :]
+}

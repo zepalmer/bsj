@@ -1,0 +1,10 @@
+import java.io.*;
+
+public class ListPermissionViolation
+{
+	[:
+		CompilationUnitNode node = context.getAnchor().getNearestAncestorOfType(CompilationUnitNode.class);
+		ImportListNode importsNode = node.getImports();
+		importsNode.clear();
+	:]
+}

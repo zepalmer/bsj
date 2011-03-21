@@ -1,9 +1,0 @@
-#import edu.jhu.cs.bsj.stdlib.metaannotations.*;
-
-@@GenerateEqualsAndHashCode(properties={"a"})
-public class InheritsFromObjectWithEquals {
-	@@Property private int a;
-	public InheritsFromObjectWithEquals(int a) {
-		this.a = a;
-	}
-}

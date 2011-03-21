@@ -1,0 +1,15 @@
+[:
+    context.getAnchor().getRootPackage().loadCompilationUnit("Loaded", context.getCompilationUnitLoadingInfo());
+:]
+
+[:
+    context.getAnchor().getRootPackage().loadCompilationUnit("Loaded", context.getCompilationUnitLoadingInfo());
+:]
+
+public class Main
+{
+	public static int foo()
+	{
+		return Loaded.x;
+	}
+}

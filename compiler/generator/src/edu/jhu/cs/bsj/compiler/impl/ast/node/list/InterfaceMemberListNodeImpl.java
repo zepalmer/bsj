@@ -17,6 +17,7 @@ import edu.jhu.cs.bsj.compiler.ast.node.InterfaceMemberNode;
 import edu.jhu.cs.bsj.compiler.ast.node.Node;
 import edu.jhu.cs.bsj.compiler.ast.node.list.InterfaceMemberListNode;
 import edu.jhu.cs.bsj.compiler.impl.ast.BsjNodeManager;
+import edu.jhu.cs.bsj.compiler.impl.ast.BsjNodeProxyFactory;
 
 @Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
 public class InterfaceMemberListNodeImpl extends ListNodeImpl<InterfaceMemberNode> implements InterfaceMemberListNode
@@ -30,6 +31,18 @@ public class InterfaceMemberListNodeImpl extends ListNodeImpl<InterfaceMemberNod
             boolean binary)
     {
         super(children, startLocation, stopLocation, manager, binary);
+    }
+    
+    /** Proxy constructor. */
+    public InterfaceMemberListNodeImpl(BsjNodeManager manager, BsjNodeProxyFactory proxyFactory, InterfaceMemberListNode backingNode)
+    {
+        super(manager, proxyFactory, backingNode);
+    }
+    
+    /** Retrieves this node's backing node (if one exists). */
+    protected InterfaceMemberListNode getBackingNode()
+    {
+        return (InterfaceMemberListNode)super.getBackingNode();
     }
     
     /**
@@ -136,6 +149,8 @@ public class InterfaceMemberListNodeImpl extends ListNodeImpl<InterfaceMemberNod
     {
         StringBuilder sb = new StringBuilder();
         sb.append(this.getClass().getSimpleName());
+        sb.append('#');
+        sb.append(this.getUid());
         sb.append('[');
         sb.append("children=");
         sb.append(this.getUnionForChildren() == null? "null" : this.getUnionForChildren().getClass().getSimpleName());
@@ -227,6 +242,14 @@ public class InterfaceMemberListNodeImpl extends ListNodeImpl<InterfaceMemberNod
     public Class<InterfaceMemberNode> getElementType()
     {
         return InterfaceMemberNode.class;
+    }
+    
+    /**
+     * Wraps an element of this list's type.
+     */
+    protected InterfaceMemberNode wrapElement(InterfaceMemberNode element)
+    {
+        return getProxyFactory().makeInterfaceMemberNode(element);
     }
     
 }

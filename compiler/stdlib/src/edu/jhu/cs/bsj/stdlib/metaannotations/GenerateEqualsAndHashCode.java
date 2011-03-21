@@ -45,260 +45,271 @@ import edu.jhu.cs.bsj.stdlib.utils.TypeDeclUtils;
  */
 public class GenerateEqualsAndHashCode extends AbstractPropertyListMetaannotationMetaprogram
 {
-	// TODO This doesn't seem to work, because the metaannotation properties defined in the abstract superclass are not detected, and it throws errors indicating that the property "properties" does not exist.
-	
-	private ClassDeclarationNode classDeclaration;
+    // TODO This doesn't seem to work, because the metaannotation properties defined in the abstract superclass are not
+    // detected, and it throws errors indicating that the property "properties" does not exist.
 
-	public GenerateEqualsAndHashCode()
-	{
-		super(Arrays.asList("equalsAndHashCode"), Arrays.asList("property"));
-	}
+    private ClassDeclarationNode classDeclaration;
 
+    public GenerateEqualsAndHashCode()
+    {
+        super(Arrays.asList("equalsAndHashCode"), Arrays.asList("property"));
+    }
 
-	@Override
-	public void execute(Context<MetaAnnotationMetaprogramAnchorNode,MetaAnnotationMetaprogramAnchorNode> context,
-			List<Pair<String, TypeNode>> getterDescriptions)
-	{
-		
-		classDeclaration = context.getAnchor()
-		.getNearestAncestorOfType(ClassDeclarationNode.class);
-		// get the other members of our class
-		ClassMemberListNode members = TypeDeclUtils.getClassMembers(context, this);
+    @Override
+    public void execute(Context<MetaAnnotationMetaprogramAnchorNode, MetaAnnotationMetaprogramAnchorNode> context,
+            List<Pair<String, TypeNode>> getterDescriptions)
+    {
 
-		// Establish the list of properties we will be using
+        classDeclaration = context.getAnchor().getNearestAncestorOfType(ClassDeclarationNode.class);
+        // get the other members of our class
+        ClassMemberListNode members = TypeDeclUtils.getClassMembers(context, this);
 
-		// Now generate equals and hashCode methods
-		members.addLast(generateEquals(context, getterDescriptions));
-		members.addLast(generateHashCode(context, getterDescriptions));
-	}
+        // Establish the list of properties we will be using
 
-	private MethodDeclarationNode generateEquals(Context<MetaAnnotationMetaprogramAnchorNode,MetaAnnotationMetaprogramAnchorNode> context,
-			List<Pair<String, TypeNode>> getters)
-	{
-		// Determine whether or not a call to super.equals is appropriate.
-		// This is the case if any of the type declarations above this one declare equals (except for java.lang.Object)
-		boolean invokeSuper; // TODO
-		
-		MetaannotationMetaprogramToolkit toolkit = new MetaannotationMetaprogramToolkit(this, context);
+        // Now generate equals and hashCode methods
+        members.addLast(generateEquals(context, getterDescriptions));
+        members.addLast(generateHashCode(context, getterDescriptions));
+    }
 
-		ClassDeclarationNode classDeclaration = toolkit.getDeclarationAncestorOfType(ClassDeclarationNode.class, context.getAnchor());
-		NameNode name = toolkit.getExtendsNameNode(classDeclaration);
-		if (name == null) {
-			invokeSuper = false;
-		} else {
-			java.util.Collection<? extends Node> superBinding = context
-					.getAnchor().getDeclarationsInScope(name);
-			if (superBinding.size() != 1) {
-				throw new NotImplementedYetException();
-				// TODO raise a diagnostic
-			}
+    private MethodDeclarationNode generateEquals(
+            Context<MetaAnnotationMetaprogramAnchorNode, MetaAnnotationMetaprogramAnchorNode> context,
+            List<Pair<String, TypeNode>> getters)
+    {
+        // Determine whether or not a call to super.equals is appropriate.
+        // This is the case if any of the type declarations above this one declare equals (except for java.lang.Object)
+        boolean invokeSuper; // TODO
 
-			java.util.Collection<? extends InvokableNameBindingNode> bindings = superBinding
-					.iterator().next().getMethodDeclarationsInScope("equals");
-			for (InvokableNameBindingNode invokable : bindings) {
-				invokable.getNearestAncestorOfType(ClassDeclarationNode.class);
+        MetaannotationMetaprogramToolkit toolkit = new MetaannotationMetaprogramToolkit(this, context);
 
-			}
-			String extendsName = toolkit.getExtendsName(classDeclaration);
-			if (extendsName.equals("java.lang.Object")) {
-				invokeSuper = true;
-			} else {
-				invokeSuper = false;
-			}
-		}
+        ClassDeclarationNode classDeclaration = toolkit.getDeclarationAncestorOfType(ClassDeclarationNode.class,
+                context.getAnchor());
+        NameNode name = toolkit.getExtendsNameNode(classDeclaration);
+        if (name == null)
+        {
+            invokeSuper = false;
+        } else
+        {
+            java.util.Collection<? extends Node> superBinding = context.getAnchor().getDeclarationsInScope(name);
+            if (superBinding.size() != 1)
+            {
+                throw new NotImplementedYetException();
+                // TODO raise a diagnostic
+            }
 
-		BsjNodeFactory factory = context.getFactory();
-		List<BlockStatementNode> statements = new ArrayList<BlockStatementNode>();
+            java.util.Collection<? extends InvokableNameBindingNode> bindings = superBinding.iterator().next().getMethodDeclarationsInScope(
+                    "equals");
+            for (InvokableNameBindingNode invokable : bindings)
+            {
+                invokable.getNearestAncestorOfType(ClassDeclarationNode.class);
 
-		// if (this == o) return true;
-		statements.add(factory.makeIfNode(factory.makeBinaryExpressionNode(factory.makeThisNode(),
-				factory.makeVariableAccessNode(null, factory.makeIdentifierNode("o")), BinaryOperator.EQUAL),
-				factory.makeReturnNode(factory.makeBooleanLiteralNode(true))));
+            }
+            String extendsName = toolkit.getExtendsName(classDeclaration);
+            if (extendsName.equals("java.lang.Object"))
+            {
+                invokeSuper = true;
+            } else
+            {
+                invokeSuper = false;
+            }
+        }
 
-		// if (obj == null) return false;
-		statements.add(factory.makeIfNode(factory.makeBinaryExpressionNode(
-				factory.makeVariableAccessNode(null, factory.makeIdentifierNode("o")), factory.makeNullLiteralNode(),
-				BinaryOperator.EQUAL), factory.makeReturnNode(factory.makeBooleanLiteralNode(false))));
+        BsjNodeFactory factory = context.getFactory();
+        List<BlockStatementNode> statements = new ArrayList<BlockStatementNode>();
 
-		// if (getClass() != obj.getClass()) return false;
-		statements.add(factory.makeIfNode(factory.makeBinaryExpressionNode(
-				factory.makeMethodInvocationNode(factory.makeIdentifierNode("getClass")),
-				factory.makeMethodInvocationNode(
-						factory.makeVariableAccessNode(null, factory.makeIdentifierNode("o")),
-						factory.makeIdentifierNode("getClass")), BinaryOperator.NOT_EQUAL),
-				factory.makeReturnNode(factory.makeBooleanLiteralNode(false))));
+        // if (this == o) return true;
+        statements.add(factory.makeIfNode(
+                factory.makeBinaryExpressionNode(factory.makeThisNode(),
+                        factory.makeVariableAccessNode(null, factory.makeIdentifierNode("o")), BinaryOperator.EQUAL),
+                factory.makeReturnNode(factory.makeBooleanLiteralNode(true))));
 
-		// if (!super.equals(o)) return false;
-		if (invokeSuper)
-		{
-			statements.add(factory.makeIfNode(factory.makeUnaryExpressionNode(factory.makeSuperMethodInvocationNode(
-					factory.makeIdentifierNode("equals"),
-					factory.makeExpressionListNode(factory.makeVariableAccessNode(null, factory.makeIdentifierNode("o")))),
-					UnaryOperator.LOGICAL_COMPLEMENT), factory.makeReturnNode(factory.makeBooleanLiteralNode(false))));
-		}
+        // if (obj == null) return false;
+        statements.add(factory.makeIfNode(factory.makeBinaryExpressionNode(
+                factory.makeVariableAccessNode(null, factory.makeIdentifierNode("o")), factory.makeNullLiteralNode(),
+                BinaryOperator.EQUAL), factory.makeReturnNode(factory.makeBooleanLiteralNode(false))));
 
-		// MyClass other = (MyClass) o;
-		NamedTypeDeclarationNode<?> enclosingDeclaration = context.getAnchor().getNearestAncestorOfType(
-				NamedTypeDeclarationNode.class);
-		// TODO: what if we have a type parameter?
-		statements.add(factory.makeLocalVariableDeclarationNode(
-				factory.makeUnparameterizedTypeNode(factory.parseNameNode(enclosingDeclaration.getIdentifier().getIdentifier())),
-				factory.makeVariableDeclaratorListNode(factory.makeVariableDeclaratorNode(
-						factory.makeIdentifierNode("other"),
-						factory.makeTypeCastNode(
-								factory.makeVariableAccessNode(null, factory.makeIdentifierNode("o")),
-								factory.makeUnparameterizedTypeNode(factory.parseNameNode(enclosingDeclaration.getIdentifier().getIdentifier())))))));
+        // if (getClass() != obj.getClass()) return false;
+        statements.add(factory.makeIfNode(
+                factory.makeBinaryExpressionNode(
+                        factory.makeMethodInvocationNode(factory.makeIdentifierNode("getClass")),
+                        factory.makeMethodInvocationNode(
+                                factory.makeVariableAccessNode(null, factory.makeIdentifierNode("o")),
+                                factory.makeIdentifierNode("getClass")), BinaryOperator.NOT_EQUAL),
+                factory.makeReturnNode(factory.makeBooleanLiteralNode(false))));
 
-		// For each property, do some kind of comparison on it
-		for (Pair<String, TypeNode> getter : getters)
-		{
-			String getterName = getter.getFirst();
-			TypeNode type = getter.getSecond();
-			ExpressionNode comparisonExpressionNode;
-			PrimaryExpressionNode thisGetterNode = factory.makeMethodInvocationNode(factory.makeIdentifierNode(getterName));
-			PrimaryExpressionNode otherGetterNode = factory.makeMethodInvocationNode(
-					factory.makeVariableAccessNode(null, factory.makeIdentifierNode("other")),
-					factory.makeIdentifierNode(getterName));
-			if (type instanceof PrimitiveTypeNode)
-			{
-				// then compare using ==
-				comparisonExpressionNode = factory.makeBinaryExpressionNode(thisGetterNode, otherGetterNode,
-						BinaryOperator.EQUAL);
-			} else if (type instanceof ArrayTypeNode)
-			{
-				// then compare using Arrays.equals
-				comparisonExpressionNode = factory.makeMethodInvocationNode(
-						factory.makeVariableAccessNode(
-								factory.makeVariableAccessNode(
-										factory.makeVariableAccessNode(factory.makeIdentifierNode("java")),
-										factory.makeIdentifierNode("util")),
-										factory.makeIdentifierNode("Arrays")),
-										factory.makeIdentifierNode("equals"),
-						factory.makeExpressionListNode(
-								thisGetterNode, otherGetterNode));
+        // if (!super.equals(o)) return false;
+        if (invokeSuper)
+        {
+            statements.add(factory.makeIfNode(
+                    factory.makeUnaryExpressionNode(
+                            factory.makeSuperMethodInvocationNode(
+                                    factory.makeIdentifierNode("equals"),
+                                    factory.makeExpressionListNode(factory.makeVariableAccessNode(null,
+                                            factory.makeIdentifierNode("o")))), UnaryOperator.LOGICAL_COMPLEMENT),
+                    factory.makeReturnNode(factory.makeBooleanLiteralNode(false))));
+        }
 
-			} else
-			{
-				// then compare using null check and .equals
-				comparisonExpressionNode = factory.makeBinaryExpressionNode(factory.makeBinaryExpressionNode(
-						factory.makeBinaryExpressionNode(thisGetterNode.deepCopy(factory),
-								factory.makeNullLiteralNode(), BinaryOperator.EQUAL),
-						factory.makeBinaryExpressionNode(otherGetterNode.deepCopy(factory),
-								factory.makeNullLiteralNode(), BinaryOperator.EQUAL), BinaryOperator.CONDITIONAL_AND),
-						factory.makeBinaryExpressionNode(factory.makeBinaryExpressionNode(
-								thisGetterNode.deepCopy(factory), factory.makeNullLiteralNode(),
-								BinaryOperator.NOT_EQUAL), factory.makeMethodInvocationNode(thisGetterNode,
-								factory.makeIdentifierNode("equals"), factory.makeExpressionListNode(otherGetterNode)),
-								BinaryOperator.CONDITIONAL_AND), BinaryOperator.CONDITIONAL_OR);
-			}
-			// Now that we have our comparison mechanism, add the statement
-			statements.add(factory.makeIfNode(comparisonExpressionNode,
-					factory.makeReturnNode(factory.makeBooleanLiteralNode(true))));
-		}
+        // MyClass other = (MyClass) o;
+        NamedTypeDeclarationNode<?> enclosingDeclaration = context.getAnchor().getNearestAncestorOfType(
+                NamedTypeDeclarationNode.class);
+        // TODO: what if we have a type parameter?
+        statements.add(factory.makeLocalVariableDeclarationNode(
+                factory.makeUnparameterizedTypeNode(factory.parseNameNode(enclosingDeclaration.getIdentifier().getIdentifier())),
+                factory.makeVariableDeclaratorListNode(factory.makeVariableDeclaratorNode(
+                        factory.makeIdentifierNode("other"),
+                        factory.makeTypeCastNode(
+                                factory.makeVariableAccessNode(null, factory.makeIdentifierNode("o")),
+                                factory.makeUnparameterizedTypeNode(factory.parseNameNode(enclosingDeclaration.getIdentifier().getIdentifier())))))));
 
-		// Add final return false
-		statements.add(factory.makeReturnNode(factory.makeBooleanLiteralNode(false)));
+        // For each property, do some kind of comparison on it
+        for (Pair<String, TypeNode> getter : getters)
+        {
+            String getterName = getter.getFirst();
+            TypeNode type = getter.getSecond();
+            ExpressionNode comparisonExpressionNode;
+            PrimaryExpressionNode thisGetterNode = factory.makeMethodInvocationNode(factory.makeIdentifierNode(getterName));
+            PrimaryExpressionNode otherGetterNode = factory.makeMethodInvocationNode(
+                    factory.makeVariableAccessNode(null, factory.makeIdentifierNode("other")),
+                    factory.makeIdentifierNode(getterName));
+            if (type instanceof PrimitiveTypeNode)
+            {
+                // then compare using ==
+                comparisonExpressionNode = factory.makeBinaryExpressionNode(thisGetterNode, otherGetterNode,
+                        BinaryOperator.EQUAL);
+            } else if (type instanceof ArrayTypeNode)
+            {
+                // then compare using Arrays.equals
+                comparisonExpressionNode = factory.makeMethodInvocationNode(
+                        factory.makeVariableAccessNode(
+                                factory.makeVariableAccessNode(
+                                        factory.makeVariableAccessNode(factory.makeIdentifierNode("java")),
+                                        factory.makeIdentifierNode("util")), factory.makeIdentifierNode("Arrays")),
+                        factory.makeIdentifierNode("equals"),
+                        factory.makeExpressionListNode(thisGetterNode, otherGetterNode));
 
-		// Return method enclosing this list of statements
-		return factory.makeMethodDeclarationNode(factory.makeBlockStatementListNode(statements),
-				factory.makeMethodModifiersNode(AccessModifier.PUBLIC), factory.makeIdentifierNode("equals"),
-				factory.makeVariableListNode(factory.makeVariableNode(
-						factory.makeUnparameterizedTypeNode(factory.parseNameNode("java.lang.Object")),
-						factory.makeIdentifierNode("o"))), factory.makePrimitiveTypeNode(PrimitiveType.BOOLEAN),
-				factory.makeJavadocNode("Overrides the default equals method.\n"
-						+ "@param o the object for comparison.\n"
-						+ "@return true if equal to this object, false otherwise."));
-	}
+            } else
+            {
+                // then compare using null check and .equals
+                comparisonExpressionNode = factory.makeBinaryExpressionNode(factory.makeBinaryExpressionNode(
+                        factory.makeBinaryExpressionNode(thisGetterNode.deepCopy(factory),
+                                factory.makeNullLiteralNode(), BinaryOperator.EQUAL),
+                        factory.makeBinaryExpressionNode(otherGetterNode.deepCopy(factory),
+                                factory.makeNullLiteralNode(), BinaryOperator.EQUAL), BinaryOperator.CONDITIONAL_AND),
+                        factory.makeBinaryExpressionNode(factory.makeBinaryExpressionNode(
+                                thisGetterNode.deepCopy(factory), factory.makeNullLiteralNode(),
+                                BinaryOperator.NOT_EQUAL), factory.makeMethodInvocationNode(thisGetterNode,
+                                factory.makeIdentifierNode("equals"), factory.makeExpressionListNode(otherGetterNode)),
+                                BinaryOperator.CONDITIONAL_AND), BinaryOperator.CONDITIONAL_OR);
+            }
+            // Now that we have our comparison mechanism, add the statement
+            statements.add(factory.makeIfNode(comparisonExpressionNode,
+                    factory.makeReturnNode(factory.makeBooleanLiteralNode(true))));
+        }
 
-	private MethodDeclarationNode generateHashCode(Context<MetaAnnotationMetaprogramAnchorNode,MetaAnnotationMetaprogramAnchorNode> context,
-			List<Pair<String, TypeNode>> getters)
-	{
-		BsjNodeFactory factory = context.getFactory();
-		List<BlockStatementNode> statements = new ArrayList<BlockStatementNode>();
+        // Add final return false
+        statements.add(factory.makeReturnNode(factory.makeBooleanLiteralNode(false)));
 
-		// final int prime = 31;
-		statements.add(factory.makeLocalVariableDeclarationNode(factory.makeVariableModifiersNode(true,
-				factory.makeMetaAnnotationListNode(), factory.makeAnnotationListNode()),
-				factory.makePrimitiveTypeNode(PrimitiveType.INT),
-				factory.makeVariableDeclaratorListNode(factory.makeVariableDeclaratorNode(
-						factory.makeIdentifierNode("prime"), factory.makeIntLiteralNode(31)))));
+        // Return method enclosing this list of statements
+        return factory.makeMethodDeclarationNode(
+                factory.makeBlockStatementListNode(statements),
+                factory.makeMethodModifiersNode(AccessModifier.PUBLIC),
+                factory.makeIdentifierNode("equals"),
+                factory.makeVariableListNode(factory.makeVariableNode(
+                        factory.makeUnparameterizedTypeNode(factory.parseNameNode("java.lang.Object")),
+                        factory.makeIdentifierNode("o"))), factory.makePrimitiveTypeNode(PrimitiveType.BOOLEAN),
+                factory.makeJavadocNode("Overrides the default equals method.\n"
+                        + "@param o the object for comparison.\n"
+                        + "@return true if equal to this object, false otherwise."));
+    }
 
-		// int result = 1;
-		statements.add(factory.makeLocalVariableDeclarationNode(factory.makePrimitiveTypeNode(PrimitiveType.INT),
-				factory.makeVariableDeclaratorListNode(factory.makeVariableDeclaratorNode(
-						factory.makeIdentifierNode("result"), factory.makeIntLiteralNode(1)))));
+    private MethodDeclarationNode generateHashCode(
+            Context<MetaAnnotationMetaprogramAnchorNode, MetaAnnotationMetaprogramAnchorNode> context,
+            List<Pair<String, TypeNode>> getters)
+    {
+        BsjNodeFactory factory = context.getFactory();
+        List<BlockStatementNode> statements = new ArrayList<BlockStatementNode>();
 
-		// for each property, bring in some change to the hash
-		for (Pair<String, TypeNode> getter : getters)
-		{
-			String getterName = getter.getFirst();
-			TypeNode type = getter.getSecond();
-			ExpressionNode hashValueNode;
-			PrimaryExpressionNode getterCallNode = factory.makeMethodInvocationNode(factory.makeIdentifierNode(getterName));
-			if (type instanceof PrimitiveTypeNode)
-			{
-				PrimitiveTypeNode primitiveTypeNode = (PrimitiveTypeNode) type;
-				switch (primitiveTypeNode.getPrimitiveType())
-				{
-					case BOOLEAN:
-						// x ? 1 : 0
-						hashValueNode = factory.makeConditionalExpressionNode(getterCallNode,
-								factory.makeIntLiteralNode(1), factory.makeIntLiteralNode(0));
-						break;
-					case DOUBLE:
-					case FLOAT:
-					case LONG:
-						// (int)x
-						hashValueNode = factory.makeTypeCastNode(getterCallNode,
-								factory.makePrimitiveTypeNode(PrimitiveType.INT));
-						break;
-					default:
-						// x
-						hashValueNode = getterCallNode;
-				}
-			} else if (type instanceof ArrayTypeNode)
-			{
-				// then use Arrays.hashCode
-				hashValueNode = factory.makeMethodInvocationNode(
-						factory.makeVariableAccessNode(
-								factory.makeVariableAccessNode(
-										factory.makeVariableAccessNode(factory.makeIdentifierNode("java")),
-										factory.makeIdentifierNode("util")),
-										factory.makeIdentifierNode("Arrays")),
-										factory.makeIdentifierNode("hashCode"),
-						factory.makeExpressionListNode(getterCallNode));
+        // final int prime = 31;
+        statements.add(factory.makeLocalVariableDeclarationNode(
+                factory.makeVariableModifiersNode(true, factory.makeMetaAnnotationListNode(),
+                        factory.makeAnnotationListNode()),
+                factory.makePrimitiveTypeNode(PrimitiveType.INT),
+                factory.makeVariableDeclaratorListNode(factory.makeVariableDeclaratorNode(
+                        factory.makeIdentifierNode("prime"), factory.makeIntLiteralNode(31)))));
 
-			} else
-			{
-				// then compare using null check and .hashCode
-				hashValueNode = factory.makeConditionalExpressionNode(factory.makeBinaryExpressionNode(
-						getterCallNode.deepCopy(factory), factory.makeNullLiteralNode(), BinaryOperator.EQUAL),
-						factory.makeIntLiteralNode(0), factory.makeMethodInvocationNode(getterCallNode,
-								factory.makeIdentifierNode("hashCode")));
-			}
-			// Now that we have our hash adjustment mechanism, add the statement
-			statements.add(factory.makeExpressionStatementNode(factory.makeAssignmentNode(
-					factory.makeVariableAccessNode(null, factory.makeIdentifierNode("result")), AssignmentOperator.ASSIGNMENT,
-					factory.makeBinaryExpressionNode(
-							factory.makeBinaryExpressionNode(
-									factory.makeVariableAccessNode(null, factory.makeIdentifierNode("result")),
-									factory.makeVariableAccessNode(null, factory.makeIdentifierNode("prime")),
-									BinaryOperator.MULTIPLY), hashValueNode, BinaryOperator.PLUS))));
-		}
+        // int result = 1;
+        statements.add(factory.makeLocalVariableDeclarationNode(
+                factory.makePrimitiveTypeNode(PrimitiveType.INT),
+                factory.makeVariableDeclaratorListNode(factory.makeVariableDeclaratorNode(
+                        factory.makeIdentifierNode("result"), factory.makeIntLiteralNode(1)))));
 
-		// Add final return
-		statements.add(factory.makeReturnNode(factory.makeVariableAccessNode(null, factory.makeIdentifierNode("result"))));
+        // for each property, bring in some change to the hash
+        for (Pair<String, TypeNode> getter : getters)
+        {
+            String getterName = getter.getFirst();
+            TypeNode type = getter.getSecond();
+            ExpressionNode hashValueNode;
+            PrimaryExpressionNode getterCallNode = factory.makeMethodInvocationNode(factory.makeIdentifierNode(getterName));
+            if (type instanceof PrimitiveTypeNode)
+            {
+                PrimitiveTypeNode primitiveTypeNode = (PrimitiveTypeNode) type;
+                switch (primitiveTypeNode.getPrimitiveType())
+                {
+                    case BOOLEAN:
+                        // x ? 1 : 0
+                        hashValueNode = factory.makeConditionalExpressionNode(getterCallNode,
+                                factory.makeIntLiteralNode(1), factory.makeIntLiteralNode(0));
+                        break;
+                    case DOUBLE:
+                    case FLOAT:
+                    case LONG:
+                        // (int)x
+                        hashValueNode = factory.makeTypeCastNode(getterCallNode,
+                                factory.makePrimitiveTypeNode(PrimitiveType.INT));
+                        break;
+                    default:
+                        // x
+                        hashValueNode = getterCallNode;
+                }
+            } else if (type instanceof ArrayTypeNode)
+            {
+                // then use Arrays.hashCode
+                hashValueNode = factory.makeMethodInvocationNode(
+                        factory.makeVariableAccessNode(
+                                factory.makeVariableAccessNode(
+                                        factory.makeVariableAccessNode(factory.makeIdentifierNode("java")),
+                                        factory.makeIdentifierNode("util")), factory.makeIdentifierNode("Arrays")),
+                        factory.makeIdentifierNode("hashCode"), factory.makeExpressionListNode(getterCallNode));
 
-		// Create hashCode method
-		return factory.makeMethodDeclarationNode(factory.makeBlockStatementListNode(statements),
-				factory.makeMethodModifiersNode(AccessModifier.PUBLIC), factory.makeIdentifierNode("hashCode"),
-				factory.makeVariableListNode(), factory.makePrimitiveTypeNode(PrimitiveType.INT),
-				factory.makeJavadocNode("Overrides the default hashCode method.\n"
-						+ "@return the hashcode for this object."));
-	}
+            } else
+            {
+                // then compare using null check and .hashCode
+                hashValueNode = factory.makeConditionalExpressionNode(
+                        factory.makeBinaryExpressionNode(getterCallNode.deepCopy(factory),
+                                factory.makeNullLiteralNode(), BinaryOperator.EQUAL), factory.makeIntLiteralNode(0),
+                        factory.makeMethodInvocationNode(getterCallNode, factory.makeIdentifierNode("hashCode")));
+            }
+            // Now that we have our hash adjustment mechanism, add the statement
+            statements.add(factory.makeExpressionStatementNode(factory.makeAssignmentNode(
+                    factory.makeVariableAccessNode(null, factory.makeIdentifierNode("result")),
+                    AssignmentOperator.ASSIGNMENT, factory.makeBinaryExpressionNode(factory.makeBinaryExpressionNode(
+                            factory.makeVariableAccessNode(null, factory.makeIdentifierNode("result")),
+                            factory.makeVariableAccessNode(null, factory.makeIdentifierNode("prime")),
+                            BinaryOperator.MULTIPLY), hashValueNode, BinaryOperator.PLUS))));
+        }
 
-	@Override
-	public void complete() throws InvalidMetaAnnotationConfigurationException
-	{
-	}
+        // Add final return
+        statements.add(factory.makeReturnNode(factory.makeVariableAccessNode(null, factory.makeIdentifierNode("result"))));
+
+        // Create hashCode method
+        return factory.makeMethodDeclarationNode(factory.makeBlockStatementListNode(statements),
+                factory.makeMethodModifiersNode(AccessModifier.PUBLIC), factory.makeIdentifierNode("hashCode"),
+                factory.makeVariableListNode(), factory.makePrimitiveTypeNode(PrimitiveType.INT),
+                factory.makeJavadocNode("Overrides the default hashCode method.\n"
+                        + "@return the hashcode for this object."));
+    }
+
+    @Override
+    public void complete() throws InvalidMetaAnnotationConfigurationException
+    {
+    }
 }

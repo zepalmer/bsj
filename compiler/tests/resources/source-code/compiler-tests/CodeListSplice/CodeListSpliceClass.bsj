@@ -1,0 +1,10 @@
+public class CodeListSpliceClass
+{
+	[:
+		ClassMemberListNode members = context.getAnchor().<ClassMemberListNode>getNearestAncestorOfType(ClassMemberListNode.class);
+	
+	    BlockStatementListNode body = <: x *= 2; x -= 3; return x; :> ;
+	    MethodDeclarationNode method = <: public static int foo(int x) { ~:body:~ } :> ;
+	    members.addFirst(method);
+	:]
+}

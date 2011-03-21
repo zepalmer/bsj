@@ -1,10 +1,10 @@
 package edu.jhu.cs.bsj.compiler.impl.ast.node;
 
 import java.util.Arrays;
-import java.util.EnumMap;
+import java.util.EnumSet;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
+import java.util.Set;
 
 import javax.annotation.Generated;
 
@@ -17,8 +17,9 @@ import edu.jhu.cs.bsj.compiler.ast.BsjTypedNodeVisitor;
 import edu.jhu.cs.bsj.compiler.ast.node.IdentifierNode;
 import edu.jhu.cs.bsj.compiler.ast.node.Node;
 import edu.jhu.cs.bsj.compiler.impl.ast.BsjNodeManager;
-import edu.jhu.cs.bsj.compiler.impl.ast.attribute.AttributeName;
-import edu.jhu.cs.bsj.compiler.impl.ast.attribute.ReadWriteAttribute;
+import edu.jhu.cs.bsj.compiler.impl.ast.BsjNodeProxyFactory;
+import edu.jhu.cs.bsj.compiler.impl.ast.delta.property.IdentifierNodeSetIdentifierPropertyEditScriptElementImpl;
+import edu.jhu.cs.bsj.compiler.impl.ast.properties.IdentifierNodeProperties;
 
 @Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
 public class IdentifierNodeImpl extends NodeImpl implements IdentifierNode
@@ -26,22 +27,11 @@ public class IdentifierNodeImpl extends NodeImpl implements IdentifierNode
     /** The identifier contained in this node. */
     private String identifier;
     
-    private Map<LocalAttribute,ReadWriteAttribute> localAttributes = new EnumMap<LocalAttribute,ReadWriteAttribute>(LocalAttribute.class);
-    private ReadWriteAttribute getAttribute(LocalAttribute attributeName)
-    {
-        ReadWriteAttribute attribute = localAttributes.get(attributeName);
-        if (attribute == null)
-        {
-            attribute = new ReadWriteAttribute(IdentifierNodeImpl.this, attributeName);
-            localAttributes.put(attributeName, attribute);
-        }
-        return attribute;
-    }
-    private static enum LocalAttribute implements AttributeName
-    {
-        /** Attribute identifier for the identifier property. */
-        IDENTIFIER,
-    }
+    /**
+     * A set of those properties which have been populated from the backing node.
+     * This field is <code>null</code> if <tt>backingNode</tt> is <code>null</code>.
+     */
+    private Set<IdentifierNodeProperties> populatedProperties;
     
     /** General constructor. */
     public IdentifierNodeImpl(
@@ -52,7 +42,35 @@ public class IdentifierNodeImpl extends NodeImpl implements IdentifierNode
             boolean binary)
     {
         super(startLocation, stopLocation, manager, binary);
-        this.identifier = identifier;
+        this.populatedProperties = null;
+        doSetIdentifier(identifier);
+    }
+    
+    /** Proxy constructor. */
+    public IdentifierNodeImpl(BsjNodeManager manager, BsjNodeProxyFactory proxyFactory, IdentifierNode backingNode)
+    {
+        super(manager, proxyFactory, backingNode);
+        this.populatedProperties = EnumSet.noneOf(IdentifierNodeProperties.class);
+    }
+    
+    /** Retrieves this node's backing node (if one exists). */
+    protected IdentifierNode getBackingNode()
+    {
+        return (IdentifierNode)super.getBackingNode();
+    }
+    
+    /**
+     * Ensures that the identifier value has been populated from proxy.
+     * If this node is not backed by a proxy or if the value has already been
+     * populated, this method does nothing.
+     */
+    private void checkIdentifierWrapped()
+    {
+        if (this.populatedProperties == null || this.populatedProperties.contains(
+                IdentifierNodeProperties.IDENTIFIER))
+            return;
+        this.populatedProperties.add(IdentifierNodeProperties.IDENTIFIER);
+        this.identifier = this.getBackingNode().getIdentifier();
     }
     
     /**
@@ -61,7 +79,7 @@ public class IdentifierNodeImpl extends NodeImpl implements IdentifierNode
      */
     public String getIdentifier()
     {
-        getAttribute(LocalAttribute.IDENTIFIER).recordAccess(ReadWriteAttribute.AccessType.READ);
+        checkIdentifierWrapped();
         return this.identifier;
     }
     
@@ -71,18 +89,15 @@ public class IdentifierNodeImpl extends NodeImpl implements IdentifierNode
      */
     public void setIdentifier(String identifier)
     {
-            setIdentifier(identifier, true);
-            getManager().notifyChange(this);
+        checkIdentifierWrapped();
+        this.getManager().assertMutatable(this);
+        this.doSetIdentifier(identifier);
+        if (this.getManager().isRecordingEdits())
+            super.recordEdit(new IdentifierNodeSetIdentifierPropertyEditScriptElementImpl(this.getManager().getCurrentMetaprogramId(), this.getUid(), identifier));
     }
     
-    private void setIdentifier(String identifier, boolean checkPermissions)
+    private void doSetIdentifier(String identifier)
     {
-        if (checkPermissions)
-        {
-            getManager().assertMutatable(this);
-            getAttribute(LocalAttribute.IDENTIFIER).recordAccess(ReadWriteAttribute.AccessType.WRITE);
-        }
-        
         this.identifier = identifier;
     }
     

@@ -1,17 +1,19 @@
 package edu.jhu.cs.bsj.tests.compiler.tool.compiler;
 
-import java.io.File;
-
+import org.junit.Assert;
 import org.junit.Test;
+
+import edu.jhu.cs.bsj.compiler.tool.filemanager.BsjCompilerLocation;
+import edu.jhu.cs.bsj.compiler.tool.filemanager.BsjFileManager;
 
 public class PackageNodeLoadTest extends AbstractBsjCompilerTest
 {
-	private static final File sourceDir = new File(EXAMPLES + File.separator + "projects" + File.separator
-			+ "bsj-tests" + File.separator + "package-load-test");
-
 	@Test
 	public void testBsjCompiler() throws Exception
 	{
-		performTest(sourceDir, "Main");
+	    BsjFileManager fileManager = performTest("PackageLoadTest", "Main");
+	    ClassLoader loader = fileManager.getLocationManager(BsjCompilerLocation.CLASS_OUTPUT).getClassLoader();
+	    DynamicClass mainClass = new DynamicClass(loader, "Main");
+	    Assert.assertEquals(0, mainClass.call("foo").unwrap());
 	}
 }

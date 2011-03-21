@@ -1,10 +1,10 @@
 package edu.jhu.cs.bsj.compiler.impl.ast.node;
 
 import java.util.Arrays;
-import java.util.EnumMap;
+import java.util.EnumSet;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
+import java.util.Set;
 
 import javax.annotation.Generated;
 
@@ -21,8 +21,11 @@ import edu.jhu.cs.bsj.compiler.ast.node.Node;
 import edu.jhu.cs.bsj.compiler.ast.node.list.AnnotationListNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaAnnotationListNode;
 import edu.jhu.cs.bsj.compiler.impl.ast.BsjNodeManager;
-import edu.jhu.cs.bsj.compiler.impl.ast.attribute.AttributeName;
-import edu.jhu.cs.bsj.compiler.impl.ast.attribute.ReadWriteAttribute;
+import edu.jhu.cs.bsj.compiler.impl.ast.BsjNodeProxyFactory;
+import edu.jhu.cs.bsj.compiler.impl.ast.delta.property.InterfaceModifiersNodeSetAccessPropertyEditScriptElementImpl;
+import edu.jhu.cs.bsj.compiler.impl.ast.delta.property.InterfaceModifiersNodeSetStaticFlagPropertyEditScriptElementImpl;
+import edu.jhu.cs.bsj.compiler.impl.ast.delta.property.InterfaceModifiersNodeSetStrictfpFlagPropertyEditScriptElementImpl;
+import edu.jhu.cs.bsj.compiler.impl.ast.properties.InterfaceModifiersNodeProperties;
 
 @Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
 public class InterfaceModifiersNodeImpl extends ModifiersNodeImpl implements InterfaceModifiersNode
@@ -36,26 +39,11 @@ public class InterfaceModifiersNodeImpl extends ModifiersNodeImpl implements Int
     /** Whether or not the associated interface uses strict floating-point. */
     private boolean strictfpFlag;
     
-    private Map<LocalAttribute,ReadWriteAttribute> localAttributes = new EnumMap<LocalAttribute,ReadWriteAttribute>(LocalAttribute.class);
-    private ReadWriteAttribute getAttribute(LocalAttribute attributeName)
-    {
-        ReadWriteAttribute attribute = localAttributes.get(attributeName);
-        if (attribute == null)
-        {
-            attribute = new ReadWriteAttribute(InterfaceModifiersNodeImpl.this, attributeName);
-            localAttributes.put(attributeName, attribute);
-        }
-        return attribute;
-    }
-    private static enum LocalAttribute implements AttributeName
-    {
-        /** Attribute identifier for the access property. */
-        ACCESS,
-        /** Attribute identifier for the staticFlag property. */
-        STATIC_FLAG,
-        /** Attribute identifier for the strictfpFlag property. */
-        STRICTFP_FLAG,
-    }
+    /**
+     * A set of those properties which have been populated from the backing node.
+     * This field is <code>null</code> if <tt>backingNode</tt> is <code>null</code>.
+     */
+    private Set<InterfaceModifiersNodeProperties> populatedProperties;
     
     /** General constructor. */
     public InterfaceModifiersNodeImpl(
@@ -70,9 +58,65 @@ public class InterfaceModifiersNodeImpl extends ModifiersNodeImpl implements Int
             boolean binary)
     {
         super(metaAnnotations, annotations, startLocation, stopLocation, manager, binary);
-        this.access = access;
-        this.staticFlag = staticFlag;
-        this.strictfpFlag = strictfpFlag;
+        this.populatedProperties = null;
+        doSetAccess(access);
+        doSetStaticFlag(staticFlag);
+        doSetStrictfpFlag(strictfpFlag);
+    }
+    
+    /** Proxy constructor. */
+    public InterfaceModifiersNodeImpl(BsjNodeManager manager, BsjNodeProxyFactory proxyFactory, InterfaceModifiersNode backingNode)
+    {
+        super(manager, proxyFactory, backingNode);
+        this.populatedProperties = EnumSet.noneOf(InterfaceModifiersNodeProperties.class);
+    }
+    
+    /** Retrieves this node's backing node (if one exists). */
+    protected InterfaceModifiersNode getBackingNode()
+    {
+        return (InterfaceModifiersNode)super.getBackingNode();
+    }
+    
+    /**
+     * Ensures that the access value has been populated from proxy.
+     * If this node is not backed by a proxy or if the value has already been
+     * populated, this method does nothing.
+     */
+    private void checkAccessWrapped()
+    {
+        if (this.populatedProperties == null || this.populatedProperties.contains(
+                InterfaceModifiersNodeProperties.ACCESS))
+            return;
+        this.populatedProperties.add(InterfaceModifiersNodeProperties.ACCESS);
+        this.access = this.getBackingNode().getAccess();
+    }
+    
+    /**
+     * Ensures that the staticFlag value has been populated from proxy.
+     * If this node is not backed by a proxy or if the value has already been
+     * populated, this method does nothing.
+     */
+    private void checkStaticFlagWrapped()
+    {
+        if (this.populatedProperties == null || this.populatedProperties.contains(
+                InterfaceModifiersNodeProperties.STATIC_FLAG))
+            return;
+        this.populatedProperties.add(InterfaceModifiersNodeProperties.STATIC_FLAG);
+        this.staticFlag = this.getBackingNode().getStaticFlag();
+    }
+    
+    /**
+     * Ensures that the strictfpFlag value has been populated from proxy.
+     * If this node is not backed by a proxy or if the value has already been
+     * populated, this method does nothing.
+     */
+    private void checkStrictfpFlagWrapped()
+    {
+        if (this.populatedProperties == null || this.populatedProperties.contains(
+                InterfaceModifiersNodeProperties.STRICTFP_FLAG))
+            return;
+        this.populatedProperties.add(InterfaceModifiersNodeProperties.STRICTFP_FLAG);
+        this.strictfpFlag = this.getBackingNode().getStrictfpFlag();
     }
     
     /**
@@ -81,7 +125,7 @@ public class InterfaceModifiersNodeImpl extends ModifiersNodeImpl implements Int
      */
     public AccessModifier getAccess()
     {
-        getAttribute(LocalAttribute.ACCESS).recordAccess(ReadWriteAttribute.AccessType.READ);
+        checkAccessWrapped();
         return this.access;
     }
     
@@ -91,18 +135,15 @@ public class InterfaceModifiersNodeImpl extends ModifiersNodeImpl implements Int
      */
     public void setAccess(AccessModifier access)
     {
-            setAccess(access, true);
-            getManager().notifyChange(this);
+        checkAccessWrapped();
+        this.getManager().assertMutatable(this);
+        this.doSetAccess(access);
+        if (this.getManager().isRecordingEdits())
+            super.recordEdit(new InterfaceModifiersNodeSetAccessPropertyEditScriptElementImpl(this.getManager().getCurrentMetaprogramId(), this.getUid(), access));
     }
     
-    private void setAccess(AccessModifier access, boolean checkPermissions)
+    private void doSetAccess(AccessModifier access)
     {
-        if (checkPermissions)
-        {
-            getManager().assertMutatable(this);
-            getAttribute(LocalAttribute.ACCESS).recordAccess(ReadWriteAttribute.AccessType.WRITE);
-        }
-        
         this.access = access;
     }
     
@@ -112,7 +153,7 @@ public class InterfaceModifiersNodeImpl extends ModifiersNodeImpl implements Int
      */
     public boolean getStaticFlag()
     {
-        getAttribute(LocalAttribute.STATIC_FLAG).recordAccess(ReadWriteAttribute.AccessType.READ);
+        checkStaticFlagWrapped();
         return this.staticFlag;
     }
     
@@ -122,18 +163,15 @@ public class InterfaceModifiersNodeImpl extends ModifiersNodeImpl implements Int
      */
     public void setStaticFlag(boolean staticFlag)
     {
-            setStaticFlag(staticFlag, true);
-            getManager().notifyChange(this);
+        checkStaticFlagWrapped();
+        this.getManager().assertMutatable(this);
+        this.doSetStaticFlag(staticFlag);
+        if (this.getManager().isRecordingEdits())
+            super.recordEdit(new InterfaceModifiersNodeSetStaticFlagPropertyEditScriptElementImpl(this.getManager().getCurrentMetaprogramId(), this.getUid(), staticFlag));
     }
     
-    private void setStaticFlag(boolean staticFlag, boolean checkPermissions)
+    private void doSetStaticFlag(boolean staticFlag)
     {
-        if (checkPermissions)
-        {
-            getManager().assertMutatable(this);
-            getAttribute(LocalAttribute.STATIC_FLAG).recordAccess(ReadWriteAttribute.AccessType.WRITE);
-        }
-        
         this.staticFlag = staticFlag;
     }
     
@@ -143,7 +181,7 @@ public class InterfaceModifiersNodeImpl extends ModifiersNodeImpl implements Int
      */
     public boolean getStrictfpFlag()
     {
-        getAttribute(LocalAttribute.STRICTFP_FLAG).recordAccess(ReadWriteAttribute.AccessType.READ);
+        checkStrictfpFlagWrapped();
         return this.strictfpFlag;
     }
     
@@ -153,18 +191,15 @@ public class InterfaceModifiersNodeImpl extends ModifiersNodeImpl implements Int
      */
     public void setStrictfpFlag(boolean strictfpFlag)
     {
-            setStrictfpFlag(strictfpFlag, true);
-            getManager().notifyChange(this);
+        checkStrictfpFlagWrapped();
+        this.getManager().assertMutatable(this);
+        this.doSetStrictfpFlag(strictfpFlag);
+        if (this.getManager().isRecordingEdits())
+            super.recordEdit(new InterfaceModifiersNodeSetStrictfpFlagPropertyEditScriptElementImpl(this.getManager().getCurrentMetaprogramId(), this.getUid(), strictfpFlag));
     }
     
-    private void setStrictfpFlag(boolean strictfpFlag, boolean checkPermissions)
+    private void doSetStrictfpFlag(boolean strictfpFlag)
     {
-        if (checkPermissions)
-        {
-            getManager().assertMutatable(this);
-            getAttribute(LocalAttribute.STRICTFP_FLAG).recordAccess(ReadWriteAttribute.AccessType.WRITE);
-        }
-        
         this.strictfpFlag = strictfpFlag;
     }
     
@@ -261,6 +296,8 @@ public class InterfaceModifiersNodeImpl extends ModifiersNodeImpl implements Int
     {
         StringBuilder sb = new StringBuilder();
         sb.append(this.getClass().getSimpleName());
+        sb.append('#');
+        sb.append(this.getUid());
         sb.append('[');
         sb.append("access=");
         sb.append(String.valueOf(this.getAccess()) + ":" + (this.getAccess() != null ? this.getAccess().getClass().getSimpleName() : "null"));

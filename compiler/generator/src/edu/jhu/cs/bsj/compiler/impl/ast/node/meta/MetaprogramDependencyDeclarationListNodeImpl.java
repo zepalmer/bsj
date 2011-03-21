@@ -17,6 +17,7 @@ import edu.jhu.cs.bsj.compiler.ast.node.Node;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramDependencyDeclarationListNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramDependencyDeclarationNode;
 import edu.jhu.cs.bsj.compiler.impl.ast.BsjNodeManager;
+import edu.jhu.cs.bsj.compiler.impl.ast.BsjNodeProxyFactory;
 import edu.jhu.cs.bsj.compiler.impl.ast.node.list.ListNodeImpl;
 
 @Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
@@ -31,6 +32,18 @@ public class MetaprogramDependencyDeclarationListNodeImpl extends ListNodeImpl<M
             boolean binary)
     {
         super(children, startLocation, stopLocation, manager, binary);
+    }
+    
+    /** Proxy constructor. */
+    public MetaprogramDependencyDeclarationListNodeImpl(BsjNodeManager manager, BsjNodeProxyFactory proxyFactory, MetaprogramDependencyDeclarationListNode backingNode)
+    {
+        super(manager, proxyFactory, backingNode);
+    }
+    
+    /** Retrieves this node's backing node (if one exists). */
+    protected MetaprogramDependencyDeclarationListNode getBackingNode()
+    {
+        return (MetaprogramDependencyDeclarationListNode)super.getBackingNode();
     }
     
     /**
@@ -137,6 +150,8 @@ public class MetaprogramDependencyDeclarationListNodeImpl extends ListNodeImpl<M
     {
         StringBuilder sb = new StringBuilder();
         sb.append(this.getClass().getSimpleName());
+        sb.append('#');
+        sb.append(this.getUid());
         sb.append('[');
         sb.append("children=");
         sb.append(this.getUnionForChildren() == null? "null" : this.getUnionForChildren().getClass().getSimpleName());
@@ -228,6 +243,14 @@ public class MetaprogramDependencyDeclarationListNodeImpl extends ListNodeImpl<M
     public Class<MetaprogramDependencyDeclarationNode> getElementType()
     {
         return MetaprogramDependencyDeclarationNode.class;
+    }
+    
+    /**
+     * Wraps an element of this list's type.
+     */
+    protected MetaprogramDependencyDeclarationNode wrapElement(MetaprogramDependencyDeclarationNode element)
+    {
+        return getProxyFactory().makeMetaprogramDependencyDeclarationNode(element);
     }
     
 }

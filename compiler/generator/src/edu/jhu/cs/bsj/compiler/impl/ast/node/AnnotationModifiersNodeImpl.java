@@ -1,10 +1,10 @@
 package edu.jhu.cs.bsj.compiler.impl.ast.node;
 
 import java.util.Arrays;
-import java.util.EnumMap;
+import java.util.EnumSet;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
+import java.util.Set;
 
 import javax.annotation.Generated;
 
@@ -21,8 +21,11 @@ import edu.jhu.cs.bsj.compiler.ast.node.Node;
 import edu.jhu.cs.bsj.compiler.ast.node.list.AnnotationListNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaAnnotationListNode;
 import edu.jhu.cs.bsj.compiler.impl.ast.BsjNodeManager;
-import edu.jhu.cs.bsj.compiler.impl.ast.attribute.AttributeName;
-import edu.jhu.cs.bsj.compiler.impl.ast.attribute.ReadWriteAttribute;
+import edu.jhu.cs.bsj.compiler.impl.ast.BsjNodeProxyFactory;
+import edu.jhu.cs.bsj.compiler.impl.ast.delta.property.AnnotationModifiersNodeSetAccessPropertyEditScriptElementImpl;
+import edu.jhu.cs.bsj.compiler.impl.ast.delta.property.AnnotationModifiersNodeSetStaticFlagPropertyEditScriptElementImpl;
+import edu.jhu.cs.bsj.compiler.impl.ast.delta.property.AnnotationModifiersNodeSetStrictfpFlagPropertyEditScriptElementImpl;
+import edu.jhu.cs.bsj.compiler.impl.ast.properties.AnnotationModifiersNodeProperties;
 
 @Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
 public class AnnotationModifiersNodeImpl extends ModifiersNodeImpl implements AnnotationModifiersNode
@@ -36,26 +39,11 @@ public class AnnotationModifiersNodeImpl extends ModifiersNodeImpl implements An
     /** Whether or not the associated annotation uses strict floating-point. */
     private boolean strictfpFlag;
     
-    private Map<LocalAttribute,ReadWriteAttribute> localAttributes = new EnumMap<LocalAttribute,ReadWriteAttribute>(LocalAttribute.class);
-    private ReadWriteAttribute getAttribute(LocalAttribute attributeName)
-    {
-        ReadWriteAttribute attribute = localAttributes.get(attributeName);
-        if (attribute == null)
-        {
-            attribute = new ReadWriteAttribute(AnnotationModifiersNodeImpl.this, attributeName);
-            localAttributes.put(attributeName, attribute);
-        }
-        return attribute;
-    }
-    private static enum LocalAttribute implements AttributeName
-    {
-        /** Attribute identifier for the access property. */
-        ACCESS,
-        /** Attribute identifier for the staticFlag property. */
-        STATIC_FLAG,
-        /** Attribute identifier for the strictfpFlag property. */
-        STRICTFP_FLAG,
-    }
+    /**
+     * A set of those properties which have been populated from the backing node.
+     * This field is <code>null</code> if <tt>backingNode</tt> is <code>null</code>.
+     */
+    private Set<AnnotationModifiersNodeProperties> populatedProperties;
     
     /** General constructor. */
     public AnnotationModifiersNodeImpl(
@@ -70,9 +58,65 @@ public class AnnotationModifiersNodeImpl extends ModifiersNodeImpl implements An
             boolean binary)
     {
         super(metaAnnotations, annotations, startLocation, stopLocation, manager, binary);
-        this.access = access;
-        this.staticFlag = staticFlag;
-        this.strictfpFlag = strictfpFlag;
+        this.populatedProperties = null;
+        doSetAccess(access);
+        doSetStaticFlag(staticFlag);
+        doSetStrictfpFlag(strictfpFlag);
+    }
+    
+    /** Proxy constructor. */
+    public AnnotationModifiersNodeImpl(BsjNodeManager manager, BsjNodeProxyFactory proxyFactory, AnnotationModifiersNode backingNode)
+    {
+        super(manager, proxyFactory, backingNode);
+        this.populatedProperties = EnumSet.noneOf(AnnotationModifiersNodeProperties.class);
+    }
+    
+    /** Retrieves this node's backing node (if one exists). */
+    protected AnnotationModifiersNode getBackingNode()
+    {
+        return (AnnotationModifiersNode)super.getBackingNode();
+    }
+    
+    /**
+     * Ensures that the access value has been populated from proxy.
+     * If this node is not backed by a proxy or if the value has already been
+     * populated, this method does nothing.
+     */
+    private void checkAccessWrapped()
+    {
+        if (this.populatedProperties == null || this.populatedProperties.contains(
+                AnnotationModifiersNodeProperties.ACCESS))
+            return;
+        this.populatedProperties.add(AnnotationModifiersNodeProperties.ACCESS);
+        this.access = this.getBackingNode().getAccess();
+    }
+    
+    /**
+     * Ensures that the staticFlag value has been populated from proxy.
+     * If this node is not backed by a proxy or if the value has already been
+     * populated, this method does nothing.
+     */
+    private void checkStaticFlagWrapped()
+    {
+        if (this.populatedProperties == null || this.populatedProperties.contains(
+                AnnotationModifiersNodeProperties.STATIC_FLAG))
+            return;
+        this.populatedProperties.add(AnnotationModifiersNodeProperties.STATIC_FLAG);
+        this.staticFlag = this.getBackingNode().getStaticFlag();
+    }
+    
+    /**
+     * Ensures that the strictfpFlag value has been populated from proxy.
+     * If this node is not backed by a proxy or if the value has already been
+     * populated, this method does nothing.
+     */
+    private void checkStrictfpFlagWrapped()
+    {
+        if (this.populatedProperties == null || this.populatedProperties.contains(
+                AnnotationModifiersNodeProperties.STRICTFP_FLAG))
+            return;
+        this.populatedProperties.add(AnnotationModifiersNodeProperties.STRICTFP_FLAG);
+        this.strictfpFlag = this.getBackingNode().getStrictfpFlag();
     }
     
     /**
@@ -81,7 +125,7 @@ public class AnnotationModifiersNodeImpl extends ModifiersNodeImpl implements An
      */
     public AccessModifier getAccess()
     {
-        getAttribute(LocalAttribute.ACCESS).recordAccess(ReadWriteAttribute.AccessType.READ);
+        checkAccessWrapped();
         return this.access;
     }
     
@@ -91,18 +135,15 @@ public class AnnotationModifiersNodeImpl extends ModifiersNodeImpl implements An
      */
     public void setAccess(AccessModifier access)
     {
-            setAccess(access, true);
-            getManager().notifyChange(this);
+        checkAccessWrapped();
+        this.getManager().assertMutatable(this);
+        this.doSetAccess(access);
+        if (this.getManager().isRecordingEdits())
+            super.recordEdit(new AnnotationModifiersNodeSetAccessPropertyEditScriptElementImpl(this.getManager().getCurrentMetaprogramId(), this.getUid(), access));
     }
     
-    private void setAccess(AccessModifier access, boolean checkPermissions)
+    private void doSetAccess(AccessModifier access)
     {
-        if (checkPermissions)
-        {
-            getManager().assertMutatable(this);
-            getAttribute(LocalAttribute.ACCESS).recordAccess(ReadWriteAttribute.AccessType.WRITE);
-        }
-        
         this.access = access;
     }
     
@@ -112,7 +153,7 @@ public class AnnotationModifiersNodeImpl extends ModifiersNodeImpl implements An
      */
     public boolean getStaticFlag()
     {
-        getAttribute(LocalAttribute.STATIC_FLAG).recordAccess(ReadWriteAttribute.AccessType.READ);
+        checkStaticFlagWrapped();
         return this.staticFlag;
     }
     
@@ -122,18 +163,15 @@ public class AnnotationModifiersNodeImpl extends ModifiersNodeImpl implements An
      */
     public void setStaticFlag(boolean staticFlag)
     {
-            setStaticFlag(staticFlag, true);
-            getManager().notifyChange(this);
+        checkStaticFlagWrapped();
+        this.getManager().assertMutatable(this);
+        this.doSetStaticFlag(staticFlag);
+        if (this.getManager().isRecordingEdits())
+            super.recordEdit(new AnnotationModifiersNodeSetStaticFlagPropertyEditScriptElementImpl(this.getManager().getCurrentMetaprogramId(), this.getUid(), staticFlag));
     }
     
-    private void setStaticFlag(boolean staticFlag, boolean checkPermissions)
+    private void doSetStaticFlag(boolean staticFlag)
     {
-        if (checkPermissions)
-        {
-            getManager().assertMutatable(this);
-            getAttribute(LocalAttribute.STATIC_FLAG).recordAccess(ReadWriteAttribute.AccessType.WRITE);
-        }
-        
         this.staticFlag = staticFlag;
     }
     
@@ -143,7 +181,7 @@ public class AnnotationModifiersNodeImpl extends ModifiersNodeImpl implements An
      */
     public boolean getStrictfpFlag()
     {
-        getAttribute(LocalAttribute.STRICTFP_FLAG).recordAccess(ReadWriteAttribute.AccessType.READ);
+        checkStrictfpFlagWrapped();
         return this.strictfpFlag;
     }
     
@@ -153,18 +191,15 @@ public class AnnotationModifiersNodeImpl extends ModifiersNodeImpl implements An
      */
     public void setStrictfpFlag(boolean strictfpFlag)
     {
-            setStrictfpFlag(strictfpFlag, true);
-            getManager().notifyChange(this);
+        checkStrictfpFlagWrapped();
+        this.getManager().assertMutatable(this);
+        this.doSetStrictfpFlag(strictfpFlag);
+        if (this.getManager().isRecordingEdits())
+            super.recordEdit(new AnnotationModifiersNodeSetStrictfpFlagPropertyEditScriptElementImpl(this.getManager().getCurrentMetaprogramId(), this.getUid(), strictfpFlag));
     }
     
-    private void setStrictfpFlag(boolean strictfpFlag, boolean checkPermissions)
+    private void doSetStrictfpFlag(boolean strictfpFlag)
     {
-        if (checkPermissions)
-        {
-            getManager().assertMutatable(this);
-            getAttribute(LocalAttribute.STRICTFP_FLAG).recordAccess(ReadWriteAttribute.AccessType.WRITE);
-        }
-        
         this.strictfpFlag = strictfpFlag;
     }
     
@@ -261,6 +296,8 @@ public class AnnotationModifiersNodeImpl extends ModifiersNodeImpl implements An
     {
         StringBuilder sb = new StringBuilder();
         sb.append(this.getClass().getSimpleName());
+        sb.append('#');
+        sb.append(this.getUid());
         sb.append('[');
         sb.append("access=");
         sb.append(String.valueOf(this.getAccess()) + ":" + (this.getAccess() != null ? this.getAccess().getClass().getSimpleName() : "null"));

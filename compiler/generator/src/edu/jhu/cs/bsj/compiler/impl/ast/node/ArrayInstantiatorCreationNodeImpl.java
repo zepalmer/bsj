@@ -1,10 +1,10 @@
 package edu.jhu.cs.bsj.compiler.impl.ast.node;
 
 import java.util.Arrays;
-import java.util.EnumMap;
+import java.util.EnumSet;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
+import java.util.Set;
 
 import javax.annotation.Generated;
 
@@ -20,9 +20,10 @@ import edu.jhu.cs.bsj.compiler.ast.node.BaseTypeNode;
 import edu.jhu.cs.bsj.compiler.ast.node.Node;
 import edu.jhu.cs.bsj.compiler.ast.node.list.ExpressionListNode;
 import edu.jhu.cs.bsj.compiler.impl.ast.BsjNodeManager;
+import edu.jhu.cs.bsj.compiler.impl.ast.BsjNodeProxyFactory;
 import edu.jhu.cs.bsj.compiler.impl.ast.NormalNodeUnion;
-import edu.jhu.cs.bsj.compiler.impl.ast.attribute.AttributeName;
-import edu.jhu.cs.bsj.compiler.impl.ast.attribute.ReadWriteAttribute;
+import edu.jhu.cs.bsj.compiler.impl.ast.delta.property.ArrayInstantiatorCreationNodeSetDimExpressionsPropertyEditScriptElementImpl;
+import edu.jhu.cs.bsj.compiler.impl.ast.properties.ArrayInstantiatorCreationNodeProperties;
 
 @Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
 public class ArrayInstantiatorCreationNodeImpl extends ArrayCreationNodeImpl implements ArrayInstantiatorCreationNode
@@ -30,22 +31,11 @@ public class ArrayInstantiatorCreationNodeImpl extends ArrayCreationNodeImpl imp
     /** The dimension expressions for this array. */
     private NodeUnion<? extends ExpressionListNode> dimExpressions;
     
-    private Map<LocalAttribute,ReadWriteAttribute> localAttributes = new EnumMap<LocalAttribute,ReadWriteAttribute>(LocalAttribute.class);
-    private ReadWriteAttribute getAttribute(LocalAttribute attributeName)
-    {
-        ReadWriteAttribute attribute = localAttributes.get(attributeName);
-        if (attribute == null)
-        {
-            attribute = new ReadWriteAttribute(ArrayInstantiatorCreationNodeImpl.this, attributeName);
-            localAttributes.put(attributeName, attribute);
-        }
-        return attribute;
-    }
-    private static enum LocalAttribute implements AttributeName
-    {
-        /** Attribute identifier for the dimExpressions property. */
-        DIM_EXPRESSIONS,
-    }
+    /**
+     * A set of those properties which have been populated from the backing node.
+     * This field is <code>null</code> if <tt>backingNode</tt> is <code>null</code>.
+     */
+    private Set<ArrayInstantiatorCreationNodeProperties> populatedProperties;
     
     /** General constructor. */
     public ArrayInstantiatorCreationNodeImpl(
@@ -58,7 +48,49 @@ public class ArrayInstantiatorCreationNodeImpl extends ArrayCreationNodeImpl imp
             boolean binary)
     {
         super(baseType, arrayLevels, startLocation, stopLocation, manager, binary);
-        setUnionForDimExpressions(dimExpressions, false);
+        this.populatedProperties = null;
+        doSetDimExpressions(dimExpressions);
+    }
+    
+    /** Proxy constructor. */
+    public ArrayInstantiatorCreationNodeImpl(BsjNodeManager manager, BsjNodeProxyFactory proxyFactory, ArrayInstantiatorCreationNode backingNode)
+    {
+        super(manager, proxyFactory, backingNode);
+        this.populatedProperties = EnumSet.noneOf(ArrayInstantiatorCreationNodeProperties.class);
+    }
+    
+    /** Retrieves this node's backing node (if one exists). */
+    protected ArrayInstantiatorCreationNode getBackingNode()
+    {
+        return (ArrayInstantiatorCreationNode)super.getBackingNode();
+    }
+    
+    /**
+     * Ensures that the dimExpressions value has been populated from proxy.
+     * If this node is not backed by a proxy or if the value has already been
+     * populated, this method does nothing.
+     */
+    private void checkDimExpressionsWrapped()
+    {
+        if (this.populatedProperties == null || this.populatedProperties.contains(
+                ArrayInstantiatorCreationNodeProperties.DIM_EXPRESSIONS))
+            return;
+        this.populatedProperties.add(ArrayInstantiatorCreationNodeProperties.DIM_EXPRESSIONS);
+        NodeUnion<? extends ExpressionListNode> union = this.getBackingNode().getUnionForDimExpressions();
+        switch (union.getType())
+        {
+            case NORMAL:
+                union = this.getProxyFactory().makeNormalNodeUnion(
+                        this.getProxyFactory().makeExpressionListNode(union.getNormalNode()));
+                break;
+            case SPLICE:
+                union = this.getProxyFactory().makeSpliceNodeUnion(
+                        this.getProxyFactory().makeSpliceNode(union.getSpliceNode()));
+                break;
+            default:
+                throw new IllegalStateException("Unrecognized union type: " + union.getType());
+        }
+        this.dimExpressions = union;
     }
     
     /**
@@ -68,7 +100,7 @@ public class ArrayInstantiatorCreationNodeImpl extends ArrayCreationNodeImpl imp
      */
     public ExpressionListNode getDimExpressions()
     {
-        getAttribute(LocalAttribute.DIM_EXPRESSIONS).recordAccess(ReadWriteAttribute.AccessType.READ);
+        checkDimExpressionsWrapped();
         if (this.dimExpressions == null)
         {
             return null;
@@ -84,7 +116,7 @@ public class ArrayInstantiatorCreationNodeImpl extends ArrayCreationNodeImpl imp
      */
     public NodeUnion<? extends ExpressionListNode> getUnionForDimExpressions()
     {
-        getAttribute(LocalAttribute.DIM_EXPRESSIONS).recordAccess(ReadWriteAttribute.AccessType.READ);
+        checkDimExpressionsWrapped();
         if (this.dimExpressions == null)
         {
             this.dimExpressions = new NormalNodeUnion<ExpressionListNode>(null);
@@ -98,24 +130,8 @@ public class ArrayInstantiatorCreationNodeImpl extends ArrayCreationNodeImpl imp
      */
     public void setDimExpressions(ExpressionListNode dimExpressions)
     {
-            setDimExpressions(dimExpressions, true);
-            getManager().notifyChange(this);
-    }
-    
-    private void setDimExpressions(ExpressionListNode dimExpressions, boolean checkPermissions)
-    {
-        if (checkPermissions)
-        {
-            getManager().assertMutatable(this);
-            getAttribute(LocalAttribute.DIM_EXPRESSIONS).recordAccess(ReadWriteAttribute.AccessType.WRITE);
-        }
-        
-        if (this.dimExpressions != null)
-        {
-            setAsChild(this.dimExpressions.getNodeValue(), false);
-        }
-        this.dimExpressions = new NormalNodeUnion<ExpressionListNode>(dimExpressions);
-        setAsChild(dimExpressions, true);
+        checkDimExpressionsWrapped();
+        this.setUnionForDimExpressions(new NormalNodeUnion<ExpressionListNode>(dimExpressions));
     }
     
     /**
@@ -124,18 +140,15 @@ public class ArrayInstantiatorCreationNodeImpl extends ArrayCreationNodeImpl imp
      */
     public void setUnionForDimExpressions(NodeUnion<? extends ExpressionListNode> dimExpressions)
     {
-            setUnionForDimExpressions(dimExpressions, true);
-            getManager().notifyChange(this);
+        checkDimExpressionsWrapped();
+        this.getManager().assertMutatable(this);
+        this.doSetDimExpressions(dimExpressions);
+        if (this.getManager().isRecordingEdits())
+            super.recordEdit(new ArrayInstantiatorCreationNodeSetDimExpressionsPropertyEditScriptElementImpl(this.getManager().getCurrentMetaprogramId(), this.getUid(), dimExpressions.getNodeValue() == null ? null : dimExpressions.getNodeValue().getUid()));
     }
     
-    private void setUnionForDimExpressions(NodeUnion<? extends ExpressionListNode> dimExpressions, boolean checkPermissions)
+    private void doSetDimExpressions(NodeUnion<? extends ExpressionListNode> dimExpressions)
     {
-        if (checkPermissions)
-        {
-            getManager().assertMutatable(this);
-            getAttribute(LocalAttribute.DIM_EXPRESSIONS).recordAccess(ReadWriteAttribute.AccessType.WRITE);
-        }
-        
         if (dimExpressions == null)
         {
             dimExpressions = new NormalNodeUnion<ExpressionListNode>(null);
@@ -159,9 +172,9 @@ public class ArrayInstantiatorCreationNodeImpl extends ArrayCreationNodeImpl imp
     protected void receiveToChildren(BsjNodeVisitor visitor)
     {
         super.receiveToChildren(visitor);
-        if (this.dimExpressions.getNodeValue() != null)
+        if (this.getUnionForDimExpressions().getNodeValue() != null)
         {
-            this.dimExpressions.getNodeValue().receive(visitor);
+            this.getUnionForDimExpressions().getNodeValue().receive(visitor);
         }
         Iterator<? extends Node> extras = getHiddenVisitorChildren();
         if (extras != null)
@@ -184,9 +197,9 @@ public class ArrayInstantiatorCreationNodeImpl extends ArrayCreationNodeImpl imp
     protected void receiveTypedToChildren(BsjTypedNodeVisitor visitor)
     {
         super.receiveTypedToChildren(visitor);
-        if (this.dimExpressions.getNodeValue() != null)
+        if (this.getUnionForDimExpressions().getNodeValue() != null)
         {
-            this.dimExpressions.getNodeValue().receiveTyped(visitor);
+            this.getUnionForDimExpressions().getNodeValue().receiveTyped(visitor);
         }
         Iterator<? extends Node> extras = getHiddenVisitorChildren();
         if (extras != null)
@@ -245,6 +258,8 @@ public class ArrayInstantiatorCreationNodeImpl extends ArrayCreationNodeImpl imp
     {
         StringBuilder sb = new StringBuilder();
         sb.append(this.getClass().getSimpleName());
+        sb.append('#');
+        sb.append(this.getUid());
         sb.append('[');
         sb.append("dimExpressions=");
         sb.append(this.getUnionForDimExpressions().getNodeValue() == null? "null" : this.getUnionForDimExpressions().getNodeValue().getClass().getSimpleName());

@@ -1,10 +1,10 @@
 package edu.jhu.cs.bsj.compiler.impl.ast.node;
 
 import java.util.Arrays;
-import java.util.EnumMap;
+import java.util.EnumSet;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
+import java.util.Set;
 
 import javax.annotation.Generated;
 
@@ -20,9 +20,11 @@ import edu.jhu.cs.bsj.compiler.ast.node.Node;
 import edu.jhu.cs.bsj.compiler.ast.node.list.BlockStatementListNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaAnnotationListNode;
 import edu.jhu.cs.bsj.compiler.impl.ast.BsjNodeManager;
+import edu.jhu.cs.bsj.compiler.impl.ast.BsjNodeProxyFactory;
 import edu.jhu.cs.bsj.compiler.impl.ast.NormalNodeUnion;
-import edu.jhu.cs.bsj.compiler.impl.ast.attribute.AttributeName;
-import edu.jhu.cs.bsj.compiler.impl.ast.attribute.ReadWriteAttribute;
+import edu.jhu.cs.bsj.compiler.impl.ast.delta.property.BlockNodeSetMetaAnnotationsPropertyEditScriptElementImpl;
+import edu.jhu.cs.bsj.compiler.impl.ast.delta.property.BlockNodeSetStatementsPropertyEditScriptElementImpl;
+import edu.jhu.cs.bsj.compiler.impl.ast.properties.BlockNodeProperties;
 
 @Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
 public class BlockNodeImpl extends NodeImpl implements BlockNode
@@ -33,24 +35,11 @@ public class BlockNodeImpl extends NodeImpl implements BlockNode
     /** The meta-annotations associated with this node. */
     private NodeUnion<? extends MetaAnnotationListNode> metaAnnotations;
     
-    private Map<LocalAttribute,ReadWriteAttribute> localAttributes = new EnumMap<LocalAttribute,ReadWriteAttribute>(LocalAttribute.class);
-    private ReadWriteAttribute getAttribute(LocalAttribute attributeName)
-    {
-        ReadWriteAttribute attribute = localAttributes.get(attributeName);
-        if (attribute == null)
-        {
-            attribute = new ReadWriteAttribute(BlockNodeImpl.this, attributeName);
-            localAttributes.put(attributeName, attribute);
-        }
-        return attribute;
-    }
-    private static enum LocalAttribute implements AttributeName
-    {
-        /** Attribute identifier for the statements property. */
-        STATEMENTS,
-        /** Attribute identifier for the metaAnnotations property. */
-        META_ANNOTATIONS,
-    }
+    /**
+     * A set of those properties which have been populated from the backing node.
+     * This field is <code>null</code> if <tt>backingNode</tt> is <code>null</code>.
+     */
+    private Set<BlockNodeProperties> populatedProperties;
     
     /** General constructor. */
     public BlockNodeImpl(
@@ -62,8 +51,78 @@ public class BlockNodeImpl extends NodeImpl implements BlockNode
             boolean binary)
     {
         super(startLocation, stopLocation, manager, binary);
-        setUnionForStatements(statements, false);
-        setUnionForMetaAnnotations(metaAnnotations, false);
+        this.populatedProperties = null;
+        doSetStatements(statements);
+        doSetMetaAnnotations(metaAnnotations);
+    }
+    
+    /** Proxy constructor. */
+    public BlockNodeImpl(BsjNodeManager manager, BsjNodeProxyFactory proxyFactory, BlockNode backingNode)
+    {
+        super(manager, proxyFactory, backingNode);
+        this.populatedProperties = EnumSet.noneOf(BlockNodeProperties.class);
+    }
+    
+    /** Retrieves this node's backing node (if one exists). */
+    protected BlockNode getBackingNode()
+    {
+        return (BlockNode)super.getBackingNode();
+    }
+    
+    /**
+     * Ensures that the statements value has been populated from proxy.
+     * If this node is not backed by a proxy or if the value has already been
+     * populated, this method does nothing.
+     */
+    private void checkStatementsWrapped()
+    {
+        if (this.populatedProperties == null || this.populatedProperties.contains(
+                BlockNodeProperties.STATEMENTS))
+            return;
+        this.populatedProperties.add(BlockNodeProperties.STATEMENTS);
+        NodeUnion<? extends BlockStatementListNode> union = this.getBackingNode().getUnionForStatements();
+        switch (union.getType())
+        {
+            case NORMAL:
+                union = this.getProxyFactory().makeNormalNodeUnion(
+                        this.getProxyFactory().makeBlockStatementListNode(union.getNormalNode()));
+                break;
+            case SPLICE:
+                union = this.getProxyFactory().makeSpliceNodeUnion(
+                        this.getProxyFactory().makeSpliceNode(union.getSpliceNode()));
+                break;
+            default:
+                throw new IllegalStateException("Unrecognized union type: " + union.getType());
+        }
+        this.statements = union;
+    }
+    
+    /**
+     * Ensures that the metaAnnotations value has been populated from proxy.
+     * If this node is not backed by a proxy or if the value has already been
+     * populated, this method does nothing.
+     */
+    private void checkMetaAnnotationsWrapped()
+    {
+        if (this.populatedProperties == null || this.populatedProperties.contains(
+                BlockNodeProperties.META_ANNOTATIONS))
+            return;
+        this.populatedProperties.add(BlockNodeProperties.META_ANNOTATIONS);
+        NodeUnion<? extends MetaAnnotationListNode> union = this.getBackingNode().getUnionForMetaAnnotations();
+        switch (union.getType())
+        {
+            case NORMAL:
+                union = this.getProxyFactory().makeNormalNodeUnion(
+                        this.getProxyFactory().makeMetaAnnotationListNode(union.getNormalNode()));
+                break;
+            case SPLICE:
+                union = this.getProxyFactory().makeSpliceNodeUnion(
+                        this.getProxyFactory().makeSpliceNode(union.getSpliceNode()));
+                break;
+            default:
+                throw new IllegalStateException("Unrecognized union type: " + union.getType());
+        }
+        this.metaAnnotations = union;
     }
     
     /**
@@ -73,7 +132,7 @@ public class BlockNodeImpl extends NodeImpl implements BlockNode
      */
     public BlockStatementListNode getStatements()
     {
-        getAttribute(LocalAttribute.STATEMENTS).recordAccess(ReadWriteAttribute.AccessType.READ);
+        checkStatementsWrapped();
         if (this.statements == null)
         {
             return null;
@@ -89,7 +148,7 @@ public class BlockNodeImpl extends NodeImpl implements BlockNode
      */
     public NodeUnion<? extends BlockStatementListNode> getUnionForStatements()
     {
-        getAttribute(LocalAttribute.STATEMENTS).recordAccess(ReadWriteAttribute.AccessType.READ);
+        checkStatementsWrapped();
         if (this.statements == null)
         {
             this.statements = new NormalNodeUnion<BlockStatementListNode>(null);
@@ -103,24 +162,8 @@ public class BlockNodeImpl extends NodeImpl implements BlockNode
      */
     public void setStatements(BlockStatementListNode statements)
     {
-            setStatements(statements, true);
-            getManager().notifyChange(this);
-    }
-    
-    private void setStatements(BlockStatementListNode statements, boolean checkPermissions)
-    {
-        if (checkPermissions)
-        {
-            getManager().assertMutatable(this);
-            getAttribute(LocalAttribute.STATEMENTS).recordAccess(ReadWriteAttribute.AccessType.WRITE);
-        }
-        
-        if (this.statements != null)
-        {
-            setAsChild(this.statements.getNodeValue(), false);
-        }
-        this.statements = new NormalNodeUnion<BlockStatementListNode>(statements);
-        setAsChild(statements, true);
+        checkStatementsWrapped();
+        this.setUnionForStatements(new NormalNodeUnion<BlockStatementListNode>(statements));
     }
     
     /**
@@ -129,18 +172,15 @@ public class BlockNodeImpl extends NodeImpl implements BlockNode
      */
     public void setUnionForStatements(NodeUnion<? extends BlockStatementListNode> statements)
     {
-            setUnionForStatements(statements, true);
-            getManager().notifyChange(this);
+        checkStatementsWrapped();
+        this.getManager().assertMutatable(this);
+        this.doSetStatements(statements);
+        if (this.getManager().isRecordingEdits())
+            super.recordEdit(new BlockNodeSetStatementsPropertyEditScriptElementImpl(this.getManager().getCurrentMetaprogramId(), this.getUid(), statements.getNodeValue() == null ? null : statements.getNodeValue().getUid()));
     }
     
-    private void setUnionForStatements(NodeUnion<? extends BlockStatementListNode> statements, boolean checkPermissions)
+    private void doSetStatements(NodeUnion<? extends BlockStatementListNode> statements)
     {
-        if (checkPermissions)
-        {
-            getManager().assertMutatable(this);
-            getAttribute(LocalAttribute.STATEMENTS).recordAccess(ReadWriteAttribute.AccessType.WRITE);
-        }
-        
         if (statements == null)
         {
             statements = new NormalNodeUnion<BlockStatementListNode>(null);
@@ -160,7 +200,7 @@ public class BlockNodeImpl extends NodeImpl implements BlockNode
      */
     public MetaAnnotationListNode getMetaAnnotations()
     {
-        getAttribute(LocalAttribute.META_ANNOTATIONS).recordAccess(ReadWriteAttribute.AccessType.READ);
+        checkMetaAnnotationsWrapped();
         if (this.metaAnnotations == null)
         {
             return null;
@@ -176,7 +216,7 @@ public class BlockNodeImpl extends NodeImpl implements BlockNode
      */
     public NodeUnion<? extends MetaAnnotationListNode> getUnionForMetaAnnotations()
     {
-        getAttribute(LocalAttribute.META_ANNOTATIONS).recordAccess(ReadWriteAttribute.AccessType.READ);
+        checkMetaAnnotationsWrapped();
         if (this.metaAnnotations == null)
         {
             this.metaAnnotations = new NormalNodeUnion<MetaAnnotationListNode>(null);
@@ -190,24 +230,8 @@ public class BlockNodeImpl extends NodeImpl implements BlockNode
      */
     public void setMetaAnnotations(MetaAnnotationListNode metaAnnotations)
     {
-            setMetaAnnotations(metaAnnotations, true);
-            getManager().notifyChange(this);
-    }
-    
-    private void setMetaAnnotations(MetaAnnotationListNode metaAnnotations, boolean checkPermissions)
-    {
-        if (checkPermissions)
-        {
-            getManager().assertMutatable(this);
-            getAttribute(LocalAttribute.META_ANNOTATIONS).recordAccess(ReadWriteAttribute.AccessType.WRITE);
-        }
-        
-        if (this.metaAnnotations != null)
-        {
-            setAsChild(this.metaAnnotations.getNodeValue(), false);
-        }
-        this.metaAnnotations = new NormalNodeUnion<MetaAnnotationListNode>(metaAnnotations);
-        setAsChild(metaAnnotations, true);
+        checkMetaAnnotationsWrapped();
+        this.setUnionForMetaAnnotations(new NormalNodeUnion<MetaAnnotationListNode>(metaAnnotations));
     }
     
     /**
@@ -216,18 +240,15 @@ public class BlockNodeImpl extends NodeImpl implements BlockNode
      */
     public void setUnionForMetaAnnotations(NodeUnion<? extends MetaAnnotationListNode> metaAnnotations)
     {
-            setUnionForMetaAnnotations(metaAnnotations, true);
-            getManager().notifyChange(this);
+        checkMetaAnnotationsWrapped();
+        this.getManager().assertMutatable(this);
+        this.doSetMetaAnnotations(metaAnnotations);
+        if (this.getManager().isRecordingEdits())
+            super.recordEdit(new BlockNodeSetMetaAnnotationsPropertyEditScriptElementImpl(this.getManager().getCurrentMetaprogramId(), this.getUid(), metaAnnotations.getNodeValue() == null ? null : metaAnnotations.getNodeValue().getUid()));
     }
     
-    private void setUnionForMetaAnnotations(NodeUnion<? extends MetaAnnotationListNode> metaAnnotations, boolean checkPermissions)
+    private void doSetMetaAnnotations(NodeUnion<? extends MetaAnnotationListNode> metaAnnotations)
     {
-        if (checkPermissions)
-        {
-            getManager().assertMutatable(this);
-            getAttribute(LocalAttribute.META_ANNOTATIONS).recordAccess(ReadWriteAttribute.AccessType.WRITE);
-        }
-        
         if (metaAnnotations == null)
         {
             metaAnnotations = new NormalNodeUnion<MetaAnnotationListNode>(null);
@@ -251,13 +272,13 @@ public class BlockNodeImpl extends NodeImpl implements BlockNode
     protected void receiveToChildren(BsjNodeVisitor visitor)
     {
         super.receiveToChildren(visitor);
-        if (this.statements.getNodeValue() != null)
+        if (this.getUnionForStatements().getNodeValue() != null)
         {
-            this.statements.getNodeValue().receive(visitor);
+            this.getUnionForStatements().getNodeValue().receive(visitor);
         }
-        if (this.metaAnnotations.getNodeValue() != null)
+        if (this.getUnionForMetaAnnotations().getNodeValue() != null)
         {
-            this.metaAnnotations.getNodeValue().receive(visitor);
+            this.getUnionForMetaAnnotations().getNodeValue().receive(visitor);
         }
         Iterator<? extends Node> extras = getHiddenVisitorChildren();
         if (extras != null)
@@ -280,13 +301,13 @@ public class BlockNodeImpl extends NodeImpl implements BlockNode
     protected void receiveTypedToChildren(BsjTypedNodeVisitor visitor)
     {
         super.receiveTypedToChildren(visitor);
-        if (this.statements.getNodeValue() != null)
+        if (this.getUnionForStatements().getNodeValue() != null)
         {
-            this.statements.getNodeValue().receiveTyped(visitor);
+            this.getUnionForStatements().getNodeValue().receiveTyped(visitor);
         }
-        if (this.metaAnnotations.getNodeValue() != null)
+        if (this.getUnionForMetaAnnotations().getNodeValue() != null)
         {
-            this.metaAnnotations.getNodeValue().receiveTyped(visitor);
+            this.getUnionForMetaAnnotations().getNodeValue().receiveTyped(visitor);
         }
         Iterator<? extends Node> extras = getHiddenVisitorChildren();
         if (extras != null)
@@ -346,6 +367,8 @@ public class BlockNodeImpl extends NodeImpl implements BlockNode
     {
         StringBuilder sb = new StringBuilder();
         sb.append(this.getClass().getSimpleName());
+        sb.append('#');
+        sb.append(this.getUid());
         sb.append('[');
         sb.append("statements=");
         sb.append(this.getUnionForStatements().getNodeValue() == null? "null" : this.getUnionForStatements().getNodeValue().getClass().getSimpleName());

@@ -1,12 +1,15 @@
 package edu.jhu.cs.bsj.compiler.impl.tool.compiler;
 
+import java.util.Map;
+
 import javax.tools.DiagnosticListener;
 
 import edu.jhu.cs.bsj.compiler.ast.BsjSourceLocation;
+import edu.jhu.cs.bsj.compiler.ast.node.Node;
 import edu.jhu.cs.bsj.compiler.ast.node.PackageNode;
-import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramAnchorNode;
 import edu.jhu.cs.bsj.compiler.impl.ast.BsjNodeManager;
 import edu.jhu.cs.bsj.compiler.impl.tool.compiler.dependency.DependencyManager;
+import edu.jhu.cs.bsj.compiler.impl.tool.compiler.extraction.ExplicitMetaprogramCompilationCache;
 import edu.jhu.cs.bsj.compiler.impl.tool.compiler.task.BsjCompilerTask;
 import edu.jhu.cs.bsj.compiler.tool.BsjToolkit;
 import edu.jhu.cs.bsj.compiler.tool.filemanager.BsjFileObject;
@@ -14,9 +17,15 @@ import edu.jhu.cs.bsj.compiler.tool.filemanager.BsjFileObject;
 public interface MetacompilationContext
 {
 	/**
-	 * Obtains the object program's root package for this compilation pass.
+	 * Obtains the object program's root package for the initial tree this compilation pass.
 	 */
 	public PackageNode getRootPackage();
+	
+    /**
+     * A mapping from UIDs to nodes in the original AST (the one specified by loaded files before any metaprograms are
+     * executed).  This map will be empty until the task that constructs it is executed.
+     */
+	public Map<Long,Node> getIdMap();
 	
 	/**
 	 * Retrieves the toolkit which should be used to satisfy tool requirements.
@@ -53,12 +62,10 @@ public interface MetacompilationContext
 	 * @param file The file to add.
 	 */
 	public void addSerializedFile(BsjFileObject file);
-	
+
 	/**
-	 * Adds a node to the set of observed anchor nodes.  This set is used primarily to ensure that the same metaprogram
-	 * does not get extracted twice.
-	 * @param anchor The anchor to add to the observed set.
-	 * @return <code>true</code> if the anchor has not been seen before.
+	 * Retrieves the compilation cache for explicit metaprograms.
+	 * @return The explicit metaprogram compilation cache.
 	 */
-	public boolean addObservedAnchor(MetaprogramAnchorNode<?> anchor);
+    public ExplicitMetaprogramCompilationCache getExplicitMetaprogramCompilationCache();
 }

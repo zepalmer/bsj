@@ -1,10 +1,10 @@
 package edu.jhu.cs.bsj.compiler.impl.ast.node;
 
 import java.util.Arrays;
-import java.util.EnumMap;
+import java.util.EnumSet;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
+import java.util.Set;
 
 import javax.annotation.Generated;
 
@@ -20,9 +20,11 @@ import edu.jhu.cs.bsj.compiler.ast.node.ExpressionNode;
 import edu.jhu.cs.bsj.compiler.ast.node.Node;
 import edu.jhu.cs.bsj.compiler.ast.node.RestrictedPrimaryExpressionNode;
 import edu.jhu.cs.bsj.compiler.impl.ast.BsjNodeManager;
+import edu.jhu.cs.bsj.compiler.impl.ast.BsjNodeProxyFactory;
 import edu.jhu.cs.bsj.compiler.impl.ast.NormalNodeUnion;
-import edu.jhu.cs.bsj.compiler.impl.ast.attribute.AttributeName;
-import edu.jhu.cs.bsj.compiler.impl.ast.attribute.ReadWriteAttribute;
+import edu.jhu.cs.bsj.compiler.impl.ast.delta.property.ArrayAccessNodeSetArrayExpressionPropertyEditScriptElementImpl;
+import edu.jhu.cs.bsj.compiler.impl.ast.delta.property.ArrayAccessNodeSetIndexExpressionPropertyEditScriptElementImpl;
+import edu.jhu.cs.bsj.compiler.impl.ast.properties.ArrayAccessNodeProperties;
 
 @Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
 public class ArrayAccessNodeImpl extends NodeImpl implements ArrayAccessNode
@@ -33,24 +35,11 @@ public class ArrayAccessNodeImpl extends NodeImpl implements ArrayAccessNode
     /** The index into the array. */
     private NodeUnion<? extends ExpressionNode> indexExpression;
     
-    private Map<LocalAttribute,ReadWriteAttribute> localAttributes = new EnumMap<LocalAttribute,ReadWriteAttribute>(LocalAttribute.class);
-    private ReadWriteAttribute getAttribute(LocalAttribute attributeName)
-    {
-        ReadWriteAttribute attribute = localAttributes.get(attributeName);
-        if (attribute == null)
-        {
-            attribute = new ReadWriteAttribute(ArrayAccessNodeImpl.this, attributeName);
-            localAttributes.put(attributeName, attribute);
-        }
-        return attribute;
-    }
-    private static enum LocalAttribute implements AttributeName
-    {
-        /** Attribute identifier for the arrayExpression property. */
-        ARRAY_EXPRESSION,
-        /** Attribute identifier for the indexExpression property. */
-        INDEX_EXPRESSION,
-    }
+    /**
+     * A set of those properties which have been populated from the backing node.
+     * This field is <code>null</code> if <tt>backingNode</tt> is <code>null</code>.
+     */
+    private Set<ArrayAccessNodeProperties> populatedProperties;
     
     /** General constructor. */
     public ArrayAccessNodeImpl(
@@ -62,8 +51,78 @@ public class ArrayAccessNodeImpl extends NodeImpl implements ArrayAccessNode
             boolean binary)
     {
         super(startLocation, stopLocation, manager, binary);
-        setUnionForArrayExpression(arrayExpression, false);
-        setUnionForIndexExpression(indexExpression, false);
+        this.populatedProperties = null;
+        doSetArrayExpression(arrayExpression);
+        doSetIndexExpression(indexExpression);
+    }
+    
+    /** Proxy constructor. */
+    public ArrayAccessNodeImpl(BsjNodeManager manager, BsjNodeProxyFactory proxyFactory, ArrayAccessNode backingNode)
+    {
+        super(manager, proxyFactory, backingNode);
+        this.populatedProperties = EnumSet.noneOf(ArrayAccessNodeProperties.class);
+    }
+    
+    /** Retrieves this node's backing node (if one exists). */
+    protected ArrayAccessNode getBackingNode()
+    {
+        return (ArrayAccessNode)super.getBackingNode();
+    }
+    
+    /**
+     * Ensures that the arrayExpression value has been populated from proxy.
+     * If this node is not backed by a proxy or if the value has already been
+     * populated, this method does nothing.
+     */
+    private void checkArrayExpressionWrapped()
+    {
+        if (this.populatedProperties == null || this.populatedProperties.contains(
+                ArrayAccessNodeProperties.ARRAY_EXPRESSION))
+            return;
+        this.populatedProperties.add(ArrayAccessNodeProperties.ARRAY_EXPRESSION);
+        NodeUnion<? extends RestrictedPrimaryExpressionNode> union = this.getBackingNode().getUnionForArrayExpression();
+        switch (union.getType())
+        {
+            case NORMAL:
+                union = this.getProxyFactory().makeNormalNodeUnion(
+                        this.getProxyFactory().makeRestrictedPrimaryExpressionNode(union.getNormalNode()));
+                break;
+            case SPLICE:
+                union = this.getProxyFactory().makeSpliceNodeUnion(
+                        this.getProxyFactory().makeSpliceNode(union.getSpliceNode()));
+                break;
+            default:
+                throw new IllegalStateException("Unrecognized union type: " + union.getType());
+        }
+        this.arrayExpression = union;
+    }
+    
+    /**
+     * Ensures that the indexExpression value has been populated from proxy.
+     * If this node is not backed by a proxy or if the value has already been
+     * populated, this method does nothing.
+     */
+    private void checkIndexExpressionWrapped()
+    {
+        if (this.populatedProperties == null || this.populatedProperties.contains(
+                ArrayAccessNodeProperties.INDEX_EXPRESSION))
+            return;
+        this.populatedProperties.add(ArrayAccessNodeProperties.INDEX_EXPRESSION);
+        NodeUnion<? extends ExpressionNode> union = this.getBackingNode().getUnionForIndexExpression();
+        switch (union.getType())
+        {
+            case NORMAL:
+                union = this.getProxyFactory().makeNormalNodeUnion(
+                        this.getProxyFactory().makeExpressionNode(union.getNormalNode()));
+                break;
+            case SPLICE:
+                union = this.getProxyFactory().makeSpliceNodeUnion(
+                        this.getProxyFactory().makeSpliceNode(union.getSpliceNode()));
+                break;
+            default:
+                throw new IllegalStateException("Unrecognized union type: " + union.getType());
+        }
+        this.indexExpression = union;
     }
     
     /**
@@ -73,7 +132,7 @@ public class ArrayAccessNodeImpl extends NodeImpl implements ArrayAccessNode
      */
     public RestrictedPrimaryExpressionNode getArrayExpression()
     {
-        getAttribute(LocalAttribute.ARRAY_EXPRESSION).recordAccess(ReadWriteAttribute.AccessType.READ);
+        checkArrayExpressionWrapped();
         if (this.arrayExpression == null)
         {
             return null;
@@ -89,7 +148,7 @@ public class ArrayAccessNodeImpl extends NodeImpl implements ArrayAccessNode
      */
     public NodeUnion<? extends RestrictedPrimaryExpressionNode> getUnionForArrayExpression()
     {
-        getAttribute(LocalAttribute.ARRAY_EXPRESSION).recordAccess(ReadWriteAttribute.AccessType.READ);
+        checkArrayExpressionWrapped();
         if (this.arrayExpression == null)
         {
             this.arrayExpression = new NormalNodeUnion<RestrictedPrimaryExpressionNode>(null);
@@ -103,24 +162,8 @@ public class ArrayAccessNodeImpl extends NodeImpl implements ArrayAccessNode
      */
     public void setArrayExpression(RestrictedPrimaryExpressionNode arrayExpression)
     {
-            setArrayExpression(arrayExpression, true);
-            getManager().notifyChange(this);
-    }
-    
-    private void setArrayExpression(RestrictedPrimaryExpressionNode arrayExpression, boolean checkPermissions)
-    {
-        if (checkPermissions)
-        {
-            getManager().assertMutatable(this);
-            getAttribute(LocalAttribute.ARRAY_EXPRESSION).recordAccess(ReadWriteAttribute.AccessType.WRITE);
-        }
-        
-        if (this.arrayExpression != null)
-        {
-            setAsChild(this.arrayExpression.getNodeValue(), false);
-        }
-        this.arrayExpression = new NormalNodeUnion<RestrictedPrimaryExpressionNode>(arrayExpression);
-        setAsChild(arrayExpression, true);
+        checkArrayExpressionWrapped();
+        this.setUnionForArrayExpression(new NormalNodeUnion<RestrictedPrimaryExpressionNode>(arrayExpression));
     }
     
     /**
@@ -129,18 +172,15 @@ public class ArrayAccessNodeImpl extends NodeImpl implements ArrayAccessNode
      */
     public void setUnionForArrayExpression(NodeUnion<? extends RestrictedPrimaryExpressionNode> arrayExpression)
     {
-            setUnionForArrayExpression(arrayExpression, true);
-            getManager().notifyChange(this);
+        checkArrayExpressionWrapped();
+        this.getManager().assertMutatable(this);
+        this.doSetArrayExpression(arrayExpression);
+        if (this.getManager().isRecordingEdits())
+            super.recordEdit(new ArrayAccessNodeSetArrayExpressionPropertyEditScriptElementImpl(this.getManager().getCurrentMetaprogramId(), this.getUid(), arrayExpression.getNodeValue() == null ? null : arrayExpression.getNodeValue().getUid()));
     }
     
-    private void setUnionForArrayExpression(NodeUnion<? extends RestrictedPrimaryExpressionNode> arrayExpression, boolean checkPermissions)
+    private void doSetArrayExpression(NodeUnion<? extends RestrictedPrimaryExpressionNode> arrayExpression)
     {
-        if (checkPermissions)
-        {
-            getManager().assertMutatable(this);
-            getAttribute(LocalAttribute.ARRAY_EXPRESSION).recordAccess(ReadWriteAttribute.AccessType.WRITE);
-        }
-        
         if (arrayExpression == null)
         {
             arrayExpression = new NormalNodeUnion<RestrictedPrimaryExpressionNode>(null);
@@ -160,7 +200,7 @@ public class ArrayAccessNodeImpl extends NodeImpl implements ArrayAccessNode
      */
     public ExpressionNode getIndexExpression()
     {
-        getAttribute(LocalAttribute.INDEX_EXPRESSION).recordAccess(ReadWriteAttribute.AccessType.READ);
+        checkIndexExpressionWrapped();
         if (this.indexExpression == null)
         {
             return null;
@@ -176,7 +216,7 @@ public class ArrayAccessNodeImpl extends NodeImpl implements ArrayAccessNode
      */
     public NodeUnion<? extends ExpressionNode> getUnionForIndexExpression()
     {
-        getAttribute(LocalAttribute.INDEX_EXPRESSION).recordAccess(ReadWriteAttribute.AccessType.READ);
+        checkIndexExpressionWrapped();
         if (this.indexExpression == null)
         {
             this.indexExpression = new NormalNodeUnion<ExpressionNode>(null);
@@ -190,24 +230,8 @@ public class ArrayAccessNodeImpl extends NodeImpl implements ArrayAccessNode
      */
     public void setIndexExpression(ExpressionNode indexExpression)
     {
-            setIndexExpression(indexExpression, true);
-            getManager().notifyChange(this);
-    }
-    
-    private void setIndexExpression(ExpressionNode indexExpression, boolean checkPermissions)
-    {
-        if (checkPermissions)
-        {
-            getManager().assertMutatable(this);
-            getAttribute(LocalAttribute.INDEX_EXPRESSION).recordAccess(ReadWriteAttribute.AccessType.WRITE);
-        }
-        
-        if (this.indexExpression != null)
-        {
-            setAsChild(this.indexExpression.getNodeValue(), false);
-        }
-        this.indexExpression = new NormalNodeUnion<ExpressionNode>(indexExpression);
-        setAsChild(indexExpression, true);
+        checkIndexExpressionWrapped();
+        this.setUnionForIndexExpression(new NormalNodeUnion<ExpressionNode>(indexExpression));
     }
     
     /**
@@ -216,18 +240,15 @@ public class ArrayAccessNodeImpl extends NodeImpl implements ArrayAccessNode
      */
     public void setUnionForIndexExpression(NodeUnion<? extends ExpressionNode> indexExpression)
     {
-            setUnionForIndexExpression(indexExpression, true);
-            getManager().notifyChange(this);
+        checkIndexExpressionWrapped();
+        this.getManager().assertMutatable(this);
+        this.doSetIndexExpression(indexExpression);
+        if (this.getManager().isRecordingEdits())
+            super.recordEdit(new ArrayAccessNodeSetIndexExpressionPropertyEditScriptElementImpl(this.getManager().getCurrentMetaprogramId(), this.getUid(), indexExpression.getNodeValue() == null ? null : indexExpression.getNodeValue().getUid()));
     }
     
-    private void setUnionForIndexExpression(NodeUnion<? extends ExpressionNode> indexExpression, boolean checkPermissions)
+    private void doSetIndexExpression(NodeUnion<? extends ExpressionNode> indexExpression)
     {
-        if (checkPermissions)
-        {
-            getManager().assertMutatable(this);
-            getAttribute(LocalAttribute.INDEX_EXPRESSION).recordAccess(ReadWriteAttribute.AccessType.WRITE);
-        }
-        
         if (indexExpression == null)
         {
             indexExpression = new NormalNodeUnion<ExpressionNode>(null);
@@ -251,13 +272,13 @@ public class ArrayAccessNodeImpl extends NodeImpl implements ArrayAccessNode
     protected void receiveToChildren(BsjNodeVisitor visitor)
     {
         super.receiveToChildren(visitor);
-        if (this.arrayExpression.getNodeValue() != null)
+        if (this.getUnionForArrayExpression().getNodeValue() != null)
         {
-            this.arrayExpression.getNodeValue().receive(visitor);
+            this.getUnionForArrayExpression().getNodeValue().receive(visitor);
         }
-        if (this.indexExpression.getNodeValue() != null)
+        if (this.getUnionForIndexExpression().getNodeValue() != null)
         {
-            this.indexExpression.getNodeValue().receive(visitor);
+            this.getUnionForIndexExpression().getNodeValue().receive(visitor);
         }
         Iterator<? extends Node> extras = getHiddenVisitorChildren();
         if (extras != null)
@@ -280,13 +301,13 @@ public class ArrayAccessNodeImpl extends NodeImpl implements ArrayAccessNode
     protected void receiveTypedToChildren(BsjTypedNodeVisitor visitor)
     {
         super.receiveTypedToChildren(visitor);
-        if (this.arrayExpression.getNodeValue() != null)
+        if (this.getUnionForArrayExpression().getNodeValue() != null)
         {
-            this.arrayExpression.getNodeValue().receiveTyped(visitor);
+            this.getUnionForArrayExpression().getNodeValue().receiveTyped(visitor);
         }
-        if (this.indexExpression.getNodeValue() != null)
+        if (this.getUnionForIndexExpression().getNodeValue() != null)
         {
-            this.indexExpression.getNodeValue().receiveTyped(visitor);
+            this.getUnionForIndexExpression().getNodeValue().receiveTyped(visitor);
         }
         Iterator<? extends Node> extras = getHiddenVisitorChildren();
         if (extras != null)
@@ -346,6 +367,8 @@ public class ArrayAccessNodeImpl extends NodeImpl implements ArrayAccessNode
     {
         StringBuilder sb = new StringBuilder();
         sb.append(this.getClass().getSimpleName());
+        sb.append('#');
+        sb.append(this.getUid());
         sb.append('[');
         sb.append("arrayExpression=");
         sb.append(this.getUnionForArrayExpression().getNodeValue() == null? "null" : this.getUnionForArrayExpression().getNodeValue().getClass().getSimpleName());

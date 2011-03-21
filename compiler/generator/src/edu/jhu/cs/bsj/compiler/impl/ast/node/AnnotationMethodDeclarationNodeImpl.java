@@ -1,10 +1,10 @@
 package edu.jhu.cs.bsj.compiler.impl.ast.node;
 
 import java.util.Arrays;
-import java.util.EnumMap;
+import java.util.EnumSet;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
+import java.util.Set;
 
 import javax.annotation.Generated;
 
@@ -23,9 +23,14 @@ import edu.jhu.cs.bsj.compiler.ast.node.JavadocNode;
 import edu.jhu.cs.bsj.compiler.ast.node.Node;
 import edu.jhu.cs.bsj.compiler.ast.node.TypeNode;
 import edu.jhu.cs.bsj.compiler.impl.ast.BsjNodeManager;
+import edu.jhu.cs.bsj.compiler.impl.ast.BsjNodeProxyFactory;
 import edu.jhu.cs.bsj.compiler.impl.ast.NormalNodeUnion;
-import edu.jhu.cs.bsj.compiler.impl.ast.attribute.AttributeName;
-import edu.jhu.cs.bsj.compiler.impl.ast.attribute.ReadWriteAttribute;
+import edu.jhu.cs.bsj.compiler.impl.ast.delta.property.AnnotationMethodDeclarationNodeSetDefaultValuePropertyEditScriptElementImpl;
+import edu.jhu.cs.bsj.compiler.impl.ast.delta.property.AnnotationMethodDeclarationNodeSetIdentifierPropertyEditScriptElementImpl;
+import edu.jhu.cs.bsj.compiler.impl.ast.delta.property.AnnotationMethodDeclarationNodeSetJavadocPropertyEditScriptElementImpl;
+import edu.jhu.cs.bsj.compiler.impl.ast.delta.property.AnnotationMethodDeclarationNodeSetModifiersPropertyEditScriptElementImpl;
+import edu.jhu.cs.bsj.compiler.impl.ast.delta.property.AnnotationMethodDeclarationNodeSetTypePropertyEditScriptElementImpl;
+import edu.jhu.cs.bsj.compiler.impl.ast.properties.AnnotationMethodDeclarationNodeProperties;
 
 @Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
 public class AnnotationMethodDeclarationNodeImpl extends NodeImpl implements AnnotationMethodDeclarationNode
@@ -45,30 +50,11 @@ public class AnnotationMethodDeclarationNodeImpl extends NodeImpl implements Ann
     /** The associated javadoc comment for this node. */
     private NodeUnion<? extends JavadocNode> javadoc;
     
-    private Map<LocalAttribute,ReadWriteAttribute> localAttributes = new EnumMap<LocalAttribute,ReadWriteAttribute>(LocalAttribute.class);
-    private ReadWriteAttribute getAttribute(LocalAttribute attributeName)
-    {
-        ReadWriteAttribute attribute = localAttributes.get(attributeName);
-        if (attribute == null)
-        {
-            attribute = new ReadWriteAttribute(AnnotationMethodDeclarationNodeImpl.this, attributeName);
-            localAttributes.put(attributeName, attribute);
-        }
-        return attribute;
-    }
-    private static enum LocalAttribute implements AttributeName
-    {
-        /** Attribute identifier for the modifiers property. */
-        MODIFIERS,
-        /** Attribute identifier for the type property. */
-        TYPE,
-        /** Attribute identifier for the identifier property. */
-        IDENTIFIER,
-        /** Attribute identifier for the defaultValue property. */
-        DEFAULT_VALUE,
-        /** Attribute identifier for the javadoc property. */
-        JAVADOC,
-    }
+    /**
+     * A set of those properties which have been populated from the backing node.
+     * This field is <code>null</code> if <tt>backingNode</tt> is <code>null</code>.
+     */
+    private Set<AnnotationMethodDeclarationNodeProperties> populatedProperties;
     
     /** General constructor. */
     public AnnotationMethodDeclarationNodeImpl(
@@ -83,11 +69,165 @@ public class AnnotationMethodDeclarationNodeImpl extends NodeImpl implements Ann
             boolean binary)
     {
         super(startLocation, stopLocation, manager, binary);
-        setUnionForModifiers(modifiers, false);
-        setUnionForType(type, false);
-        setUnionForIdentifier(identifier, false);
-        setUnionForDefaultValue(defaultValue, false);
-        setUnionForJavadoc(javadoc, false);
+        this.populatedProperties = null;
+        doSetModifiers(modifiers);
+        doSetType(type);
+        doSetIdentifier(identifier);
+        doSetDefaultValue(defaultValue);
+        doSetJavadoc(javadoc);
+    }
+    
+    /** Proxy constructor. */
+    public AnnotationMethodDeclarationNodeImpl(BsjNodeManager manager, BsjNodeProxyFactory proxyFactory, AnnotationMethodDeclarationNode backingNode)
+    {
+        super(manager, proxyFactory, backingNode);
+        this.populatedProperties = EnumSet.noneOf(AnnotationMethodDeclarationNodeProperties.class);
+    }
+    
+    /** Retrieves this node's backing node (if one exists). */
+    protected AnnotationMethodDeclarationNode getBackingNode()
+    {
+        return (AnnotationMethodDeclarationNode)super.getBackingNode();
+    }
+    
+    /**
+     * Ensures that the modifiers value has been populated from proxy.
+     * If this node is not backed by a proxy or if the value has already been
+     * populated, this method does nothing.
+     */
+    private void checkModifiersWrapped()
+    {
+        if (this.populatedProperties == null || this.populatedProperties.contains(
+                AnnotationMethodDeclarationNodeProperties.MODIFIERS))
+            return;
+        this.populatedProperties.add(AnnotationMethodDeclarationNodeProperties.MODIFIERS);
+        NodeUnion<? extends AnnotationMethodModifiersNode> union = this.getBackingNode().getUnionForModifiers();
+        switch (union.getType())
+        {
+            case NORMAL:
+                union = this.getProxyFactory().makeNormalNodeUnion(
+                        this.getProxyFactory().makeAnnotationMethodModifiersNode(union.getNormalNode()));
+                break;
+            case SPLICE:
+                union = this.getProxyFactory().makeSpliceNodeUnion(
+                        this.getProxyFactory().makeSpliceNode(union.getSpliceNode()));
+                break;
+            default:
+                throw new IllegalStateException("Unrecognized union type: " + union.getType());
+        }
+        this.modifiers = union;
+    }
+    
+    /**
+     * Ensures that the type value has been populated from proxy.
+     * If this node is not backed by a proxy or if the value has already been
+     * populated, this method does nothing.
+     */
+    private void checkTypeWrapped()
+    {
+        if (this.populatedProperties == null || this.populatedProperties.contains(
+                AnnotationMethodDeclarationNodeProperties.TYPE))
+            return;
+        this.populatedProperties.add(AnnotationMethodDeclarationNodeProperties.TYPE);
+        NodeUnion<? extends TypeNode> union = this.getBackingNode().getUnionForType();
+        switch (union.getType())
+        {
+            case NORMAL:
+                union = this.getProxyFactory().makeNormalNodeUnion(
+                        this.getProxyFactory().makeTypeNode(union.getNormalNode()));
+                break;
+            case SPLICE:
+                union = this.getProxyFactory().makeSpliceNodeUnion(
+                        this.getProxyFactory().makeSpliceNode(union.getSpliceNode()));
+                break;
+            default:
+                throw new IllegalStateException("Unrecognized union type: " + union.getType());
+        }
+        this.type = union;
+    }
+    
+    /**
+     * Ensures that the identifier value has been populated from proxy.
+     * If this node is not backed by a proxy or if the value has already been
+     * populated, this method does nothing.
+     */
+    private void checkIdentifierWrapped()
+    {
+        if (this.populatedProperties == null || this.populatedProperties.contains(
+                AnnotationMethodDeclarationNodeProperties.IDENTIFIER))
+            return;
+        this.populatedProperties.add(AnnotationMethodDeclarationNodeProperties.IDENTIFIER);
+        NodeUnion<? extends IdentifierNode> union = this.getBackingNode().getUnionForIdentifier();
+        switch (union.getType())
+        {
+            case NORMAL:
+                union = this.getProxyFactory().makeNormalNodeUnion(
+                        this.getProxyFactory().makeIdentifierNode(union.getNormalNode()));
+                break;
+            case SPLICE:
+                union = this.getProxyFactory().makeSpliceNodeUnion(
+                        this.getProxyFactory().makeSpliceNode(union.getSpliceNode()));
+                break;
+            default:
+                throw new IllegalStateException("Unrecognized union type: " + union.getType());
+        }
+        this.identifier = union;
+    }
+    
+    /**
+     * Ensures that the defaultValue value has been populated from proxy.
+     * If this node is not backed by a proxy or if the value has already been
+     * populated, this method does nothing.
+     */
+    private void checkDefaultValueWrapped()
+    {
+        if (this.populatedProperties == null || this.populatedProperties.contains(
+                AnnotationMethodDeclarationNodeProperties.DEFAULT_VALUE))
+            return;
+        this.populatedProperties.add(AnnotationMethodDeclarationNodeProperties.DEFAULT_VALUE);
+        NodeUnion<? extends AnnotationValueNode> union = this.getBackingNode().getUnionForDefaultValue();
+        switch (union.getType())
+        {
+            case NORMAL:
+                union = this.getProxyFactory().makeNormalNodeUnion(
+                        this.getProxyFactory().makeAnnotationValueNode(union.getNormalNode()));
+                break;
+            case SPLICE:
+                union = this.getProxyFactory().makeSpliceNodeUnion(
+                        this.getProxyFactory().makeSpliceNode(union.getSpliceNode()));
+                break;
+            default:
+                throw new IllegalStateException("Unrecognized union type: " + union.getType());
+        }
+        this.defaultValue = union;
+    }
+    
+    /**
+     * Ensures that the javadoc value has been populated from proxy.
+     * If this node is not backed by a proxy or if the value has already been
+     * populated, this method does nothing.
+     */
+    private void checkJavadocWrapped()
+    {
+        if (this.populatedProperties == null || this.populatedProperties.contains(
+                AnnotationMethodDeclarationNodeProperties.JAVADOC))
+            return;
+        this.populatedProperties.add(AnnotationMethodDeclarationNodeProperties.JAVADOC);
+        NodeUnion<? extends JavadocNode> union = this.getBackingNode().getUnionForJavadoc();
+        switch (union.getType())
+        {
+            case NORMAL:
+                union = this.getProxyFactory().makeNormalNodeUnion(
+                        this.getProxyFactory().makeJavadocNode(union.getNormalNode()));
+                break;
+            case SPLICE:
+                union = this.getProxyFactory().makeSpliceNodeUnion(
+                        this.getProxyFactory().makeSpliceNode(union.getSpliceNode()));
+                break;
+            default:
+                throw new IllegalStateException("Unrecognized union type: " + union.getType());
+        }
+        this.javadoc = union;
     }
     
     /**
@@ -97,7 +237,7 @@ public class AnnotationMethodDeclarationNodeImpl extends NodeImpl implements Ann
      */
     public AnnotationMethodModifiersNode getModifiers()
     {
-        getAttribute(LocalAttribute.MODIFIERS).recordAccess(ReadWriteAttribute.AccessType.READ);
+        checkModifiersWrapped();
         if (this.modifiers == null)
         {
             return null;
@@ -113,7 +253,7 @@ public class AnnotationMethodDeclarationNodeImpl extends NodeImpl implements Ann
      */
     public NodeUnion<? extends AnnotationMethodModifiersNode> getUnionForModifiers()
     {
-        getAttribute(LocalAttribute.MODIFIERS).recordAccess(ReadWriteAttribute.AccessType.READ);
+        checkModifiersWrapped();
         if (this.modifiers == null)
         {
             this.modifiers = new NormalNodeUnion<AnnotationMethodModifiersNode>(null);
@@ -127,24 +267,8 @@ public class AnnotationMethodDeclarationNodeImpl extends NodeImpl implements Ann
      */
     public void setModifiers(AnnotationMethodModifiersNode modifiers)
     {
-            setModifiers(modifiers, true);
-            getManager().notifyChange(this);
-    }
-    
-    private void setModifiers(AnnotationMethodModifiersNode modifiers, boolean checkPermissions)
-    {
-        if (checkPermissions)
-        {
-            getManager().assertMutatable(this);
-            getAttribute(LocalAttribute.MODIFIERS).recordAccess(ReadWriteAttribute.AccessType.WRITE);
-        }
-        
-        if (this.modifiers != null)
-        {
-            setAsChild(this.modifiers.getNodeValue(), false);
-        }
-        this.modifiers = new NormalNodeUnion<AnnotationMethodModifiersNode>(modifiers);
-        setAsChild(modifiers, true);
+        checkModifiersWrapped();
+        this.setUnionForModifiers(new NormalNodeUnion<AnnotationMethodModifiersNode>(modifiers));
     }
     
     /**
@@ -153,18 +277,15 @@ public class AnnotationMethodDeclarationNodeImpl extends NodeImpl implements Ann
      */
     public void setUnionForModifiers(NodeUnion<? extends AnnotationMethodModifiersNode> modifiers)
     {
-            setUnionForModifiers(modifiers, true);
-            getManager().notifyChange(this);
+        checkModifiersWrapped();
+        this.getManager().assertMutatable(this);
+        this.doSetModifiers(modifiers);
+        if (this.getManager().isRecordingEdits())
+            super.recordEdit(new AnnotationMethodDeclarationNodeSetModifiersPropertyEditScriptElementImpl(this.getManager().getCurrentMetaprogramId(), this.getUid(), modifiers.getNodeValue() == null ? null : modifiers.getNodeValue().getUid()));
     }
     
-    private void setUnionForModifiers(NodeUnion<? extends AnnotationMethodModifiersNode> modifiers, boolean checkPermissions)
+    private void doSetModifiers(NodeUnion<? extends AnnotationMethodModifiersNode> modifiers)
     {
-        if (checkPermissions)
-        {
-            getManager().assertMutatable(this);
-            getAttribute(LocalAttribute.MODIFIERS).recordAccess(ReadWriteAttribute.AccessType.WRITE);
-        }
-        
         if (modifiers == null)
         {
             modifiers = new NormalNodeUnion<AnnotationMethodModifiersNode>(null);
@@ -184,7 +305,7 @@ public class AnnotationMethodDeclarationNodeImpl extends NodeImpl implements Ann
      */
     public TypeNode getType()
     {
-        getAttribute(LocalAttribute.TYPE).recordAccess(ReadWriteAttribute.AccessType.READ);
+        checkTypeWrapped();
         if (this.type == null)
         {
             return null;
@@ -200,7 +321,7 @@ public class AnnotationMethodDeclarationNodeImpl extends NodeImpl implements Ann
      */
     public NodeUnion<? extends TypeNode> getUnionForType()
     {
-        getAttribute(LocalAttribute.TYPE).recordAccess(ReadWriteAttribute.AccessType.READ);
+        checkTypeWrapped();
         if (this.type == null)
         {
             this.type = new NormalNodeUnion<TypeNode>(null);
@@ -214,24 +335,8 @@ public class AnnotationMethodDeclarationNodeImpl extends NodeImpl implements Ann
      */
     public void setType(TypeNode type)
     {
-            setType(type, true);
-            getManager().notifyChange(this);
-    }
-    
-    private void setType(TypeNode type, boolean checkPermissions)
-    {
-        if (checkPermissions)
-        {
-            getManager().assertMutatable(this);
-            getAttribute(LocalAttribute.TYPE).recordAccess(ReadWriteAttribute.AccessType.WRITE);
-        }
-        
-        if (this.type != null)
-        {
-            setAsChild(this.type.getNodeValue(), false);
-        }
-        this.type = new NormalNodeUnion<TypeNode>(type);
-        setAsChild(type, true);
+        checkTypeWrapped();
+        this.setUnionForType(new NormalNodeUnion<TypeNode>(type));
     }
     
     /**
@@ -240,18 +345,15 @@ public class AnnotationMethodDeclarationNodeImpl extends NodeImpl implements Ann
      */
     public void setUnionForType(NodeUnion<? extends TypeNode> type)
     {
-            setUnionForType(type, true);
-            getManager().notifyChange(this);
+        checkTypeWrapped();
+        this.getManager().assertMutatable(this);
+        this.doSetType(type);
+        if (this.getManager().isRecordingEdits())
+            super.recordEdit(new AnnotationMethodDeclarationNodeSetTypePropertyEditScriptElementImpl(this.getManager().getCurrentMetaprogramId(), this.getUid(), type.getNodeValue() == null ? null : type.getNodeValue().getUid()));
     }
     
-    private void setUnionForType(NodeUnion<? extends TypeNode> type, boolean checkPermissions)
+    private void doSetType(NodeUnion<? extends TypeNode> type)
     {
-        if (checkPermissions)
-        {
-            getManager().assertMutatable(this);
-            getAttribute(LocalAttribute.TYPE).recordAccess(ReadWriteAttribute.AccessType.WRITE);
-        }
-        
         if (type == null)
         {
             type = new NormalNodeUnion<TypeNode>(null);
@@ -271,7 +373,7 @@ public class AnnotationMethodDeclarationNodeImpl extends NodeImpl implements Ann
      */
     public IdentifierNode getIdentifier()
     {
-        getAttribute(LocalAttribute.IDENTIFIER).recordAccess(ReadWriteAttribute.AccessType.READ);
+        checkIdentifierWrapped();
         if (this.identifier == null)
         {
             return null;
@@ -287,7 +389,7 @@ public class AnnotationMethodDeclarationNodeImpl extends NodeImpl implements Ann
      */
     public NodeUnion<? extends IdentifierNode> getUnionForIdentifier()
     {
-        getAttribute(LocalAttribute.IDENTIFIER).recordAccess(ReadWriteAttribute.AccessType.READ);
+        checkIdentifierWrapped();
         if (this.identifier == null)
         {
             this.identifier = new NormalNodeUnion<IdentifierNode>(null);
@@ -301,24 +403,8 @@ public class AnnotationMethodDeclarationNodeImpl extends NodeImpl implements Ann
      */
     public void setIdentifier(IdentifierNode identifier)
     {
-            setIdentifier(identifier, true);
-            getManager().notifyChange(this);
-    }
-    
-    private void setIdentifier(IdentifierNode identifier, boolean checkPermissions)
-    {
-        if (checkPermissions)
-        {
-            getManager().assertMutatable(this);
-            getAttribute(LocalAttribute.IDENTIFIER).recordAccess(ReadWriteAttribute.AccessType.WRITE);
-        }
-        
-        if (this.identifier != null)
-        {
-            setAsChild(this.identifier.getNodeValue(), false);
-        }
-        this.identifier = new NormalNodeUnion<IdentifierNode>(identifier);
-        setAsChild(identifier, true);
+        checkIdentifierWrapped();
+        this.setUnionForIdentifier(new NormalNodeUnion<IdentifierNode>(identifier));
     }
     
     /**
@@ -327,18 +413,15 @@ public class AnnotationMethodDeclarationNodeImpl extends NodeImpl implements Ann
      */
     public void setUnionForIdentifier(NodeUnion<? extends IdentifierNode> identifier)
     {
-            setUnionForIdentifier(identifier, true);
-            getManager().notifyChange(this);
+        checkIdentifierWrapped();
+        this.getManager().assertMutatable(this);
+        this.doSetIdentifier(identifier);
+        if (this.getManager().isRecordingEdits())
+            super.recordEdit(new AnnotationMethodDeclarationNodeSetIdentifierPropertyEditScriptElementImpl(this.getManager().getCurrentMetaprogramId(), this.getUid(), identifier.getNodeValue() == null ? null : identifier.getNodeValue().getUid()));
     }
     
-    private void setUnionForIdentifier(NodeUnion<? extends IdentifierNode> identifier, boolean checkPermissions)
+    private void doSetIdentifier(NodeUnion<? extends IdentifierNode> identifier)
     {
-        if (checkPermissions)
-        {
-            getManager().assertMutatable(this);
-            getAttribute(LocalAttribute.IDENTIFIER).recordAccess(ReadWriteAttribute.AccessType.WRITE);
-        }
-        
         if (identifier == null)
         {
             identifier = new NormalNodeUnion<IdentifierNode>(null);
@@ -358,7 +441,7 @@ public class AnnotationMethodDeclarationNodeImpl extends NodeImpl implements Ann
      */
     public AnnotationValueNode getDefaultValue()
     {
-        getAttribute(LocalAttribute.DEFAULT_VALUE).recordAccess(ReadWriteAttribute.AccessType.READ);
+        checkDefaultValueWrapped();
         if (this.defaultValue == null)
         {
             return null;
@@ -374,7 +457,7 @@ public class AnnotationMethodDeclarationNodeImpl extends NodeImpl implements Ann
      */
     public NodeUnion<? extends AnnotationValueNode> getUnionForDefaultValue()
     {
-        getAttribute(LocalAttribute.DEFAULT_VALUE).recordAccess(ReadWriteAttribute.AccessType.READ);
+        checkDefaultValueWrapped();
         if (this.defaultValue == null)
         {
             this.defaultValue = new NormalNodeUnion<AnnotationValueNode>(null);
@@ -388,24 +471,8 @@ public class AnnotationMethodDeclarationNodeImpl extends NodeImpl implements Ann
      */
     public void setDefaultValue(AnnotationValueNode defaultValue)
     {
-            setDefaultValue(defaultValue, true);
-            getManager().notifyChange(this);
-    }
-    
-    private void setDefaultValue(AnnotationValueNode defaultValue, boolean checkPermissions)
-    {
-        if (checkPermissions)
-        {
-            getManager().assertMutatable(this);
-            getAttribute(LocalAttribute.DEFAULT_VALUE).recordAccess(ReadWriteAttribute.AccessType.WRITE);
-        }
-        
-        if (this.defaultValue != null)
-        {
-            setAsChild(this.defaultValue.getNodeValue(), false);
-        }
-        this.defaultValue = new NormalNodeUnion<AnnotationValueNode>(defaultValue);
-        setAsChild(defaultValue, true);
+        checkDefaultValueWrapped();
+        this.setUnionForDefaultValue(new NormalNodeUnion<AnnotationValueNode>(defaultValue));
     }
     
     /**
@@ -414,18 +481,15 @@ public class AnnotationMethodDeclarationNodeImpl extends NodeImpl implements Ann
      */
     public void setUnionForDefaultValue(NodeUnion<? extends AnnotationValueNode> defaultValue)
     {
-            setUnionForDefaultValue(defaultValue, true);
-            getManager().notifyChange(this);
+        checkDefaultValueWrapped();
+        this.getManager().assertMutatable(this);
+        this.doSetDefaultValue(defaultValue);
+        if (this.getManager().isRecordingEdits())
+            super.recordEdit(new AnnotationMethodDeclarationNodeSetDefaultValuePropertyEditScriptElementImpl(this.getManager().getCurrentMetaprogramId(), this.getUid(), defaultValue.getNodeValue() == null ? null : defaultValue.getNodeValue().getUid()));
     }
     
-    private void setUnionForDefaultValue(NodeUnion<? extends AnnotationValueNode> defaultValue, boolean checkPermissions)
+    private void doSetDefaultValue(NodeUnion<? extends AnnotationValueNode> defaultValue)
     {
-        if (checkPermissions)
-        {
-            getManager().assertMutatable(this);
-            getAttribute(LocalAttribute.DEFAULT_VALUE).recordAccess(ReadWriteAttribute.AccessType.WRITE);
-        }
-        
         if (defaultValue == null)
         {
             defaultValue = new NormalNodeUnion<AnnotationValueNode>(null);
@@ -445,7 +509,7 @@ public class AnnotationMethodDeclarationNodeImpl extends NodeImpl implements Ann
      */
     public JavadocNode getJavadoc()
     {
-        getAttribute(LocalAttribute.JAVADOC).recordAccess(ReadWriteAttribute.AccessType.READ);
+        checkJavadocWrapped();
         if (this.javadoc == null)
         {
             return null;
@@ -461,7 +525,7 @@ public class AnnotationMethodDeclarationNodeImpl extends NodeImpl implements Ann
      */
     public NodeUnion<? extends JavadocNode> getUnionForJavadoc()
     {
-        getAttribute(LocalAttribute.JAVADOC).recordAccess(ReadWriteAttribute.AccessType.READ);
+        checkJavadocWrapped();
         if (this.javadoc == null)
         {
             this.javadoc = new NormalNodeUnion<JavadocNode>(null);
@@ -475,24 +539,8 @@ public class AnnotationMethodDeclarationNodeImpl extends NodeImpl implements Ann
      */
     public void setJavadoc(JavadocNode javadoc)
     {
-            setJavadoc(javadoc, true);
-            getManager().notifyChange(this);
-    }
-    
-    private void setJavadoc(JavadocNode javadoc, boolean checkPermissions)
-    {
-        if (checkPermissions)
-        {
-            getManager().assertMutatable(this);
-            getAttribute(LocalAttribute.JAVADOC).recordAccess(ReadWriteAttribute.AccessType.WRITE);
-        }
-        
-        if (this.javadoc != null)
-        {
-            setAsChild(this.javadoc.getNodeValue(), false);
-        }
-        this.javadoc = new NormalNodeUnion<JavadocNode>(javadoc);
-        setAsChild(javadoc, true);
+        checkJavadocWrapped();
+        this.setUnionForJavadoc(new NormalNodeUnion<JavadocNode>(javadoc));
     }
     
     /**
@@ -501,18 +549,15 @@ public class AnnotationMethodDeclarationNodeImpl extends NodeImpl implements Ann
      */
     public void setUnionForJavadoc(NodeUnion<? extends JavadocNode> javadoc)
     {
-            setUnionForJavadoc(javadoc, true);
-            getManager().notifyChange(this);
+        checkJavadocWrapped();
+        this.getManager().assertMutatable(this);
+        this.doSetJavadoc(javadoc);
+        if (this.getManager().isRecordingEdits())
+            super.recordEdit(new AnnotationMethodDeclarationNodeSetJavadocPropertyEditScriptElementImpl(this.getManager().getCurrentMetaprogramId(), this.getUid(), javadoc.getNodeValue() == null ? null : javadoc.getNodeValue().getUid()));
     }
     
-    private void setUnionForJavadoc(NodeUnion<? extends JavadocNode> javadoc, boolean checkPermissions)
+    private void doSetJavadoc(NodeUnion<? extends JavadocNode> javadoc)
     {
-        if (checkPermissions)
-        {
-            getManager().assertMutatable(this);
-            getAttribute(LocalAttribute.JAVADOC).recordAccess(ReadWriteAttribute.AccessType.WRITE);
-        }
-        
         if (javadoc == null)
         {
             javadoc = new NormalNodeUnion<JavadocNode>(null);
@@ -536,25 +581,25 @@ public class AnnotationMethodDeclarationNodeImpl extends NodeImpl implements Ann
     protected void receiveToChildren(BsjNodeVisitor visitor)
     {
         super.receiveToChildren(visitor);
-        if (this.modifiers.getNodeValue() != null)
+        if (this.getUnionForModifiers().getNodeValue() != null)
         {
-            this.modifiers.getNodeValue().receive(visitor);
+            this.getUnionForModifiers().getNodeValue().receive(visitor);
         }
-        if (this.type.getNodeValue() != null)
+        if (this.getUnionForType().getNodeValue() != null)
         {
-            this.type.getNodeValue().receive(visitor);
+            this.getUnionForType().getNodeValue().receive(visitor);
         }
-        if (this.identifier.getNodeValue() != null)
+        if (this.getUnionForIdentifier().getNodeValue() != null)
         {
-            this.identifier.getNodeValue().receive(visitor);
+            this.getUnionForIdentifier().getNodeValue().receive(visitor);
         }
-        if (this.defaultValue.getNodeValue() != null)
+        if (this.getUnionForDefaultValue().getNodeValue() != null)
         {
-            this.defaultValue.getNodeValue().receive(visitor);
+            this.getUnionForDefaultValue().getNodeValue().receive(visitor);
         }
-        if (this.javadoc.getNodeValue() != null)
+        if (this.getUnionForJavadoc().getNodeValue() != null)
         {
-            this.javadoc.getNodeValue().receive(visitor);
+            this.getUnionForJavadoc().getNodeValue().receive(visitor);
         }
         Iterator<? extends Node> extras = getHiddenVisitorChildren();
         if (extras != null)
@@ -577,25 +622,25 @@ public class AnnotationMethodDeclarationNodeImpl extends NodeImpl implements Ann
     protected void receiveTypedToChildren(BsjTypedNodeVisitor visitor)
     {
         super.receiveTypedToChildren(visitor);
-        if (this.modifiers.getNodeValue() != null)
+        if (this.getUnionForModifiers().getNodeValue() != null)
         {
-            this.modifiers.getNodeValue().receiveTyped(visitor);
+            this.getUnionForModifiers().getNodeValue().receiveTyped(visitor);
         }
-        if (this.type.getNodeValue() != null)
+        if (this.getUnionForType().getNodeValue() != null)
         {
-            this.type.getNodeValue().receiveTyped(visitor);
+            this.getUnionForType().getNodeValue().receiveTyped(visitor);
         }
-        if (this.identifier.getNodeValue() != null)
+        if (this.getUnionForIdentifier().getNodeValue() != null)
         {
-            this.identifier.getNodeValue().receiveTyped(visitor);
+            this.getUnionForIdentifier().getNodeValue().receiveTyped(visitor);
         }
-        if (this.defaultValue.getNodeValue() != null)
+        if (this.getUnionForDefaultValue().getNodeValue() != null)
         {
-            this.defaultValue.getNodeValue().receiveTyped(visitor);
+            this.getUnionForDefaultValue().getNodeValue().receiveTyped(visitor);
         }
-        if (this.javadoc.getNodeValue() != null)
+        if (this.getUnionForJavadoc().getNodeValue() != null)
         {
-            this.javadoc.getNodeValue().receiveTyped(visitor);
+            this.getUnionForJavadoc().getNodeValue().receiveTyped(visitor);
         }
         Iterator<? extends Node> extras = getHiddenVisitorChildren();
         if (extras != null)
@@ -664,6 +709,8 @@ public class AnnotationMethodDeclarationNodeImpl extends NodeImpl implements Ann
     {
         StringBuilder sb = new StringBuilder();
         sb.append(this.getClass().getSimpleName());
+        sb.append('#');
+        sb.append(this.getUid());
         sb.append('[');
         sb.append("modifiers=");
         sb.append(this.getUnionForModifiers().getNodeValue() == null? "null" : this.getUnionForModifiers().getNodeValue().getClass().getSimpleName());

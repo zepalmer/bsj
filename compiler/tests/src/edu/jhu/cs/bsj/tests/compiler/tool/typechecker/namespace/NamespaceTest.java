@@ -1,5 +1,6 @@
 package edu.jhu.cs.bsj.tests.compiler.tool.typechecker.namespace;
 
+import java.io.File;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Iterator;
@@ -97,10 +98,13 @@ public class NamespaceTest extends AbstractTest
         diagnosticListener = new RecordingDiagnosticProxyListener<BsjSourceLocation>(
                 new DiagnosticPrintingListener<BsjSourceLocation>(System.err));
 
-        BsjToolkit toolkit = getToolkit(SPECIFIC_SOURCE_DIR);
+        // TODO: move this to a more distinct location -- perhaps create AbstractNamespaceTest?
+        BsjToolkit toolkit = getToolkit(new File(EXAMPLES.getPath() + File.separator + "projects" + File.separator
+                + "bsj-test-sources" + File.separator));
         final BsjNodeFactory factory = toolkit.getNodeFactory();
         rootPackage = factory.makePackageNode((IdentifierNode) null);
-        final CompilationUnitLoadingInfo loadingInfo = toolkit.getCompilationUnitLoadingInfoFactory().makeLoadingInfo(diagnosticListener);
+        final CompilationUnitLoadingInfo loadingInfo = toolkit.getCompilationUnitLoadingInfoFactory().makeLoadingInfo(
+                diagnosticListener);
         rootPackage.loadCompilationUnit("ExampleNamespace", loadingInfo);
         compilationUnitNode = rootPackage.getCompilationUnit("ExampleNamespace");
         assertNoNewErrorDiagnostics("Error while loading ExampleNamespace.bsj");
@@ -111,8 +115,8 @@ public class NamespaceTest extends AbstractTest
         }
         exampleNamespaceClassNode = (ClassDeclarationNode) compilationUnitNode.getTypeDecls().getFirst();
 
-        final TypecheckerManager typecheckerManager = new TypecheckerManager(rootPackage, toolkit.getParser(), loadingInfo,
-                diagnosticListener);
+        final TypecheckerManager typecheckerManager = new TypecheckerManager(rootPackage, toolkit.getParser(),
+                loadingInfo, diagnosticListener);
         final NamespaceBuilder namespaceBuilder = new NamespaceBuilder(rootPackage, diagnosticListener, loadingInfo,
                 new TypecheckerToolkit(typecheckerManager, loadingInfo));
 

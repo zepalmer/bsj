@@ -256,7 +256,6 @@
 
         <type name="NameNode" super="Node" mode="abstract">
             <prop name="identifier" type="IdentifierNode" desc="the identifier used in this name" />
-            <include file="NameNode.java" />
             <doc><![CDATA[
                 A common supertype for all nodes representing a name.  In Java, a name is either a simple name (a single
                 identifier) or a qualified name (a name, a dot, and an identifier).  The meaning of a name is context-sensitive
@@ -273,7 +272,6 @@
         <!-- TODO: is the QNN vs. SNN distinction buying us anything useful or just a bunch of instanceof checks? -->
         <type name="QualifiedNameNode" super="NameNode">
             <prop name="base" type="NameNode" desc="the name being qualified" />
-            <include file="QualifiedNameNode.java" />
             <doc><![CDATA[
                 Represents a qualified name, as in
                 <pre>
@@ -314,7 +312,6 @@
         </type>
 
         <type name="SimpleNameNode" super="NameNode">
-            <include file="SimpleNameNode.java" />
             <doc><![CDATA[
                 Represents a simple name, as in
                 <pre>
@@ -1258,7 +1255,6 @@
             <prop name="arrayLevels" type="int"
                 desc="the number of additional array levels added to the type of this variable" default="0" />
             <prop name="initializer" type="VariableInitializerNode" desc="the initializer to use" />
-            <include file="VariableDeclaratorNode.java" />
             <doc><![CDATA[
                 Represents a declarator for a variable declaration.  For example, in
                 <pre>int x = 5, y;</pre>
@@ -1389,8 +1385,10 @@
         </type>
 
         <type name="ClassLiteralNode" super="Node">
-            <tag name="LiteralNode" typeArg="LiteralizableTypeNode" />            <!-- Overriding property so source generator realizes that it must reimplement the method. This is necessary because 
-                LiteralizableTypeNode is a node type and appropriate management of its parent reference must be done. -->
+            <tag name="LiteralNode" typeArg="LiteralizableTypeNode" />
+            <!-- Overriding property so source generator realizes that it must reimplement the method. This is 
+                necessary because LiteralizableTypeNode is a node type and appropriate management of its parent reference must 
+                be done. -->
             <prop name="value" type="LiteralizableTypeNode" desc="the type for this literal" />
             <doc><![CDATA[
                 A note representing a class literal, such as <tt>String.class</tt>.  Note that the BSJ compiler API includes a
@@ -1790,7 +1788,6 @@
             <prop name="modifiers" type="ModifiersNode" desc="the modifiers associated with this node"
                 mode="readOnly" />
             <prop name="body" type="TypeBodyNode" typeArg="? extends T" mode="readOnly" desc="this type's body" />
-            <include file="NamedTypeDeclarationNode.java" />
             <doc><![CDATA[
                 Acts as a superclass for all named type declarations.
             ]]></doc>
@@ -2026,7 +2023,6 @@
             <prop name="manager" type="BsjNodeManager" mode="hide" desc="the BSJ node manager for this node" />
             <prop name="binary" type="boolean" mode="hide"
                 desc="whether or not this node originated in a binary file" />
-            <include file="Node.java" />
             <doc><![CDATA[
                 The parent class for all BSJ AST nodes.
             ]]></doc>
@@ -2074,7 +2070,6 @@
 
         <type name="PackageNode" super="Node">
             <prop name="name" type="IdentifierNode" mode="readOnly" desc="the simple name of this package" />
-            <include file="PackageNode.java" />
             <doc><![CDATA[
                 A node representing a package.  This node has no syntactic equivalent; it is used to represent the
                 object program package hierarchy.  In addition to the typical duties performed by an AST node, however,
@@ -2190,7 +2185,6 @@
             <constant name="alwaysOrdered" type="boolean"
                 desc="whether or not this list's contents are always order-dependent" />
             <prop name="children" type="List" typeArg="T" mode="readOnly" desc="the list of children" />
-            <include file="ListNode.java" />
             <doc><![CDATA[
                 Represents a list of nodes.  Nodes do not simply have lists as properties as the ListNode allows
                 additional information to be tracked as necessary.
@@ -2497,7 +2491,6 @@
 
         <type name="MetaprogramAnchorNode" typeParam="T extends Node" super="Node" mode="abstract">
             <constant name="replacementType" type="Class&lt;T&gt;" desc="the type of node which can replace this anchor" />
-            <include file="MetaprogramAnchorNode.java" />
             <doc><![CDATA[
                 Represents the anchor for a metaprogram during its execution.  The replacement field on this node is
                 used to indicate the node with which this node will be replaced once the execution of this metaprogram
@@ -2532,7 +2525,6 @@
             <tag name="BlockStatementNode" />
             <constant name="replacementType" type="Class&lt;BlockStatementNode&gt;" desc="the type of node which can replace this anchor"
                 default="BlockStatementNode.class" />
-            <include file="_NoOpMetaprogramAnchorNodes.java" />
             <doc><![CDATA[
                 A node representing a metaprogram as a block statement.
             ]]></doc>
@@ -2543,7 +2535,6 @@
             <tag name="AnnotationMemberNode" />
             <constant name="replacementType" type="Class&lt;AnnotationMemberNode&gt;" desc="the type of node which can replace this anchor"
                 default="AnnotationMemberNode.class" />
-            <include file="_NoOpMetaprogramAnchorNodes.java" />
             <doc><![CDATA[
                 A node representing a metaprogram found in an annotation declaration.
             ]]></doc>
@@ -2554,7 +2545,6 @@
             <tag name="AnonymousClassMemberNode" />
             <constant name="replacementType" type="Class&lt;AnonymousClassMemberNode&gt;" desc="the type of node which can replace this anchor"
                 default="AnonymousClassMemberNode.class" />
-            <include file="_NoOpMetaprogramAnchorNodes.java" />
             <doc><![CDATA[
                 A node representing a metaprogram found in an anonymous class body.
             ]]></doc>
@@ -2564,7 +2554,6 @@
             <tag name="ClassMemberNode" />
             <constant name="replacementType" type="Class&lt;ClassMemberNode&gt;" desc="the type of node which can replace this anchor"
                 default="ClassMemberNode.class" />
-            <include file="_NoOpMetaprogramAnchorNodes.java" />
             <doc><![CDATA[
                 A node representing a metaprogram found in a class body.
             ]]></doc>
@@ -2575,16 +2564,14 @@
             <tag name="InterfaceMemberNode" />
             <constant name="replacementType" type="Class&lt;InterfaceMemberNode&gt;" desc="the type of node which can replace this anchor"
                 default="InterfaceMemberNode.class" />
-            <include file="_NoOpMetaprogramAnchorNodes.java" />
             <doc><![CDATA[
                 A node representing a metaprogram found in an intereface body.
             ]]></doc>
         </type>
 
         <type name="MetaAnnotationMetaprogramAnchorNode" super="MetaprogramAnchorNode" superTypeArg="MetaAnnotationMetaprogramAnchorNode">
-            <constant name="replacementType" type="Class&lt;MetaAnnotationMetaprogramAnchorNode&gt;" desc="the type of node which can replace this anchor"
-                default="MetaAnnotationMetaprogramAnchorNode.class" />
-            <include file="MetaAnnotationMetaprogramAnchorNode.java" />
+            <constant name="replacementType" type="Class&lt;MetaAnnotationMetaprogramAnchorNode&gt;"
+                desc="the type of node which can replace this anchor" default="MetaAnnotationMetaprogramAnchorNode.class" />
             <doc><![CDATA[
                 A node representing a metaprogram attached to a meta-annotation.
             ]]></doc>
@@ -2595,7 +2582,6 @@
             <tag name="TypeDeclarationNode" />
             <constant name="replacementType" type="Class&lt;TypeDeclarationNode&gt;" desc="the type of node which can replace this anchor"
                 default="TypeDeclarationNode.class" />
-            <include file="_NoOpMetaprogramAnchorNodes.java" />
             <doc><![CDATA[
                 A node representing a metaprogram found at the top level of a source file.
             ]]></doc>
@@ -2647,15 +2633,13 @@
 
         <type name="MetaAnnotationNode" super="Node" mode="abstract">
             <prop name="annotationType" type="UnparameterizedTypeNode" desc="the annotation type" />
-            <prop name="metaprogramAnchor" type="MetaAnnotationMetaprogramAnchorNode" default="null"
+            <prop name="metaprogramAnchor" type="MetaAnnotationMetaprogramAnchorNode" default="makeMetaAnnotationMetaprogramAnchorNode()"
                 mode="readOnly" desc="the anchor of a metaprogram attached to this node" allowUnion="false" />
-            <include file="MetaAnnotationNode.java" />
             <doc><![CDATA[
                 Acts as a base class for meta-annotation nodes.  Subclasses distinguish between the different types of
                 meta-annotation sugar.  The <tt>metaprogramAnchor</tt> field is used when the meta-annotation for this
                 node represents a metaprogram; otherwise, it is <tt>null</tt>.
             ]]></doc>
-            <factory-override prop="metaprogramAnchor" expr="null" />
         </type>
 
         <type name="NormalMetaAnnotationNode" super="MetaAnnotationNode">
@@ -2668,6 +2652,9 @@
                 Note that this node does not handle the single element meta-annotation format (<pre>@@Foo("bar")</pre>).
                 That is handled by the {@link SingleElementMetaAnnotationNode} class.
             ]]></doc>
+            <factory-method>
+                <use-defaults />
+            </factory-method>
         </type>
 
         <type name="SingleElementMetaAnnotationNode" super="MetaAnnotationNode">
@@ -2676,6 +2663,9 @@
                 Represents a single element meta-annotation, as in:
                 <pre>@@<i>type</i>(<i>value</i>)</pre>
             ]]></doc>
+            <factory-method>
+                <use-defaults />
+            </factory-method>
         </type>
 
         <!-- ========================= LIST NODES ======================= -->

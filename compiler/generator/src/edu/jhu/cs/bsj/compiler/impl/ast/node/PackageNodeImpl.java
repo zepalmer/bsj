@@ -2,9 +2,8 @@ package edu.jhu.cs.bsj.compiler.impl.ast.node;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.EnumMap;
+import java.util.EnumSet;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -20,9 +19,6 @@ import edu.jhu.cs.bsj.compiler.ast.BsjSourceLocation;
 import edu.jhu.cs.bsj.compiler.ast.BsjTypedNodeVisitor;
 import edu.jhu.cs.bsj.compiler.ast.NodeFilter;
 import edu.jhu.cs.bsj.compiler.ast.NodeUnion;
-import edu.jhu.cs.bsj.compiler.ast.conflict.KnowledgeBase;
-import edu.jhu.cs.bsj.compiler.ast.conflict.knowledge.ConflictKnowledge;
-import edu.jhu.cs.bsj.compiler.ast.conflict.packagenode.knowledge.PackageKnowledge;
 import edu.jhu.cs.bsj.compiler.ast.node.CompilationUnitNode;
 import edu.jhu.cs.bsj.compiler.ast.node.IdentifierNode;
 import edu.jhu.cs.bsj.compiler.ast.node.NameNode;
@@ -33,19 +29,14 @@ import edu.jhu.cs.bsj.compiler.ast.node.QualifiedNameNode;
 import edu.jhu.cs.bsj.compiler.ast.node.SimpleNameNode;
 import edu.jhu.cs.bsj.compiler.ast.node.TypeDeclarationNode;
 import edu.jhu.cs.bsj.compiler.impl.ast.BsjNodeManager;
+import edu.jhu.cs.bsj.compiler.impl.ast.BsjNodeProxyFactory;
 import edu.jhu.cs.bsj.compiler.impl.ast.NormalNodeUnion;
-import edu.jhu.cs.bsj.compiler.impl.ast.attribute.AttributeName;
-import edu.jhu.cs.bsj.compiler.impl.ast.attribute.ReadWriteAttribute;
-import edu.jhu.cs.bsj.compiler.impl.ast.conflict.KnowledgeBaseUtilities;
-import edu.jhu.cs.bsj.compiler.impl.ast.conflict.packagenode.knowledge.LoadedGetKnowledgeImpl;
-import edu.jhu.cs.bsj.compiler.impl.ast.conflict.packagenode.knowledge.PackageFilterKnowledgeImpl;
-import edu.jhu.cs.bsj.compiler.impl.ast.conflict.packagenode.knowledge.PutKnowledgeImpl;
-import edu.jhu.cs.bsj.compiler.impl.ast.conflict.packagenode.knowledge.SuccessfulLoadKnowledgeImpl;
-import edu.jhu.cs.bsj.compiler.impl.ast.conflict.packagenode.knowledge.UnloadedGetKnowledgeImpl;
-import edu.jhu.cs.bsj.compiler.impl.ast.conflict.packagenode.knowledge.UnsuccessfulLoadKnowledgeImpl;
-import edu.jhu.cs.bsj.compiler.impl.ast.conflict.source.OperationKnowledgeSourceImpl;
+import edu.jhu.cs.bsj.compiler.impl.ast.delta.pkg.AddCompilationUnitPackageEditScriptElementImpl;
+import edu.jhu.cs.bsj.compiler.impl.ast.delta.pkg.AddImplicitSubpackagePackageEditScriptElementImpl;
+import edu.jhu.cs.bsj.compiler.impl.ast.delta.pkg.AddSubpackagePackageEditScriptElementImpl;
+import edu.jhu.cs.bsj.compiler.impl.ast.delta.pkg.LoadCompilationUnitPackageEditScriptElementImpl;
 import edu.jhu.cs.bsj.compiler.impl.ast.exception.DuplicatePackageMemberExceptionImpl;
-import edu.jhu.cs.bsj.compiler.impl.ast.exception.MetaprogramPackageConflictExceptionImpl;
+import edu.jhu.cs.bsj.compiler.impl.ast.properties.PackageNodeProperties;
 import edu.jhu.cs.bsj.compiler.impl.utils.CollectionUtilities;
 import edu.jhu.cs.bsj.compiler.impl.utils.CompoundIterator;
 import edu.jhu.cs.bsj.compiler.impl.utils.filter.TrueNodeFilter;
@@ -57,22 +48,11 @@ public class PackageNodeImpl extends NodeImpl implements PackageNode
     /** The simple name of this package. */
     private NodeUnion<? extends IdentifierNode> name;
     
-    private Map<LocalAttribute,ReadWriteAttribute> localAttributes = new EnumMap<LocalAttribute,ReadWriteAttribute>(LocalAttribute.class);
-    private ReadWriteAttribute getAttribute(LocalAttribute attributeName)
-    {
-        ReadWriteAttribute attribute = localAttributes.get(attributeName);
-        if (attribute == null)
-        {
-            attribute = new ReadWriteAttribute(PackageNodeImpl.this, attributeName);
-            localAttributes.put(attributeName, attribute);
-        }
-        return attribute;
-    }
-    private static enum LocalAttribute implements AttributeName
-    {
-        /** Attribute identifier for the name property. */
-        NAME,
-    }
+    /**
+     * A set of those properties which have been populated from the backing node.
+     * This field is <code>null</code> if <tt>backingNode</tt> is <code>null</code>.
+     */
+    private Set<PackageNodeProperties> populatedProperties;
     
     /** General constructor. */
     public PackageNodeImpl(
@@ -83,7 +63,49 @@ public class PackageNodeImpl extends NodeImpl implements PackageNode
             boolean binary)
     {
         super(startLocation, stopLocation, manager, binary);
-        this.name = name;
+        this.populatedProperties = null;
+        doSetName(name);
+    }
+    
+    /** Proxy constructor. */
+    public PackageNodeImpl(BsjNodeManager manager, BsjNodeProxyFactory proxyFactory, PackageNode backingNode)
+    {
+        super(manager, proxyFactory, backingNode);
+        this.populatedProperties = EnumSet.noneOf(PackageNodeProperties.class);
+    }
+    
+    /** Retrieves this node's backing node (if one exists). */
+    protected PackageNode getBackingNode()
+    {
+        return (PackageNode)super.getBackingNode();
+    }
+    
+    /**
+     * Ensures that the name value has been populated from proxy.
+     * If this node is not backed by a proxy or if the value has already been
+     * populated, this method does nothing.
+     */
+    private void checkNameWrapped()
+    {
+        if (this.populatedProperties == null || this.populatedProperties.contains(
+                PackageNodeProperties.NAME))
+            return;
+        this.populatedProperties.add(PackageNodeProperties.NAME);
+        NodeUnion<? extends IdentifierNode> union = this.getBackingNode().getUnionForName();
+        switch (union.getType())
+        {
+            case NORMAL:
+                union = this.getProxyFactory().makeNormalNodeUnion(
+                        this.getProxyFactory().makeIdentifierNode(union.getNormalNode()));
+                break;
+            case SPLICE:
+                union = this.getProxyFactory().makeSpliceNodeUnion(
+                        this.getProxyFactory().makeSpliceNode(union.getSpliceNode()));
+                break;
+            default:
+                throw new IllegalStateException("Unrecognized union type: " + union.getType());
+        }
+        this.name = union;
     }
     
     /**
@@ -93,7 +115,7 @@ public class PackageNodeImpl extends NodeImpl implements PackageNode
      */
     public IdentifierNode getName()
     {
-        getAttribute(LocalAttribute.NAME).recordAccess(ReadWriteAttribute.AccessType.READ);
+        checkNameWrapped();
         if (this.name == null)
         {
             return null;
@@ -109,12 +131,26 @@ public class PackageNodeImpl extends NodeImpl implements PackageNode
      */
     public NodeUnion<? extends IdentifierNode> getUnionForName()
     {
-        getAttribute(LocalAttribute.NAME).recordAccess(ReadWriteAttribute.AccessType.READ);
+        checkNameWrapped();
         if (this.name == null)
         {
             this.name = new NormalNodeUnion<IdentifierNode>(null);
         }
         return this.name;
+    }
+    
+    private void doSetName(NodeUnion<? extends IdentifierNode> name)
+    {
+        if (name == null)
+        {
+            name = new NormalNodeUnion<IdentifierNode>(null);
+        }
+        if (this.name != null)
+        {
+            setAsChild(this.name.getNodeValue(), false);
+        }
+        this.name = name;
+        setAsChild(name.getNodeValue(), true);
     }
     
     /**
@@ -128,9 +164,9 @@ public class PackageNodeImpl extends NodeImpl implements PackageNode
     protected void receiveToChildren(BsjNodeVisitor visitor)
     {
         super.receiveToChildren(visitor);
-        if (this.name.getNodeValue() != null)
+        if (this.getUnionForName().getNodeValue() != null)
         {
-            this.name.getNodeValue().receive(visitor);
+            this.getUnionForName().getNodeValue().receive(visitor);
         }
         Iterator<? extends Node> extras = getHiddenVisitorChildren();
         if (extras != null)
@@ -153,9 +189,9 @@ public class PackageNodeImpl extends NodeImpl implements PackageNode
     protected void receiveTypedToChildren(BsjTypedNodeVisitor visitor)
     {
         super.receiveTypedToChildren(visitor);
-        if (this.name.getNodeValue() != null)
+        if (this.getUnionForName().getNodeValue() != null)
         {
-            this.name.getNodeValue().receiveTyped(visitor);
+            this.getUnionForName().getNodeValue().receiveTyped(visitor);
         }
         Iterator<? extends Node> extras = getHiddenVisitorChildren();
         if (extras != null)
@@ -212,6 +248,8 @@ public class PackageNodeImpl extends NodeImpl implements PackageNode
     {
         StringBuilder sb = new StringBuilder();
         sb.append(this.getClass().getSimpleName());
+        sb.append('#');
+        sb.append(this.getUid());
         sb.append('[');
         sb.append("name=");
         sb.append(this.getUnionForName().getNodeValue() == null? "null" : this.getUnionForName().getNodeValue().getClass().getSimpleName());
@@ -311,87 +349,35 @@ public class PackageNodeImpl extends NodeImpl implements PackageNode
     private Map<String, CompilationUnitNode> loadedCompilationUnits = new HashMap<String, CompilationUnitNode>();
     /** The compilation units which were added via addition. */
     private Map<String, CompilationUnitNode> storedCompilationUnits = new HashMap<String, CompilationUnitNode>();
-    /** The knowledge base which tracks conflict detection logic for this package. */
-    private KnowledgeBase<PackageKnowledge> knowledgeBase = KnowledgeBaseUtilities.createPackageKnowledgeBase(getManager());
-    /** A cached set of all names which have been successfully loaded by this package. */
-    private Set<String> successfullyLoadedNames = new HashSet<String>();
 
-    protected void fireCompilationUnitAdded(CompilationUnitNode compilationUnitNode, boolean purelyInjected)
-    {
-        this.getManager().getPackageNodeManager().fireCompilationUnitAdded(this, compilationUnitNode, purelyInjected);
-    }
+    // TODO: create a somewhat more performant version of lazy population than this beast
+    private boolean isPopulated = false;
 
-    protected void fireSubpackageAdded(PackageNode subPackageNode)
+    private void checkPopulated()
     {
-        this.getManager().getPackageNodeManager().fireSubpackageAdded(this, subPackageNode);
-    }
-
-    protected void fireRegisterAsInjector(CompilationUnitNode compilationUnitNode)
-    {
-        this.getManager().getPackageNodeManager().fireRegisterAsInjector(compilationUnitNode);
-    }
-
-    private void learn(PackageKnowledge packageKnowledge)
-    {
-        Set<ConflictKnowledge> conflicts = this.knowledgeBase.addKnowledge(packageKnowledge);
-        if (!conflicts.isEmpty())
+        if (this.isPopulated || getBackingNode() == null)
         {
-            ConflictKnowledge conflict = conflicts.iterator().next();
-            throw new MetaprogramPackageConflictExceptionImpl(getManager().getAnchorByID(
-                    conflict.getFirstMetaprogramId()), getManager().getAnchorByID(conflict.getSecondMetaprogramId()),
-                    this, conflicts);
+            this.isPopulated = true;
+            return;
         }
-    }
-    
-    private void learnGet(String name, CompilationUnitNode compilationUnit)
-    {
-        if (getManager().getCurrentMetaprogramId() != null)
+        // This approach is not pretty, but it relies on the true invariant that all nodes in this tree were prouced
+        // by the BsjNodeFactoryImpl that we know.  It also allows us to avoid exposing to the user through the API
+        // the information about which specific subpackages are present and whether a given compilation unit is loaded
+        // or stored. 
+        PackageNodeImpl impl = (PackageNodeImpl) (this.getBackingNode());
+        for (Map.Entry<String, CompilationUnitNode> entry : impl.loadedCompilationUnits.entrySet())
         {
-            if (this.successfullyLoadedNames.contains(name))
-            {
-                learn(new LoadedGetKnowledgeImpl(new OperationKnowledgeSourceImpl(1),
-                        getManager().getCurrentMetaprogramId(), name, compilationUnit));
-            } else
-            {
-                learn(new UnloadedGetKnowledgeImpl(new OperationKnowledgeSourceImpl(1),
-                        getManager().getCurrentMetaprogramId(), name, compilationUnit));
-            }
+            this.loadedCompilationUnits.put(entry.getKey(), getProxyFactory().makeCompilationUnitNode(entry.getValue()));
         }
-    }
-    
-    private void learnLoad(String name, CompilationUnitNode compilationUnit)
-    {
-        if (getManager().getCurrentMetaprogramId() != null)
+        for (Map.Entry<String, CompilationUnitNode> entry : impl.storedCompilationUnits.entrySet())
         {
-            if (compilationUnit != null)
-            {
-                this.successfullyLoadedNames.add(name);
-                learn(new SuccessfulLoadKnowledgeImpl(new OperationKnowledgeSourceImpl(1),
-                        getManager().getCurrentMetaprogramId(), name, compilationUnit));
-            } else
-            {
-                learn(new UnsuccessfulLoadKnowledgeImpl(new OperationKnowledgeSourceImpl(1),
-                        getManager().getCurrentMetaprogramId(), name, compilationUnit));
-            }
+            this.storedCompilationUnits.put(entry.getKey(), getProxyFactory().makeCompilationUnitNode(entry.getValue()));
         }
-    }
-    
-    private void learnPut(CompilationUnitNode compilationUnit)
-    {
-        if (getManager().getCurrentMetaprogramId() != null)
+        for (Map.Entry<String, PackageNode> entry : impl.packageNodes.entrySet())
         {
-            learn(new PutKnowledgeImpl(new OperationKnowledgeSourceImpl(1), getManager().getCurrentMetaprogramId(),
-                    compilationUnit.getName(), compilationUnit));
-        }        
-    }
-    
-    private void learnFilter(NodeFilter<? super CompilationUnitNode> filter)
-    {
-        if (getManager().getCurrentMetaprogramId() != null)
-        {
-            learn(new PackageFilterKnowledgeImpl(new OperationKnowledgeSourceImpl(1), 
-                    getManager().getCurrentMetaprogramId(), filter, new HashSet<String>(this.successfullyLoadedNames)));
+            this.packageNodes.put(entry.getKey(), getProxyFactory().makePackageNode(entry.getValue()));
         }
+        this.isPopulated = true;
     }
 
     /**
@@ -399,21 +385,47 @@ public class PackageNodeImpl extends NodeImpl implements PackageNode
      */
     public void addPackage(PackageNode packageNode)
     {
+        checkPopulated();
         if (this.packageNodes.containsKey(packageNode.getName().getIdentifier()))
         {
             throw new DuplicatePackageMemberExceptionImpl(this, packageNode, packageNode.getName().getIdentifier());
         }
         getManager().assertInsertable(this);
-        this.packageNodes.put(packageNode.getName().getIdentifier(), packageNode);
         setAsChild(packageNode, true);
-        fireSubpackageAdded(packageNode);
+        this.packageNodes.put(packageNode.getName().getIdentifier(), packageNode);
+        if (getManager().isRecordingEdits())
+        {
+            getManager().recordEdit(new AddSubpackagePackageEditScriptElementImpl(
+                    getManager().getCurrentMetaprogramId(), getUid(), packageNode.getUid()));
+        }
+        getManager().notifyChange(this);
     }
-
+   
     /**
      * {@inheritDoc}
      */
     public PackageNode getSubpackage(String name)
     {
+        if (name.length() == 0)
+            return this;
+        checkPopulated();
+        String[] nameComponents = name.split("\\.");
+        PackageNodeImpl p = this;
+        for (String component : nameComponents)
+        {
+            // True invariant: all recursive children of this node must be created by the BsjNodeFactoryImpl
+            p = (PackageNodeImpl)p.getSimpleSubpackage(component);
+            if (p == null)
+            {
+                break;
+            }
+        }
+        return p;
+    }
+    
+    private PackageNode getSimpleSubpackage(String name)
+    {
+        checkPopulated();
         PackageNode packageNode = this.packageNodes.get(name);
         if (packageNode == null)
         {
@@ -421,9 +433,52 @@ public class PackageNodeImpl extends NodeImpl implements PackageNode
             packageNode = factory.makePackageNode(factory.makeIdentifierNode(name));
             setAsChild(packageNode, true);
             this.packageNodes.put(name, packageNode);
-            fireSubpackageAdded(packageNode);
+            if (getManager().isRecordingEdits())
+            {
+                getManager().recordEdit(new AddImplicitSubpackagePackageEditScriptElementImpl(
+                        getManager().getCurrentMetaprogramId(), getUid(), packageNode.getUid(), name));
+            }
+            getManager().notifyChange(this);
         }
         return packageNode;
+    }
+
+    public PackageNode getSubpackage(List<String> name)
+    {
+        checkPopulated();
+        PackageNodeImpl p = this;
+        for (String nameComponent : name)
+        {
+            if (nameComponent.contains("."))
+                throw new IllegalArgumentException("name component " + nameComponent + " is not simple");
+            // True invariant: all recursive children of this node must be created by the BsjNodeFactoryImpl
+            p = (PackageNodeImpl)p.getSimpleSubpackage(nameComponent);
+            if (p == null)
+            {
+                break;
+            }            
+        }
+        return p;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public PackageNode getSubpackage(NameNode name)
+    {
+        checkPopulated();
+        if (name instanceof QualifiedNameNode)
+        {
+            QualifiedNameNode qualifiedNameNode = (QualifiedNameNode) name;
+            PackageNode packageNode = getSubpackage(qualifiedNameNode.getBase());
+            return packageNode.getSubpackage(name.getIdentifier().getIdentifier());
+        } else if (name instanceof SimpleNameNode)
+        {
+            return getSubpackage(name.getIdentifier().getIdentifier());
+        } else
+        {
+            throw new IllegalStateException("Unrecognized name node type " + name.getClass().getName());
+        }
     }
 
     /**
@@ -431,38 +486,56 @@ public class PackageNodeImpl extends NodeImpl implements PackageNode
      */
     public void addCompilationUnit(CompilationUnitNode compilationUnit)
     {
+        checkPopulated();
         if (compilationUnit == null)
             throw new NullPointerException("Cannot add null compilation unit to a package");
-        getManager().assertInsertable(this);
-        learnPut(compilationUnit);
         if (this.loadedCompilationUnits.containsKey(compilationUnit.getName())
                 || this.storedCompilationUnits.containsKey(compilationUnit.getName()))
         {
             throw new DuplicatePackageMemberExceptionImpl(this, compilationUnit, compilationUnit.getName());
         }
-        this.storedCompilationUnits.put(compilationUnit.getName(), compilationUnit);
+        getManager().assertInsertable(this);
         setAsChild(compilationUnit, true);
-        fireCompilationUnitAdded(compilationUnit, true);
+        this.storedCompilationUnits.put(compilationUnit.getName(), compilationUnit);
+        if (getManager().isRecordingEdits())
+        {
+            getManager().recordEdit(new AddCompilationUnitPackageEditScriptElementImpl(
+                    getManager().getCurrentMetaprogramId(), getUid(), compilationUnit.getUid()));
+        }
+        getManager().notifyChange(this);
     }
 
     public boolean loadCompilationUnit(String name, CompilationUnitLoadingInfo info)
     {
+        checkPopulated();
+        CompilationUnitNode node;
         if (this.loadedCompilationUnits.containsKey(name))
         {
-            CompilationUnitNode compilationUnit = this.loadedCompilationUnits.get(name);
-            learnLoad(name, compilationUnit); 
-            return compilationUnit != null;
-        }
-
-        CompilationUnitNode node = getManager().getCompilationUnitLoader().load(this.getFullyQualifiedName(), name,
-                info);
-        this.loadedCompilationUnits.put(name, node);
-        learnLoad(name, node);
-        if (node != null)
+            node = this.loadedCompilationUnits.get(name);
+        } else
         {
-            setAsChild(node, true);
-            fireCompilationUnitAdded(node, false);
-            fireRegisterAsInjector(node);
+            node = getManager().getCompilationUnitLoader().load(this.getFullyQualifiedName(), name, info);
+            if (this.getManager().getProxyFactory() != null)
+            {
+                node = this.getManager().getProxyFactory().makeCompilationUnitNode(node);
+            }
+            if (this.storedCompilationUnits.containsKey(name))
+            {
+                throw new DuplicatePackageMemberExceptionImpl(this, node, name);
+            }
+            this.loadedCompilationUnits.put(name, node);
+            if (node != null)
+            {
+                setAsChild(node, true);
+                getManager().getPackageNodeManager().fireCompilationUnitAdded(this, node,
+                        this.getManager().getProxyFactory() == null ? null : this.getManager().getProxyFactory().getProxyIdMapping());
+                getManager().notifyChange(this);
+            }
+        }
+        if (getManager().isRecordingEdits())
+        {
+            getManager().recordEdit(new LoadCompilationUnitPackageEditScriptElementImpl(
+                    getManager().getCurrentMetaprogramId(), getUid(), (node == null ? null : node.getUid()), name));
         }
         return node != null;
     }
@@ -480,6 +553,7 @@ public class PackageNodeImpl extends NodeImpl implements PackageNode
      */
     public CompilationUnitNode getCompilationUnit(String name)
     {
+        checkPopulated();
         CompilationUnitNode node;
         if (this.loadedCompilationUnits.containsKey(name))
         {
@@ -488,13 +562,12 @@ public class PackageNodeImpl extends NodeImpl implements PackageNode
         {
             node = this.storedCompilationUnits.get(name);
         }
-        learnGet(name, node);
         return node;
     }
     
     public Map<String, CompilationUnitNode> filterCompilationUnits(NodeFilter<? super CompilationUnitNode> filter)
     {
-        learnFilter(filter);
+        checkPopulated();
         Map<String, CompilationUnitNode> ret = new HashMap<String, CompilationUnitNode>();
         for (Map<String, CompilationUnitNode> map : CollectionUtilities.listOf(this.loadedCompilationUnits, this.storedCompilationUnits))
         {
@@ -514,6 +587,7 @@ public class PackageNodeImpl extends NodeImpl implements PackageNode
      */
     public Iterator<CompilationUnitNode> getCompilationUnitIterator()
     {
+        checkPopulated();
         return filterCompilationUnits(TrueNodeFilter.<CompilationUnitNode>instance()).values().iterator();
     }
 
@@ -522,6 +596,7 @@ public class PackageNodeImpl extends NodeImpl implements PackageNode
      */
     public Iterator<CompilationUnitNode> getRecursiveCompilationUnitIterator()
     {
+        checkPopulated();
         List<Iterator<? extends CompilationUnitNode>> iterators = new ArrayList<Iterator<? extends CompilationUnitNode>>();
         iterators.add(getCompilationUnitIterator());
         for (PackageNode p : packageNodes.values())
@@ -538,6 +613,7 @@ public class PackageNodeImpl extends NodeImpl implements PackageNode
      */
     protected Iterator<? extends Node> getHiddenVisitorChildren()
     {
+        checkPopulated();
         List<Iterator<? extends Node>> iterators = new ArrayList<Iterator<? extends Node>>();
         iterators.add(super.getHiddenVisitorChildren());
         iterators.add(getRecursiveCompilationUnitIterator());
@@ -547,45 +623,9 @@ public class PackageNodeImpl extends NodeImpl implements PackageNode
     /**
      * {@inheritDoc}
      */
-    public PackageNode getSubpackageByQualifiedName(String name)
-    {
-        String[] nameComponents = name.split("\\.");
-        PackageNode p = this;
-        for (String component : nameComponents)
-        {
-            p = p.getSubpackage(component);
-            if (p == null)
-            {
-                break;
-            }
-        }
-        return p;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public PackageNode getSubpackageByQualifiedName(NameNode name)
-    {
-        if (name instanceof QualifiedNameNode)
-        {
-            QualifiedNameNode qualifiedNameNode = (QualifiedNameNode) name;
-            PackageNode packageNode = getSubpackageByQualifiedName(qualifiedNameNode.getBase());
-            return packageNode.getSubpackage(name.getIdentifier().getIdentifier());
-        } else if (name instanceof SimpleNameNode)
-        {
-            return getSubpackage(name.getIdentifier().getIdentifier());
-        } else
-        {
-            throw new IllegalStateException("Unrecognized name node type " + name.getClass().getName());
-        }
-    }
-
-    /**
-     * {@inheritDoc}
-     */
     public NamedTypeDeclarationNode<?> getTopLevelTypeDeclaration(String name, CompilationUnitLoadingInfo info)
     {
+        checkPopulated();
         this.loadCompilationUnit(name, info);
         CompilationUnitNode compilationUnitNode = this.getCompilationUnit(name);
         if (compilationUnitNode != null)
@@ -665,4 +705,22 @@ public class PackageNodeImpl extends NodeImpl implements PackageNode
         }
     }
 
+    /**
+     * This function provides a recursive iterator over all subpackages of this node.  This is necessary for the
+     * {@link edu.jhu.cs.bsj.compiler.impl.tool.compiler.task.BuildIdMapTask}.  This method only exists on the backing
+     * class implementation and not on the interface because this information should not be provided to metaprogrammers
+     * through the API.
+     */
+    public Iterator<PackageNode> getRecursivePackageIterator()
+    {
+        checkPopulated();
+        List<Iterator<? extends PackageNode>> iterators = new ArrayList<Iterator<? extends PackageNode>>();
+        iterators.add(this.packageNodes.values().iterator());
+        for (PackageNode p : packageNodes.values())
+        {
+            iterators.add(((PackageNodeImpl)p).getRecursivePackageIterator());
+        }
+        return new CompoundIterator<PackageNode>(iterators.iterator());
+    }
+    
 }

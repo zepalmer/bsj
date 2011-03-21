@@ -14,12 +14,12 @@ public class MetaAnnotationBigIntegerOperatorOverloadingMetaProgramTest  extends
 	@Test
 	public void testBasicOperatorOverloading() throws Exception
 	{
-	    performTest(new String[]{"projects","bsj-tests","BigIntegerOperatorOverloading"}, "BigIntegerOperatorOverloadingClass");
+	    performTest("BigIntegerOperatorOverloading");
 	}
 	
 	@Test
 	public void testAckermannFunction() throws Exception
 	{
-	    performTest(SPECIFIC_SOURCE_DIR, "Ackermann");
+	    performTest("Ackermann");
 	}
 }

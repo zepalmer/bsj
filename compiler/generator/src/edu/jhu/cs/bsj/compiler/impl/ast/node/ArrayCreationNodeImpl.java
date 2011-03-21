@@ -1,9 +1,9 @@
 package edu.jhu.cs.bsj.compiler.impl.ast.node;
 
-import java.util.EnumMap;
+import java.util.EnumSet;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
+import java.util.Set;
 
 import javax.annotation.Generated;
 
@@ -15,9 +15,11 @@ import edu.jhu.cs.bsj.compiler.ast.node.ArrayCreationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.BaseTypeNode;
 import edu.jhu.cs.bsj.compiler.ast.node.Node;
 import edu.jhu.cs.bsj.compiler.impl.ast.BsjNodeManager;
+import edu.jhu.cs.bsj.compiler.impl.ast.BsjNodeProxyFactory;
 import edu.jhu.cs.bsj.compiler.impl.ast.NormalNodeUnion;
-import edu.jhu.cs.bsj.compiler.impl.ast.attribute.AttributeName;
-import edu.jhu.cs.bsj.compiler.impl.ast.attribute.ReadWriteAttribute;
+import edu.jhu.cs.bsj.compiler.impl.ast.delta.property.ArrayCreationNodeSetArrayLevelsPropertyEditScriptElementImpl;
+import edu.jhu.cs.bsj.compiler.impl.ast.delta.property.ArrayCreationNodeSetBaseTypePropertyEditScriptElementImpl;
+import edu.jhu.cs.bsj.compiler.impl.ast.properties.ArrayCreationNodeProperties;
 
 @Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
 public abstract class ArrayCreationNodeImpl extends NodeImpl implements ArrayCreationNode
@@ -28,24 +30,11 @@ public abstract class ArrayCreationNodeImpl extends NodeImpl implements ArrayCre
     /** The number of uninitialized levels for this array. */
     private int arrayLevels;
     
-    private Map<LocalAttribute,ReadWriteAttribute> localAttributes = new EnumMap<LocalAttribute,ReadWriteAttribute>(LocalAttribute.class);
-    private ReadWriteAttribute getAttribute(LocalAttribute attributeName)
-    {
-        ReadWriteAttribute attribute = localAttributes.get(attributeName);
-        if (attribute == null)
-        {
-            attribute = new ReadWriteAttribute(ArrayCreationNodeImpl.this, attributeName);
-            localAttributes.put(attributeName, attribute);
-        }
-        return attribute;
-    }
-    private static enum LocalAttribute implements AttributeName
-    {
-        /** Attribute identifier for the baseType property. */
-        BASE_TYPE,
-        /** Attribute identifier for the arrayLevels property. */
-        ARRAY_LEVELS,
-    }
+    /**
+     * A set of those properties which have been populated from the backing node.
+     * This field is <code>null</code> if <tt>backingNode</tt> is <code>null</code>.
+     */
+    private Set<ArrayCreationNodeProperties> populatedProperties;
     
     /** General constructor. */
     protected ArrayCreationNodeImpl(
@@ -57,8 +46,64 @@ public abstract class ArrayCreationNodeImpl extends NodeImpl implements ArrayCre
             boolean binary)
     {
         super(startLocation, stopLocation, manager, binary);
-        setUnionForBaseType(baseType, false);
-        this.arrayLevels = arrayLevels;
+        this.populatedProperties = null;
+        doSetBaseType(baseType);
+        doSetArrayLevels(arrayLevels);
+    }
+    
+    /** Proxy constructor. */
+    protected ArrayCreationNodeImpl(BsjNodeManager manager, BsjNodeProxyFactory proxyFactory, ArrayCreationNode backingNode)
+    {
+        super(manager, proxyFactory, backingNode);
+        this.populatedProperties = EnumSet.noneOf(ArrayCreationNodeProperties.class);
+    }
+    
+    /** Retrieves this node's backing node (if one exists). */
+    protected ArrayCreationNode getBackingNode()
+    {
+        return (ArrayCreationNode)super.getBackingNode();
+    }
+    
+    /**
+     * Ensures that the baseType value has been populated from proxy.
+     * If this node is not backed by a proxy or if the value has already been
+     * populated, this method does nothing.
+     */
+    private void checkBaseTypeWrapped()
+    {
+        if (this.populatedProperties == null || this.populatedProperties.contains(
+                ArrayCreationNodeProperties.BASE_TYPE))
+            return;
+        this.populatedProperties.add(ArrayCreationNodeProperties.BASE_TYPE);
+        NodeUnion<? extends BaseTypeNode> union = this.getBackingNode().getUnionForBaseType();
+        switch (union.getType())
+        {
+            case NORMAL:
+                union = this.getProxyFactory().makeNormalNodeUnion(
+                        this.getProxyFactory().makeBaseTypeNode(union.getNormalNode()));
+                break;
+            case SPLICE:
+                union = this.getProxyFactory().makeSpliceNodeUnion(
+                        this.getProxyFactory().makeSpliceNode(union.getSpliceNode()));
+                break;
+            default:
+                throw new IllegalStateException("Unrecognized union type: " + union.getType());
+        }
+        this.baseType = union;
+    }
+    
+    /**
+     * Ensures that the arrayLevels value has been populated from proxy.
+     * If this node is not backed by a proxy or if the value has already been
+     * populated, this method does nothing.
+     */
+    private void checkArrayLevelsWrapped()
+    {
+        if (this.populatedProperties == null || this.populatedProperties.contains(
+                ArrayCreationNodeProperties.ARRAY_LEVELS))
+            return;
+        this.populatedProperties.add(ArrayCreationNodeProperties.ARRAY_LEVELS);
+        this.arrayLevels = this.getBackingNode().getArrayLevels();
     }
     
     /**
@@ -68,7 +113,7 @@ public abstract class ArrayCreationNodeImpl extends NodeImpl implements ArrayCre
      */
     public BaseTypeNode getBaseType()
     {
-        getAttribute(LocalAttribute.BASE_TYPE).recordAccess(ReadWriteAttribute.AccessType.READ);
+        checkBaseTypeWrapped();
         if (this.baseType == null)
         {
             return null;
@@ -84,7 +129,7 @@ public abstract class ArrayCreationNodeImpl extends NodeImpl implements ArrayCre
      */
     public NodeUnion<? extends BaseTypeNode> getUnionForBaseType()
     {
-        getAttribute(LocalAttribute.BASE_TYPE).recordAccess(ReadWriteAttribute.AccessType.READ);
+        checkBaseTypeWrapped();
         if (this.baseType == null)
         {
             this.baseType = new NormalNodeUnion<BaseTypeNode>(null);
@@ -98,24 +143,8 @@ public abstract class ArrayCreationNodeImpl extends NodeImpl implements ArrayCre
      */
     public void setBaseType(BaseTypeNode baseType)
     {
-            setBaseType(baseType, true);
-            getManager().notifyChange(this);
-    }
-    
-    private void setBaseType(BaseTypeNode baseType, boolean checkPermissions)
-    {
-        if (checkPermissions)
-        {
-            getManager().assertMutatable(this);
-            getAttribute(LocalAttribute.BASE_TYPE).recordAccess(ReadWriteAttribute.AccessType.WRITE);
-        }
-        
-        if (this.baseType != null)
-        {
-            setAsChild(this.baseType.getNodeValue(), false);
-        }
-        this.baseType = new NormalNodeUnion<BaseTypeNode>(baseType);
-        setAsChild(baseType, true);
+        checkBaseTypeWrapped();
+        this.setUnionForBaseType(new NormalNodeUnion<BaseTypeNode>(baseType));
     }
     
     /**
@@ -124,18 +153,15 @@ public abstract class ArrayCreationNodeImpl extends NodeImpl implements ArrayCre
      */
     public void setUnionForBaseType(NodeUnion<? extends BaseTypeNode> baseType)
     {
-            setUnionForBaseType(baseType, true);
-            getManager().notifyChange(this);
+        checkBaseTypeWrapped();
+        this.getManager().assertMutatable(this);
+        this.doSetBaseType(baseType);
+        if (this.getManager().isRecordingEdits())
+            super.recordEdit(new ArrayCreationNodeSetBaseTypePropertyEditScriptElementImpl(this.getManager().getCurrentMetaprogramId(), this.getUid(), baseType.getNodeValue() == null ? null : baseType.getNodeValue().getUid()));
     }
     
-    private void setUnionForBaseType(NodeUnion<? extends BaseTypeNode> baseType, boolean checkPermissions)
+    private void doSetBaseType(NodeUnion<? extends BaseTypeNode> baseType)
     {
-        if (checkPermissions)
-        {
-            getManager().assertMutatable(this);
-            getAttribute(LocalAttribute.BASE_TYPE).recordAccess(ReadWriteAttribute.AccessType.WRITE);
-        }
-        
         if (baseType == null)
         {
             baseType = new NormalNodeUnion<BaseTypeNode>(null);
@@ -154,7 +180,7 @@ public abstract class ArrayCreationNodeImpl extends NodeImpl implements ArrayCre
      */
     public int getArrayLevels()
     {
-        getAttribute(LocalAttribute.ARRAY_LEVELS).recordAccess(ReadWriteAttribute.AccessType.READ);
+        checkArrayLevelsWrapped();
         return this.arrayLevels;
     }
     
@@ -164,18 +190,15 @@ public abstract class ArrayCreationNodeImpl extends NodeImpl implements ArrayCre
      */
     public void setArrayLevels(int arrayLevels)
     {
-            setArrayLevels(arrayLevels, true);
-            getManager().notifyChange(this);
+        checkArrayLevelsWrapped();
+        this.getManager().assertMutatable(this);
+        this.doSetArrayLevels(arrayLevels);
+        if (this.getManager().isRecordingEdits())
+            super.recordEdit(new ArrayCreationNodeSetArrayLevelsPropertyEditScriptElementImpl(this.getManager().getCurrentMetaprogramId(), this.getUid(), arrayLevels));
     }
     
-    private void setArrayLevels(int arrayLevels, boolean checkPermissions)
+    private void doSetArrayLevels(int arrayLevels)
     {
-        if (checkPermissions)
-        {
-            getManager().assertMutatable(this);
-            getAttribute(LocalAttribute.ARRAY_LEVELS).recordAccess(ReadWriteAttribute.AccessType.WRITE);
-        }
-        
         this.arrayLevels = arrayLevels;
     }
     
@@ -190,9 +213,9 @@ public abstract class ArrayCreationNodeImpl extends NodeImpl implements ArrayCre
     protected void receiveToChildren(BsjNodeVisitor visitor)
     {
         super.receiveToChildren(visitor);
-        if (this.baseType.getNodeValue() != null)
+        if (this.getUnionForBaseType().getNodeValue() != null)
         {
-            this.baseType.getNodeValue().receive(visitor);
+            this.getUnionForBaseType().getNodeValue().receive(visitor);
         }
         Iterator<? extends Node> extras = getHiddenVisitorChildren();
         if (extras != null)
@@ -215,9 +238,9 @@ public abstract class ArrayCreationNodeImpl extends NodeImpl implements ArrayCre
     protected void receiveTypedToChildren(BsjTypedNodeVisitor visitor)
     {
         super.receiveTypedToChildren(visitor);
-        if (this.baseType.getNodeValue() != null)
+        if (this.getUnionForBaseType().getNodeValue() != null)
         {
-            this.baseType.getNodeValue().receiveTyped(visitor);
+            this.getUnionForBaseType().getNodeValue().receiveTyped(visitor);
         }
         Iterator<? extends Node> extras = getHiddenVisitorChildren();
         if (extras != null)
@@ -267,6 +290,8 @@ public abstract class ArrayCreationNodeImpl extends NodeImpl implements ArrayCre
     {
         StringBuilder sb = new StringBuilder();
         sb.append(this.getClass().getSimpleName());
+        sb.append('#');
+        sb.append(this.getUid());
         sb.append('[');
         sb.append("baseType=");
         sb.append(this.getUnionForBaseType().getNodeValue() == null? "null" : this.getUnionForBaseType().getNodeValue().getClass().getSimpleName());

@@ -19,6 +19,7 @@ import edu.jhu.cs.bsj.compiler.ast.node.TypeDeclarationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.TypeDeclarationMetaprogramAnchorNode;
 import edu.jhu.cs.bsj.compiler.impl.ast.BsjNodeManager;
+import edu.jhu.cs.bsj.compiler.impl.ast.BsjNodeProxyFactory;
 
 @Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
 public class TypeDeclarationMetaprogramAnchorNodeImpl extends ExplicitMetaprogramAnchorNodeImpl<TypeDeclarationNode> implements TypeDeclarationMetaprogramAnchorNode
@@ -32,6 +33,18 @@ public class TypeDeclarationMetaprogramAnchorNodeImpl extends ExplicitMetaprogra
             boolean binary)
     {
         super(metaprogram, startLocation, stopLocation, manager, binary);
+    }
+    
+    /** Proxy constructor. */
+    public TypeDeclarationMetaprogramAnchorNodeImpl(BsjNodeManager manager, BsjNodeProxyFactory proxyFactory, TypeDeclarationMetaprogramAnchorNode backingNode)
+    {
+        super(manager, proxyFactory, backingNode);
+    }
+    
+    /** Retrieves this node's backing node (if one exists). */
+    protected TypeDeclarationMetaprogramAnchorNode getBackingNode()
+    {
+        return (TypeDeclarationMetaprogramAnchorNode)super.getBackingNode();
     }
     
     /**
@@ -135,6 +148,8 @@ public class TypeDeclarationMetaprogramAnchorNodeImpl extends ExplicitMetaprogra
     {
         StringBuilder sb = new StringBuilder();
         sb.append(this.getClass().getSimpleName());
+        sb.append('#');
+        sb.append(this.getUid());
         sb.append('[');
         sb.append("metaprogram=");
         sb.append(this.getUnionForMetaprogram().getNodeValue() == null? "null" : this.getUnionForMetaprogram().getNodeValue().getClass().getSimpleName());
@@ -230,8 +245,8 @@ public class TypeDeclarationMetaprogramAnchorNodeImpl extends ExplicitMetaprogra
         return false;
     }
     
-	public NoOperationNode getDefaultReplacement(BsjNodeFactory factory)
-	{
-		return factory.makeNoOperationNode();
-	}
+    public NoOperationNode getDefaultReplacement(BsjNodeFactory factory)
+    {
+        return factory.makeNoOperationNode();
+    }
 }

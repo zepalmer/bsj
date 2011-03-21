@@ -1,0 +1,15 @@
+import java.io.*;
+
+public class PermissionViolation
+{
+	[:
+	    BsjNodeFactory factory = context.getFactory();
+		CompilationUnitNode c = context.getAnchor().getNearestAncestorOfType(CompilationUnitNode.class);
+		ClassDeclarationNode decl = (ClassDeclarationNode)c.getTypeDecls().get(1);
+		decl.setIdentifier(factory.makeIdentifierNode("OtherOther"));
+	:]
+}
+
+class Other
+{
+}

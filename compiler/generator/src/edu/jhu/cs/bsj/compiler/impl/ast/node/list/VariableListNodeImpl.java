@@ -17,6 +17,7 @@ import edu.jhu.cs.bsj.compiler.ast.node.Node;
 import edu.jhu.cs.bsj.compiler.ast.node.VariableNode;
 import edu.jhu.cs.bsj.compiler.ast.node.list.VariableListNode;
 import edu.jhu.cs.bsj.compiler.impl.ast.BsjNodeManager;
+import edu.jhu.cs.bsj.compiler.impl.ast.BsjNodeProxyFactory;
 
 @Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
 public class VariableListNodeImpl extends ListNodeImpl<VariableNode> implements VariableListNode
@@ -30,6 +31,18 @@ public class VariableListNodeImpl extends ListNodeImpl<VariableNode> implements 
             boolean binary)
     {
         super(children, startLocation, stopLocation, manager, binary);
+    }
+    
+    /** Proxy constructor. */
+    public VariableListNodeImpl(BsjNodeManager manager, BsjNodeProxyFactory proxyFactory, VariableListNode backingNode)
+    {
+        super(manager, proxyFactory, backingNode);
+    }
+    
+    /** Retrieves this node's backing node (if one exists). */
+    protected VariableListNode getBackingNode()
+    {
+        return (VariableListNode)super.getBackingNode();
     }
     
     /**
@@ -136,6 +149,8 @@ public class VariableListNodeImpl extends ListNodeImpl<VariableNode> implements 
     {
         StringBuilder sb = new StringBuilder();
         sb.append(this.getClass().getSimpleName());
+        sb.append('#');
+        sb.append(this.getUid());
         sb.append('[');
         sb.append("children=");
         sb.append(this.getUnionForChildren() == null? "null" : this.getUnionForChildren().getClass().getSimpleName());
@@ -227,6 +242,14 @@ public class VariableListNodeImpl extends ListNodeImpl<VariableNode> implements 
     public Class<VariableNode> getElementType()
     {
         return VariableNode.class;
+    }
+    
+    /**
+     * Wraps an element of this list's type.
+     */
+    protected VariableNode wrapElement(VariableNode element)
+    {
+        return getProxyFactory().makeVariableNode(element);
     }
     
 }

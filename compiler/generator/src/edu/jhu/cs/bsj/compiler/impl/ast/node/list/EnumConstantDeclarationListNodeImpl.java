@@ -17,6 +17,7 @@ import edu.jhu.cs.bsj.compiler.ast.node.EnumConstantDeclarationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.Node;
 import edu.jhu.cs.bsj.compiler.ast.node.list.EnumConstantDeclarationListNode;
 import edu.jhu.cs.bsj.compiler.impl.ast.BsjNodeManager;
+import edu.jhu.cs.bsj.compiler.impl.ast.BsjNodeProxyFactory;
 
 @Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
 public class EnumConstantDeclarationListNodeImpl extends ListNodeImpl<EnumConstantDeclarationNode> implements EnumConstantDeclarationListNode
@@ -30,6 +31,18 @@ public class EnumConstantDeclarationListNodeImpl extends ListNodeImpl<EnumConsta
             boolean binary)
     {
         super(children, startLocation, stopLocation, manager, binary);
+    }
+    
+    /** Proxy constructor. */
+    public EnumConstantDeclarationListNodeImpl(BsjNodeManager manager, BsjNodeProxyFactory proxyFactory, EnumConstantDeclarationListNode backingNode)
+    {
+        super(manager, proxyFactory, backingNode);
+    }
+    
+    /** Retrieves this node's backing node (if one exists). */
+    protected EnumConstantDeclarationListNode getBackingNode()
+    {
+        return (EnumConstantDeclarationListNode)super.getBackingNode();
     }
     
     /**
@@ -136,6 +149,8 @@ public class EnumConstantDeclarationListNodeImpl extends ListNodeImpl<EnumConsta
     {
         StringBuilder sb = new StringBuilder();
         sb.append(this.getClass().getSimpleName());
+        sb.append('#');
+        sb.append(this.getUid());
         sb.append('[');
         sb.append("children=");
         sb.append(this.getUnionForChildren() == null? "null" : this.getUnionForChildren().getClass().getSimpleName());
@@ -227,6 +242,14 @@ public class EnumConstantDeclarationListNodeImpl extends ListNodeImpl<EnumConsta
     public Class<EnumConstantDeclarationNode> getElementType()
     {
         return EnumConstantDeclarationNode.class;
+    }
+    
+    /**
+     * Wraps an element of this list's type.
+     */
+    protected EnumConstantDeclarationNode wrapElement(EnumConstantDeclarationNode element)
+    {
+        return getProxyFactory().makeEnumConstantDeclarationNode(element);
     }
     
 }

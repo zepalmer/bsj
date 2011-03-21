@@ -15,6 +15,7 @@ import edu.jhu.cs.bsj.compiler.ast.BsjTypedNodeVisitor;
 import edu.jhu.cs.bsj.compiler.ast.node.Node;
 import edu.jhu.cs.bsj.compiler.ast.node.VoidTypeNode;
 import edu.jhu.cs.bsj.compiler.impl.ast.BsjNodeManager;
+import edu.jhu.cs.bsj.compiler.impl.ast.BsjNodeProxyFactory;
 
 @Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
 public class VoidTypeNodeImpl extends NodeImpl implements VoidTypeNode
@@ -27,6 +28,18 @@ public class VoidTypeNodeImpl extends NodeImpl implements VoidTypeNode
             boolean binary)
     {
         super(startLocation, stopLocation, manager, binary);
+    }
+    
+    /** Proxy constructor. */
+    public VoidTypeNodeImpl(BsjNodeManager manager, BsjNodeProxyFactory proxyFactory, VoidTypeNode backingNode)
+    {
+        super(manager, proxyFactory, backingNode);
+    }
+    
+    /** Retrieves this node's backing node (if one exists). */
+    protected VoidTypeNode getBackingNode()
+    {
+        return (VoidTypeNode)super.getBackingNode();
     }
     
     /**
@@ -119,6 +132,8 @@ public class VoidTypeNodeImpl extends NodeImpl implements VoidTypeNode
     {
         StringBuilder sb = new StringBuilder();
         sb.append(this.getClass().getSimpleName());
+        sb.append('#');
+        sb.append(this.getUid());
         sb.append('[');
         sb.append("startLocation=");
         sb.append(String.valueOf(this.getStartLocation()) + ":" + (this.getStartLocation() != null ? this.getStartLocation().getClass().getSimpleName() : "null"));

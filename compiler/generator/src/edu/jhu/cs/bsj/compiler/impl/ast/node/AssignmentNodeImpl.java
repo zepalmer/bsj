@@ -1,10 +1,10 @@
 package edu.jhu.cs.bsj.compiler.impl.ast.node;
 
 import java.util.Arrays;
-import java.util.EnumMap;
+import java.util.EnumSet;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
+import java.util.Set;
 
 import javax.annotation.Generated;
 
@@ -20,9 +20,12 @@ import edu.jhu.cs.bsj.compiler.ast.node.AssignmentNode;
 import edu.jhu.cs.bsj.compiler.ast.node.ExpressionNode;
 import edu.jhu.cs.bsj.compiler.ast.node.Node;
 import edu.jhu.cs.bsj.compiler.impl.ast.BsjNodeManager;
+import edu.jhu.cs.bsj.compiler.impl.ast.BsjNodeProxyFactory;
 import edu.jhu.cs.bsj.compiler.impl.ast.NormalNodeUnion;
-import edu.jhu.cs.bsj.compiler.impl.ast.attribute.AttributeName;
-import edu.jhu.cs.bsj.compiler.impl.ast.attribute.ReadWriteAttribute;
+import edu.jhu.cs.bsj.compiler.impl.ast.delta.property.AssignmentNodeSetExpressionPropertyEditScriptElementImpl;
+import edu.jhu.cs.bsj.compiler.impl.ast.delta.property.AssignmentNodeSetOperatorPropertyEditScriptElementImpl;
+import edu.jhu.cs.bsj.compiler.impl.ast.delta.property.AssignmentNodeSetVariablePropertyEditScriptElementImpl;
+import edu.jhu.cs.bsj.compiler.impl.ast.properties.AssignmentNodeProperties;
 
 @Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
 public class AssignmentNodeImpl extends NodeImpl implements AssignmentNode
@@ -36,26 +39,11 @@ public class AssignmentNodeImpl extends NodeImpl implements AssignmentNode
     /** The expression to use. */
     private NodeUnion<? extends ExpressionNode> expression;
     
-    private Map<LocalAttribute,ReadWriteAttribute> localAttributes = new EnumMap<LocalAttribute,ReadWriteAttribute>(LocalAttribute.class);
-    private ReadWriteAttribute getAttribute(LocalAttribute attributeName)
-    {
-        ReadWriteAttribute attribute = localAttributes.get(attributeName);
-        if (attribute == null)
-        {
-            attribute = new ReadWriteAttribute(AssignmentNodeImpl.this, attributeName);
-            localAttributes.put(attributeName, attribute);
-        }
-        return attribute;
-    }
-    private static enum LocalAttribute implements AttributeName
-    {
-        /** Attribute identifier for the variable property. */
-        VARIABLE,
-        /** Attribute identifier for the operator property. */
-        OPERATOR,
-        /** Attribute identifier for the expression property. */
-        EXPRESSION,
-    }
+    /**
+     * A set of those properties which have been populated from the backing node.
+     * This field is <code>null</code> if <tt>backingNode</tt> is <code>null</code>.
+     */
+    private Set<AssignmentNodeProperties> populatedProperties;
     
     /** General constructor. */
     public AssignmentNodeImpl(
@@ -68,9 +56,93 @@ public class AssignmentNodeImpl extends NodeImpl implements AssignmentNode
             boolean binary)
     {
         super(startLocation, stopLocation, manager, binary);
-        setUnionForVariable(variable, false);
-        this.operator = operator;
-        setUnionForExpression(expression, false);
+        this.populatedProperties = null;
+        doSetVariable(variable);
+        doSetOperator(operator);
+        doSetExpression(expression);
+    }
+    
+    /** Proxy constructor. */
+    public AssignmentNodeImpl(BsjNodeManager manager, BsjNodeProxyFactory proxyFactory, AssignmentNode backingNode)
+    {
+        super(manager, proxyFactory, backingNode);
+        this.populatedProperties = EnumSet.noneOf(AssignmentNodeProperties.class);
+    }
+    
+    /** Retrieves this node's backing node (if one exists). */
+    protected AssignmentNode getBackingNode()
+    {
+        return (AssignmentNode)super.getBackingNode();
+    }
+    
+    /**
+     * Ensures that the variable value has been populated from proxy.
+     * If this node is not backed by a proxy or if the value has already been
+     * populated, this method does nothing.
+     */
+    private void checkVariableWrapped()
+    {
+        if (this.populatedProperties == null || this.populatedProperties.contains(
+                AssignmentNodeProperties.VARIABLE))
+            return;
+        this.populatedProperties.add(AssignmentNodeProperties.VARIABLE);
+        NodeUnion<? extends ExpressionNode> union = this.getBackingNode().getUnionForVariable();
+        switch (union.getType())
+        {
+            case NORMAL:
+                union = this.getProxyFactory().makeNormalNodeUnion(
+                        this.getProxyFactory().makeExpressionNode(union.getNormalNode()));
+                break;
+            case SPLICE:
+                union = this.getProxyFactory().makeSpliceNodeUnion(
+                        this.getProxyFactory().makeSpliceNode(union.getSpliceNode()));
+                break;
+            default:
+                throw new IllegalStateException("Unrecognized union type: " + union.getType());
+        }
+        this.variable = union;
+    }
+    
+    /**
+     * Ensures that the operator value has been populated from proxy.
+     * If this node is not backed by a proxy or if the value has already been
+     * populated, this method does nothing.
+     */
+    private void checkOperatorWrapped()
+    {
+        if (this.populatedProperties == null || this.populatedProperties.contains(
+                AssignmentNodeProperties.OPERATOR))
+            return;
+        this.populatedProperties.add(AssignmentNodeProperties.OPERATOR);
+        this.operator = this.getBackingNode().getOperator();
+    }
+    
+    /**
+     * Ensures that the expression value has been populated from proxy.
+     * If this node is not backed by a proxy or if the value has already been
+     * populated, this method does nothing.
+     */
+    private void checkExpressionWrapped()
+    {
+        if (this.populatedProperties == null || this.populatedProperties.contains(
+                AssignmentNodeProperties.EXPRESSION))
+            return;
+        this.populatedProperties.add(AssignmentNodeProperties.EXPRESSION);
+        NodeUnion<? extends ExpressionNode> union = this.getBackingNode().getUnionForExpression();
+        switch (union.getType())
+        {
+            case NORMAL:
+                union = this.getProxyFactory().makeNormalNodeUnion(
+                        this.getProxyFactory().makeExpressionNode(union.getNormalNode()));
+                break;
+            case SPLICE:
+                union = this.getProxyFactory().makeSpliceNodeUnion(
+                        this.getProxyFactory().makeSpliceNode(union.getSpliceNode()));
+                break;
+            default:
+                throw new IllegalStateException("Unrecognized union type: " + union.getType());
+        }
+        this.expression = union;
     }
     
     /**
@@ -80,7 +152,7 @@ public class AssignmentNodeImpl extends NodeImpl implements AssignmentNode
      */
     public ExpressionNode getVariable()
     {
-        getAttribute(LocalAttribute.VARIABLE).recordAccess(ReadWriteAttribute.AccessType.READ);
+        checkVariableWrapped();
         if (this.variable == null)
         {
             return null;
@@ -96,7 +168,7 @@ public class AssignmentNodeImpl extends NodeImpl implements AssignmentNode
      */
     public NodeUnion<? extends ExpressionNode> getUnionForVariable()
     {
-        getAttribute(LocalAttribute.VARIABLE).recordAccess(ReadWriteAttribute.AccessType.READ);
+        checkVariableWrapped();
         if (this.variable == null)
         {
             this.variable = new NormalNodeUnion<ExpressionNode>(null);
@@ -110,24 +182,8 @@ public class AssignmentNodeImpl extends NodeImpl implements AssignmentNode
      */
     public void setVariable(ExpressionNode variable)
     {
-            setVariable(variable, true);
-            getManager().notifyChange(this);
-    }
-    
-    private void setVariable(ExpressionNode variable, boolean checkPermissions)
-    {
-        if (checkPermissions)
-        {
-            getManager().assertMutatable(this);
-            getAttribute(LocalAttribute.VARIABLE).recordAccess(ReadWriteAttribute.AccessType.WRITE);
-        }
-        
-        if (this.variable != null)
-        {
-            setAsChild(this.variable.getNodeValue(), false);
-        }
-        this.variable = new NormalNodeUnion<ExpressionNode>(variable);
-        setAsChild(variable, true);
+        checkVariableWrapped();
+        this.setUnionForVariable(new NormalNodeUnion<ExpressionNode>(variable));
     }
     
     /**
@@ -136,18 +192,15 @@ public class AssignmentNodeImpl extends NodeImpl implements AssignmentNode
      */
     public void setUnionForVariable(NodeUnion<? extends ExpressionNode> variable)
     {
-            setUnionForVariable(variable, true);
-            getManager().notifyChange(this);
+        checkVariableWrapped();
+        this.getManager().assertMutatable(this);
+        this.doSetVariable(variable);
+        if (this.getManager().isRecordingEdits())
+            super.recordEdit(new AssignmentNodeSetVariablePropertyEditScriptElementImpl(this.getManager().getCurrentMetaprogramId(), this.getUid(), variable.getNodeValue() == null ? null : variable.getNodeValue().getUid()));
     }
     
-    private void setUnionForVariable(NodeUnion<? extends ExpressionNode> variable, boolean checkPermissions)
+    private void doSetVariable(NodeUnion<? extends ExpressionNode> variable)
     {
-        if (checkPermissions)
-        {
-            getManager().assertMutatable(this);
-            getAttribute(LocalAttribute.VARIABLE).recordAccess(ReadWriteAttribute.AccessType.WRITE);
-        }
-        
         if (variable == null)
         {
             variable = new NormalNodeUnion<ExpressionNode>(null);
@@ -166,7 +219,7 @@ public class AssignmentNodeImpl extends NodeImpl implements AssignmentNode
      */
     public AssignmentOperator getOperator()
     {
-        getAttribute(LocalAttribute.OPERATOR).recordAccess(ReadWriteAttribute.AccessType.READ);
+        checkOperatorWrapped();
         return this.operator;
     }
     
@@ -176,18 +229,15 @@ public class AssignmentNodeImpl extends NodeImpl implements AssignmentNode
      */
     public void setOperator(AssignmentOperator operator)
     {
-            setOperator(operator, true);
-            getManager().notifyChange(this);
+        checkOperatorWrapped();
+        this.getManager().assertMutatable(this);
+        this.doSetOperator(operator);
+        if (this.getManager().isRecordingEdits())
+            super.recordEdit(new AssignmentNodeSetOperatorPropertyEditScriptElementImpl(this.getManager().getCurrentMetaprogramId(), this.getUid(), operator));
     }
     
-    private void setOperator(AssignmentOperator operator, boolean checkPermissions)
+    private void doSetOperator(AssignmentOperator operator)
     {
-        if (checkPermissions)
-        {
-            getManager().assertMutatable(this);
-            getAttribute(LocalAttribute.OPERATOR).recordAccess(ReadWriteAttribute.AccessType.WRITE);
-        }
-        
         this.operator = operator;
     }
     
@@ -198,7 +248,7 @@ public class AssignmentNodeImpl extends NodeImpl implements AssignmentNode
      */
     public ExpressionNode getExpression()
     {
-        getAttribute(LocalAttribute.EXPRESSION).recordAccess(ReadWriteAttribute.AccessType.READ);
+        checkExpressionWrapped();
         if (this.expression == null)
         {
             return null;
@@ -214,7 +264,7 @@ public class AssignmentNodeImpl extends NodeImpl implements AssignmentNode
      */
     public NodeUnion<? extends ExpressionNode> getUnionForExpression()
     {
-        getAttribute(LocalAttribute.EXPRESSION).recordAccess(ReadWriteAttribute.AccessType.READ);
+        checkExpressionWrapped();
         if (this.expression == null)
         {
             this.expression = new NormalNodeUnion<ExpressionNode>(null);
@@ -228,24 +278,8 @@ public class AssignmentNodeImpl extends NodeImpl implements AssignmentNode
      */
     public void setExpression(ExpressionNode expression)
     {
-            setExpression(expression, true);
-            getManager().notifyChange(this);
-    }
-    
-    private void setExpression(ExpressionNode expression, boolean checkPermissions)
-    {
-        if (checkPermissions)
-        {
-            getManager().assertMutatable(this);
-            getAttribute(LocalAttribute.EXPRESSION).recordAccess(ReadWriteAttribute.AccessType.WRITE);
-        }
-        
-        if (this.expression != null)
-        {
-            setAsChild(this.expression.getNodeValue(), false);
-        }
-        this.expression = new NormalNodeUnion<ExpressionNode>(expression);
-        setAsChild(expression, true);
+        checkExpressionWrapped();
+        this.setUnionForExpression(new NormalNodeUnion<ExpressionNode>(expression));
     }
     
     /**
@@ -254,18 +288,15 @@ public class AssignmentNodeImpl extends NodeImpl implements AssignmentNode
      */
     public void setUnionForExpression(NodeUnion<? extends ExpressionNode> expression)
     {
-            setUnionForExpression(expression, true);
-            getManager().notifyChange(this);
+        checkExpressionWrapped();
+        this.getManager().assertMutatable(this);
+        this.doSetExpression(expression);
+        if (this.getManager().isRecordingEdits())
+            super.recordEdit(new AssignmentNodeSetExpressionPropertyEditScriptElementImpl(this.getManager().getCurrentMetaprogramId(), this.getUid(), expression.getNodeValue() == null ? null : expression.getNodeValue().getUid()));
     }
     
-    private void setUnionForExpression(NodeUnion<? extends ExpressionNode> expression, boolean checkPermissions)
+    private void doSetExpression(NodeUnion<? extends ExpressionNode> expression)
     {
-        if (checkPermissions)
-        {
-            getManager().assertMutatable(this);
-            getAttribute(LocalAttribute.EXPRESSION).recordAccess(ReadWriteAttribute.AccessType.WRITE);
-        }
-        
         if (expression == null)
         {
             expression = new NormalNodeUnion<ExpressionNode>(null);
@@ -289,13 +320,13 @@ public class AssignmentNodeImpl extends NodeImpl implements AssignmentNode
     protected void receiveToChildren(BsjNodeVisitor visitor)
     {
         super.receiveToChildren(visitor);
-        if (this.variable.getNodeValue() != null)
+        if (this.getUnionForVariable().getNodeValue() != null)
         {
-            this.variable.getNodeValue().receive(visitor);
+            this.getUnionForVariable().getNodeValue().receive(visitor);
         }
-        if (this.expression.getNodeValue() != null)
+        if (this.getUnionForExpression().getNodeValue() != null)
         {
-            this.expression.getNodeValue().receive(visitor);
+            this.getUnionForExpression().getNodeValue().receive(visitor);
         }
         Iterator<? extends Node> extras = getHiddenVisitorChildren();
         if (extras != null)
@@ -318,13 +349,13 @@ public class AssignmentNodeImpl extends NodeImpl implements AssignmentNode
     protected void receiveTypedToChildren(BsjTypedNodeVisitor visitor)
     {
         super.receiveTypedToChildren(visitor);
-        if (this.variable.getNodeValue() != null)
+        if (this.getUnionForVariable().getNodeValue() != null)
         {
-            this.variable.getNodeValue().receiveTyped(visitor);
+            this.getUnionForVariable().getNodeValue().receiveTyped(visitor);
         }
-        if (this.expression.getNodeValue() != null)
+        if (this.getUnionForExpression().getNodeValue() != null)
         {
-            this.expression.getNodeValue().receiveTyped(visitor);
+            this.getUnionForExpression().getNodeValue().receiveTyped(visitor);
         }
         Iterator<? extends Node> extras = getHiddenVisitorChildren();
         if (extras != null)
@@ -385,6 +416,8 @@ public class AssignmentNodeImpl extends NodeImpl implements AssignmentNode
     {
         StringBuilder sb = new StringBuilder();
         sb.append(this.getClass().getSimpleName());
+        sb.append('#');
+        sb.append(this.getUid());
         sb.append('[');
         sb.append("variable=");
         sb.append(this.getUnionForVariable().getNodeValue() == null? "null" : this.getUnionForVariable().getNodeValue().getClass().getSimpleName());

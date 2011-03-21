@@ -8,29 +8,43 @@
 
 package edu.jhu.cs.bsj.compiler.diagnostic.compiler;
 
-import java.util.Set;
-
 import javax.annotation.Generated;
 
 import edu.jhu.cs.bsj.compiler.ast.exception.MetaprogramListConflictException;
+import edu.jhu.cs.bsj.compiler.ast.node.Node;
 import edu.jhu.cs.bsj.compiler.ast.node.list.ListNode;
-import edu.jhu.cs.bsj.compiler.ast.node.list.knowledge.ConflictKnowledge;
 /**
- * Indicates that two metaprograms are in conflict because of the manner in which they accessed the same
- * {@link ListNode}.  Note that this diagnostic has the ability to represent multiple failures
- * detected in a closure.  As a result, the anchors provided are merely advisory and represent one
- * of the possible conflicts contained within.
+ * Indicates that two metaprograms are in conflict because they attempted to insert different
+ * order-dependent elements into the same position in a list.
  */
 @Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
-public interface MetaprogramListConflictDiagnostic extends MetaprogramConflictDiagnostic<MetaprogramListConflictException>
+public interface MetaprogramListConflictDiagnostic<N extends Node> extends MetaprogramConflictDiagnostic<MetaprogramListConflictException>
 {
     /** The code for this diagnostic. */
     public static final String CODE = "bsj.compiler.metaprogram.failure.conflict.list";
     
     /**
-     * Retrieves the conflicts which were detected.
-     * @return The conflicts which were detected.
+     * Retrieves the list over which the metaprograms conflicted.
+     * @return The list over which the metaprograms conflicted.
      */
-    public Set<? extends ConflictKnowledge<?>> getConflicts();
+    public ListNode<N> getList();
+    
+    /**
+     * Retrieves the node which both metaprograms used as a reference point (or null for beginning or end).
+     * @return The node which both metaprograms used as a reference point (or null for beginning or end).
+     */
+    public N getReference();
+    
+    /**
+     * Retrieves true if the nodes added after the reference point; false if they added before.
+     * @return True if the nodes added after the reference point; false if they added before.
+     */
+    public boolean getAfter();
+    
+    /**
+     * Retrieves the node added by the first metaprogram.
+     * @return The node added by the first metaprogram.
+     */
+    public N getElement();
     
 }

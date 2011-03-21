@@ -1,0 +1,8 @@
+public class Listener implements MyListener
+{
+    public static int calls = 0;
+    public void myEventOccurred(MyEvent event)
+    {
+        calls++;           
+    }       
+}

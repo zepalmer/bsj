@@ -473,7 +473,6 @@ public class SourceGeneratorParser
 			List<TagReferenceDefinition> tags = new ArrayList<TagReferenceDefinition>();
 			List<ConstantDefinition> constants = new ArrayList<ConstantDefinition>();
 			List<PropertyDefinition> props = new ArrayList<PropertyDefinition>();
-			List<String> includes = new ArrayList<String>();
 			String docString = null;
 			String constructorFooter = null;
 			List<String> toStringLines = new ArrayList<String>();
@@ -509,9 +508,6 @@ public class SourceGeneratorParser
 					{
 						PropertyHandler handler = new PropertyHandler(this.profile);
 						props.add(handler.handle(childElement));
-					} else if (childTag.equals("include"))
-					{
-						includes.add(childElement.getAttribute("file"));
 					} else if (childTag.equals("doc"))
 					{
 						docString = unindent(childElement.getTextContent());
@@ -555,9 +551,9 @@ public class SourceGeneratorParser
 			}
 
 			TypeDefinition typeDefinition = new TypeDefinition(name, typeParam, superName, superTypeArg,
-					constructorFooter, profile, interfaces, tags, constants, props, includes, docString, toStringLines,
-					factoryOverrideMap, constructorOverrideMap, genConstructor, genChildren, genReplace,
-					factoryMethodDefinitions, mode, isBsjSpecific);
+					constructorFooter, profile, interfaces, tags, constants, props, docString, toStringLines, factoryOverrideMap,
+					constructorOverrideMap, genConstructor, genChildren, genReplace, factoryMethodDefinitions,
+					mode, isBsjSpecific);
 			for (FactoryMethodDefinition factoryMethodDefinition : factoryMethodDefinitions)
 			{
 				factoryMethodDefinition.setParent(typeDefinition);

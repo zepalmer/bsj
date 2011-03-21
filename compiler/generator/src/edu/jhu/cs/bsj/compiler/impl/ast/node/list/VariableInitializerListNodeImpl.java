@@ -17,6 +17,7 @@ import edu.jhu.cs.bsj.compiler.ast.node.Node;
 import edu.jhu.cs.bsj.compiler.ast.node.VariableInitializerNode;
 import edu.jhu.cs.bsj.compiler.ast.node.list.VariableInitializerListNode;
 import edu.jhu.cs.bsj.compiler.impl.ast.BsjNodeManager;
+import edu.jhu.cs.bsj.compiler.impl.ast.BsjNodeProxyFactory;
 
 @Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
 public class VariableInitializerListNodeImpl extends ListNodeImpl<VariableInitializerNode> implements VariableInitializerListNode
@@ -30,6 +31,18 @@ public class VariableInitializerListNodeImpl extends ListNodeImpl<VariableInitia
             boolean binary)
     {
         super(children, startLocation, stopLocation, manager, binary);
+    }
+    
+    /** Proxy constructor. */
+    public VariableInitializerListNodeImpl(BsjNodeManager manager, BsjNodeProxyFactory proxyFactory, VariableInitializerListNode backingNode)
+    {
+        super(manager, proxyFactory, backingNode);
+    }
+    
+    /** Retrieves this node's backing node (if one exists). */
+    protected VariableInitializerListNode getBackingNode()
+    {
+        return (VariableInitializerListNode)super.getBackingNode();
     }
     
     /**
@@ -136,6 +149,8 @@ public class VariableInitializerListNodeImpl extends ListNodeImpl<VariableInitia
     {
         StringBuilder sb = new StringBuilder();
         sb.append(this.getClass().getSimpleName());
+        sb.append('#');
+        sb.append(this.getUid());
         sb.append('[');
         sb.append("children=");
         sb.append(this.getUnionForChildren() == null? "null" : this.getUnionForChildren().getClass().getSimpleName());
@@ -227,6 +242,14 @@ public class VariableInitializerListNodeImpl extends ListNodeImpl<VariableInitia
     public Class<VariableInitializerNode> getElementType()
     {
         return VariableInitializerNode.class;
+    }
+    
+    /**
+     * Wraps an element of this list's type.
+     */
+    protected VariableInitializerNode wrapElement(VariableInitializerNode element)
+    {
+        return getProxyFactory().makeVariableInitializerNode(element);
     }
     
 }

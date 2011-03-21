@@ -1,10 +1,10 @@
 package edu.jhu.cs.bsj.compiler.impl.ast.node.meta;
 
 import java.util.Arrays;
-import java.util.EnumMap;
+import java.util.EnumSet;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
+import java.util.Set;
 
 import javax.annotation.Generated;
 
@@ -18,9 +18,10 @@ import edu.jhu.cs.bsj.compiler.ast.BsjTypedNodeVisitor;
 import edu.jhu.cs.bsj.compiler.ast.node.Node;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.RawCodeLiteralNode;
 import edu.jhu.cs.bsj.compiler.impl.ast.BsjNodeManager;
-import edu.jhu.cs.bsj.compiler.impl.ast.attribute.AttributeName;
-import edu.jhu.cs.bsj.compiler.impl.ast.attribute.ReadWriteAttribute;
+import edu.jhu.cs.bsj.compiler.impl.ast.BsjNodeProxyFactory;
+import edu.jhu.cs.bsj.compiler.impl.ast.delta.property.RawCodeLiteralNodeSetValuePropertyEditScriptElementImpl;
 import edu.jhu.cs.bsj.compiler.impl.ast.node.NodeImpl;
+import edu.jhu.cs.bsj.compiler.impl.ast.properties.RawCodeLiteralNodeProperties;
 
 @Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
 public class RawCodeLiteralNodeImpl extends NodeImpl implements RawCodeLiteralNode
@@ -28,22 +29,11 @@ public class RawCodeLiteralNodeImpl extends NodeImpl implements RawCodeLiteralNo
     /** The literal value for this node. */
     private BsjRawCodeLiteralPayload value;
     
-    private Map<LocalAttribute,ReadWriteAttribute> localAttributes = new EnumMap<LocalAttribute,ReadWriteAttribute>(LocalAttribute.class);
-    private ReadWriteAttribute getAttribute(LocalAttribute attributeName)
-    {
-        ReadWriteAttribute attribute = localAttributes.get(attributeName);
-        if (attribute == null)
-        {
-            attribute = new ReadWriteAttribute(RawCodeLiteralNodeImpl.this, attributeName);
-            localAttributes.put(attributeName, attribute);
-        }
-        return attribute;
-    }
-    private static enum LocalAttribute implements AttributeName
-    {
-        /** Attribute identifier for the value property. */
-        VALUE,
-    }
+    /**
+     * A set of those properties which have been populated from the backing node.
+     * This field is <code>null</code> if <tt>backingNode</tt> is <code>null</code>.
+     */
+    private Set<RawCodeLiteralNodeProperties> populatedProperties;
     
     /** General constructor. */
     public RawCodeLiteralNodeImpl(
@@ -54,7 +44,35 @@ public class RawCodeLiteralNodeImpl extends NodeImpl implements RawCodeLiteralNo
             boolean binary)
     {
         super(startLocation, stopLocation, manager, binary);
-        this.value = value;
+        this.populatedProperties = null;
+        doSetValue(value);
+    }
+    
+    /** Proxy constructor. */
+    public RawCodeLiteralNodeImpl(BsjNodeManager manager, BsjNodeProxyFactory proxyFactory, RawCodeLiteralNode backingNode)
+    {
+        super(manager, proxyFactory, backingNode);
+        this.populatedProperties = EnumSet.noneOf(RawCodeLiteralNodeProperties.class);
+    }
+    
+    /** Retrieves this node's backing node (if one exists). */
+    protected RawCodeLiteralNode getBackingNode()
+    {
+        return (RawCodeLiteralNode)super.getBackingNode();
+    }
+    
+    /**
+     * Ensures that the value value has been populated from proxy.
+     * If this node is not backed by a proxy or if the value has already been
+     * populated, this method does nothing.
+     */
+    private void checkValueWrapped()
+    {
+        if (this.populatedProperties == null || this.populatedProperties.contains(
+                RawCodeLiteralNodeProperties.VALUE))
+            return;
+        this.populatedProperties.add(RawCodeLiteralNodeProperties.VALUE);
+        this.value = this.getBackingNode().getValue();
     }
     
     /**
@@ -63,7 +81,7 @@ public class RawCodeLiteralNodeImpl extends NodeImpl implements RawCodeLiteralNo
      */
     public BsjRawCodeLiteralPayload getValue()
     {
-        getAttribute(LocalAttribute.VALUE).recordAccess(ReadWriteAttribute.AccessType.READ);
+        checkValueWrapped();
         return this.value;
     }
     
@@ -73,18 +91,15 @@ public class RawCodeLiteralNodeImpl extends NodeImpl implements RawCodeLiteralNo
      */
     public void setValue(BsjRawCodeLiteralPayload value)
     {
-            setValue(value, true);
-            getManager().notifyChange(this);
+        checkValueWrapped();
+        this.getManager().assertMutatable(this);
+        this.doSetValue(value);
+        if (this.getManager().isRecordingEdits())
+            super.recordEdit(new RawCodeLiteralNodeSetValuePropertyEditScriptElementImpl(this.getManager().getCurrentMetaprogramId(), this.getUid(), value));
     }
     
-    private void setValue(BsjRawCodeLiteralPayload value, boolean checkPermissions)
+    private void doSetValue(BsjRawCodeLiteralPayload value)
     {
-        if (checkPermissions)
-        {
-            getManager().assertMutatable(this);
-            getAttribute(LocalAttribute.VALUE).recordAccess(ReadWriteAttribute.AccessType.WRITE);
-        }
-        
         this.value = value;
     }
     
@@ -177,6 +192,8 @@ public class RawCodeLiteralNodeImpl extends NodeImpl implements RawCodeLiteralNo
     {
         StringBuilder sb = new StringBuilder();
         sb.append(this.getClass().getSimpleName());
+        sb.append('#');
+        sb.append(this.getUid());
         sb.append('[');
         sb.append("value=");
         sb.append(String.valueOf(this.getValue()) + ":" + (this.getValue() != null ? this.getValue().getClass().getSimpleName() : "null"));

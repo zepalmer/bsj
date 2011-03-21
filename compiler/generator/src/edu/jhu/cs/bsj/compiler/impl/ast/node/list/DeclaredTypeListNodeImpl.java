@@ -17,6 +17,7 @@ import edu.jhu.cs.bsj.compiler.ast.node.DeclaredTypeNode;
 import edu.jhu.cs.bsj.compiler.ast.node.Node;
 import edu.jhu.cs.bsj.compiler.ast.node.list.DeclaredTypeListNode;
 import edu.jhu.cs.bsj.compiler.impl.ast.BsjNodeManager;
+import edu.jhu.cs.bsj.compiler.impl.ast.BsjNodeProxyFactory;
 
 @Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
 public class DeclaredTypeListNodeImpl extends ListNodeImpl<DeclaredTypeNode> implements DeclaredTypeListNode
@@ -30,6 +31,18 @@ public class DeclaredTypeListNodeImpl extends ListNodeImpl<DeclaredTypeNode> imp
             boolean binary)
     {
         super(children, startLocation, stopLocation, manager, binary);
+    }
+    
+    /** Proxy constructor. */
+    public DeclaredTypeListNodeImpl(BsjNodeManager manager, BsjNodeProxyFactory proxyFactory, DeclaredTypeListNode backingNode)
+    {
+        super(manager, proxyFactory, backingNode);
+    }
+    
+    /** Retrieves this node's backing node (if one exists). */
+    protected DeclaredTypeListNode getBackingNode()
+    {
+        return (DeclaredTypeListNode)super.getBackingNode();
     }
     
     /**
@@ -136,6 +149,8 @@ public class DeclaredTypeListNodeImpl extends ListNodeImpl<DeclaredTypeNode> imp
     {
         StringBuilder sb = new StringBuilder();
         sb.append(this.getClass().getSimpleName());
+        sb.append('#');
+        sb.append(this.getUid());
         sb.append('[');
         sb.append("children=");
         sb.append(this.getUnionForChildren() == null? "null" : this.getUnionForChildren().getClass().getSimpleName());
@@ -227,6 +242,14 @@ public class DeclaredTypeListNodeImpl extends ListNodeImpl<DeclaredTypeNode> imp
     public Class<DeclaredTypeNode> getElementType()
     {
         return DeclaredTypeNode.class;
+    }
+    
+    /**
+     * Wraps an element of this list's type.
+     */
+    protected DeclaredTypeNode wrapElement(DeclaredTypeNode element)
+    {
+        return getProxyFactory().makeDeclaredTypeNode(element);
     }
     
 }

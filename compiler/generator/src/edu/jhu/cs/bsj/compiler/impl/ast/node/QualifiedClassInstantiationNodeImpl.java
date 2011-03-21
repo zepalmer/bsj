@@ -1,10 +1,10 @@
 package edu.jhu.cs.bsj.compiler.impl.ast.node;
 
 import java.util.Arrays;
-import java.util.EnumMap;
+import java.util.EnumSet;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
+import java.util.Set;
 
 import javax.annotation.Generated;
 
@@ -23,9 +23,12 @@ import edu.jhu.cs.bsj.compiler.ast.node.QualifiedClassInstantiationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.list.ExpressionListNode;
 import edu.jhu.cs.bsj.compiler.ast.node.list.TypeArgumentListNode;
 import edu.jhu.cs.bsj.compiler.impl.ast.BsjNodeManager;
+import edu.jhu.cs.bsj.compiler.impl.ast.BsjNodeProxyFactory;
 import edu.jhu.cs.bsj.compiler.impl.ast.NormalNodeUnion;
-import edu.jhu.cs.bsj.compiler.impl.ast.attribute.AttributeName;
-import edu.jhu.cs.bsj.compiler.impl.ast.attribute.ReadWriteAttribute;
+import edu.jhu.cs.bsj.compiler.impl.ast.delta.property.QualifiedClassInstantiationNodeSetEnclosingExpressionPropertyEditScriptElementImpl;
+import edu.jhu.cs.bsj.compiler.impl.ast.delta.property.QualifiedClassInstantiationNodeSetIdentifierPropertyEditScriptElementImpl;
+import edu.jhu.cs.bsj.compiler.impl.ast.delta.property.QualifiedClassInstantiationNodeSetTypeArgumentsPropertyEditScriptElementImpl;
+import edu.jhu.cs.bsj.compiler.impl.ast.properties.QualifiedClassInstantiationNodeProperties;
 
 @Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
 public class QualifiedClassInstantiationNodeImpl extends ClassInstantiationNodeImpl implements QualifiedClassInstantiationNode
@@ -39,26 +42,11 @@ public class QualifiedClassInstantiationNodeImpl extends ClassInstantiationNodeI
     /** The type arguments to apply to the class being instantiated. */
     private NodeUnion<? extends TypeArgumentListNode> typeArguments;
     
-    private Map<LocalAttribute,ReadWriteAttribute> localAttributes = new EnumMap<LocalAttribute,ReadWriteAttribute>(LocalAttribute.class);
-    private ReadWriteAttribute getAttribute(LocalAttribute attributeName)
-    {
-        ReadWriteAttribute attribute = localAttributes.get(attributeName);
-        if (attribute == null)
-        {
-            attribute = new ReadWriteAttribute(QualifiedClassInstantiationNodeImpl.this, attributeName);
-            localAttributes.put(attributeName, attribute);
-        }
-        return attribute;
-    }
-    private static enum LocalAttribute implements AttributeName
-    {
-        /** Attribute identifier for the enclosingExpression property. */
-        ENCLOSING_EXPRESSION,
-        /** Attribute identifier for the identifier property. */
-        IDENTIFIER,
-        /** Attribute identifier for the typeArguments property. */
-        TYPE_ARGUMENTS,
-    }
+    /**
+     * A set of those properties which have been populated from the backing node.
+     * This field is <code>null</code> if <tt>backingNode</tt> is <code>null</code>.
+     */
+    private Set<QualifiedClassInstantiationNodeProperties> populatedProperties;
     
     /** General constructor. */
     public QualifiedClassInstantiationNodeImpl(
@@ -74,9 +62,107 @@ public class QualifiedClassInstantiationNodeImpl extends ClassInstantiationNodeI
             boolean binary)
     {
         super(constructorTypeArguments, arguments, body, startLocation, stopLocation, manager, binary);
-        setUnionForEnclosingExpression(enclosingExpression, false);
-        setUnionForIdentifier(identifier, false);
-        setUnionForTypeArguments(typeArguments, false);
+        this.populatedProperties = null;
+        doSetEnclosingExpression(enclosingExpression);
+        doSetIdentifier(identifier);
+        doSetTypeArguments(typeArguments);
+    }
+    
+    /** Proxy constructor. */
+    public QualifiedClassInstantiationNodeImpl(BsjNodeManager manager, BsjNodeProxyFactory proxyFactory, QualifiedClassInstantiationNode backingNode)
+    {
+        super(manager, proxyFactory, backingNode);
+        this.populatedProperties = EnumSet.noneOf(QualifiedClassInstantiationNodeProperties.class);
+    }
+    
+    /** Retrieves this node's backing node (if one exists). */
+    protected QualifiedClassInstantiationNode getBackingNode()
+    {
+        return (QualifiedClassInstantiationNode)super.getBackingNode();
+    }
+    
+    /**
+     * Ensures that the enclosingExpression value has been populated from proxy.
+     * If this node is not backed by a proxy or if the value has already been
+     * populated, this method does nothing.
+     */
+    private void checkEnclosingExpressionWrapped()
+    {
+        if (this.populatedProperties == null || this.populatedProperties.contains(
+                QualifiedClassInstantiationNodeProperties.ENCLOSING_EXPRESSION))
+            return;
+        this.populatedProperties.add(QualifiedClassInstantiationNodeProperties.ENCLOSING_EXPRESSION);
+        NodeUnion<? extends ExpressionNode> union = this.getBackingNode().getUnionForEnclosingExpression();
+        switch (union.getType())
+        {
+            case NORMAL:
+                union = this.getProxyFactory().makeNormalNodeUnion(
+                        this.getProxyFactory().makeExpressionNode(union.getNormalNode()));
+                break;
+            case SPLICE:
+                union = this.getProxyFactory().makeSpliceNodeUnion(
+                        this.getProxyFactory().makeSpliceNode(union.getSpliceNode()));
+                break;
+            default:
+                throw new IllegalStateException("Unrecognized union type: " + union.getType());
+        }
+        this.enclosingExpression = union;
+    }
+    
+    /**
+     * Ensures that the identifier value has been populated from proxy.
+     * If this node is not backed by a proxy or if the value has already been
+     * populated, this method does nothing.
+     */
+    private void checkIdentifierWrapped()
+    {
+        if (this.populatedProperties == null || this.populatedProperties.contains(
+                QualifiedClassInstantiationNodeProperties.IDENTIFIER))
+            return;
+        this.populatedProperties.add(QualifiedClassInstantiationNodeProperties.IDENTIFIER);
+        NodeUnion<? extends IdentifierNode> union = this.getBackingNode().getUnionForIdentifier();
+        switch (union.getType())
+        {
+            case NORMAL:
+                union = this.getProxyFactory().makeNormalNodeUnion(
+                        this.getProxyFactory().makeIdentifierNode(union.getNormalNode()));
+                break;
+            case SPLICE:
+                union = this.getProxyFactory().makeSpliceNodeUnion(
+                        this.getProxyFactory().makeSpliceNode(union.getSpliceNode()));
+                break;
+            default:
+                throw new IllegalStateException("Unrecognized union type: " + union.getType());
+        }
+        this.identifier = union;
+    }
+    
+    /**
+     * Ensures that the typeArguments value has been populated from proxy.
+     * If this node is not backed by a proxy or if the value has already been
+     * populated, this method does nothing.
+     */
+    private void checkTypeArgumentsWrapped()
+    {
+        if (this.populatedProperties == null || this.populatedProperties.contains(
+                QualifiedClassInstantiationNodeProperties.TYPE_ARGUMENTS))
+            return;
+        this.populatedProperties.add(QualifiedClassInstantiationNodeProperties.TYPE_ARGUMENTS);
+        NodeUnion<? extends TypeArgumentListNode> union = this.getBackingNode().getUnionForTypeArguments();
+        switch (union.getType())
+        {
+            case NORMAL:
+                union = this.getProxyFactory().makeNormalNodeUnion(
+                        this.getProxyFactory().makeTypeArgumentListNode(union.getNormalNode()));
+                break;
+            case SPLICE:
+                union = this.getProxyFactory().makeSpliceNodeUnion(
+                        this.getProxyFactory().makeSpliceNode(union.getSpliceNode()));
+                break;
+            default:
+                throw new IllegalStateException("Unrecognized union type: " + union.getType());
+        }
+        this.typeArguments = union;
     }
     
     /**
@@ -86,7 +172,7 @@ public class QualifiedClassInstantiationNodeImpl extends ClassInstantiationNodeI
      */
     public ExpressionNode getEnclosingExpression()
     {
-        getAttribute(LocalAttribute.ENCLOSING_EXPRESSION).recordAccess(ReadWriteAttribute.AccessType.READ);
+        checkEnclosingExpressionWrapped();
         if (this.enclosingExpression == null)
         {
             return null;
@@ -102,7 +188,7 @@ public class QualifiedClassInstantiationNodeImpl extends ClassInstantiationNodeI
      */
     public NodeUnion<? extends ExpressionNode> getUnionForEnclosingExpression()
     {
-        getAttribute(LocalAttribute.ENCLOSING_EXPRESSION).recordAccess(ReadWriteAttribute.AccessType.READ);
+        checkEnclosingExpressionWrapped();
         if (this.enclosingExpression == null)
         {
             this.enclosingExpression = new NormalNodeUnion<ExpressionNode>(null);
@@ -116,24 +202,8 @@ public class QualifiedClassInstantiationNodeImpl extends ClassInstantiationNodeI
      */
     public void setEnclosingExpression(ExpressionNode enclosingExpression)
     {
-            setEnclosingExpression(enclosingExpression, true);
-            getManager().notifyChange(this);
-    }
-    
-    private void setEnclosingExpression(ExpressionNode enclosingExpression, boolean checkPermissions)
-    {
-        if (checkPermissions)
-        {
-            getManager().assertMutatable(this);
-            getAttribute(LocalAttribute.ENCLOSING_EXPRESSION).recordAccess(ReadWriteAttribute.AccessType.WRITE);
-        }
-        
-        if (this.enclosingExpression != null)
-        {
-            setAsChild(this.enclosingExpression.getNodeValue(), false);
-        }
-        this.enclosingExpression = new NormalNodeUnion<ExpressionNode>(enclosingExpression);
-        setAsChild(enclosingExpression, true);
+        checkEnclosingExpressionWrapped();
+        this.setUnionForEnclosingExpression(new NormalNodeUnion<ExpressionNode>(enclosingExpression));
     }
     
     /**
@@ -142,18 +212,15 @@ public class QualifiedClassInstantiationNodeImpl extends ClassInstantiationNodeI
      */
     public void setUnionForEnclosingExpression(NodeUnion<? extends ExpressionNode> enclosingExpression)
     {
-            setUnionForEnclosingExpression(enclosingExpression, true);
-            getManager().notifyChange(this);
+        checkEnclosingExpressionWrapped();
+        this.getManager().assertMutatable(this);
+        this.doSetEnclosingExpression(enclosingExpression);
+        if (this.getManager().isRecordingEdits())
+            super.recordEdit(new QualifiedClassInstantiationNodeSetEnclosingExpressionPropertyEditScriptElementImpl(this.getManager().getCurrentMetaprogramId(), this.getUid(), enclosingExpression.getNodeValue() == null ? null : enclosingExpression.getNodeValue().getUid()));
     }
     
-    private void setUnionForEnclosingExpression(NodeUnion<? extends ExpressionNode> enclosingExpression, boolean checkPermissions)
+    private void doSetEnclosingExpression(NodeUnion<? extends ExpressionNode> enclosingExpression)
     {
-        if (checkPermissions)
-        {
-            getManager().assertMutatable(this);
-            getAttribute(LocalAttribute.ENCLOSING_EXPRESSION).recordAccess(ReadWriteAttribute.AccessType.WRITE);
-        }
-        
         if (enclosingExpression == null)
         {
             enclosingExpression = new NormalNodeUnion<ExpressionNode>(null);
@@ -173,7 +240,7 @@ public class QualifiedClassInstantiationNodeImpl extends ClassInstantiationNodeI
      */
     public IdentifierNode getIdentifier()
     {
-        getAttribute(LocalAttribute.IDENTIFIER).recordAccess(ReadWriteAttribute.AccessType.READ);
+        checkIdentifierWrapped();
         if (this.identifier == null)
         {
             return null;
@@ -189,7 +256,7 @@ public class QualifiedClassInstantiationNodeImpl extends ClassInstantiationNodeI
      */
     public NodeUnion<? extends IdentifierNode> getUnionForIdentifier()
     {
-        getAttribute(LocalAttribute.IDENTIFIER).recordAccess(ReadWriteAttribute.AccessType.READ);
+        checkIdentifierWrapped();
         if (this.identifier == null)
         {
             this.identifier = new NormalNodeUnion<IdentifierNode>(null);
@@ -203,24 +270,8 @@ public class QualifiedClassInstantiationNodeImpl extends ClassInstantiationNodeI
      */
     public void setIdentifier(IdentifierNode identifier)
     {
-            setIdentifier(identifier, true);
-            getManager().notifyChange(this);
-    }
-    
-    private void setIdentifier(IdentifierNode identifier, boolean checkPermissions)
-    {
-        if (checkPermissions)
-        {
-            getManager().assertMutatable(this);
-            getAttribute(LocalAttribute.IDENTIFIER).recordAccess(ReadWriteAttribute.AccessType.WRITE);
-        }
-        
-        if (this.identifier != null)
-        {
-            setAsChild(this.identifier.getNodeValue(), false);
-        }
-        this.identifier = new NormalNodeUnion<IdentifierNode>(identifier);
-        setAsChild(identifier, true);
+        checkIdentifierWrapped();
+        this.setUnionForIdentifier(new NormalNodeUnion<IdentifierNode>(identifier));
     }
     
     /**
@@ -229,18 +280,15 @@ public class QualifiedClassInstantiationNodeImpl extends ClassInstantiationNodeI
      */
     public void setUnionForIdentifier(NodeUnion<? extends IdentifierNode> identifier)
     {
-            setUnionForIdentifier(identifier, true);
-            getManager().notifyChange(this);
+        checkIdentifierWrapped();
+        this.getManager().assertMutatable(this);
+        this.doSetIdentifier(identifier);
+        if (this.getManager().isRecordingEdits())
+            super.recordEdit(new QualifiedClassInstantiationNodeSetIdentifierPropertyEditScriptElementImpl(this.getManager().getCurrentMetaprogramId(), this.getUid(), identifier.getNodeValue() == null ? null : identifier.getNodeValue().getUid()));
     }
     
-    private void setUnionForIdentifier(NodeUnion<? extends IdentifierNode> identifier, boolean checkPermissions)
+    private void doSetIdentifier(NodeUnion<? extends IdentifierNode> identifier)
     {
-        if (checkPermissions)
-        {
-            getManager().assertMutatable(this);
-            getAttribute(LocalAttribute.IDENTIFIER).recordAccess(ReadWriteAttribute.AccessType.WRITE);
-        }
-        
         if (identifier == null)
         {
             identifier = new NormalNodeUnion<IdentifierNode>(null);
@@ -260,7 +308,7 @@ public class QualifiedClassInstantiationNodeImpl extends ClassInstantiationNodeI
      */
     public TypeArgumentListNode getTypeArguments()
     {
-        getAttribute(LocalAttribute.TYPE_ARGUMENTS).recordAccess(ReadWriteAttribute.AccessType.READ);
+        checkTypeArgumentsWrapped();
         if (this.typeArguments == null)
         {
             return null;
@@ -276,7 +324,7 @@ public class QualifiedClassInstantiationNodeImpl extends ClassInstantiationNodeI
      */
     public NodeUnion<? extends TypeArgumentListNode> getUnionForTypeArguments()
     {
-        getAttribute(LocalAttribute.TYPE_ARGUMENTS).recordAccess(ReadWriteAttribute.AccessType.READ);
+        checkTypeArgumentsWrapped();
         if (this.typeArguments == null)
         {
             this.typeArguments = new NormalNodeUnion<TypeArgumentListNode>(null);
@@ -290,24 +338,8 @@ public class QualifiedClassInstantiationNodeImpl extends ClassInstantiationNodeI
      */
     public void setTypeArguments(TypeArgumentListNode typeArguments)
     {
-            setTypeArguments(typeArguments, true);
-            getManager().notifyChange(this);
-    }
-    
-    private void setTypeArguments(TypeArgumentListNode typeArguments, boolean checkPermissions)
-    {
-        if (checkPermissions)
-        {
-            getManager().assertMutatable(this);
-            getAttribute(LocalAttribute.TYPE_ARGUMENTS).recordAccess(ReadWriteAttribute.AccessType.WRITE);
-        }
-        
-        if (this.typeArguments != null)
-        {
-            setAsChild(this.typeArguments.getNodeValue(), false);
-        }
-        this.typeArguments = new NormalNodeUnion<TypeArgumentListNode>(typeArguments);
-        setAsChild(typeArguments, true);
+        checkTypeArgumentsWrapped();
+        this.setUnionForTypeArguments(new NormalNodeUnion<TypeArgumentListNode>(typeArguments));
     }
     
     /**
@@ -316,18 +348,15 @@ public class QualifiedClassInstantiationNodeImpl extends ClassInstantiationNodeI
      */
     public void setUnionForTypeArguments(NodeUnion<? extends TypeArgumentListNode> typeArguments)
     {
-            setUnionForTypeArguments(typeArguments, true);
-            getManager().notifyChange(this);
+        checkTypeArgumentsWrapped();
+        this.getManager().assertMutatable(this);
+        this.doSetTypeArguments(typeArguments);
+        if (this.getManager().isRecordingEdits())
+            super.recordEdit(new QualifiedClassInstantiationNodeSetTypeArgumentsPropertyEditScriptElementImpl(this.getManager().getCurrentMetaprogramId(), this.getUid(), typeArguments.getNodeValue() == null ? null : typeArguments.getNodeValue().getUid()));
     }
     
-    private void setUnionForTypeArguments(NodeUnion<? extends TypeArgumentListNode> typeArguments, boolean checkPermissions)
+    private void doSetTypeArguments(NodeUnion<? extends TypeArgumentListNode> typeArguments)
     {
-        if (checkPermissions)
-        {
-            getManager().assertMutatable(this);
-            getAttribute(LocalAttribute.TYPE_ARGUMENTS).recordAccess(ReadWriteAttribute.AccessType.WRITE);
-        }
-        
         if (typeArguments == null)
         {
             typeArguments = new NormalNodeUnion<TypeArgumentListNode>(null);
@@ -351,17 +380,17 @@ public class QualifiedClassInstantiationNodeImpl extends ClassInstantiationNodeI
     protected void receiveToChildren(BsjNodeVisitor visitor)
     {
         super.receiveToChildren(visitor);
-        if (this.enclosingExpression.getNodeValue() != null)
+        if (this.getUnionForEnclosingExpression().getNodeValue() != null)
         {
-            this.enclosingExpression.getNodeValue().receive(visitor);
+            this.getUnionForEnclosingExpression().getNodeValue().receive(visitor);
         }
-        if (this.identifier.getNodeValue() != null)
+        if (this.getUnionForIdentifier().getNodeValue() != null)
         {
-            this.identifier.getNodeValue().receive(visitor);
+            this.getUnionForIdentifier().getNodeValue().receive(visitor);
         }
-        if (this.typeArguments.getNodeValue() != null)
+        if (this.getUnionForTypeArguments().getNodeValue() != null)
         {
-            this.typeArguments.getNodeValue().receive(visitor);
+            this.getUnionForTypeArguments().getNodeValue().receive(visitor);
         }
         Iterator<? extends Node> extras = getHiddenVisitorChildren();
         if (extras != null)
@@ -384,17 +413,17 @@ public class QualifiedClassInstantiationNodeImpl extends ClassInstantiationNodeI
     protected void receiveTypedToChildren(BsjTypedNodeVisitor visitor)
     {
         super.receiveTypedToChildren(visitor);
-        if (this.enclosingExpression.getNodeValue() != null)
+        if (this.getUnionForEnclosingExpression().getNodeValue() != null)
         {
-            this.enclosingExpression.getNodeValue().receiveTyped(visitor);
+            this.getUnionForEnclosingExpression().getNodeValue().receiveTyped(visitor);
         }
-        if (this.identifier.getNodeValue() != null)
+        if (this.getUnionForIdentifier().getNodeValue() != null)
         {
-            this.identifier.getNodeValue().receiveTyped(visitor);
+            this.getUnionForIdentifier().getNodeValue().receiveTyped(visitor);
         }
-        if (this.typeArguments.getNodeValue() != null)
+        if (this.getUnionForTypeArguments().getNodeValue() != null)
         {
-            this.typeArguments.getNodeValue().receiveTyped(visitor);
+            this.getUnionForTypeArguments().getNodeValue().receiveTyped(visitor);
         }
         Iterator<? extends Node> extras = getHiddenVisitorChildren();
         if (extras != null)
@@ -455,6 +484,8 @@ public class QualifiedClassInstantiationNodeImpl extends ClassInstantiationNodeI
     {
         StringBuilder sb = new StringBuilder();
         sb.append(this.getClass().getSimpleName());
+        sb.append('#');
+        sb.append(this.getUid());
         sb.append('[');
         sb.append("enclosingExpression=");
         sb.append(this.getUnionForEnclosingExpression().getNodeValue() == null? "null" : this.getUnionForEnclosingExpression().getNodeValue().getClass().getSimpleName());

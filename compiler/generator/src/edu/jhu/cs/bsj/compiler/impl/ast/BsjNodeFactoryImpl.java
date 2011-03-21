@@ -82,6 +82,8 @@ import edu.jhu.cs.bsj.compiler.ast.node.meta.RawCodeLiteralNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.SingleElementMetaAnnotationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.SpliceNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.TypeDeclarationMetaprogramAnchorNode;
+import edu.jhu.cs.bsj.compiler.impl.ast.delta.EditScriptUtilities;
+import edu.jhu.cs.bsj.compiler.impl.ast.delta.create.*;
 import edu.jhu.cs.bsj.compiler.impl.ast.node.*;
 import edu.jhu.cs.bsj.compiler.impl.ast.node.list.AnnotationElementListNodeImpl;
 import edu.jhu.cs.bsj.compiler.impl.ast.node.list.AnnotationListNodeImpl;
@@ -335,6 +337,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             NodeUnion<? extends ReferenceTypeListNode> typeArguments)
     {
         AlternateConstructorInvocationNode ret = new AlternateConstructorInvocationNodeImpl(arguments, typeArguments, startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateAlternateConstructorInvocationNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), arguments == null ? null : (arguments.getNodeValue() == null ? null : arguments.getNodeValue().getUid()), typeArguments == null ? null : (typeArguments.getNodeValue() == null ? null : typeArguments.getNodeValue().getUid()), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -348,6 +354,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             ReferenceTypeListNode typeArguments)
     {
         AlternateConstructorInvocationNode ret = new AlternateConstructorInvocationNodeImpl(this.<ExpressionListNode>makeNormalNodeUnion(arguments), this.<ReferenceTypeListNode>makeNormalNodeUnion(typeArguments), startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateAlternateConstructorInvocationNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), arguments == null ? null : arguments.getUid(), typeArguments == null ? null : typeArguments.getUid(), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -363,6 +373,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             BsjSourceLocation stopLocation)
     {
         AlternateConstructorInvocationNode ret = new AlternateConstructorInvocationNodeImpl(arguments, typeArguments, startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateAlternateConstructorInvocationNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), arguments == null ? null : (arguments.getNodeValue() == null ? null : arguments.getNodeValue().getUid()), typeArguments == null ? null : (typeArguments.getNodeValue() == null ? null : typeArguments.getNodeValue().getUid()), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -378,6 +392,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             BsjSourceLocation stopLocation)
     {
         AlternateConstructorInvocationNode ret = new AlternateConstructorInvocationNodeImpl(this.<ExpressionListNode>makeNormalNodeUnion(arguments), this.<ReferenceTypeListNode>makeNormalNodeUnion(typeArguments), startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateAlternateConstructorInvocationNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), arguments == null ? null : arguments.getUid(), typeArguments == null ? null : typeArguments.getUid(), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -390,6 +408,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             ExpressionListNode arguments)
     {
         AlternateConstructorInvocationNode ret = new AlternateConstructorInvocationNodeImpl(this.<ExpressionListNode>makeNormalNodeUnion(arguments), this.<ReferenceTypeListNode>makeNormalNodeUnion(makeReferenceTypeListNode()), startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateAlternateConstructorInvocationNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), arguments == null ? null : arguments.getUid(), ret.getTypeArguments() == null ? null : ret.getTypeArguments().getUid(), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -404,6 +426,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             BsjSourceLocation stopLocation)
     {
         AlternateConstructorInvocationNode ret = new AlternateConstructorInvocationNodeImpl(this.<ExpressionListNode>makeNormalNodeUnion(arguments), this.<ReferenceTypeListNode>makeNormalNodeUnion(makeReferenceTypeListNode()), startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateAlternateConstructorInvocationNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), arguments == null ? null : arguments.getUid(), ret.getTypeArguments() == null ? null : ret.getTypeArguments().getUid(), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -416,6 +442,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             NodeUnion<? extends AnnotationNode> annotation)
     {
         AnnotationAnnotationValueNode ret = new AnnotationAnnotationValueNodeImpl(annotation, startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateAnnotationAnnotationValueNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), annotation == null ? null : (annotation.getNodeValue() == null ? null : annotation.getNodeValue().getUid()), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -428,6 +458,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             AnnotationNode annotation)
     {
         AnnotationAnnotationValueNode ret = new AnnotationAnnotationValueNodeImpl(this.<AnnotationNode>makeNormalNodeUnion(annotation), startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateAnnotationAnnotationValueNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), annotation == null ? null : annotation.getUid(), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -442,6 +476,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             BsjSourceLocation stopLocation)
     {
         AnnotationAnnotationValueNode ret = new AnnotationAnnotationValueNodeImpl(annotation, startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateAnnotationAnnotationValueNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), annotation == null ? null : (annotation.getNodeValue() == null ? null : annotation.getNodeValue().getUid()), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -456,6 +494,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             BsjSourceLocation stopLocation)
     {
         AnnotationAnnotationValueNode ret = new AnnotationAnnotationValueNodeImpl(this.<AnnotationNode>makeNormalNodeUnion(annotation), startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateAnnotationAnnotationValueNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), annotation == null ? null : annotation.getUid(), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -468,6 +510,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             NodeUnion<? extends AnnotationValueListNode> values)
     {
         AnnotationArrayValueNode ret = new AnnotationArrayValueNodeImpl(values, startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateAnnotationArrayValueNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), values == null ? null : (values.getNodeValue() == null ? null : values.getNodeValue().getUid()), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -480,6 +526,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             AnnotationValueListNode values)
     {
         AnnotationArrayValueNode ret = new AnnotationArrayValueNodeImpl(this.<AnnotationValueListNode>makeNormalNodeUnion(values), startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateAnnotationArrayValueNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), values == null ? null : values.getUid(), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -494,6 +544,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             BsjSourceLocation stopLocation)
     {
         AnnotationArrayValueNode ret = new AnnotationArrayValueNodeImpl(values, startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateAnnotationArrayValueNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), values == null ? null : (values.getNodeValue() == null ? null : values.getNodeValue().getUid()), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -508,6 +562,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             BsjSourceLocation stopLocation)
     {
         AnnotationArrayValueNode ret = new AnnotationArrayValueNodeImpl(this.<AnnotationValueListNode>makeNormalNodeUnion(values), startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateAnnotationArrayValueNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), values == null ? null : values.getUid(), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -520,6 +578,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             NodeUnion<? extends AnnotationMemberListNode> members)
     {
         AnnotationBodyNode ret = new AnnotationBodyNodeImpl(members, startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateAnnotationBodyNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), members == null ? null : (members.getNodeValue() == null ? null : members.getNodeValue().getUid()), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -532,6 +594,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             AnnotationMemberListNode members)
     {
         AnnotationBodyNode ret = new AnnotationBodyNodeImpl(this.<AnnotationMemberListNode>makeNormalNodeUnion(members), startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateAnnotationBodyNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), members == null ? null : members.getUid(), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -546,6 +612,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             BsjSourceLocation stopLocation)
     {
         AnnotationBodyNode ret = new AnnotationBodyNodeImpl(members, startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateAnnotationBodyNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), members == null ? null : (members.getNodeValue() == null ? null : members.getNodeValue().getUid()), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -560,6 +630,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             BsjSourceLocation stopLocation)
     {
         AnnotationBodyNode ret = new AnnotationBodyNodeImpl(this.<AnnotationMemberListNode>makeNormalNodeUnion(members), startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateAnnotationBodyNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), members == null ? null : members.getUid(), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -575,6 +649,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             NodeUnion<? extends JavadocNode> javadoc)
     {
         AnnotationDeclarationNode ret = new AnnotationDeclarationNodeImpl(modifiers, body, identifier, javadoc, startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateAnnotationDeclarationNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), modifiers == null ? null : (modifiers.getNodeValue() == null ? null : modifiers.getNodeValue().getUid()), body == null ? null : (body.getNodeValue() == null ? null : body.getNodeValue().getUid()), identifier == null ? null : (identifier.getNodeValue() == null ? null : identifier.getNodeValue().getUid()), javadoc == null ? null : (javadoc.getNodeValue() == null ? null : javadoc.getNodeValue().getUid()), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -590,6 +668,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             JavadocNode javadoc)
     {
         AnnotationDeclarationNode ret = new AnnotationDeclarationNodeImpl(this.<AnnotationModifiersNode>makeNormalNodeUnion(modifiers), this.<AnnotationBodyNode>makeNormalNodeUnion(body), this.<IdentifierNode>makeNormalNodeUnion(identifier), this.<JavadocNode>makeNormalNodeUnion(javadoc), startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateAnnotationDeclarationNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), modifiers == null ? null : modifiers.getUid(), body == null ? null : body.getUid(), identifier == null ? null : identifier.getUid(), javadoc == null ? null : javadoc.getUid(), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -607,6 +689,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             BsjSourceLocation stopLocation)
     {
         AnnotationDeclarationNode ret = new AnnotationDeclarationNodeImpl(modifiers, body, identifier, javadoc, startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateAnnotationDeclarationNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), modifiers == null ? null : (modifiers.getNodeValue() == null ? null : modifiers.getNodeValue().getUid()), body == null ? null : (body.getNodeValue() == null ? null : body.getNodeValue().getUid()), identifier == null ? null : (identifier.getNodeValue() == null ? null : identifier.getNodeValue().getUid()), javadoc == null ? null : (javadoc.getNodeValue() == null ? null : javadoc.getNodeValue().getUid()), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -624,6 +710,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             BsjSourceLocation stopLocation)
     {
         AnnotationDeclarationNode ret = new AnnotationDeclarationNodeImpl(this.<AnnotationModifiersNode>makeNormalNodeUnion(modifiers), this.<AnnotationBodyNode>makeNormalNodeUnion(body), this.<IdentifierNode>makeNormalNodeUnion(identifier), this.<JavadocNode>makeNormalNodeUnion(javadoc), startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateAnnotationDeclarationNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), modifiers == null ? null : modifiers.getUid(), body == null ? null : body.getUid(), identifier == null ? null : identifier.getUid(), javadoc == null ? null : javadoc.getUid(), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -636,6 +726,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             List<NodeUnion<? extends AnnotationElementNode>> children)
     {
         AnnotationElementListNode ret = new AnnotationElementListNodeImpl(children, startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateAnnotationElementListNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), EditScriptUtilities.getNodeUnionUids(children), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -648,6 +742,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             List<AnnotationElementNode> children)
     {
         AnnotationElementListNode ret = new AnnotationElementListNodeImpl(unionWrapList(children), startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateAnnotationElementListNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), EditScriptUtilities.getNodeUids(children), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -674,6 +772,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             BsjSourceLocation stopLocation)
     {
         AnnotationElementListNode ret = new AnnotationElementListNodeImpl(children, startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateAnnotationElementListNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), EditScriptUtilities.getNodeUnionUids(children), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -688,6 +790,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             BsjSourceLocation stopLocation)
     {
         AnnotationElementListNode ret = new AnnotationElementListNodeImpl(unionWrapList(children), startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateAnnotationElementListNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), EditScriptUtilities.getNodeUids(children), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -715,6 +821,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             NodeUnion<? extends AnnotationValueNode> value)
     {
         AnnotationElementNode ret = new AnnotationElementNodeImpl(identifier, value, startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateAnnotationElementNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), identifier == null ? null : (identifier.getNodeValue() == null ? null : identifier.getNodeValue().getUid()), value == null ? null : (value.getNodeValue() == null ? null : value.getNodeValue().getUid()), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -728,6 +838,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             AnnotationValueNode value)
     {
         AnnotationElementNode ret = new AnnotationElementNodeImpl(this.<IdentifierNode>makeNormalNodeUnion(identifier), this.<AnnotationValueNode>makeNormalNodeUnion(value), startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateAnnotationElementNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), identifier == null ? null : identifier.getUid(), value == null ? null : value.getUid(), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -743,6 +857,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             BsjSourceLocation stopLocation)
     {
         AnnotationElementNode ret = new AnnotationElementNodeImpl(identifier, value, startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateAnnotationElementNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), identifier == null ? null : (identifier.getNodeValue() == null ? null : identifier.getNodeValue().getUid()), value == null ? null : (value.getNodeValue() == null ? null : value.getNodeValue().getUid()), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -758,6 +876,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             BsjSourceLocation stopLocation)
     {
         AnnotationElementNode ret = new AnnotationElementNodeImpl(this.<IdentifierNode>makeNormalNodeUnion(identifier), this.<AnnotationValueNode>makeNormalNodeUnion(value), startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateAnnotationElementNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), identifier == null ? null : identifier.getUid(), value == null ? null : value.getUid(), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -770,6 +892,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             NodeUnion<? extends NonAssignmentExpressionNode> expression)
     {
         AnnotationExpressionValueNode ret = new AnnotationExpressionValueNodeImpl(expression, startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateAnnotationExpressionValueNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), expression == null ? null : (expression.getNodeValue() == null ? null : expression.getNodeValue().getUid()), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -782,6 +908,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             NonAssignmentExpressionNode expression)
     {
         AnnotationExpressionValueNode ret = new AnnotationExpressionValueNodeImpl(this.<NonAssignmentExpressionNode>makeNormalNodeUnion(expression), startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateAnnotationExpressionValueNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), expression == null ? null : expression.getUid(), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -796,6 +926,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             BsjSourceLocation stopLocation)
     {
         AnnotationExpressionValueNode ret = new AnnotationExpressionValueNodeImpl(expression, startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateAnnotationExpressionValueNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), expression == null ? null : (expression.getNodeValue() == null ? null : expression.getNodeValue().getUid()), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -810,6 +944,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             BsjSourceLocation stopLocation)
     {
         AnnotationExpressionValueNode ret = new AnnotationExpressionValueNodeImpl(this.<NonAssignmentExpressionNode>makeNormalNodeUnion(expression), startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateAnnotationExpressionValueNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), expression == null ? null : expression.getUid(), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -822,6 +960,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             List<NodeUnion<? extends AnnotationNode>> children)
     {
         AnnotationListNode ret = new AnnotationListNodeImpl(children, startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateAnnotationListNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), EditScriptUtilities.getNodeUnionUids(children), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -834,6 +976,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             List<AnnotationNode> children)
     {
         AnnotationListNode ret = new AnnotationListNodeImpl(unionWrapList(children), startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateAnnotationListNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), EditScriptUtilities.getNodeUids(children), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -860,6 +1006,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             BsjSourceLocation stopLocation)
     {
         AnnotationListNode ret = new AnnotationListNodeImpl(children, startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateAnnotationListNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), EditScriptUtilities.getNodeUnionUids(children), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -874,6 +1024,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             BsjSourceLocation stopLocation)
     {
         AnnotationListNode ret = new AnnotationListNodeImpl(unionWrapList(children), startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateAnnotationListNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), EditScriptUtilities.getNodeUids(children), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -900,6 +1054,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             List<NodeUnion<? extends AnnotationMemberNode>> children)
     {
         AnnotationMemberListNode ret = new AnnotationMemberListNodeImpl(children, startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateAnnotationMemberListNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), EditScriptUtilities.getNodeUnionUids(children), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -912,6 +1070,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             List<AnnotationMemberNode> children)
     {
         AnnotationMemberListNode ret = new AnnotationMemberListNodeImpl(unionWrapList(children), startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateAnnotationMemberListNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), EditScriptUtilities.getNodeUids(children), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -938,6 +1100,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             BsjSourceLocation stopLocation)
     {
         AnnotationMemberListNode ret = new AnnotationMemberListNodeImpl(children, startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateAnnotationMemberListNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), EditScriptUtilities.getNodeUnionUids(children), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -952,6 +1118,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             BsjSourceLocation stopLocation)
     {
         AnnotationMemberListNode ret = new AnnotationMemberListNodeImpl(unionWrapList(children), startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateAnnotationMemberListNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), EditScriptUtilities.getNodeUids(children), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -978,6 +1148,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             NodeUnion<? extends MetaprogramNode> metaprogram)
     {
         AnnotationMemberMetaprogramAnchorNode ret = new AnnotationMemberMetaprogramAnchorNodeImpl(metaprogram, startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateAnnotationMemberMetaprogramAnchorNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), metaprogram == null ? null : (metaprogram.getNodeValue() == null ? null : metaprogram.getNodeValue().getUid()), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -990,6 +1164,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             MetaprogramNode metaprogram)
     {
         AnnotationMemberMetaprogramAnchorNode ret = new AnnotationMemberMetaprogramAnchorNodeImpl(this.<MetaprogramNode>makeNormalNodeUnion(metaprogram), startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateAnnotationMemberMetaprogramAnchorNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), metaprogram == null ? null : metaprogram.getUid(), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -1004,6 +1182,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             BsjSourceLocation stopLocation)
     {
         AnnotationMemberMetaprogramAnchorNode ret = new AnnotationMemberMetaprogramAnchorNodeImpl(metaprogram, startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateAnnotationMemberMetaprogramAnchorNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), metaprogram == null ? null : (metaprogram.getNodeValue() == null ? null : metaprogram.getNodeValue().getUid()), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -1018,6 +1200,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             BsjSourceLocation stopLocation)
     {
         AnnotationMemberMetaprogramAnchorNode ret = new AnnotationMemberMetaprogramAnchorNodeImpl(this.<MetaprogramNode>makeNormalNodeUnion(metaprogram), startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateAnnotationMemberMetaprogramAnchorNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), metaprogram == null ? null : metaprogram.getUid(), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -1034,6 +1220,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             NodeUnion<? extends JavadocNode> javadoc)
     {
         AnnotationMethodDeclarationNode ret = new AnnotationMethodDeclarationNodeImpl(modifiers, type, identifier, defaultValue, javadoc, startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateAnnotationMethodDeclarationNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), modifiers == null ? null : (modifiers.getNodeValue() == null ? null : modifiers.getNodeValue().getUid()), type == null ? null : (type.getNodeValue() == null ? null : type.getNodeValue().getUid()), identifier == null ? null : (identifier.getNodeValue() == null ? null : identifier.getNodeValue().getUid()), defaultValue == null ? null : (defaultValue.getNodeValue() == null ? null : defaultValue.getNodeValue().getUid()), javadoc == null ? null : (javadoc.getNodeValue() == null ? null : javadoc.getNodeValue().getUid()), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -1050,6 +1240,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             JavadocNode javadoc)
     {
         AnnotationMethodDeclarationNode ret = new AnnotationMethodDeclarationNodeImpl(this.<AnnotationMethodModifiersNode>makeNormalNodeUnion(modifiers), this.<TypeNode>makeNormalNodeUnion(type), this.<IdentifierNode>makeNormalNodeUnion(identifier), this.<AnnotationValueNode>makeNormalNodeUnion(defaultValue), this.<JavadocNode>makeNormalNodeUnion(javadoc), startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateAnnotationMethodDeclarationNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), modifiers == null ? null : modifiers.getUid(), type == null ? null : type.getUid(), identifier == null ? null : identifier.getUid(), defaultValue == null ? null : defaultValue.getUid(), javadoc == null ? null : javadoc.getUid(), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -1068,6 +1262,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             BsjSourceLocation stopLocation)
     {
         AnnotationMethodDeclarationNode ret = new AnnotationMethodDeclarationNodeImpl(modifiers, type, identifier, defaultValue, javadoc, startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateAnnotationMethodDeclarationNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), modifiers == null ? null : (modifiers.getNodeValue() == null ? null : modifiers.getNodeValue().getUid()), type == null ? null : (type.getNodeValue() == null ? null : type.getNodeValue().getUid()), identifier == null ? null : (identifier.getNodeValue() == null ? null : identifier.getNodeValue().getUid()), defaultValue == null ? null : (defaultValue.getNodeValue() == null ? null : defaultValue.getNodeValue().getUid()), javadoc == null ? null : (javadoc.getNodeValue() == null ? null : javadoc.getNodeValue().getUid()), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -1086,6 +1284,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             BsjSourceLocation stopLocation)
     {
         AnnotationMethodDeclarationNode ret = new AnnotationMethodDeclarationNodeImpl(this.<AnnotationMethodModifiersNode>makeNormalNodeUnion(modifiers), this.<TypeNode>makeNormalNodeUnion(type), this.<IdentifierNode>makeNormalNodeUnion(identifier), this.<AnnotationValueNode>makeNormalNodeUnion(defaultValue), this.<JavadocNode>makeNormalNodeUnion(javadoc), startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateAnnotationMethodDeclarationNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), modifiers == null ? null : modifiers.getUid(), type == null ? null : type.getUid(), identifier == null ? null : identifier.getUid(), defaultValue == null ? null : defaultValue.getUid(), javadoc == null ? null : javadoc.getUid(), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -1099,6 +1301,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             NodeUnion<? extends AnnotationListNode> annotations)
     {
         AnnotationMethodModifiersNode ret = new AnnotationMethodModifiersNodeImpl(metaAnnotations, annotations, startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateAnnotationMethodModifiersNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), metaAnnotations == null ? null : (metaAnnotations.getNodeValue() == null ? null : metaAnnotations.getNodeValue().getUid()), annotations == null ? null : (annotations.getNodeValue() == null ? null : annotations.getNodeValue().getUid()), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -1112,6 +1318,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             AnnotationListNode annotations)
     {
         AnnotationMethodModifiersNode ret = new AnnotationMethodModifiersNodeImpl(this.<MetaAnnotationListNode>makeNormalNodeUnion(metaAnnotations), this.<AnnotationListNode>makeNormalNodeUnion(annotations), startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateAnnotationMethodModifiersNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), metaAnnotations == null ? null : metaAnnotations.getUid(), annotations == null ? null : annotations.getUid(), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -1127,6 +1337,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             BsjSourceLocation stopLocation)
     {
         AnnotationMethodModifiersNode ret = new AnnotationMethodModifiersNodeImpl(metaAnnotations, annotations, startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateAnnotationMethodModifiersNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), metaAnnotations == null ? null : (metaAnnotations.getNodeValue() == null ? null : metaAnnotations.getNodeValue().getUid()), annotations == null ? null : (annotations.getNodeValue() == null ? null : annotations.getNodeValue().getUid()), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -1142,6 +1356,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             BsjSourceLocation stopLocation)
     {
         AnnotationMethodModifiersNode ret = new AnnotationMethodModifiersNodeImpl(this.<MetaAnnotationListNode>makeNormalNodeUnion(metaAnnotations), this.<AnnotationListNode>makeNormalNodeUnion(annotations), startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateAnnotationMethodModifiersNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), metaAnnotations == null ? null : metaAnnotations.getUid(), annotations == null ? null : annotations.getUid(), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -1158,6 +1376,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             NodeUnion<? extends AnnotationListNode> annotations)
     {
         AnnotationModifiersNode ret = new AnnotationModifiersNodeImpl(access, staticFlag, strictfpFlag, metaAnnotations, annotations, startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateAnnotationModifiersNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), access, staticFlag, strictfpFlag, metaAnnotations == null ? null : (metaAnnotations.getNodeValue() == null ? null : metaAnnotations.getNodeValue().getUid()), annotations == null ? null : (annotations.getNodeValue() == null ? null : annotations.getNodeValue().getUid()), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -1174,6 +1396,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             AnnotationListNode annotations)
     {
         AnnotationModifiersNode ret = new AnnotationModifiersNodeImpl(access, staticFlag, strictfpFlag, this.<MetaAnnotationListNode>makeNormalNodeUnion(metaAnnotations), this.<AnnotationListNode>makeNormalNodeUnion(annotations), startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateAnnotationModifiersNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), access, staticFlag, strictfpFlag, metaAnnotations == null ? null : metaAnnotations.getUid(), annotations == null ? null : annotations.getUid(), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -1192,6 +1418,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             BsjSourceLocation stopLocation)
     {
         AnnotationModifiersNode ret = new AnnotationModifiersNodeImpl(access, staticFlag, strictfpFlag, metaAnnotations, annotations, startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateAnnotationModifiersNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), access, staticFlag, strictfpFlag, metaAnnotations == null ? null : (metaAnnotations.getNodeValue() == null ? null : metaAnnotations.getNodeValue().getUid()), annotations == null ? null : (annotations.getNodeValue() == null ? null : annotations.getNodeValue().getUid()), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -1210,6 +1440,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             BsjSourceLocation stopLocation)
     {
         AnnotationModifiersNode ret = new AnnotationModifiersNodeImpl(access, staticFlag, strictfpFlag, this.<MetaAnnotationListNode>makeNormalNodeUnion(metaAnnotations), this.<AnnotationListNode>makeNormalNodeUnion(annotations), startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateAnnotationModifiersNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), access, staticFlag, strictfpFlag, metaAnnotations == null ? null : metaAnnotations.getUid(), annotations == null ? null : annotations.getUid(), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -1222,6 +1456,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             AccessModifier access)
     {
         AnnotationModifiersNode ret = new AnnotationModifiersNodeImpl(access, false, false, this.<MetaAnnotationListNode>makeNormalNodeUnion(makeMetaAnnotationListNode()), this.<AnnotationListNode>makeNormalNodeUnion(makeAnnotationListNode()), startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateAnnotationModifiersNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), access, ret.getStaticFlag(), ret.getStrictfpFlag(), ret.getMetaAnnotations() == null ? null : ret.getMetaAnnotations().getUid(), ret.getAnnotations() == null ? null : ret.getAnnotations().getUid(), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -1236,6 +1474,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             BsjSourceLocation stopLocation)
     {
         AnnotationModifiersNode ret = new AnnotationModifiersNodeImpl(access, false, false, this.<MetaAnnotationListNode>makeNormalNodeUnion(makeMetaAnnotationListNode()), this.<AnnotationListNode>makeNormalNodeUnion(makeAnnotationListNode()), startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateAnnotationModifiersNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), access, ret.getStaticFlag(), ret.getStrictfpFlag(), ret.getMetaAnnotations() == null ? null : ret.getMetaAnnotations().getUid(), ret.getAnnotations() == null ? null : ret.getAnnotations().getUid(), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -1248,6 +1490,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             List<NodeUnion<? extends AnnotationValueNode>> children)
     {
         AnnotationValueListNode ret = new AnnotationValueListNodeImpl(children, startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateAnnotationValueListNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), EditScriptUtilities.getNodeUnionUids(children), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -1260,6 +1506,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             List<AnnotationValueNode> children)
     {
         AnnotationValueListNode ret = new AnnotationValueListNodeImpl(unionWrapList(children), startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateAnnotationValueListNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), EditScriptUtilities.getNodeUids(children), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -1286,6 +1536,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             BsjSourceLocation stopLocation)
     {
         AnnotationValueListNode ret = new AnnotationValueListNodeImpl(children, startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateAnnotationValueListNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), EditScriptUtilities.getNodeUnionUids(children), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -1300,6 +1554,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             BsjSourceLocation stopLocation)
     {
         AnnotationValueListNode ret = new AnnotationValueListNodeImpl(unionWrapList(children), startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateAnnotationValueListNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), EditScriptUtilities.getNodeUids(children), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -1326,6 +1584,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             NodeUnion<? extends AnonymousClassMemberListNode> members)
     {
         AnonymousClassBodyNode ret = new AnonymousClassBodyNodeImpl(members, startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateAnonymousClassBodyNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), members == null ? null : (members.getNodeValue() == null ? null : members.getNodeValue().getUid()), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -1338,6 +1600,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             AnonymousClassMemberListNode members)
     {
         AnonymousClassBodyNode ret = new AnonymousClassBodyNodeImpl(this.<AnonymousClassMemberListNode>makeNormalNodeUnion(members), startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateAnonymousClassBodyNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), members == null ? null : members.getUid(), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -1352,6 +1618,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             BsjSourceLocation stopLocation)
     {
         AnonymousClassBodyNode ret = new AnonymousClassBodyNodeImpl(members, startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateAnonymousClassBodyNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), members == null ? null : (members.getNodeValue() == null ? null : members.getNodeValue().getUid()), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -1366,6 +1636,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             BsjSourceLocation stopLocation)
     {
         AnonymousClassBodyNode ret = new AnonymousClassBodyNodeImpl(this.<AnonymousClassMemberListNode>makeNormalNodeUnion(members), startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateAnonymousClassBodyNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), members == null ? null : members.getUid(), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -1378,6 +1652,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             List<NodeUnion<? extends AnonymousClassMemberNode>> children)
     {
         AnonymousClassMemberListNode ret = new AnonymousClassMemberListNodeImpl(children, startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateAnonymousClassMemberListNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), EditScriptUtilities.getNodeUnionUids(children), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -1390,6 +1668,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             List<AnonymousClassMemberNode> children)
     {
         AnonymousClassMemberListNode ret = new AnonymousClassMemberListNodeImpl(unionWrapList(children), startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateAnonymousClassMemberListNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), EditScriptUtilities.getNodeUids(children), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -1416,6 +1698,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             BsjSourceLocation stopLocation)
     {
         AnonymousClassMemberListNode ret = new AnonymousClassMemberListNodeImpl(children, startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateAnonymousClassMemberListNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), EditScriptUtilities.getNodeUnionUids(children), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -1430,6 +1716,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             BsjSourceLocation stopLocation)
     {
         AnonymousClassMemberListNode ret = new AnonymousClassMemberListNodeImpl(unionWrapList(children), startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateAnonymousClassMemberListNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), EditScriptUtilities.getNodeUids(children), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -1456,6 +1746,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             NodeUnion<? extends MetaprogramNode> metaprogram)
     {
         AnonymousClassMemberMetaprogramAnchorNode ret = new AnonymousClassMemberMetaprogramAnchorNodeImpl(metaprogram, startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateAnonymousClassMemberMetaprogramAnchorNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), metaprogram == null ? null : (metaprogram.getNodeValue() == null ? null : metaprogram.getNodeValue().getUid()), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -1468,6 +1762,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             MetaprogramNode metaprogram)
     {
         AnonymousClassMemberMetaprogramAnchorNode ret = new AnonymousClassMemberMetaprogramAnchorNodeImpl(this.<MetaprogramNode>makeNormalNodeUnion(metaprogram), startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateAnonymousClassMemberMetaprogramAnchorNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), metaprogram == null ? null : metaprogram.getUid(), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -1482,6 +1780,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             BsjSourceLocation stopLocation)
     {
         AnonymousClassMemberMetaprogramAnchorNode ret = new AnonymousClassMemberMetaprogramAnchorNodeImpl(metaprogram, startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateAnonymousClassMemberMetaprogramAnchorNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), metaprogram == null ? null : (metaprogram.getNodeValue() == null ? null : metaprogram.getNodeValue().getUid()), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -1496,6 +1798,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             BsjSourceLocation stopLocation)
     {
         AnonymousClassMemberMetaprogramAnchorNode ret = new AnonymousClassMemberMetaprogramAnchorNodeImpl(this.<MetaprogramNode>makeNormalNodeUnion(metaprogram), startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateAnonymousClassMemberMetaprogramAnchorNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), metaprogram == null ? null : metaprogram.getUid(), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -1509,6 +1815,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             NodeUnion<? extends ExpressionNode> indexExpression)
     {
         ArrayAccessNode ret = new ArrayAccessNodeImpl(arrayExpression, indexExpression, startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateArrayAccessNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), arrayExpression == null ? null : (arrayExpression.getNodeValue() == null ? null : arrayExpression.getNodeValue().getUid()), indexExpression == null ? null : (indexExpression.getNodeValue() == null ? null : indexExpression.getNodeValue().getUid()), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -1522,6 +1832,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             ExpressionNode indexExpression)
     {
         ArrayAccessNode ret = new ArrayAccessNodeImpl(this.<RestrictedPrimaryExpressionNode>makeNormalNodeUnion(arrayExpression), this.<ExpressionNode>makeNormalNodeUnion(indexExpression), startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateArrayAccessNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), arrayExpression == null ? null : arrayExpression.getUid(), indexExpression == null ? null : indexExpression.getUid(), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -1537,6 +1851,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             BsjSourceLocation stopLocation)
     {
         ArrayAccessNode ret = new ArrayAccessNodeImpl(arrayExpression, indexExpression, startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateArrayAccessNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), arrayExpression == null ? null : (arrayExpression.getNodeValue() == null ? null : arrayExpression.getNodeValue().getUid()), indexExpression == null ? null : (indexExpression.getNodeValue() == null ? null : indexExpression.getNodeValue().getUid()), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -1552,6 +1870,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             BsjSourceLocation stopLocation)
     {
         ArrayAccessNode ret = new ArrayAccessNodeImpl(this.<RestrictedPrimaryExpressionNode>makeNormalNodeUnion(arrayExpression), this.<ExpressionNode>makeNormalNodeUnion(indexExpression), startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateArrayAccessNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), arrayExpression == null ? null : arrayExpression.getUid(), indexExpression == null ? null : indexExpression.getUid(), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -1566,6 +1888,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             int arrayLevels)
     {
         ArrayInitializerCreationNode ret = new ArrayInitializerCreationNodeImpl(initializer, baseType, arrayLevels, startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateArrayInitializerCreationNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), initializer == null ? null : (initializer.getNodeValue() == null ? null : initializer.getNodeValue().getUid()), baseType == null ? null : (baseType.getNodeValue() == null ? null : baseType.getNodeValue().getUid()), arrayLevels, startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -1580,6 +1906,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             int arrayLevels)
     {
         ArrayInitializerCreationNode ret = new ArrayInitializerCreationNodeImpl(this.<ArrayInitializerNode>makeNormalNodeUnion(initializer), this.<BaseTypeNode>makeNormalNodeUnion(baseType), arrayLevels, startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateArrayInitializerCreationNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), initializer == null ? null : initializer.getUid(), baseType == null ? null : baseType.getUid(), arrayLevels, startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -1596,6 +1926,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             BsjSourceLocation stopLocation)
     {
         ArrayInitializerCreationNode ret = new ArrayInitializerCreationNodeImpl(initializer, baseType, arrayLevels, startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateArrayInitializerCreationNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), initializer == null ? null : (initializer.getNodeValue() == null ? null : initializer.getNodeValue().getUid()), baseType == null ? null : (baseType.getNodeValue() == null ? null : baseType.getNodeValue().getUid()), arrayLevels, startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -1612,6 +1946,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             BsjSourceLocation stopLocation)
     {
         ArrayInitializerCreationNode ret = new ArrayInitializerCreationNodeImpl(this.<ArrayInitializerNode>makeNormalNodeUnion(initializer), this.<BaseTypeNode>makeNormalNodeUnion(baseType), arrayLevels, startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateArrayInitializerCreationNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), initializer == null ? null : initializer.getUid(), baseType == null ? null : baseType.getUid(), arrayLevels, startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -1624,6 +1962,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             NodeUnion<? extends VariableInitializerListNode> initializers)
     {
         ArrayInitializerNode ret = new ArrayInitializerNodeImpl(initializers, startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateArrayInitializerNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), initializers == null ? null : (initializers.getNodeValue() == null ? null : initializers.getNodeValue().getUid()), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -1636,6 +1978,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             VariableInitializerListNode initializers)
     {
         ArrayInitializerNode ret = new ArrayInitializerNodeImpl(this.<VariableInitializerListNode>makeNormalNodeUnion(initializers), startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateArrayInitializerNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), initializers == null ? null : initializers.getUid(), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -1650,6 +1996,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             BsjSourceLocation stopLocation)
     {
         ArrayInitializerNode ret = new ArrayInitializerNodeImpl(initializers, startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateArrayInitializerNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), initializers == null ? null : (initializers.getNodeValue() == null ? null : initializers.getNodeValue().getUid()), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -1664,6 +2014,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             BsjSourceLocation stopLocation)
     {
         ArrayInitializerNode ret = new ArrayInitializerNodeImpl(this.<VariableInitializerListNode>makeNormalNodeUnion(initializers), startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateArrayInitializerNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), initializers == null ? null : initializers.getUid(), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -1678,6 +2032,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             int arrayLevels)
     {
         ArrayInstantiatorCreationNode ret = new ArrayInstantiatorCreationNodeImpl(dimExpressions, baseType, arrayLevels, startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateArrayInstantiatorCreationNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), dimExpressions == null ? null : (dimExpressions.getNodeValue() == null ? null : dimExpressions.getNodeValue().getUid()), baseType == null ? null : (baseType.getNodeValue() == null ? null : baseType.getNodeValue().getUid()), arrayLevels, startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -1692,6 +2050,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             int arrayLevels)
     {
         ArrayInstantiatorCreationNode ret = new ArrayInstantiatorCreationNodeImpl(this.<ExpressionListNode>makeNormalNodeUnion(dimExpressions), this.<BaseTypeNode>makeNormalNodeUnion(baseType), arrayLevels, startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateArrayInstantiatorCreationNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), dimExpressions == null ? null : dimExpressions.getUid(), baseType == null ? null : baseType.getUid(), arrayLevels, startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -1708,6 +2070,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             BsjSourceLocation stopLocation)
     {
         ArrayInstantiatorCreationNode ret = new ArrayInstantiatorCreationNodeImpl(dimExpressions, baseType, arrayLevels, startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateArrayInstantiatorCreationNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), dimExpressions == null ? null : (dimExpressions.getNodeValue() == null ? null : dimExpressions.getNodeValue().getUid()), baseType == null ? null : (baseType.getNodeValue() == null ? null : baseType.getNodeValue().getUid()), arrayLevels, startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -1724,6 +2090,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             BsjSourceLocation stopLocation)
     {
         ArrayInstantiatorCreationNode ret = new ArrayInstantiatorCreationNodeImpl(this.<ExpressionListNode>makeNormalNodeUnion(dimExpressions), this.<BaseTypeNode>makeNormalNodeUnion(baseType), arrayLevels, startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateArrayInstantiatorCreationNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), dimExpressions == null ? null : dimExpressions.getUid(), baseType == null ? null : baseType.getUid(), arrayLevels, startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -1736,6 +2106,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             NodeUnion<? extends TypeNode> type)
     {
         ArrayTypeNode ret = new ArrayTypeNodeImpl(type, startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateArrayTypeNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), type == null ? null : (type.getNodeValue() == null ? null : type.getNodeValue().getUid()), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -1748,6 +2122,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             TypeNode type)
     {
         ArrayTypeNode ret = new ArrayTypeNodeImpl(this.<TypeNode>makeNormalNodeUnion(type), startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateArrayTypeNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), type == null ? null : type.getUid(), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -1762,6 +2140,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             BsjSourceLocation stopLocation)
     {
         ArrayTypeNode ret = new ArrayTypeNodeImpl(type, startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateArrayTypeNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), type == null ? null : (type.getNodeValue() == null ? null : type.getNodeValue().getUid()), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -1776,6 +2158,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             BsjSourceLocation stopLocation)
     {
         ArrayTypeNode ret = new ArrayTypeNodeImpl(this.<TypeNode>makeNormalNodeUnion(type), startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateArrayTypeNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), type == null ? null : type.getUid(), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -1790,6 +2176,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             NodeUnion<? extends MetaAnnotationListNode> metaAnnotations)
     {
         AssertStatementNode ret = new AssertStatementNodeImpl(testExpression, messageExpression, metaAnnotations, startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateAssertStatementNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), testExpression == null ? null : (testExpression.getNodeValue() == null ? null : testExpression.getNodeValue().getUid()), messageExpression == null ? null : (messageExpression.getNodeValue() == null ? null : messageExpression.getNodeValue().getUid()), metaAnnotations == null ? null : (metaAnnotations.getNodeValue() == null ? null : metaAnnotations.getNodeValue().getUid()), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -1804,6 +2194,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             MetaAnnotationListNode metaAnnotations)
     {
         AssertStatementNode ret = new AssertStatementNodeImpl(this.<ExpressionNode>makeNormalNodeUnion(testExpression), this.<ExpressionNode>makeNormalNodeUnion(messageExpression), this.<MetaAnnotationListNode>makeNormalNodeUnion(metaAnnotations), startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateAssertStatementNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), testExpression == null ? null : testExpression.getUid(), messageExpression == null ? null : messageExpression.getUid(), metaAnnotations == null ? null : metaAnnotations.getUid(), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -1820,6 +2214,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             BsjSourceLocation stopLocation)
     {
         AssertStatementNode ret = new AssertStatementNodeImpl(testExpression, messageExpression, metaAnnotations, startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateAssertStatementNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), testExpression == null ? null : (testExpression.getNodeValue() == null ? null : testExpression.getNodeValue().getUid()), messageExpression == null ? null : (messageExpression.getNodeValue() == null ? null : messageExpression.getNodeValue().getUid()), metaAnnotations == null ? null : (metaAnnotations.getNodeValue() == null ? null : metaAnnotations.getNodeValue().getUid()), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -1836,6 +2234,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             BsjSourceLocation stopLocation)
     {
         AssertStatementNode ret = new AssertStatementNodeImpl(this.<ExpressionNode>makeNormalNodeUnion(testExpression), this.<ExpressionNode>makeNormalNodeUnion(messageExpression), this.<MetaAnnotationListNode>makeNormalNodeUnion(metaAnnotations), startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateAssertStatementNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), testExpression == null ? null : testExpression.getUid(), messageExpression == null ? null : messageExpression.getUid(), metaAnnotations == null ? null : metaAnnotations.getUid(), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -1848,6 +2250,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             ExpressionNode testExpression)
     {
         AssertStatementNode ret = new AssertStatementNodeImpl(this.<ExpressionNode>makeNormalNodeUnion(testExpression), this.<ExpressionNode>makeNormalNodeUnion(null), this.<MetaAnnotationListNode>makeNormalNodeUnion(makeMetaAnnotationListNode()), startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateAssertStatementNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), testExpression == null ? null : testExpression.getUid(), ret.getMessageExpression() == null ? null : ret.getMessageExpression().getUid(), ret.getMetaAnnotations() == null ? null : ret.getMetaAnnotations().getUid(), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -1862,6 +2268,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             BsjSourceLocation stopLocation)
     {
         AssertStatementNode ret = new AssertStatementNodeImpl(this.<ExpressionNode>makeNormalNodeUnion(testExpression), this.<ExpressionNode>makeNormalNodeUnion(null), this.<MetaAnnotationListNode>makeNormalNodeUnion(makeMetaAnnotationListNode()), startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateAssertStatementNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), testExpression == null ? null : testExpression.getUid(), ret.getMessageExpression() == null ? null : ret.getMessageExpression().getUid(), ret.getMetaAnnotations() == null ? null : ret.getMetaAnnotations().getUid(), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -1875,6 +2285,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             ExpressionNode messageExpression)
     {
         AssertStatementNode ret = new AssertStatementNodeImpl(this.<ExpressionNode>makeNormalNodeUnion(testExpression), this.<ExpressionNode>makeNormalNodeUnion(messageExpression), this.<MetaAnnotationListNode>makeNormalNodeUnion(makeMetaAnnotationListNode()), startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateAssertStatementNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), testExpression == null ? null : testExpression.getUid(), messageExpression == null ? null : messageExpression.getUid(), ret.getMetaAnnotations() == null ? null : ret.getMetaAnnotations().getUid(), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -1890,6 +2304,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             BsjSourceLocation stopLocation)
     {
         AssertStatementNode ret = new AssertStatementNodeImpl(this.<ExpressionNode>makeNormalNodeUnion(testExpression), this.<ExpressionNode>makeNormalNodeUnion(messageExpression), this.<MetaAnnotationListNode>makeNormalNodeUnion(makeMetaAnnotationListNode()), startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateAssertStatementNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), testExpression == null ? null : testExpression.getUid(), messageExpression == null ? null : messageExpression.getUid(), ret.getMetaAnnotations() == null ? null : ret.getMetaAnnotations().getUid(), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -1904,6 +2322,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             NodeUnion<? extends ExpressionNode> expression)
     {
         AssignmentNode ret = new AssignmentNodeImpl(variable, operator, expression, startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateAssignmentNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), variable == null ? null : (variable.getNodeValue() == null ? null : variable.getNodeValue().getUid()), operator, expression == null ? null : (expression.getNodeValue() == null ? null : expression.getNodeValue().getUid()), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -1918,6 +2340,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             ExpressionNode expression)
     {
         AssignmentNode ret = new AssignmentNodeImpl(this.<ExpressionNode>makeNormalNodeUnion(variable), operator, this.<ExpressionNode>makeNormalNodeUnion(expression), startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateAssignmentNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), variable == null ? null : variable.getUid(), operator, expression == null ? null : expression.getUid(), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -1934,6 +2360,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             BsjSourceLocation stopLocation)
     {
         AssignmentNode ret = new AssignmentNodeImpl(variable, operator, expression, startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateAssignmentNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), variable == null ? null : (variable.getNodeValue() == null ? null : variable.getNodeValue().getUid()), operator, expression == null ? null : (expression.getNodeValue() == null ? null : expression.getNodeValue().getUid()), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -1950,6 +2380,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             BsjSourceLocation stopLocation)
     {
         AssignmentNode ret = new AssignmentNodeImpl(this.<ExpressionNode>makeNormalNodeUnion(variable), operator, this.<ExpressionNode>makeNormalNodeUnion(expression), startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateAssignmentNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), variable == null ? null : variable.getUid(), operator, expression == null ? null : expression.getUid(), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -1964,6 +2398,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             BinaryOperator operator)
     {
         BinaryExpressionNode ret = new BinaryExpressionNodeImpl(leftOperand, rightOperand, operator, startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateBinaryExpressionNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), leftOperand == null ? null : (leftOperand.getNodeValue() == null ? null : leftOperand.getNodeValue().getUid()), rightOperand == null ? null : (rightOperand.getNodeValue() == null ? null : rightOperand.getNodeValue().getUid()), operator, startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -1978,6 +2416,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             BinaryOperator operator)
     {
         BinaryExpressionNode ret = new BinaryExpressionNodeImpl(this.<ExpressionNode>makeNormalNodeUnion(leftOperand), this.<ExpressionNode>makeNormalNodeUnion(rightOperand), operator, startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateBinaryExpressionNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), leftOperand == null ? null : leftOperand.getUid(), rightOperand == null ? null : rightOperand.getUid(), operator, startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -1994,6 +2436,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             BsjSourceLocation stopLocation)
     {
         BinaryExpressionNode ret = new BinaryExpressionNodeImpl(leftOperand, rightOperand, operator, startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateBinaryExpressionNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), leftOperand == null ? null : (leftOperand.getNodeValue() == null ? null : leftOperand.getNodeValue().getUid()), rightOperand == null ? null : (rightOperand.getNodeValue() == null ? null : rightOperand.getNodeValue().getUid()), operator, startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -2010,6 +2456,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             BsjSourceLocation stopLocation)
     {
         BinaryExpressionNode ret = new BinaryExpressionNodeImpl(this.<ExpressionNode>makeNormalNodeUnion(leftOperand), this.<ExpressionNode>makeNormalNodeUnion(rightOperand), operator, startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateBinaryExpressionNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), leftOperand == null ? null : leftOperand.getUid(), rightOperand == null ? null : rightOperand.getUid(), operator, startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -2023,6 +2473,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             NodeUnion<? extends MetaAnnotationListNode> metaAnnotations)
     {
         BlockNode ret = new BlockNodeImpl(statements, metaAnnotations, startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateBlockNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), statements == null ? null : (statements.getNodeValue() == null ? null : statements.getNodeValue().getUid()), metaAnnotations == null ? null : (metaAnnotations.getNodeValue() == null ? null : metaAnnotations.getNodeValue().getUid()), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -2036,6 +2490,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             MetaAnnotationListNode metaAnnotations)
     {
         BlockNode ret = new BlockNodeImpl(this.<BlockStatementListNode>makeNormalNodeUnion(statements), this.<MetaAnnotationListNode>makeNormalNodeUnion(metaAnnotations), startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateBlockNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), statements == null ? null : statements.getUid(), metaAnnotations == null ? null : metaAnnotations.getUid(), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -2051,6 +2509,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             BsjSourceLocation stopLocation)
     {
         BlockNode ret = new BlockNodeImpl(statements, metaAnnotations, startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateBlockNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), statements == null ? null : (statements.getNodeValue() == null ? null : statements.getNodeValue().getUid()), metaAnnotations == null ? null : (metaAnnotations.getNodeValue() == null ? null : metaAnnotations.getNodeValue().getUid()), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -2066,6 +2528,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             BsjSourceLocation stopLocation)
     {
         BlockNode ret = new BlockNodeImpl(this.<BlockStatementListNode>makeNormalNodeUnion(statements), this.<MetaAnnotationListNode>makeNormalNodeUnion(metaAnnotations), startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateBlockNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), statements == null ? null : statements.getUid(), metaAnnotations == null ? null : metaAnnotations.getUid(), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -2078,6 +2544,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             BlockStatementListNode statements)
     {
         BlockNode ret = new BlockNodeImpl(this.<BlockStatementListNode>makeNormalNodeUnion(statements), this.<MetaAnnotationListNode>makeNormalNodeUnion(makeMetaAnnotationListNode()), startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateBlockNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), statements == null ? null : statements.getUid(), ret.getMetaAnnotations() == null ? null : ret.getMetaAnnotations().getUid(), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -2092,6 +2562,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             BsjSourceLocation stopLocation)
     {
         BlockNode ret = new BlockNodeImpl(this.<BlockStatementListNode>makeNormalNodeUnion(statements), this.<MetaAnnotationListNode>makeNormalNodeUnion(makeMetaAnnotationListNode()), startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateBlockNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), statements == null ? null : statements.getUid(), ret.getMetaAnnotations() == null ? null : ret.getMetaAnnotations().getUid(), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -2104,6 +2578,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             List<NodeUnion<? extends BlockStatementNode>> children)
     {
         BlockStatementListNode ret = new BlockStatementListNodeImpl(children, startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateBlockStatementListNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), EditScriptUtilities.getNodeUnionUids(children), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -2116,6 +2594,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             List<BlockStatementNode> children)
     {
         BlockStatementListNode ret = new BlockStatementListNodeImpl(unionWrapList(children), startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateBlockStatementListNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), EditScriptUtilities.getNodeUids(children), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -2142,6 +2624,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             BsjSourceLocation stopLocation)
     {
         BlockStatementListNode ret = new BlockStatementListNodeImpl(children, startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateBlockStatementListNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), EditScriptUtilities.getNodeUnionUids(children), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -2156,6 +2642,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             BsjSourceLocation stopLocation)
     {
         BlockStatementListNode ret = new BlockStatementListNodeImpl(unionWrapList(children), startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateBlockStatementListNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), EditScriptUtilities.getNodeUids(children), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -2182,6 +2672,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             NodeUnion<? extends MetaprogramNode> metaprogram)
     {
         BlockStatementMetaprogramAnchorNode ret = new BlockStatementMetaprogramAnchorNodeImpl(metaprogram, startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateBlockStatementMetaprogramAnchorNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), metaprogram == null ? null : (metaprogram.getNodeValue() == null ? null : metaprogram.getNodeValue().getUid()), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -2194,6 +2688,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             MetaprogramNode metaprogram)
     {
         BlockStatementMetaprogramAnchorNode ret = new BlockStatementMetaprogramAnchorNodeImpl(this.<MetaprogramNode>makeNormalNodeUnion(metaprogram), startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateBlockStatementMetaprogramAnchorNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), metaprogram == null ? null : metaprogram.getUid(), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -2208,6 +2706,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             BsjSourceLocation stopLocation)
     {
         BlockStatementMetaprogramAnchorNode ret = new BlockStatementMetaprogramAnchorNodeImpl(metaprogram, startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateBlockStatementMetaprogramAnchorNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), metaprogram == null ? null : (metaprogram.getNodeValue() == null ? null : metaprogram.getNodeValue().getUid()), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -2222,6 +2724,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             BsjSourceLocation stopLocation)
     {
         BlockStatementMetaprogramAnchorNode ret = new BlockStatementMetaprogramAnchorNodeImpl(this.<MetaprogramNode>makeNormalNodeUnion(metaprogram), startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateBlockStatementMetaprogramAnchorNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), metaprogram == null ? null : metaprogram.getUid(), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -2234,6 +2740,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             Boolean value)
     {
         BooleanLiteralNode ret = new BooleanLiteralNodeImpl(value, startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateBooleanLiteralNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), value, startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -2248,6 +2758,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             BsjSourceLocation stopLocation)
     {
         BooleanLiteralNode ret = new BooleanLiteralNodeImpl(value, startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateBooleanLiteralNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), value, startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -2261,6 +2775,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             NodeUnion<? extends MetaAnnotationListNode> metaAnnotations)
     {
         BreakNode ret = new BreakNodeImpl(label, metaAnnotations, startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateBreakNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), label == null ? null : (label.getNodeValue() == null ? null : label.getNodeValue().getUid()), metaAnnotations == null ? null : (metaAnnotations.getNodeValue() == null ? null : metaAnnotations.getNodeValue().getUid()), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -2274,6 +2792,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             MetaAnnotationListNode metaAnnotations)
     {
         BreakNode ret = new BreakNodeImpl(this.<IdentifierNode>makeNormalNodeUnion(label), this.<MetaAnnotationListNode>makeNormalNodeUnion(metaAnnotations), startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateBreakNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), label == null ? null : label.getUid(), metaAnnotations == null ? null : metaAnnotations.getUid(), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -2289,6 +2811,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             BsjSourceLocation stopLocation)
     {
         BreakNode ret = new BreakNodeImpl(label, metaAnnotations, startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateBreakNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), label == null ? null : (label.getNodeValue() == null ? null : label.getNodeValue().getUid()), metaAnnotations == null ? null : (metaAnnotations.getNodeValue() == null ? null : metaAnnotations.getNodeValue().getUid()), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -2304,6 +2830,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             BsjSourceLocation stopLocation)
     {
         BreakNode ret = new BreakNodeImpl(this.<IdentifierNode>makeNormalNodeUnion(label), this.<MetaAnnotationListNode>makeNormalNodeUnion(metaAnnotations), startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateBreakNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), label == null ? null : label.getUid(), metaAnnotations == null ? null : metaAnnotations.getUid(), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -2315,6 +2845,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
     public BreakNode makeBreakNode()
     {
         BreakNode ret = new BreakNodeImpl(this.<IdentifierNode>makeNormalNodeUnion(null), this.<MetaAnnotationListNode>makeNormalNodeUnion(makeMetaAnnotationListNode()), startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateBreakNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), ret.getLabel() == null ? null : ret.getLabel().getUid(), ret.getMetaAnnotations() == null ? null : ret.getMetaAnnotations().getUid(), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -2328,6 +2862,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             BsjSourceLocation stopLocation)
     {
         BreakNode ret = new BreakNodeImpl(this.<IdentifierNode>makeNormalNodeUnion(null), this.<MetaAnnotationListNode>makeNormalNodeUnion(makeMetaAnnotationListNode()), startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateBreakNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), ret.getLabel() == null ? null : ret.getLabel().getUid(), ret.getMetaAnnotations() == null ? null : ret.getMetaAnnotations().getUid(), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -2340,6 +2878,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             IdentifierNode label)
     {
         BreakNode ret = new BreakNodeImpl(this.<IdentifierNode>makeNormalNodeUnion(label), this.<MetaAnnotationListNode>makeNormalNodeUnion(makeMetaAnnotationListNode()), startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateBreakNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), label == null ? null : label.getUid(), ret.getMetaAnnotations() == null ? null : ret.getMetaAnnotations().getUid(), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -2354,6 +2896,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             BsjSourceLocation stopLocation)
     {
         BreakNode ret = new BreakNodeImpl(this.<IdentifierNode>makeNormalNodeUnion(label), this.<MetaAnnotationListNode>makeNormalNodeUnion(makeMetaAnnotationListNode()), startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateBreakNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), label == null ? null : label.getUid(), ret.getMetaAnnotations() == null ? null : ret.getMetaAnnotations().getUid(), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -2366,6 +2912,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             List<NodeUnion<? extends CaseNode>> children)
     {
         CaseListNode ret = new CaseListNodeImpl(children, startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateCaseListNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), EditScriptUtilities.getNodeUnionUids(children), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -2378,6 +2928,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             List<CaseNode> children)
     {
         CaseListNode ret = new CaseListNodeImpl(unionWrapList(children), startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateCaseListNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), EditScriptUtilities.getNodeUids(children), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -2404,6 +2958,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             BsjSourceLocation stopLocation)
     {
         CaseListNode ret = new CaseListNodeImpl(children, startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateCaseListNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), EditScriptUtilities.getNodeUnionUids(children), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -2418,6 +2976,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             BsjSourceLocation stopLocation)
     {
         CaseListNode ret = new CaseListNodeImpl(unionWrapList(children), startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateCaseListNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), EditScriptUtilities.getNodeUids(children), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -2445,6 +3007,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             NodeUnion<? extends BlockStatementListNode> statements)
     {
         CaseNode ret = new CaseNodeImpl(expression, statements, startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateCaseNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), expression == null ? null : (expression.getNodeValue() == null ? null : expression.getNodeValue().getUid()), statements == null ? null : (statements.getNodeValue() == null ? null : statements.getNodeValue().getUid()), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -2458,6 +3024,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             BlockStatementListNode statements)
     {
         CaseNode ret = new CaseNodeImpl(this.<ExpressionNode>makeNormalNodeUnion(expression), this.<BlockStatementListNode>makeNormalNodeUnion(statements), startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateCaseNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), expression == null ? null : expression.getUid(), statements == null ? null : statements.getUid(), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -2473,6 +3043,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             BsjSourceLocation stopLocation)
     {
         CaseNode ret = new CaseNodeImpl(expression, statements, startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateCaseNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), expression == null ? null : (expression.getNodeValue() == null ? null : expression.getNodeValue().getUid()), statements == null ? null : (statements.getNodeValue() == null ? null : statements.getNodeValue().getUid()), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -2488,6 +3062,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             BsjSourceLocation stopLocation)
     {
         CaseNode ret = new CaseNodeImpl(this.<ExpressionNode>makeNormalNodeUnion(expression), this.<BlockStatementListNode>makeNormalNodeUnion(statements), startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateCaseNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), expression == null ? null : expression.getUid(), statements == null ? null : statements.getUid(), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -2500,6 +3078,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             List<NodeUnion<? extends CatchNode>> children)
     {
         CatchListNode ret = new CatchListNodeImpl(children, startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateCatchListNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), EditScriptUtilities.getNodeUnionUids(children), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -2512,6 +3094,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             List<CatchNode> children)
     {
         CatchListNode ret = new CatchListNodeImpl(unionWrapList(children), startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateCatchListNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), EditScriptUtilities.getNodeUids(children), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -2538,6 +3124,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             BsjSourceLocation stopLocation)
     {
         CatchListNode ret = new CatchListNodeImpl(children, startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateCatchListNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), EditScriptUtilities.getNodeUnionUids(children), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -2552,6 +3142,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             BsjSourceLocation stopLocation)
     {
         CatchListNode ret = new CatchListNodeImpl(unionWrapList(children), startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateCatchListNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), EditScriptUtilities.getNodeUids(children), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -2579,6 +3173,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             NodeUnion<? extends VariableNode> parameter)
     {
         CatchNode ret = new CatchNodeImpl(body, parameter, startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateCatchNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), body == null ? null : (body.getNodeValue() == null ? null : body.getNodeValue().getUid()), parameter == null ? null : (parameter.getNodeValue() == null ? null : parameter.getNodeValue().getUid()), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -2592,6 +3190,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             VariableNode parameter)
     {
         CatchNode ret = new CatchNodeImpl(this.<BlockStatementListNode>makeNormalNodeUnion(body), this.<VariableNode>makeNormalNodeUnion(parameter), startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateCatchNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), body == null ? null : body.getUid(), parameter == null ? null : parameter.getUid(), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -2607,6 +3209,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             BsjSourceLocation stopLocation)
     {
         CatchNode ret = new CatchNodeImpl(body, parameter, startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateCatchNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), body == null ? null : (body.getNodeValue() == null ? null : body.getNodeValue().getUid()), parameter == null ? null : (parameter.getNodeValue() == null ? null : parameter.getNodeValue().getUid()), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -2622,6 +3228,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             BsjSourceLocation stopLocation)
     {
         CatchNode ret = new CatchNodeImpl(this.<BlockStatementListNode>makeNormalNodeUnion(body), this.<VariableNode>makeNormalNodeUnion(parameter), startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateCatchNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), body == null ? null : body.getUid(), parameter == null ? null : parameter.getUid(), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -2634,6 +3244,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             Character value)
     {
         CharLiteralNode ret = new CharLiteralNodeImpl(value, startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateCharLiteralNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), value, startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -2648,6 +3262,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             BsjSourceLocation stopLocation)
     {
         CharLiteralNode ret = new CharLiteralNodeImpl(value, startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateCharLiteralNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), value, startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -2660,6 +3278,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             NodeUnion<? extends ClassMemberListNode> members)
     {
         ClassBodyNode ret = new ClassBodyNodeImpl(members, startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateClassBodyNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), members == null ? null : (members.getNodeValue() == null ? null : members.getNodeValue().getUid()), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -2672,6 +3294,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             ClassMemberListNode members)
     {
         ClassBodyNode ret = new ClassBodyNodeImpl(this.<ClassMemberListNode>makeNormalNodeUnion(members), startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateClassBodyNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), members == null ? null : members.getUid(), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -2686,6 +3312,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             BsjSourceLocation stopLocation)
     {
         ClassBodyNode ret = new ClassBodyNodeImpl(members, startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateClassBodyNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), members == null ? null : (members.getNodeValue() == null ? null : members.getNodeValue().getUid()), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -2700,6 +3330,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             BsjSourceLocation stopLocation)
     {
         ClassBodyNode ret = new ClassBodyNodeImpl(this.<ClassMemberListNode>makeNormalNodeUnion(members), startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateClassBodyNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), members == null ? null : members.getUid(), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -2718,6 +3352,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             NodeUnion<? extends JavadocNode> javadoc)
     {
         ClassDeclarationNode ret = new ClassDeclarationNodeImpl(modifiers, extendsClause, implementsClause, body, typeParameters, identifier, javadoc, startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateClassDeclarationNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), modifiers == null ? null : (modifiers.getNodeValue() == null ? null : modifiers.getNodeValue().getUid()), extendsClause == null ? null : (extendsClause.getNodeValue() == null ? null : extendsClause.getNodeValue().getUid()), implementsClause == null ? null : (implementsClause.getNodeValue() == null ? null : implementsClause.getNodeValue().getUid()), body == null ? null : (body.getNodeValue() == null ? null : body.getNodeValue().getUid()), typeParameters == null ? null : (typeParameters.getNodeValue() == null ? null : typeParameters.getNodeValue().getUid()), identifier == null ? null : (identifier.getNodeValue() == null ? null : identifier.getNodeValue().getUid()), javadoc == null ? null : (javadoc.getNodeValue() == null ? null : javadoc.getNodeValue().getUid()), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -2736,6 +3374,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             JavadocNode javadoc)
     {
         ClassDeclarationNode ret = new ClassDeclarationNodeImpl(this.<ClassModifiersNode>makeNormalNodeUnion(modifiers), this.<DeclaredTypeNode>makeNormalNodeUnion(extendsClause), this.<DeclaredTypeListNode>makeNormalNodeUnion(implementsClause), this.<ClassBodyNode>makeNormalNodeUnion(body), this.<TypeParameterListNode>makeNormalNodeUnion(typeParameters), this.<IdentifierNode>makeNormalNodeUnion(identifier), this.<JavadocNode>makeNormalNodeUnion(javadoc), startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateClassDeclarationNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), modifiers == null ? null : modifiers.getUid(), extendsClause == null ? null : extendsClause.getUid(), implementsClause == null ? null : implementsClause.getUid(), body == null ? null : body.getUid(), typeParameters == null ? null : typeParameters.getUid(), identifier == null ? null : identifier.getUid(), javadoc == null ? null : javadoc.getUid(), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -2756,6 +3398,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             BsjSourceLocation stopLocation)
     {
         ClassDeclarationNode ret = new ClassDeclarationNodeImpl(modifiers, extendsClause, implementsClause, body, typeParameters, identifier, javadoc, startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateClassDeclarationNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), modifiers == null ? null : (modifiers.getNodeValue() == null ? null : modifiers.getNodeValue().getUid()), extendsClause == null ? null : (extendsClause.getNodeValue() == null ? null : extendsClause.getNodeValue().getUid()), implementsClause == null ? null : (implementsClause.getNodeValue() == null ? null : implementsClause.getNodeValue().getUid()), body == null ? null : (body.getNodeValue() == null ? null : body.getNodeValue().getUid()), typeParameters == null ? null : (typeParameters.getNodeValue() == null ? null : typeParameters.getNodeValue().getUid()), identifier == null ? null : (identifier.getNodeValue() == null ? null : identifier.getNodeValue().getUid()), javadoc == null ? null : (javadoc.getNodeValue() == null ? null : javadoc.getNodeValue().getUid()), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -2776,6 +3422,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             BsjSourceLocation stopLocation)
     {
         ClassDeclarationNode ret = new ClassDeclarationNodeImpl(this.<ClassModifiersNode>makeNormalNodeUnion(modifiers), this.<DeclaredTypeNode>makeNormalNodeUnion(extendsClause), this.<DeclaredTypeListNode>makeNormalNodeUnion(implementsClause), this.<ClassBodyNode>makeNormalNodeUnion(body), this.<TypeParameterListNode>makeNormalNodeUnion(typeParameters), this.<IdentifierNode>makeNormalNodeUnion(identifier), this.<JavadocNode>makeNormalNodeUnion(javadoc), startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateClassDeclarationNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), modifiers == null ? null : modifiers.getUid(), extendsClause == null ? null : extendsClause.getUid(), implementsClause == null ? null : implementsClause.getUid(), body == null ? null : body.getUid(), typeParameters == null ? null : typeParameters.getUid(), identifier == null ? null : identifier.getUid(), javadoc == null ? null : javadoc.getUid(), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -2788,6 +3438,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             NodeUnion<? extends LiteralizableTypeNode> value)
     {
         ClassLiteralNode ret = new ClassLiteralNodeImpl(value, startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateClassLiteralNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), value == null ? null : (value.getNodeValue() == null ? null : value.getNodeValue().getUid()), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -2800,6 +3454,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             LiteralizableTypeNode value)
     {
         ClassLiteralNode ret = new ClassLiteralNodeImpl(this.<LiteralizableTypeNode>makeNormalNodeUnion(value), startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateClassLiteralNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), value == null ? null : value.getUid(), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -2814,6 +3472,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             BsjSourceLocation stopLocation)
     {
         ClassLiteralNode ret = new ClassLiteralNodeImpl(value, startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateClassLiteralNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), value == null ? null : (value.getNodeValue() == null ? null : value.getNodeValue().getUid()), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -2828,6 +3490,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             BsjSourceLocation stopLocation)
     {
         ClassLiteralNode ret = new ClassLiteralNodeImpl(this.<LiteralizableTypeNode>makeNormalNodeUnion(value), startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateClassLiteralNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), value == null ? null : value.getUid(), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -2840,6 +3506,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             List<NodeUnion<? extends ClassMemberNode>> children)
     {
         ClassMemberListNode ret = new ClassMemberListNodeImpl(children, startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateClassMemberListNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), EditScriptUtilities.getNodeUnionUids(children), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -2852,6 +3522,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             List<ClassMemberNode> children)
     {
         ClassMemberListNode ret = new ClassMemberListNodeImpl(unionWrapList(children), startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateClassMemberListNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), EditScriptUtilities.getNodeUids(children), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -2878,6 +3552,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             BsjSourceLocation stopLocation)
     {
         ClassMemberListNode ret = new ClassMemberListNodeImpl(children, startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateClassMemberListNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), EditScriptUtilities.getNodeUnionUids(children), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -2892,6 +3570,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             BsjSourceLocation stopLocation)
     {
         ClassMemberListNode ret = new ClassMemberListNodeImpl(unionWrapList(children), startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateClassMemberListNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), EditScriptUtilities.getNodeUids(children), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -2918,6 +3600,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             NodeUnion<? extends MetaprogramNode> metaprogram)
     {
         ClassMemberMetaprogramAnchorNode ret = new ClassMemberMetaprogramAnchorNodeImpl(metaprogram, startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateClassMemberMetaprogramAnchorNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), metaprogram == null ? null : (metaprogram.getNodeValue() == null ? null : metaprogram.getNodeValue().getUid()), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -2930,6 +3616,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             MetaprogramNode metaprogram)
     {
         ClassMemberMetaprogramAnchorNode ret = new ClassMemberMetaprogramAnchorNodeImpl(this.<MetaprogramNode>makeNormalNodeUnion(metaprogram), startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateClassMemberMetaprogramAnchorNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), metaprogram == null ? null : metaprogram.getUid(), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -2944,6 +3634,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             BsjSourceLocation stopLocation)
     {
         ClassMemberMetaprogramAnchorNode ret = new ClassMemberMetaprogramAnchorNodeImpl(metaprogram, startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateClassMemberMetaprogramAnchorNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), metaprogram == null ? null : (metaprogram.getNodeValue() == null ? null : metaprogram.getNodeValue().getUid()), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -2958,6 +3652,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             BsjSourceLocation stopLocation)
     {
         ClassMemberMetaprogramAnchorNode ret = new ClassMemberMetaprogramAnchorNodeImpl(this.<MetaprogramNode>makeNormalNodeUnion(metaprogram), startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateClassMemberMetaprogramAnchorNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), metaprogram == null ? null : metaprogram.getUid(), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -2976,6 +3674,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             NodeUnion<? extends AnnotationListNode> annotations)
     {
         ClassModifiersNode ret = new ClassModifiersNodeImpl(access, abstractFlag, staticFlag, finalFlag, strictfpFlag, metaAnnotations, annotations, startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateClassModifiersNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), access, abstractFlag, staticFlag, finalFlag, strictfpFlag, metaAnnotations == null ? null : (metaAnnotations.getNodeValue() == null ? null : metaAnnotations.getNodeValue().getUid()), annotations == null ? null : (annotations.getNodeValue() == null ? null : annotations.getNodeValue().getUid()), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -2994,6 +3696,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             AnnotationListNode annotations)
     {
         ClassModifiersNode ret = new ClassModifiersNodeImpl(access, abstractFlag, staticFlag, finalFlag, strictfpFlag, this.<MetaAnnotationListNode>makeNormalNodeUnion(metaAnnotations), this.<AnnotationListNode>makeNormalNodeUnion(annotations), startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateClassModifiersNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), access, abstractFlag, staticFlag, finalFlag, strictfpFlag, metaAnnotations == null ? null : metaAnnotations.getUid(), annotations == null ? null : annotations.getUid(), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -3014,6 +3720,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             BsjSourceLocation stopLocation)
     {
         ClassModifiersNode ret = new ClassModifiersNodeImpl(access, abstractFlag, staticFlag, finalFlag, strictfpFlag, metaAnnotations, annotations, startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateClassModifiersNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), access, abstractFlag, staticFlag, finalFlag, strictfpFlag, metaAnnotations == null ? null : (metaAnnotations.getNodeValue() == null ? null : metaAnnotations.getNodeValue().getUid()), annotations == null ? null : (annotations.getNodeValue() == null ? null : annotations.getNodeValue().getUid()), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -3034,6 +3744,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             BsjSourceLocation stopLocation)
     {
         ClassModifiersNode ret = new ClassModifiersNodeImpl(access, abstractFlag, staticFlag, finalFlag, strictfpFlag, this.<MetaAnnotationListNode>makeNormalNodeUnion(metaAnnotations), this.<AnnotationListNode>makeNormalNodeUnion(annotations), startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateClassModifiersNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), access, abstractFlag, staticFlag, finalFlag, strictfpFlag, metaAnnotations == null ? null : metaAnnotations.getUid(), annotations == null ? null : annotations.getUid(), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -3046,6 +3760,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             AccessModifier access)
     {
         ClassModifiersNode ret = new ClassModifiersNodeImpl(access, false, false, false, false, this.<MetaAnnotationListNode>makeNormalNodeUnion(makeMetaAnnotationListNode()), this.<AnnotationListNode>makeNormalNodeUnion(makeAnnotationListNode()), startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateClassModifiersNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), access, ret.getAbstractFlag(), ret.getStaticFlag(), ret.getFinalFlag(), ret.getStrictfpFlag(), ret.getMetaAnnotations() == null ? null : ret.getMetaAnnotations().getUid(), ret.getAnnotations() == null ? null : ret.getAnnotations().getUid(), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -3060,6 +3778,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             BsjSourceLocation stopLocation)
     {
         ClassModifiersNode ret = new ClassModifiersNodeImpl(access, false, false, false, false, this.<MetaAnnotationListNode>makeNormalNodeUnion(makeMetaAnnotationListNode()), this.<AnnotationListNode>makeNormalNodeUnion(makeAnnotationListNode()), startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateClassModifiersNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), access, ret.getAbstractFlag(), ret.getStaticFlag(), ret.getFinalFlag(), ret.getStrictfpFlag(), ret.getMetaAnnotations() == null ? null : ret.getMetaAnnotations().getUid(), ret.getAnnotations() == null ? null : ret.getAnnotations().getUid(), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -3072,6 +3794,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             NodeUnion<? extends Node> value)
     {
         CodeLiteralNode ret = new CodeLiteralNodeImpl(value, startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateCodeLiteralNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), value == null ? null : (value.getNodeValue() == null ? null : value.getNodeValue().getUid()), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -3084,6 +3810,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             Node value)
     {
         CodeLiteralNode ret = new CodeLiteralNodeImpl(this.<Node>makeNormalNodeUnion(value), startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateCodeLiteralNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), value == null ? null : value.getUid(), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -3098,6 +3828,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             BsjSourceLocation stopLocation)
     {
         CodeLiteralNode ret = new CodeLiteralNodeImpl(value, startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateCodeLiteralNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), value == null ? null : (value.getNodeValue() == null ? null : value.getNodeValue().getUid()), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -3112,6 +3846,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             BsjSourceLocation stopLocation)
     {
         CodeLiteralNode ret = new CodeLiteralNodeImpl(this.<Node>makeNormalNodeUnion(value), startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateCodeLiteralNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), value == null ? null : value.getUid(), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -3128,6 +3866,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             NodeUnion<? extends TypeDeclarationListNode> typeDecls)
     {
         CompilationUnitNode ret = new CompilationUnitNodeImpl(name, packageDeclaration, metaimports, imports, typeDecls, startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateCompilationUnitNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), name, packageDeclaration == null ? null : (packageDeclaration.getNodeValue() == null ? null : packageDeclaration.getNodeValue().getUid()), metaimports == null ? null : (metaimports.getNodeValue() == null ? null : metaimports.getNodeValue().getUid()), imports == null ? null : (imports.getNodeValue() == null ? null : imports.getNodeValue().getUid()), typeDecls == null ? null : (typeDecls.getNodeValue() == null ? null : typeDecls.getNodeValue().getUid()), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -3144,6 +3886,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             TypeDeclarationListNode typeDecls)
     {
         CompilationUnitNode ret = new CompilationUnitNodeImpl(name, this.<PackageDeclarationNode>makeNormalNodeUnion(packageDeclaration), this.<MetaprogramImportListNode>makeNormalNodeUnion(metaimports), this.<ImportListNode>makeNormalNodeUnion(imports), this.<TypeDeclarationListNode>makeNormalNodeUnion(typeDecls), startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateCompilationUnitNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), name, packageDeclaration == null ? null : packageDeclaration.getUid(), metaimports == null ? null : metaimports.getUid(), imports == null ? null : imports.getUid(), typeDecls == null ? null : typeDecls.getUid(), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -3162,6 +3908,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             BsjSourceLocation stopLocation)
     {
         CompilationUnitNode ret = new CompilationUnitNodeImpl(name, packageDeclaration, metaimports, imports, typeDecls, startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateCompilationUnitNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), name, packageDeclaration == null ? null : (packageDeclaration.getNodeValue() == null ? null : packageDeclaration.getNodeValue().getUid()), metaimports == null ? null : (metaimports.getNodeValue() == null ? null : metaimports.getNodeValue().getUid()), imports == null ? null : (imports.getNodeValue() == null ? null : imports.getNodeValue().getUid()), typeDecls == null ? null : (typeDecls.getNodeValue() == null ? null : typeDecls.getNodeValue().getUid()), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -3180,6 +3930,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             BsjSourceLocation stopLocation)
     {
         CompilationUnitNode ret = new CompilationUnitNodeImpl(name, this.<PackageDeclarationNode>makeNormalNodeUnion(packageDeclaration), this.<MetaprogramImportListNode>makeNormalNodeUnion(metaimports), this.<ImportListNode>makeNormalNodeUnion(imports), this.<TypeDeclarationListNode>makeNormalNodeUnion(typeDecls), startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateCompilationUnitNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), name, packageDeclaration == null ? null : packageDeclaration.getUid(), metaimports == null ? null : metaimports.getUid(), imports == null ? null : imports.getUid(), typeDecls == null ? null : typeDecls.getUid(), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -3195,6 +3949,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             TypeDeclarationListNode typeDecls)
     {
         CompilationUnitNode ret = new CompilationUnitNodeImpl(name, this.<PackageDeclarationNode>makeNormalNodeUnion(packageDeclaration), this.<MetaprogramImportListNode>makeNormalNodeUnion(makeMetaprogramImportListNode()), this.<ImportListNode>makeNormalNodeUnion(imports), this.<TypeDeclarationListNode>makeNormalNodeUnion(typeDecls), startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateCompilationUnitNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), name, packageDeclaration == null ? null : packageDeclaration.getUid(), ret.getMetaimports() == null ? null : ret.getMetaimports().getUid(), imports == null ? null : imports.getUid(), typeDecls == null ? null : typeDecls.getUid(), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -3212,6 +3970,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             BsjSourceLocation stopLocation)
     {
         CompilationUnitNode ret = new CompilationUnitNodeImpl(name, this.<PackageDeclarationNode>makeNormalNodeUnion(packageDeclaration), this.<MetaprogramImportListNode>makeNormalNodeUnion(makeMetaprogramImportListNode()), this.<ImportListNode>makeNormalNodeUnion(imports), this.<TypeDeclarationListNode>makeNormalNodeUnion(typeDecls), startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateCompilationUnitNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), name, packageDeclaration == null ? null : packageDeclaration.getUid(), ret.getMetaimports() == null ? null : ret.getMetaimports().getUid(), imports == null ? null : imports.getUid(), typeDecls == null ? null : typeDecls.getUid(), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -3226,6 +3988,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             NodeUnion<? extends ExpressionNode> falseExpression)
     {
         ConditionalExpressionNode ret = new ConditionalExpressionNodeImpl(condition, trueExpression, falseExpression, startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateConditionalExpressionNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), condition == null ? null : (condition.getNodeValue() == null ? null : condition.getNodeValue().getUid()), trueExpression == null ? null : (trueExpression.getNodeValue() == null ? null : trueExpression.getNodeValue().getUid()), falseExpression == null ? null : (falseExpression.getNodeValue() == null ? null : falseExpression.getNodeValue().getUid()), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -3240,6 +4006,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             ExpressionNode falseExpression)
     {
         ConditionalExpressionNode ret = new ConditionalExpressionNodeImpl(this.<ExpressionNode>makeNormalNodeUnion(condition), this.<ExpressionNode>makeNormalNodeUnion(trueExpression), this.<ExpressionNode>makeNormalNodeUnion(falseExpression), startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateConditionalExpressionNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), condition == null ? null : condition.getUid(), trueExpression == null ? null : trueExpression.getUid(), falseExpression == null ? null : falseExpression.getUid(), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -3256,6 +4026,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             BsjSourceLocation stopLocation)
     {
         ConditionalExpressionNode ret = new ConditionalExpressionNodeImpl(condition, trueExpression, falseExpression, startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateConditionalExpressionNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), condition == null ? null : (condition.getNodeValue() == null ? null : condition.getNodeValue().getUid()), trueExpression == null ? null : (trueExpression.getNodeValue() == null ? null : trueExpression.getNodeValue().getUid()), falseExpression == null ? null : (falseExpression.getNodeValue() == null ? null : falseExpression.getNodeValue().getUid()), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -3272,6 +4046,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             BsjSourceLocation stopLocation)
     {
         ConditionalExpressionNode ret = new ConditionalExpressionNodeImpl(this.<ExpressionNode>makeNormalNodeUnion(condition), this.<ExpressionNode>makeNormalNodeUnion(trueExpression), this.<ExpressionNode>makeNormalNodeUnion(falseExpression), startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateConditionalExpressionNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), condition == null ? null : condition.getUid(), trueExpression == null ? null : trueExpression.getUid(), falseExpression == null ? null : falseExpression.getUid(), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -3287,6 +4065,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             NodeUnion<? extends JavadocNode> javadoc)
     {
         ConstantDeclarationNode ret = new ConstantDeclarationNodeImpl(modifiers, type, declarators, javadoc, startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateConstantDeclarationNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), modifiers == null ? null : (modifiers.getNodeValue() == null ? null : modifiers.getNodeValue().getUid()), type == null ? null : (type.getNodeValue() == null ? null : type.getNodeValue().getUid()), declarators == null ? null : (declarators.getNodeValue() == null ? null : declarators.getNodeValue().getUid()), javadoc == null ? null : (javadoc.getNodeValue() == null ? null : javadoc.getNodeValue().getUid()), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -3302,6 +4084,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             JavadocNode javadoc)
     {
         ConstantDeclarationNode ret = new ConstantDeclarationNodeImpl(this.<ConstantModifiersNode>makeNormalNodeUnion(modifiers), this.<TypeNode>makeNormalNodeUnion(type), this.<VariableDeclaratorListNode>makeNormalNodeUnion(declarators), this.<JavadocNode>makeNormalNodeUnion(javadoc), startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateConstantDeclarationNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), modifiers == null ? null : modifiers.getUid(), type == null ? null : type.getUid(), declarators == null ? null : declarators.getUid(), javadoc == null ? null : javadoc.getUid(), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -3319,6 +4105,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             BsjSourceLocation stopLocation)
     {
         ConstantDeclarationNode ret = new ConstantDeclarationNodeImpl(modifiers, type, declarators, javadoc, startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateConstantDeclarationNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), modifiers == null ? null : (modifiers.getNodeValue() == null ? null : modifiers.getNodeValue().getUid()), type == null ? null : (type.getNodeValue() == null ? null : type.getNodeValue().getUid()), declarators == null ? null : (declarators.getNodeValue() == null ? null : declarators.getNodeValue().getUid()), javadoc == null ? null : (javadoc.getNodeValue() == null ? null : javadoc.getNodeValue().getUid()), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -3336,6 +4126,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             BsjSourceLocation stopLocation)
     {
         ConstantDeclarationNode ret = new ConstantDeclarationNodeImpl(this.<ConstantModifiersNode>makeNormalNodeUnion(modifiers), this.<TypeNode>makeNormalNodeUnion(type), this.<VariableDeclaratorListNode>makeNormalNodeUnion(declarators), this.<JavadocNode>makeNormalNodeUnion(javadoc), startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateConstantDeclarationNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), modifiers == null ? null : modifiers.getUid(), type == null ? null : type.getUid(), declarators == null ? null : declarators.getUid(), javadoc == null ? null : javadoc.getUid(), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -3349,6 +4143,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             NodeUnion<? extends AnnotationListNode> annotations)
     {
         ConstantModifiersNode ret = new ConstantModifiersNodeImpl(metaAnnotations, annotations, startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateConstantModifiersNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), metaAnnotations == null ? null : (metaAnnotations.getNodeValue() == null ? null : metaAnnotations.getNodeValue().getUid()), annotations == null ? null : (annotations.getNodeValue() == null ? null : annotations.getNodeValue().getUid()), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -3362,6 +4160,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             AnnotationListNode annotations)
     {
         ConstantModifiersNode ret = new ConstantModifiersNodeImpl(this.<MetaAnnotationListNode>makeNormalNodeUnion(metaAnnotations), this.<AnnotationListNode>makeNormalNodeUnion(annotations), startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateConstantModifiersNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), metaAnnotations == null ? null : metaAnnotations.getUid(), annotations == null ? null : annotations.getUid(), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -3377,6 +4179,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             BsjSourceLocation stopLocation)
     {
         ConstantModifiersNode ret = new ConstantModifiersNodeImpl(metaAnnotations, annotations, startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateConstantModifiersNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), metaAnnotations == null ? null : (metaAnnotations.getNodeValue() == null ? null : metaAnnotations.getNodeValue().getUid()), annotations == null ? null : (annotations.getNodeValue() == null ? null : annotations.getNodeValue().getUid()), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -3392,6 +4198,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             BsjSourceLocation stopLocation)
     {
         ConstantModifiersNode ret = new ConstantModifiersNodeImpl(this.<MetaAnnotationListNode>makeNormalNodeUnion(metaAnnotations), this.<AnnotationListNode>makeNormalNodeUnion(annotations), startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateConstantModifiersNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), metaAnnotations == null ? null : metaAnnotations.getUid(), annotations == null ? null : annotations.getUid(), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -3404,6 +4214,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
     )
     {
         ConstantModifiersNode ret = new ConstantModifiersNodeImpl(this.<MetaAnnotationListNode>makeNormalNodeUnion(makeMetaAnnotationListNode()), this.<AnnotationListNode>makeNormalNodeUnion(makeAnnotationListNode()), startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateConstantModifiersNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), ret.getMetaAnnotations() == null ? null : ret.getMetaAnnotations().getUid(), ret.getAnnotations() == null ? null : ret.getAnnotations().getUid(), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -3417,6 +4231,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             BsjSourceLocation stopLocation)
     {
         ConstantModifiersNode ret = new ConstantModifiersNodeImpl(this.<MetaAnnotationListNode>makeNormalNodeUnion(makeMetaAnnotationListNode()), this.<AnnotationListNode>makeNormalNodeUnion(makeAnnotationListNode()), startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateConstantModifiersNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), ret.getMetaAnnotations() == null ? null : ret.getMetaAnnotations().getUid(), ret.getAnnotations() == null ? null : ret.getAnnotations().getUid(), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -3430,6 +4248,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             NodeUnion<? extends BlockStatementListNode> statements)
     {
         ConstructorBodyNode ret = new ConstructorBodyNodeImpl(constructorInvocation, statements, startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateConstructorBodyNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), constructorInvocation == null ? null : (constructorInvocation.getNodeValue() == null ? null : constructorInvocation.getNodeValue().getUid()), statements == null ? null : (statements.getNodeValue() == null ? null : statements.getNodeValue().getUid()), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -3443,6 +4265,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             BlockStatementListNode statements)
     {
         ConstructorBodyNode ret = new ConstructorBodyNodeImpl(this.<ConstructorInvocationNode>makeNormalNodeUnion(constructorInvocation), this.<BlockStatementListNode>makeNormalNodeUnion(statements), startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateConstructorBodyNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), constructorInvocation == null ? null : constructorInvocation.getUid(), statements == null ? null : statements.getUid(), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -3458,6 +4284,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             BsjSourceLocation stopLocation)
     {
         ConstructorBodyNode ret = new ConstructorBodyNodeImpl(constructorInvocation, statements, startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateConstructorBodyNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), constructorInvocation == null ? null : (constructorInvocation.getNodeValue() == null ? null : constructorInvocation.getNodeValue().getUid()), statements == null ? null : (statements.getNodeValue() == null ? null : statements.getNodeValue().getUid()), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -3473,6 +4303,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             BsjSourceLocation stopLocation)
     {
         ConstructorBodyNode ret = new ConstructorBodyNodeImpl(this.<ConstructorInvocationNode>makeNormalNodeUnion(constructorInvocation), this.<BlockStatementListNode>makeNormalNodeUnion(statements), startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateConstructorBodyNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), constructorInvocation == null ? null : constructorInvocation.getUid(), statements == null ? null : statements.getUid(), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -3492,6 +4326,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             NodeUnion<? extends JavadocNode> javadoc)
     {
         ConstructorDeclarationNode ret = new ConstructorDeclarationNodeImpl(identifier, body, modifiers, parameters, varargParameter, throwTypes, typeParameters, javadoc, startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateConstructorDeclarationNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), identifier == null ? null : (identifier.getNodeValue() == null ? null : identifier.getNodeValue().getUid()), body == null ? null : (body.getNodeValue() == null ? null : body.getNodeValue().getUid()), modifiers == null ? null : (modifiers.getNodeValue() == null ? null : modifiers.getNodeValue().getUid()), parameters == null ? null : (parameters.getNodeValue() == null ? null : parameters.getNodeValue().getUid()), varargParameter == null ? null : (varargParameter.getNodeValue() == null ? null : varargParameter.getNodeValue().getUid()), throwTypes == null ? null : (throwTypes.getNodeValue() == null ? null : throwTypes.getNodeValue().getUid()), typeParameters == null ? null : (typeParameters.getNodeValue() == null ? null : typeParameters.getNodeValue().getUid()), javadoc == null ? null : (javadoc.getNodeValue() == null ? null : javadoc.getNodeValue().getUid()), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -3511,6 +4349,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             JavadocNode javadoc)
     {
         ConstructorDeclarationNode ret = new ConstructorDeclarationNodeImpl(this.<IdentifierNode>makeNormalNodeUnion(identifier), this.<ConstructorBodyNode>makeNormalNodeUnion(body), this.<ConstructorModifiersNode>makeNormalNodeUnion(modifiers), this.<VariableListNode>makeNormalNodeUnion(parameters), this.<VariableNode>makeNormalNodeUnion(varargParameter), this.<UnparameterizedTypeListNode>makeNormalNodeUnion(throwTypes), this.<TypeParameterListNode>makeNormalNodeUnion(typeParameters), this.<JavadocNode>makeNormalNodeUnion(javadoc), startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateConstructorDeclarationNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), identifier == null ? null : identifier.getUid(), body == null ? null : body.getUid(), modifiers == null ? null : modifiers.getUid(), parameters == null ? null : parameters.getUid(), varargParameter == null ? null : varargParameter.getUid(), throwTypes == null ? null : throwTypes.getUid(), typeParameters == null ? null : typeParameters.getUid(), javadoc == null ? null : javadoc.getUid(), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -3532,6 +4374,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             BsjSourceLocation stopLocation)
     {
         ConstructorDeclarationNode ret = new ConstructorDeclarationNodeImpl(identifier, body, modifiers, parameters, varargParameter, throwTypes, typeParameters, javadoc, startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateConstructorDeclarationNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), identifier == null ? null : (identifier.getNodeValue() == null ? null : identifier.getNodeValue().getUid()), body == null ? null : (body.getNodeValue() == null ? null : body.getNodeValue().getUid()), modifiers == null ? null : (modifiers.getNodeValue() == null ? null : modifiers.getNodeValue().getUid()), parameters == null ? null : (parameters.getNodeValue() == null ? null : parameters.getNodeValue().getUid()), varargParameter == null ? null : (varargParameter.getNodeValue() == null ? null : varargParameter.getNodeValue().getUid()), throwTypes == null ? null : (throwTypes.getNodeValue() == null ? null : throwTypes.getNodeValue().getUid()), typeParameters == null ? null : (typeParameters.getNodeValue() == null ? null : typeParameters.getNodeValue().getUid()), javadoc == null ? null : (javadoc.getNodeValue() == null ? null : javadoc.getNodeValue().getUid()), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -3553,6 +4399,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             BsjSourceLocation stopLocation)
     {
         ConstructorDeclarationNode ret = new ConstructorDeclarationNodeImpl(this.<IdentifierNode>makeNormalNodeUnion(identifier), this.<ConstructorBodyNode>makeNormalNodeUnion(body), this.<ConstructorModifiersNode>makeNormalNodeUnion(modifiers), this.<VariableListNode>makeNormalNodeUnion(parameters), this.<VariableNode>makeNormalNodeUnion(varargParameter), this.<UnparameterizedTypeListNode>makeNormalNodeUnion(throwTypes), this.<TypeParameterListNode>makeNormalNodeUnion(typeParameters), this.<JavadocNode>makeNormalNodeUnion(javadoc), startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateConstructorDeclarationNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), identifier == null ? null : identifier.getUid(), body == null ? null : body.getUid(), modifiers == null ? null : modifiers.getUid(), parameters == null ? null : parameters.getUid(), varargParameter == null ? null : varargParameter.getUid(), throwTypes == null ? null : throwTypes.getUid(), typeParameters == null ? null : typeParameters.getUid(), javadoc == null ? null : javadoc.getUid(), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -3569,6 +4419,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             JavadocNode javadoc)
     {
         ConstructorDeclarationNode ret = new ConstructorDeclarationNodeImpl(this.<IdentifierNode>makeNormalNodeUnion(identifier), this.<ConstructorBodyNode>makeNormalNodeUnion(body), this.<ConstructorModifiersNode>makeNormalNodeUnion(modifiers), this.<VariableListNode>makeNormalNodeUnion(parameters), this.<VariableNode>makeNormalNodeUnion(null), this.<UnparameterizedTypeListNode>makeNormalNodeUnion(makeUnparameterizedTypeListNode()), this.<TypeParameterListNode>makeNormalNodeUnion(makeTypeParameterListNode()), this.<JavadocNode>makeNormalNodeUnion(javadoc), startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateConstructorDeclarationNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), identifier == null ? null : identifier.getUid(), body == null ? null : body.getUid(), modifiers == null ? null : modifiers.getUid(), parameters == null ? null : parameters.getUid(), ret.getVarargParameter() == null ? null : ret.getVarargParameter().getUid(), ret.getThrowTypes() == null ? null : ret.getThrowTypes().getUid(), ret.getTypeParameters() == null ? null : ret.getTypeParameters().getUid(), javadoc == null ? null : javadoc.getUid(), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -3587,6 +4441,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             BsjSourceLocation stopLocation)
     {
         ConstructorDeclarationNode ret = new ConstructorDeclarationNodeImpl(this.<IdentifierNode>makeNormalNodeUnion(identifier), this.<ConstructorBodyNode>makeNormalNodeUnion(body), this.<ConstructorModifiersNode>makeNormalNodeUnion(modifiers), this.<VariableListNode>makeNormalNodeUnion(parameters), this.<VariableNode>makeNormalNodeUnion(null), this.<UnparameterizedTypeListNode>makeNormalNodeUnion(makeUnparameterizedTypeListNode()), this.<TypeParameterListNode>makeNormalNodeUnion(makeTypeParameterListNode()), this.<JavadocNode>makeNormalNodeUnion(javadoc), startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateConstructorDeclarationNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), identifier == null ? null : identifier.getUid(), body == null ? null : body.getUid(), modifiers == null ? null : modifiers.getUid(), parameters == null ? null : parameters.getUid(), ret.getVarargParameter() == null ? null : ret.getVarargParameter().getUid(), ret.getThrowTypes() == null ? null : ret.getThrowTypes().getUid(), ret.getTypeParameters() == null ? null : ret.getTypeParameters().getUid(), javadoc == null ? null : javadoc.getUid(), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -3601,6 +4459,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             NodeUnion<? extends AnnotationListNode> annotations)
     {
         ConstructorModifiersNode ret = new ConstructorModifiersNodeImpl(access, metaAnnotations, annotations, startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateConstructorModifiersNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), access, metaAnnotations == null ? null : (metaAnnotations.getNodeValue() == null ? null : metaAnnotations.getNodeValue().getUid()), annotations == null ? null : (annotations.getNodeValue() == null ? null : annotations.getNodeValue().getUid()), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -3615,6 +4477,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             AnnotationListNode annotations)
     {
         ConstructorModifiersNode ret = new ConstructorModifiersNodeImpl(access, this.<MetaAnnotationListNode>makeNormalNodeUnion(metaAnnotations), this.<AnnotationListNode>makeNormalNodeUnion(annotations), startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateConstructorModifiersNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), access, metaAnnotations == null ? null : metaAnnotations.getUid(), annotations == null ? null : annotations.getUid(), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -3631,6 +4497,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             BsjSourceLocation stopLocation)
     {
         ConstructorModifiersNode ret = new ConstructorModifiersNodeImpl(access, metaAnnotations, annotations, startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateConstructorModifiersNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), access, metaAnnotations == null ? null : (metaAnnotations.getNodeValue() == null ? null : metaAnnotations.getNodeValue().getUid()), annotations == null ? null : (annotations.getNodeValue() == null ? null : annotations.getNodeValue().getUid()), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -3647,6 +4517,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             BsjSourceLocation stopLocation)
     {
         ConstructorModifiersNode ret = new ConstructorModifiersNodeImpl(access, this.<MetaAnnotationListNode>makeNormalNodeUnion(metaAnnotations), this.<AnnotationListNode>makeNormalNodeUnion(annotations), startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateConstructorModifiersNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), access, metaAnnotations == null ? null : metaAnnotations.getUid(), annotations == null ? null : annotations.getUid(), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -3659,6 +4533,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             AccessModifier access)
     {
         ConstructorModifiersNode ret = new ConstructorModifiersNodeImpl(access, this.<MetaAnnotationListNode>makeNormalNodeUnion(makeMetaAnnotationListNode()), this.<AnnotationListNode>makeNormalNodeUnion(makeAnnotationListNode()), startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateConstructorModifiersNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), access, ret.getMetaAnnotations() == null ? null : ret.getMetaAnnotations().getUid(), ret.getAnnotations() == null ? null : ret.getAnnotations().getUid(), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -3673,6 +4551,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             BsjSourceLocation stopLocation)
     {
         ConstructorModifiersNode ret = new ConstructorModifiersNodeImpl(access, this.<MetaAnnotationListNode>makeNormalNodeUnion(makeMetaAnnotationListNode()), this.<AnnotationListNode>makeNormalNodeUnion(makeAnnotationListNode()), startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateConstructorModifiersNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), access, ret.getMetaAnnotations() == null ? null : ret.getMetaAnnotations().getUid(), ret.getAnnotations() == null ? null : ret.getAnnotations().getUid(), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -3686,6 +4568,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             NodeUnion<? extends MetaAnnotationListNode> metaAnnotations)
     {
         ContinueNode ret = new ContinueNodeImpl(label, metaAnnotations, startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateContinueNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), label == null ? null : (label.getNodeValue() == null ? null : label.getNodeValue().getUid()), metaAnnotations == null ? null : (metaAnnotations.getNodeValue() == null ? null : metaAnnotations.getNodeValue().getUid()), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -3699,6 +4585,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             MetaAnnotationListNode metaAnnotations)
     {
         ContinueNode ret = new ContinueNodeImpl(this.<IdentifierNode>makeNormalNodeUnion(label), this.<MetaAnnotationListNode>makeNormalNodeUnion(metaAnnotations), startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateContinueNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), label == null ? null : label.getUid(), metaAnnotations == null ? null : metaAnnotations.getUid(), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -3714,6 +4604,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             BsjSourceLocation stopLocation)
     {
         ContinueNode ret = new ContinueNodeImpl(label, metaAnnotations, startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateContinueNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), label == null ? null : (label.getNodeValue() == null ? null : label.getNodeValue().getUid()), metaAnnotations == null ? null : (metaAnnotations.getNodeValue() == null ? null : metaAnnotations.getNodeValue().getUid()), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -3729,6 +4623,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             BsjSourceLocation stopLocation)
     {
         ContinueNode ret = new ContinueNodeImpl(this.<IdentifierNode>makeNormalNodeUnion(label), this.<MetaAnnotationListNode>makeNormalNodeUnion(metaAnnotations), startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateContinueNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), label == null ? null : label.getUid(), metaAnnotations == null ? null : metaAnnotations.getUid(), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -3740,6 +4638,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
     public ContinueNode makeContinueNode()
     {
         ContinueNode ret = new ContinueNodeImpl(this.<IdentifierNode>makeNormalNodeUnion(null), this.<MetaAnnotationListNode>makeNormalNodeUnion(makeMetaAnnotationListNode()), startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateContinueNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), ret.getLabel() == null ? null : ret.getLabel().getUid(), ret.getMetaAnnotations() == null ? null : ret.getMetaAnnotations().getUid(), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -3753,6 +4655,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             BsjSourceLocation stopLocation)
     {
         ContinueNode ret = new ContinueNodeImpl(this.<IdentifierNode>makeNormalNodeUnion(null), this.<MetaAnnotationListNode>makeNormalNodeUnion(makeMetaAnnotationListNode()), startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateContinueNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), ret.getLabel() == null ? null : ret.getLabel().getUid(), ret.getMetaAnnotations() == null ? null : ret.getMetaAnnotations().getUid(), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -3765,6 +4671,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             IdentifierNode label)
     {
         ContinueNode ret = new ContinueNodeImpl(this.<IdentifierNode>makeNormalNodeUnion(label), this.<MetaAnnotationListNode>makeNormalNodeUnion(makeMetaAnnotationListNode()), startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateContinueNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), label == null ? null : label.getUid(), ret.getMetaAnnotations() == null ? null : ret.getMetaAnnotations().getUid(), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -3779,6 +4689,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             BsjSourceLocation stopLocation)
     {
         ContinueNode ret = new ContinueNodeImpl(this.<IdentifierNode>makeNormalNodeUnion(label), this.<MetaAnnotationListNode>makeNormalNodeUnion(makeMetaAnnotationListNode()), startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateContinueNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), label == null ? null : label.getUid(), ret.getMetaAnnotations() == null ? null : ret.getMetaAnnotations().getUid(), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -3791,6 +4705,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             List<NodeUnion<? extends DeclaredTypeNode>> children)
     {
         DeclaredTypeListNode ret = new DeclaredTypeListNodeImpl(children, startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateDeclaredTypeListNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), EditScriptUtilities.getNodeUnionUids(children), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -3803,6 +4721,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             List<DeclaredTypeNode> children)
     {
         DeclaredTypeListNode ret = new DeclaredTypeListNodeImpl(unionWrapList(children), startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateDeclaredTypeListNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), EditScriptUtilities.getNodeUids(children), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -3829,6 +4751,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             BsjSourceLocation stopLocation)
     {
         DeclaredTypeListNode ret = new DeclaredTypeListNodeImpl(children, startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateDeclaredTypeListNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), EditScriptUtilities.getNodeUnionUids(children), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -3843,6 +4769,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             BsjSourceLocation stopLocation)
     {
         DeclaredTypeListNode ret = new DeclaredTypeListNodeImpl(unionWrapList(children), startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateDeclaredTypeListNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), EditScriptUtilities.getNodeUids(children), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -3871,6 +4801,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             NodeUnion<? extends MetaAnnotationListNode> metaAnnotations)
     {
         DoWhileLoopNode ret = new DoWhileLoopNodeImpl(condition, statement, metaAnnotations, startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateDoWhileLoopNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), condition == null ? null : (condition.getNodeValue() == null ? null : condition.getNodeValue().getUid()), statement == null ? null : (statement.getNodeValue() == null ? null : statement.getNodeValue().getUid()), metaAnnotations == null ? null : (metaAnnotations.getNodeValue() == null ? null : metaAnnotations.getNodeValue().getUid()), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -3885,6 +4819,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             MetaAnnotationListNode metaAnnotations)
     {
         DoWhileLoopNode ret = new DoWhileLoopNodeImpl(this.<ExpressionNode>makeNormalNodeUnion(condition), this.<StatementNode>makeNormalNodeUnion(statement), this.<MetaAnnotationListNode>makeNormalNodeUnion(metaAnnotations), startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateDoWhileLoopNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), condition == null ? null : condition.getUid(), statement == null ? null : statement.getUid(), metaAnnotations == null ? null : metaAnnotations.getUid(), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -3901,6 +4839,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             BsjSourceLocation stopLocation)
     {
         DoWhileLoopNode ret = new DoWhileLoopNodeImpl(condition, statement, metaAnnotations, startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateDoWhileLoopNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), condition == null ? null : (condition.getNodeValue() == null ? null : condition.getNodeValue().getUid()), statement == null ? null : (statement.getNodeValue() == null ? null : statement.getNodeValue().getUid()), metaAnnotations == null ? null : (metaAnnotations.getNodeValue() == null ? null : metaAnnotations.getNodeValue().getUid()), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -3917,6 +4859,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             BsjSourceLocation stopLocation)
     {
         DoWhileLoopNode ret = new DoWhileLoopNodeImpl(this.<ExpressionNode>makeNormalNodeUnion(condition), this.<StatementNode>makeNormalNodeUnion(statement), this.<MetaAnnotationListNode>makeNormalNodeUnion(metaAnnotations), startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateDoWhileLoopNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), condition == null ? null : condition.getUid(), statement == null ? null : statement.getUid(), metaAnnotations == null ? null : metaAnnotations.getUid(), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -3930,6 +4876,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             StatementNode statement)
     {
         DoWhileLoopNode ret = new DoWhileLoopNodeImpl(this.<ExpressionNode>makeNormalNodeUnion(condition), this.<StatementNode>makeNormalNodeUnion(statement), this.<MetaAnnotationListNode>makeNormalNodeUnion(makeMetaAnnotationListNode()), startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateDoWhileLoopNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), condition == null ? null : condition.getUid(), statement == null ? null : statement.getUid(), ret.getMetaAnnotations() == null ? null : ret.getMetaAnnotations().getUid(), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -3945,6 +4895,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             BsjSourceLocation stopLocation)
     {
         DoWhileLoopNode ret = new DoWhileLoopNodeImpl(this.<ExpressionNode>makeNormalNodeUnion(condition), this.<StatementNode>makeNormalNodeUnion(statement), this.<MetaAnnotationListNode>makeNormalNodeUnion(makeMetaAnnotationListNode()), startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateDoWhileLoopNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), condition == null ? null : condition.getUid(), statement == null ? null : statement.getUid(), ret.getMetaAnnotations() == null ? null : ret.getMetaAnnotations().getUid(), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -3957,6 +4911,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             Double value)
     {
         DoubleLiteralNode ret = new DoubleLiteralNodeImpl(value, startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateDoubleLiteralNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), value, startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -3971,6 +4929,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             BsjSourceLocation stopLocation)
     {
         DoubleLiteralNode ret = new DoubleLiteralNodeImpl(value, startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateDoubleLiteralNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), value, startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -3986,6 +4948,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             NodeUnion<? extends MetaAnnotationListNode> metaAnnotations)
     {
         EnhancedForLoopNode ret = new EnhancedForLoopNodeImpl(variable, expression, statement, metaAnnotations, startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateEnhancedForLoopNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), variable == null ? null : (variable.getNodeValue() == null ? null : variable.getNodeValue().getUid()), expression == null ? null : (expression.getNodeValue() == null ? null : expression.getNodeValue().getUid()), statement == null ? null : (statement.getNodeValue() == null ? null : statement.getNodeValue().getUid()), metaAnnotations == null ? null : (metaAnnotations.getNodeValue() == null ? null : metaAnnotations.getNodeValue().getUid()), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -4001,6 +4967,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             MetaAnnotationListNode metaAnnotations)
     {
         EnhancedForLoopNode ret = new EnhancedForLoopNodeImpl(this.<VariableNode>makeNormalNodeUnion(variable), this.<ExpressionNode>makeNormalNodeUnion(expression), this.<StatementNode>makeNormalNodeUnion(statement), this.<MetaAnnotationListNode>makeNormalNodeUnion(metaAnnotations), startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateEnhancedForLoopNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), variable == null ? null : variable.getUid(), expression == null ? null : expression.getUid(), statement == null ? null : statement.getUid(), metaAnnotations == null ? null : metaAnnotations.getUid(), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -4018,6 +4988,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             BsjSourceLocation stopLocation)
     {
         EnhancedForLoopNode ret = new EnhancedForLoopNodeImpl(variable, expression, statement, metaAnnotations, startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateEnhancedForLoopNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), variable == null ? null : (variable.getNodeValue() == null ? null : variable.getNodeValue().getUid()), expression == null ? null : (expression.getNodeValue() == null ? null : expression.getNodeValue().getUid()), statement == null ? null : (statement.getNodeValue() == null ? null : statement.getNodeValue().getUid()), metaAnnotations == null ? null : (metaAnnotations.getNodeValue() == null ? null : metaAnnotations.getNodeValue().getUid()), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -4035,6 +5009,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             BsjSourceLocation stopLocation)
     {
         EnhancedForLoopNode ret = new EnhancedForLoopNodeImpl(this.<VariableNode>makeNormalNodeUnion(variable), this.<ExpressionNode>makeNormalNodeUnion(expression), this.<StatementNode>makeNormalNodeUnion(statement), this.<MetaAnnotationListNode>makeNormalNodeUnion(metaAnnotations), startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateEnhancedForLoopNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), variable == null ? null : variable.getUid(), expression == null ? null : expression.getUid(), statement == null ? null : statement.getUid(), metaAnnotations == null ? null : metaAnnotations.getUid(), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -4049,6 +5027,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             StatementNode statement)
     {
         EnhancedForLoopNode ret = new EnhancedForLoopNodeImpl(this.<VariableNode>makeNormalNodeUnion(variable), this.<ExpressionNode>makeNormalNodeUnion(expression), this.<StatementNode>makeNormalNodeUnion(statement), this.<MetaAnnotationListNode>makeNormalNodeUnion(makeMetaAnnotationListNode()), startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateEnhancedForLoopNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), variable == null ? null : variable.getUid(), expression == null ? null : expression.getUid(), statement == null ? null : statement.getUid(), ret.getMetaAnnotations() == null ? null : ret.getMetaAnnotations().getUid(), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -4065,6 +5047,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             BsjSourceLocation stopLocation)
     {
         EnhancedForLoopNode ret = new EnhancedForLoopNodeImpl(this.<VariableNode>makeNormalNodeUnion(variable), this.<ExpressionNode>makeNormalNodeUnion(expression), this.<StatementNode>makeNormalNodeUnion(statement), this.<MetaAnnotationListNode>makeNormalNodeUnion(makeMetaAnnotationListNode()), startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateEnhancedForLoopNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), variable == null ? null : variable.getUid(), expression == null ? null : expression.getUid(), statement == null ? null : statement.getUid(), ret.getMetaAnnotations() == null ? null : ret.getMetaAnnotations().getUid(), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -4078,6 +5064,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             NodeUnion<? extends ClassMemberListNode> members)
     {
         EnumBodyNode ret = new EnumBodyNodeImpl(constants, members, startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateEnumBodyNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), constants == null ? null : (constants.getNodeValue() == null ? null : constants.getNodeValue().getUid()), members == null ? null : (members.getNodeValue() == null ? null : members.getNodeValue().getUid()), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -4091,6 +5081,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             ClassMemberListNode members)
     {
         EnumBodyNode ret = new EnumBodyNodeImpl(this.<EnumConstantDeclarationListNode>makeNormalNodeUnion(constants), this.<ClassMemberListNode>makeNormalNodeUnion(members), startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateEnumBodyNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), constants == null ? null : constants.getUid(), members == null ? null : members.getUid(), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -4106,6 +5100,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             BsjSourceLocation stopLocation)
     {
         EnumBodyNode ret = new EnumBodyNodeImpl(constants, members, startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateEnumBodyNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), constants == null ? null : (constants.getNodeValue() == null ? null : constants.getNodeValue().getUid()), members == null ? null : (members.getNodeValue() == null ? null : members.getNodeValue().getUid()), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -4121,6 +5119,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             BsjSourceLocation stopLocation)
     {
         EnumBodyNode ret = new EnumBodyNodeImpl(this.<EnumConstantDeclarationListNode>makeNormalNodeUnion(constants), this.<ClassMemberListNode>makeNormalNodeUnion(members), startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateEnumBodyNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), constants == null ? null : constants.getUid(), members == null ? null : members.getUid(), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -4133,6 +5135,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             List<NodeUnion<? extends EnumConstantDeclarationNode>> children)
     {
         EnumConstantDeclarationListNode ret = new EnumConstantDeclarationListNodeImpl(children, startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateEnumConstantDeclarationListNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), EditScriptUtilities.getNodeUnionUids(children), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -4145,6 +5151,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             List<EnumConstantDeclarationNode> children)
     {
         EnumConstantDeclarationListNode ret = new EnumConstantDeclarationListNodeImpl(unionWrapList(children), startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateEnumConstantDeclarationListNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), EditScriptUtilities.getNodeUids(children), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -4171,6 +5181,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             BsjSourceLocation stopLocation)
     {
         EnumConstantDeclarationListNode ret = new EnumConstantDeclarationListNodeImpl(children, startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateEnumConstantDeclarationListNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), EditScriptUtilities.getNodeUnionUids(children), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -4185,6 +5199,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             BsjSourceLocation stopLocation)
     {
         EnumConstantDeclarationListNode ret = new EnumConstantDeclarationListNodeImpl(unionWrapList(children), startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateEnumConstantDeclarationListNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), EditScriptUtilities.getNodeUids(children), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -4215,6 +5233,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             NodeUnion<? extends JavadocNode> javadoc)
     {
         EnumConstantDeclarationNode ret = new EnumConstantDeclarationNodeImpl(modifiers, identifier, arguments, body, javadoc, startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateEnumConstantDeclarationNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), modifiers == null ? null : (modifiers.getNodeValue() == null ? null : modifiers.getNodeValue().getUid()), identifier == null ? null : (identifier.getNodeValue() == null ? null : identifier.getNodeValue().getUid()), arguments == null ? null : (arguments.getNodeValue() == null ? null : arguments.getNodeValue().getUid()), body == null ? null : (body.getNodeValue() == null ? null : body.getNodeValue().getUid()), javadoc == null ? null : (javadoc.getNodeValue() == null ? null : javadoc.getNodeValue().getUid()), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -4231,6 +5253,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             JavadocNode javadoc)
     {
         EnumConstantDeclarationNode ret = new EnumConstantDeclarationNodeImpl(this.<EnumConstantModifiersNode>makeNormalNodeUnion(modifiers), this.<IdentifierNode>makeNormalNodeUnion(identifier), this.<ExpressionListNode>makeNormalNodeUnion(arguments), this.<AnonymousClassBodyNode>makeNormalNodeUnion(body), this.<JavadocNode>makeNormalNodeUnion(javadoc), startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateEnumConstantDeclarationNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), modifiers == null ? null : modifiers.getUid(), identifier == null ? null : identifier.getUid(), arguments == null ? null : arguments.getUid(), body == null ? null : body.getUid(), javadoc == null ? null : javadoc.getUid(), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -4249,6 +5275,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             BsjSourceLocation stopLocation)
     {
         EnumConstantDeclarationNode ret = new EnumConstantDeclarationNodeImpl(modifiers, identifier, arguments, body, javadoc, startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateEnumConstantDeclarationNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), modifiers == null ? null : (modifiers.getNodeValue() == null ? null : modifiers.getNodeValue().getUid()), identifier == null ? null : (identifier.getNodeValue() == null ? null : identifier.getNodeValue().getUid()), arguments == null ? null : (arguments.getNodeValue() == null ? null : arguments.getNodeValue().getUid()), body == null ? null : (body.getNodeValue() == null ? null : body.getNodeValue().getUid()), javadoc == null ? null : (javadoc.getNodeValue() == null ? null : javadoc.getNodeValue().getUid()), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -4267,6 +5297,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             BsjSourceLocation stopLocation)
     {
         EnumConstantDeclarationNode ret = new EnumConstantDeclarationNodeImpl(this.<EnumConstantModifiersNode>makeNormalNodeUnion(modifiers), this.<IdentifierNode>makeNormalNodeUnion(identifier), this.<ExpressionListNode>makeNormalNodeUnion(arguments), this.<AnonymousClassBodyNode>makeNormalNodeUnion(body), this.<JavadocNode>makeNormalNodeUnion(javadoc), startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateEnumConstantDeclarationNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), modifiers == null ? null : modifiers.getUid(), identifier == null ? null : identifier.getUid(), arguments == null ? null : arguments.getUid(), body == null ? null : body.getUid(), javadoc == null ? null : javadoc.getUid(), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -4282,6 +5316,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             JavadocNode javadoc)
     {
         EnumConstantDeclarationNode ret = new EnumConstantDeclarationNodeImpl(this.<EnumConstantModifiersNode>makeNormalNodeUnion(modifiers), this.<IdentifierNode>makeNormalNodeUnion(identifier), this.<ExpressionListNode>makeNormalNodeUnion(arguments), this.<AnonymousClassBodyNode>makeNormalNodeUnion(null), this.<JavadocNode>makeNormalNodeUnion(javadoc), startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateEnumConstantDeclarationNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), modifiers == null ? null : modifiers.getUid(), identifier == null ? null : identifier.getUid(), arguments == null ? null : arguments.getUid(), ret.getBody() == null ? null : ret.getBody().getUid(), javadoc == null ? null : javadoc.getUid(), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -4299,6 +5337,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             BsjSourceLocation stopLocation)
     {
         EnumConstantDeclarationNode ret = new EnumConstantDeclarationNodeImpl(this.<EnumConstantModifiersNode>makeNormalNodeUnion(modifiers), this.<IdentifierNode>makeNormalNodeUnion(identifier), this.<ExpressionListNode>makeNormalNodeUnion(arguments), this.<AnonymousClassBodyNode>makeNormalNodeUnion(null), this.<JavadocNode>makeNormalNodeUnion(javadoc), startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateEnumConstantDeclarationNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), modifiers == null ? null : modifiers.getUid(), identifier == null ? null : identifier.getUid(), arguments == null ? null : arguments.getUid(), ret.getBody() == null ? null : ret.getBody().getUid(), javadoc == null ? null : javadoc.getUid(), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -4312,6 +5354,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             NodeUnion<? extends AnnotationListNode> annotations)
     {
         EnumConstantModifiersNode ret = new EnumConstantModifiersNodeImpl(metaAnnotations, annotations, startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateEnumConstantModifiersNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), metaAnnotations == null ? null : (metaAnnotations.getNodeValue() == null ? null : metaAnnotations.getNodeValue().getUid()), annotations == null ? null : (annotations.getNodeValue() == null ? null : annotations.getNodeValue().getUid()), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -4325,6 +5371,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             AnnotationListNode annotations)
     {
         EnumConstantModifiersNode ret = new EnumConstantModifiersNodeImpl(this.<MetaAnnotationListNode>makeNormalNodeUnion(metaAnnotations), this.<AnnotationListNode>makeNormalNodeUnion(annotations), startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateEnumConstantModifiersNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), metaAnnotations == null ? null : metaAnnotations.getUid(), annotations == null ? null : annotations.getUid(), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -4340,6 +5390,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             BsjSourceLocation stopLocation)
     {
         EnumConstantModifiersNode ret = new EnumConstantModifiersNodeImpl(metaAnnotations, annotations, startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateEnumConstantModifiersNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), metaAnnotations == null ? null : (metaAnnotations.getNodeValue() == null ? null : metaAnnotations.getNodeValue().getUid()), annotations == null ? null : (annotations.getNodeValue() == null ? null : annotations.getNodeValue().getUid()), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -4355,6 +5409,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             BsjSourceLocation stopLocation)
     {
         EnumConstantModifiersNode ret = new EnumConstantModifiersNodeImpl(this.<MetaAnnotationListNode>makeNormalNodeUnion(metaAnnotations), this.<AnnotationListNode>makeNormalNodeUnion(annotations), startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateEnumConstantModifiersNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), metaAnnotations == null ? null : metaAnnotations.getUid(), annotations == null ? null : annotations.getUid(), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -4367,6 +5425,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
     )
     {
         EnumConstantModifiersNode ret = new EnumConstantModifiersNodeImpl(this.<MetaAnnotationListNode>makeNormalNodeUnion(makeMetaAnnotationListNode()), this.<AnnotationListNode>makeNormalNodeUnion(makeAnnotationListNode()), startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateEnumConstantModifiersNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), ret.getMetaAnnotations() == null ? null : ret.getMetaAnnotations().getUid(), ret.getAnnotations() == null ? null : ret.getAnnotations().getUid(), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -4380,6 +5442,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             BsjSourceLocation stopLocation)
     {
         EnumConstantModifiersNode ret = new EnumConstantModifiersNodeImpl(this.<MetaAnnotationListNode>makeNormalNodeUnion(makeMetaAnnotationListNode()), this.<AnnotationListNode>makeNormalNodeUnion(makeAnnotationListNode()), startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateEnumConstantModifiersNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), ret.getMetaAnnotations() == null ? null : ret.getMetaAnnotations().getUid(), ret.getAnnotations() == null ? null : ret.getAnnotations().getUid(), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -4396,6 +5462,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             NodeUnion<? extends JavadocNode> javadoc)
     {
         EnumDeclarationNode ret = new EnumDeclarationNodeImpl(modifiers, implementsClause, body, identifier, javadoc, startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateEnumDeclarationNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), modifiers == null ? null : (modifiers.getNodeValue() == null ? null : modifiers.getNodeValue().getUid()), implementsClause == null ? null : (implementsClause.getNodeValue() == null ? null : implementsClause.getNodeValue().getUid()), body == null ? null : (body.getNodeValue() == null ? null : body.getNodeValue().getUid()), identifier == null ? null : (identifier.getNodeValue() == null ? null : identifier.getNodeValue().getUid()), javadoc == null ? null : (javadoc.getNodeValue() == null ? null : javadoc.getNodeValue().getUid()), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -4412,6 +5482,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             JavadocNode javadoc)
     {
         EnumDeclarationNode ret = new EnumDeclarationNodeImpl(this.<EnumModifiersNode>makeNormalNodeUnion(modifiers), this.<DeclaredTypeListNode>makeNormalNodeUnion(implementsClause), this.<EnumBodyNode>makeNormalNodeUnion(body), this.<IdentifierNode>makeNormalNodeUnion(identifier), this.<JavadocNode>makeNormalNodeUnion(javadoc), startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateEnumDeclarationNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), modifiers == null ? null : modifiers.getUid(), implementsClause == null ? null : implementsClause.getUid(), body == null ? null : body.getUid(), identifier == null ? null : identifier.getUid(), javadoc == null ? null : javadoc.getUid(), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -4430,6 +5504,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             BsjSourceLocation stopLocation)
     {
         EnumDeclarationNode ret = new EnumDeclarationNodeImpl(modifiers, implementsClause, body, identifier, javadoc, startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateEnumDeclarationNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), modifiers == null ? null : (modifiers.getNodeValue() == null ? null : modifiers.getNodeValue().getUid()), implementsClause == null ? null : (implementsClause.getNodeValue() == null ? null : implementsClause.getNodeValue().getUid()), body == null ? null : (body.getNodeValue() == null ? null : body.getNodeValue().getUid()), identifier == null ? null : (identifier.getNodeValue() == null ? null : identifier.getNodeValue().getUid()), javadoc == null ? null : (javadoc.getNodeValue() == null ? null : javadoc.getNodeValue().getUid()), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -4448,6 +5526,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             BsjSourceLocation stopLocation)
     {
         EnumDeclarationNode ret = new EnumDeclarationNodeImpl(this.<EnumModifiersNode>makeNormalNodeUnion(modifiers), this.<DeclaredTypeListNode>makeNormalNodeUnion(implementsClause), this.<EnumBodyNode>makeNormalNodeUnion(body), this.<IdentifierNode>makeNormalNodeUnion(identifier), this.<JavadocNode>makeNormalNodeUnion(javadoc), startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateEnumDeclarationNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), modifiers == null ? null : modifiers.getUid(), implementsClause == null ? null : implementsClause.getUid(), body == null ? null : body.getUid(), identifier == null ? null : identifier.getUid(), javadoc == null ? null : javadoc.getUid(), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -4463,6 +5545,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             NodeUnion<? extends AnnotationListNode> annotations)
     {
         EnumModifiersNode ret = new EnumModifiersNodeImpl(access, strictfpFlag, metaAnnotations, annotations, startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateEnumModifiersNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), access, strictfpFlag, metaAnnotations == null ? null : (metaAnnotations.getNodeValue() == null ? null : metaAnnotations.getNodeValue().getUid()), annotations == null ? null : (annotations.getNodeValue() == null ? null : annotations.getNodeValue().getUid()), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -4478,6 +5564,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             AnnotationListNode annotations)
     {
         EnumModifiersNode ret = new EnumModifiersNodeImpl(access, strictfpFlag, this.<MetaAnnotationListNode>makeNormalNodeUnion(metaAnnotations), this.<AnnotationListNode>makeNormalNodeUnion(annotations), startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateEnumModifiersNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), access, strictfpFlag, metaAnnotations == null ? null : metaAnnotations.getUid(), annotations == null ? null : annotations.getUid(), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -4495,6 +5585,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             BsjSourceLocation stopLocation)
     {
         EnumModifiersNode ret = new EnumModifiersNodeImpl(access, strictfpFlag, metaAnnotations, annotations, startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateEnumModifiersNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), access, strictfpFlag, metaAnnotations == null ? null : (metaAnnotations.getNodeValue() == null ? null : metaAnnotations.getNodeValue().getUid()), annotations == null ? null : (annotations.getNodeValue() == null ? null : annotations.getNodeValue().getUid()), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -4512,6 +5606,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             BsjSourceLocation stopLocation)
     {
         EnumModifiersNode ret = new EnumModifiersNodeImpl(access, strictfpFlag, this.<MetaAnnotationListNode>makeNormalNodeUnion(metaAnnotations), this.<AnnotationListNode>makeNormalNodeUnion(annotations), startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateEnumModifiersNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), access, strictfpFlag, metaAnnotations == null ? null : metaAnnotations.getUid(), annotations == null ? null : annotations.getUid(), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -4524,6 +5622,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             AccessModifier access)
     {
         EnumModifiersNode ret = new EnumModifiersNodeImpl(access, false, this.<MetaAnnotationListNode>makeNormalNodeUnion(makeMetaAnnotationListNode()), this.<AnnotationListNode>makeNormalNodeUnion(makeAnnotationListNode()), startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateEnumModifiersNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), access, ret.getStrictfpFlag(), ret.getMetaAnnotations() == null ? null : ret.getMetaAnnotations().getUid(), ret.getAnnotations() == null ? null : ret.getAnnotations().getUid(), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -4538,6 +5640,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             BsjSourceLocation stopLocation)
     {
         EnumModifiersNode ret = new EnumModifiersNodeImpl(access, false, this.<MetaAnnotationListNode>makeNormalNodeUnion(makeMetaAnnotationListNode()), this.<AnnotationListNode>makeNormalNodeUnion(makeAnnotationListNode()), startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateEnumModifiersNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), access, ret.getStrictfpFlag(), ret.getMetaAnnotations() == null ? null : ret.getMetaAnnotations().getUid(), ret.getAnnotations() == null ? null : ret.getAnnotations().getUid(), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -4550,6 +5656,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             List<NodeUnion<? extends ExpressionNode>> children)
     {
         ExpressionListNode ret = new ExpressionListNodeImpl(children, startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateExpressionListNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), EditScriptUtilities.getNodeUnionUids(children), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -4562,6 +5672,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             List<ExpressionNode> children)
     {
         ExpressionListNode ret = new ExpressionListNodeImpl(unionWrapList(children), startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateExpressionListNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), EditScriptUtilities.getNodeUids(children), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -4588,6 +5702,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             BsjSourceLocation stopLocation)
     {
         ExpressionListNode ret = new ExpressionListNodeImpl(children, startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateExpressionListNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), EditScriptUtilities.getNodeUnionUids(children), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -4602,6 +5720,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             BsjSourceLocation stopLocation)
     {
         ExpressionListNode ret = new ExpressionListNodeImpl(unionWrapList(children), startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateExpressionListNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), EditScriptUtilities.getNodeUids(children), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -4629,6 +5751,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             NodeUnion<? extends MetaAnnotationListNode> metaAnnotations)
     {
         ExpressionStatementNode ret = new ExpressionStatementNodeImpl(expression, metaAnnotations, startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateExpressionStatementNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), expression == null ? null : (expression.getNodeValue() == null ? null : expression.getNodeValue().getUid()), metaAnnotations == null ? null : (metaAnnotations.getNodeValue() == null ? null : metaAnnotations.getNodeValue().getUid()), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -4642,6 +5768,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             MetaAnnotationListNode metaAnnotations)
     {
         ExpressionStatementNode ret = new ExpressionStatementNodeImpl(this.<StatementExpressionNode>makeNormalNodeUnion(expression), this.<MetaAnnotationListNode>makeNormalNodeUnion(metaAnnotations), startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateExpressionStatementNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), expression == null ? null : expression.getUid(), metaAnnotations == null ? null : metaAnnotations.getUid(), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -4657,6 +5787,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             BsjSourceLocation stopLocation)
     {
         ExpressionStatementNode ret = new ExpressionStatementNodeImpl(expression, metaAnnotations, startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateExpressionStatementNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), expression == null ? null : (expression.getNodeValue() == null ? null : expression.getNodeValue().getUid()), metaAnnotations == null ? null : (metaAnnotations.getNodeValue() == null ? null : metaAnnotations.getNodeValue().getUid()), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -4672,6 +5806,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             BsjSourceLocation stopLocation)
     {
         ExpressionStatementNode ret = new ExpressionStatementNodeImpl(this.<StatementExpressionNode>makeNormalNodeUnion(expression), this.<MetaAnnotationListNode>makeNormalNodeUnion(metaAnnotations), startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateExpressionStatementNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), expression == null ? null : expression.getUid(), metaAnnotations == null ? null : metaAnnotations.getUid(), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -4684,6 +5822,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             StatementExpressionNode expression)
     {
         ExpressionStatementNode ret = new ExpressionStatementNodeImpl(this.<StatementExpressionNode>makeNormalNodeUnion(expression), this.<MetaAnnotationListNode>makeNormalNodeUnion(makeMetaAnnotationListNode()), startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateExpressionStatementNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), expression == null ? null : expression.getUid(), ret.getMetaAnnotations() == null ? null : ret.getMetaAnnotations().getUid(), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -4698,6 +5840,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             BsjSourceLocation stopLocation)
     {
         ExpressionStatementNode ret = new ExpressionStatementNodeImpl(this.<StatementExpressionNode>makeNormalNodeUnion(expression), this.<MetaAnnotationListNode>makeNormalNodeUnion(makeMetaAnnotationListNode()), startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateExpressionStatementNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), expression == null ? null : expression.getUid(), ret.getMetaAnnotations() == null ? null : ret.getMetaAnnotations().getUid(), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -4713,6 +5859,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             NodeUnion<? extends JavadocNode> javadoc)
     {
         FieldDeclarationNode ret = new FieldDeclarationNodeImpl(modifiers, type, declarators, javadoc, startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateFieldDeclarationNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), modifiers == null ? null : (modifiers.getNodeValue() == null ? null : modifiers.getNodeValue().getUid()), type == null ? null : (type.getNodeValue() == null ? null : type.getNodeValue().getUid()), declarators == null ? null : (declarators.getNodeValue() == null ? null : declarators.getNodeValue().getUid()), javadoc == null ? null : (javadoc.getNodeValue() == null ? null : javadoc.getNodeValue().getUid()), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -4728,6 +5878,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             JavadocNode javadoc)
     {
         FieldDeclarationNode ret = new FieldDeclarationNodeImpl(this.<FieldModifiersNode>makeNormalNodeUnion(modifiers), this.<TypeNode>makeNormalNodeUnion(type), this.<VariableDeclaratorListNode>makeNormalNodeUnion(declarators), this.<JavadocNode>makeNormalNodeUnion(javadoc), startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateFieldDeclarationNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), modifiers == null ? null : modifiers.getUid(), type == null ? null : type.getUid(), declarators == null ? null : declarators.getUid(), javadoc == null ? null : javadoc.getUid(), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -4745,6 +5899,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             BsjSourceLocation stopLocation)
     {
         FieldDeclarationNode ret = new FieldDeclarationNodeImpl(modifiers, type, declarators, javadoc, startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateFieldDeclarationNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), modifiers == null ? null : (modifiers.getNodeValue() == null ? null : modifiers.getNodeValue().getUid()), type == null ? null : (type.getNodeValue() == null ? null : type.getNodeValue().getUid()), declarators == null ? null : (declarators.getNodeValue() == null ? null : declarators.getNodeValue().getUid()), javadoc == null ? null : (javadoc.getNodeValue() == null ? null : javadoc.getNodeValue().getUid()), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -4762,6 +5920,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             BsjSourceLocation stopLocation)
     {
         FieldDeclarationNode ret = new FieldDeclarationNodeImpl(this.<FieldModifiersNode>makeNormalNodeUnion(modifiers), this.<TypeNode>makeNormalNodeUnion(type), this.<VariableDeclaratorListNode>makeNormalNodeUnion(declarators), this.<JavadocNode>makeNormalNodeUnion(javadoc), startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateFieldDeclarationNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), modifiers == null ? null : modifiers.getUid(), type == null ? null : type.getUid(), declarators == null ? null : declarators.getUid(), javadoc == null ? null : javadoc.getUid(), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -4780,6 +5942,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             NodeUnion<? extends AnnotationListNode> annotations)
     {
         FieldModifiersNode ret = new FieldModifiersNodeImpl(access, staticFlag, finalFlag, transientFlag, volatileFlag, metaAnnotations, annotations, startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateFieldModifiersNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), access, staticFlag, finalFlag, transientFlag, volatileFlag, metaAnnotations == null ? null : (metaAnnotations.getNodeValue() == null ? null : metaAnnotations.getNodeValue().getUid()), annotations == null ? null : (annotations.getNodeValue() == null ? null : annotations.getNodeValue().getUid()), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -4798,6 +5964,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             AnnotationListNode annotations)
     {
         FieldModifiersNode ret = new FieldModifiersNodeImpl(access, staticFlag, finalFlag, transientFlag, volatileFlag, this.<MetaAnnotationListNode>makeNormalNodeUnion(metaAnnotations), this.<AnnotationListNode>makeNormalNodeUnion(annotations), startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateFieldModifiersNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), access, staticFlag, finalFlag, transientFlag, volatileFlag, metaAnnotations == null ? null : metaAnnotations.getUid(), annotations == null ? null : annotations.getUid(), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -4818,6 +5988,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             BsjSourceLocation stopLocation)
     {
         FieldModifiersNode ret = new FieldModifiersNodeImpl(access, staticFlag, finalFlag, transientFlag, volatileFlag, metaAnnotations, annotations, startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateFieldModifiersNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), access, staticFlag, finalFlag, transientFlag, volatileFlag, metaAnnotations == null ? null : (metaAnnotations.getNodeValue() == null ? null : metaAnnotations.getNodeValue().getUid()), annotations == null ? null : (annotations.getNodeValue() == null ? null : annotations.getNodeValue().getUid()), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -4838,6 +6012,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             BsjSourceLocation stopLocation)
     {
         FieldModifiersNode ret = new FieldModifiersNodeImpl(access, staticFlag, finalFlag, transientFlag, volatileFlag, this.<MetaAnnotationListNode>makeNormalNodeUnion(metaAnnotations), this.<AnnotationListNode>makeNormalNodeUnion(annotations), startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateFieldModifiersNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), access, staticFlag, finalFlag, transientFlag, volatileFlag, metaAnnotations == null ? null : metaAnnotations.getUid(), annotations == null ? null : annotations.getUid(), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -4850,6 +6028,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             AccessModifier access)
     {
         FieldModifiersNode ret = new FieldModifiersNodeImpl(access, false, false, false, false, this.<MetaAnnotationListNode>makeNormalNodeUnion(makeMetaAnnotationListNode()), this.<AnnotationListNode>makeNormalNodeUnion(makeAnnotationListNode()), startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateFieldModifiersNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), access, ret.getStaticFlag(), ret.getFinalFlag(), ret.getTransientFlag(), ret.getVolatileFlag(), ret.getMetaAnnotations() == null ? null : ret.getMetaAnnotations().getUid(), ret.getAnnotations() == null ? null : ret.getAnnotations().getUid(), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -4864,6 +6046,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             BsjSourceLocation stopLocation)
     {
         FieldModifiersNode ret = new FieldModifiersNodeImpl(access, false, false, false, false, this.<MetaAnnotationListNode>makeNormalNodeUnion(makeMetaAnnotationListNode()), this.<AnnotationListNode>makeNormalNodeUnion(makeAnnotationListNode()), startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateFieldModifiersNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), access, ret.getStaticFlag(), ret.getFinalFlag(), ret.getTransientFlag(), ret.getVolatileFlag(), ret.getMetaAnnotations() == null ? null : ret.getMetaAnnotations().getUid(), ret.getAnnotations() == null ? null : ret.getAnnotations().getUid(), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -4876,6 +6062,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             Float value)
     {
         FloatLiteralNode ret = new FloatLiteralNodeImpl(value, startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateFloatLiteralNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), value, startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -4890,6 +6080,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             BsjSourceLocation stopLocation)
     {
         FloatLiteralNode ret = new FloatLiteralNodeImpl(value, startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateFloatLiteralNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), value, startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -4902,6 +6096,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             NodeUnion<? extends LocalVariableDeclarationNode> declaration)
     {
         ForInitializerDeclarationNode ret = new ForInitializerDeclarationNodeImpl(declaration, startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateForInitializerDeclarationNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), declaration == null ? null : (declaration.getNodeValue() == null ? null : declaration.getNodeValue().getUid()), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -4914,6 +6112,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             LocalVariableDeclarationNode declaration)
     {
         ForInitializerDeclarationNode ret = new ForInitializerDeclarationNodeImpl(this.<LocalVariableDeclarationNode>makeNormalNodeUnion(declaration), startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateForInitializerDeclarationNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), declaration == null ? null : declaration.getUid(), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -4928,6 +6130,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             BsjSourceLocation stopLocation)
     {
         ForInitializerDeclarationNode ret = new ForInitializerDeclarationNodeImpl(declaration, startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateForInitializerDeclarationNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), declaration == null ? null : (declaration.getNodeValue() == null ? null : declaration.getNodeValue().getUid()), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -4942,6 +6148,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             BsjSourceLocation stopLocation)
     {
         ForInitializerDeclarationNode ret = new ForInitializerDeclarationNodeImpl(this.<LocalVariableDeclarationNode>makeNormalNodeUnion(declaration), startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateForInitializerDeclarationNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), declaration == null ? null : declaration.getUid(), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -4954,6 +6164,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             NodeUnion<? extends StatementExpressionListNode> expressions)
     {
         ForInitializerExpressionNode ret = new ForInitializerExpressionNodeImpl(expressions, startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateForInitializerExpressionNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), expressions == null ? null : (expressions.getNodeValue() == null ? null : expressions.getNodeValue().getUid()), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -4966,6 +6180,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             StatementExpressionListNode expressions)
     {
         ForInitializerExpressionNode ret = new ForInitializerExpressionNodeImpl(this.<StatementExpressionListNode>makeNormalNodeUnion(expressions), startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateForInitializerExpressionNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), expressions == null ? null : expressions.getUid(), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -4980,6 +6198,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             BsjSourceLocation stopLocation)
     {
         ForInitializerExpressionNode ret = new ForInitializerExpressionNodeImpl(expressions, startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateForInitializerExpressionNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), expressions == null ? null : (expressions.getNodeValue() == null ? null : expressions.getNodeValue().getUid()), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -4994,6 +6216,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             BsjSourceLocation stopLocation)
     {
         ForInitializerExpressionNode ret = new ForInitializerExpressionNodeImpl(this.<StatementExpressionListNode>makeNormalNodeUnion(expressions), startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateForInitializerExpressionNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), expressions == null ? null : expressions.getUid(), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -5010,6 +6236,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             NodeUnion<? extends MetaAnnotationListNode> metaAnnotations)
     {
         ForLoopNode ret = new ForLoopNodeImpl(initializer, condition, update, statement, metaAnnotations, startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateForLoopNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), initializer == null ? null : (initializer.getNodeValue() == null ? null : initializer.getNodeValue().getUid()), condition == null ? null : (condition.getNodeValue() == null ? null : condition.getNodeValue().getUid()), update == null ? null : (update.getNodeValue() == null ? null : update.getNodeValue().getUid()), statement == null ? null : (statement.getNodeValue() == null ? null : statement.getNodeValue().getUid()), metaAnnotations == null ? null : (metaAnnotations.getNodeValue() == null ? null : metaAnnotations.getNodeValue().getUid()), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -5026,6 +6256,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             MetaAnnotationListNode metaAnnotations)
     {
         ForLoopNode ret = new ForLoopNodeImpl(this.<ForInitializerNode>makeNormalNodeUnion(initializer), this.<ExpressionNode>makeNormalNodeUnion(condition), this.<StatementExpressionListNode>makeNormalNodeUnion(update), this.<StatementNode>makeNormalNodeUnion(statement), this.<MetaAnnotationListNode>makeNormalNodeUnion(metaAnnotations), startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateForLoopNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), initializer == null ? null : initializer.getUid(), condition == null ? null : condition.getUid(), update == null ? null : update.getUid(), statement == null ? null : statement.getUid(), metaAnnotations == null ? null : metaAnnotations.getUid(), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -5044,6 +6278,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             BsjSourceLocation stopLocation)
     {
         ForLoopNode ret = new ForLoopNodeImpl(initializer, condition, update, statement, metaAnnotations, startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateForLoopNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), initializer == null ? null : (initializer.getNodeValue() == null ? null : initializer.getNodeValue().getUid()), condition == null ? null : (condition.getNodeValue() == null ? null : condition.getNodeValue().getUid()), update == null ? null : (update.getNodeValue() == null ? null : update.getNodeValue().getUid()), statement == null ? null : (statement.getNodeValue() == null ? null : statement.getNodeValue().getUid()), metaAnnotations == null ? null : (metaAnnotations.getNodeValue() == null ? null : metaAnnotations.getNodeValue().getUid()), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -5062,6 +6300,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             BsjSourceLocation stopLocation)
     {
         ForLoopNode ret = new ForLoopNodeImpl(this.<ForInitializerNode>makeNormalNodeUnion(initializer), this.<ExpressionNode>makeNormalNodeUnion(condition), this.<StatementExpressionListNode>makeNormalNodeUnion(update), this.<StatementNode>makeNormalNodeUnion(statement), this.<MetaAnnotationListNode>makeNormalNodeUnion(metaAnnotations), startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateForLoopNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), initializer == null ? null : initializer.getUid(), condition == null ? null : condition.getUid(), update == null ? null : update.getUid(), statement == null ? null : statement.getUid(), metaAnnotations == null ? null : metaAnnotations.getUid(), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -5077,6 +6319,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             StatementNode statement)
     {
         ForLoopNode ret = new ForLoopNodeImpl(this.<ForInitializerNode>makeNormalNodeUnion(initializer), this.<ExpressionNode>makeNormalNodeUnion(condition), this.<StatementExpressionListNode>makeNormalNodeUnion(update), this.<StatementNode>makeNormalNodeUnion(statement), this.<MetaAnnotationListNode>makeNormalNodeUnion(makeMetaAnnotationListNode()), startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateForLoopNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), initializer == null ? null : initializer.getUid(), condition == null ? null : condition.getUid(), update == null ? null : update.getUid(), statement == null ? null : statement.getUid(), ret.getMetaAnnotations() == null ? null : ret.getMetaAnnotations().getUid(), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -5094,6 +6340,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             BsjSourceLocation stopLocation)
     {
         ForLoopNode ret = new ForLoopNodeImpl(this.<ForInitializerNode>makeNormalNodeUnion(initializer), this.<ExpressionNode>makeNormalNodeUnion(condition), this.<StatementExpressionListNode>makeNormalNodeUnion(update), this.<StatementNode>makeNormalNodeUnion(statement), this.<MetaAnnotationListNode>makeNormalNodeUnion(makeMetaAnnotationListNode()), startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateForLoopNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), initializer == null ? null : initializer.getUid(), condition == null ? null : condition.getUid(), update == null ? null : update.getUid(), statement == null ? null : statement.getUid(), ret.getMetaAnnotations() == null ? null : ret.getMetaAnnotations().getUid(), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -5106,6 +6356,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             List<NodeUnion<? extends IdentifierNode>> children)
     {
         IdentifierListNode ret = new IdentifierListNodeImpl(children, startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateIdentifierListNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), EditScriptUtilities.getNodeUnionUids(children), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -5118,6 +6372,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             List<IdentifierNode> children)
     {
         IdentifierListNode ret = new IdentifierListNodeImpl(unionWrapList(children), startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateIdentifierListNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), EditScriptUtilities.getNodeUids(children), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -5144,6 +6402,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             BsjSourceLocation stopLocation)
     {
         IdentifierListNode ret = new IdentifierListNodeImpl(children, startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateIdentifierListNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), EditScriptUtilities.getNodeUnionUids(children), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -5158,6 +6420,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             BsjSourceLocation stopLocation)
     {
         IdentifierListNode ret = new IdentifierListNodeImpl(unionWrapList(children), startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateIdentifierListNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), EditScriptUtilities.getNodeUids(children), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -5184,6 +6450,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             String identifier)
     {
         IdentifierNode ret = new IdentifierNodeImpl(identifier, startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateIdentifierNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), identifier, startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -5198,6 +6468,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             BsjSourceLocation stopLocation)
     {
         IdentifierNode ret = new IdentifierNodeImpl(identifier, startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateIdentifierNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), identifier, startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -5213,6 +6487,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             NodeUnion<? extends MetaAnnotationListNode> metaAnnotations)
     {
         IfNode ret = new IfNodeImpl(condition, thenStatement, elseStatement, metaAnnotations, startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateIfNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), condition == null ? null : (condition.getNodeValue() == null ? null : condition.getNodeValue().getUid()), thenStatement == null ? null : (thenStatement.getNodeValue() == null ? null : thenStatement.getNodeValue().getUid()), elseStatement == null ? null : (elseStatement.getNodeValue() == null ? null : elseStatement.getNodeValue().getUid()), metaAnnotations == null ? null : (metaAnnotations.getNodeValue() == null ? null : metaAnnotations.getNodeValue().getUid()), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -5228,6 +6506,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             MetaAnnotationListNode metaAnnotations)
     {
         IfNode ret = new IfNodeImpl(this.<ExpressionNode>makeNormalNodeUnion(condition), this.<StatementNode>makeNormalNodeUnion(thenStatement), this.<StatementNode>makeNormalNodeUnion(elseStatement), this.<MetaAnnotationListNode>makeNormalNodeUnion(metaAnnotations), startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateIfNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), condition == null ? null : condition.getUid(), thenStatement == null ? null : thenStatement.getUid(), elseStatement == null ? null : elseStatement.getUid(), metaAnnotations == null ? null : metaAnnotations.getUid(), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -5245,6 +6527,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             BsjSourceLocation stopLocation)
     {
         IfNode ret = new IfNodeImpl(condition, thenStatement, elseStatement, metaAnnotations, startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateIfNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), condition == null ? null : (condition.getNodeValue() == null ? null : condition.getNodeValue().getUid()), thenStatement == null ? null : (thenStatement.getNodeValue() == null ? null : thenStatement.getNodeValue().getUid()), elseStatement == null ? null : (elseStatement.getNodeValue() == null ? null : elseStatement.getNodeValue().getUid()), metaAnnotations == null ? null : (metaAnnotations.getNodeValue() == null ? null : metaAnnotations.getNodeValue().getUid()), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -5262,6 +6548,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             BsjSourceLocation stopLocation)
     {
         IfNode ret = new IfNodeImpl(this.<ExpressionNode>makeNormalNodeUnion(condition), this.<StatementNode>makeNormalNodeUnion(thenStatement), this.<StatementNode>makeNormalNodeUnion(elseStatement), this.<MetaAnnotationListNode>makeNormalNodeUnion(metaAnnotations), startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateIfNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), condition == null ? null : condition.getUid(), thenStatement == null ? null : thenStatement.getUid(), elseStatement == null ? null : elseStatement.getUid(), metaAnnotations == null ? null : metaAnnotations.getUid(), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -5276,6 +6566,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             StatementNode elseStatement)
     {
         IfNode ret = new IfNodeImpl(this.<ExpressionNode>makeNormalNodeUnion(condition), this.<StatementNode>makeNormalNodeUnion(thenStatement), this.<StatementNode>makeNormalNodeUnion(elseStatement), this.<MetaAnnotationListNode>makeNormalNodeUnion(makeMetaAnnotationListNode()), startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateIfNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), condition == null ? null : condition.getUid(), thenStatement == null ? null : thenStatement.getUid(), elseStatement == null ? null : elseStatement.getUid(), ret.getMetaAnnotations() == null ? null : ret.getMetaAnnotations().getUid(), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -5292,6 +6586,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             BsjSourceLocation stopLocation)
     {
         IfNode ret = new IfNodeImpl(this.<ExpressionNode>makeNormalNodeUnion(condition), this.<StatementNode>makeNormalNodeUnion(thenStatement), this.<StatementNode>makeNormalNodeUnion(elseStatement), this.<MetaAnnotationListNode>makeNormalNodeUnion(makeMetaAnnotationListNode()), startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateIfNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), condition == null ? null : condition.getUid(), thenStatement == null ? null : thenStatement.getUid(), elseStatement == null ? null : elseStatement.getUid(), ret.getMetaAnnotations() == null ? null : ret.getMetaAnnotations().getUid(), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -5305,6 +6603,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             StatementNode thenStatement)
     {
         IfNode ret = new IfNodeImpl(this.<ExpressionNode>makeNormalNodeUnion(condition), this.<StatementNode>makeNormalNodeUnion(thenStatement), this.<StatementNode>makeNormalNodeUnion(null), this.<MetaAnnotationListNode>makeNormalNodeUnion(makeMetaAnnotationListNode()), startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateIfNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), condition == null ? null : condition.getUid(), thenStatement == null ? null : thenStatement.getUid(), ret.getElseStatement() == null ? null : ret.getElseStatement().getUid(), ret.getMetaAnnotations() == null ? null : ret.getMetaAnnotations().getUid(), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -5320,6 +6622,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             BsjSourceLocation stopLocation)
     {
         IfNode ret = new IfNodeImpl(this.<ExpressionNode>makeNormalNodeUnion(condition), this.<StatementNode>makeNormalNodeUnion(thenStatement), this.<StatementNode>makeNormalNodeUnion(null), this.<MetaAnnotationListNode>makeNormalNodeUnion(makeMetaAnnotationListNode()), startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateIfNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), condition == null ? null : condition.getUid(), thenStatement == null ? null : thenStatement.getUid(), ret.getElseStatement() == null ? null : ret.getElseStatement().getUid(), ret.getMetaAnnotations() == null ? null : ret.getMetaAnnotations().getUid(), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -5332,6 +6638,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             List<NodeUnion<? extends ImportNode>> children)
     {
         ImportListNode ret = new ImportListNodeImpl(children, startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateImportListNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), EditScriptUtilities.getNodeUnionUids(children), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -5344,6 +6654,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             List<ImportNode> children)
     {
         ImportListNode ret = new ImportListNodeImpl(unionWrapList(children), startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateImportListNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), EditScriptUtilities.getNodeUids(children), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -5370,6 +6684,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             BsjSourceLocation stopLocation)
     {
         ImportListNode ret = new ImportListNodeImpl(children, startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateImportListNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), EditScriptUtilities.getNodeUnionUids(children), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -5384,6 +6702,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             BsjSourceLocation stopLocation)
     {
         ImportListNode ret = new ImportListNodeImpl(unionWrapList(children), startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateImportListNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), EditScriptUtilities.getNodeUids(children), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -5410,6 +6732,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             NodeUnion<? extends NameNode> name)
     {
         ImportOnDemandNode ret = new ImportOnDemandNodeImpl(name, startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateImportOnDemandNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), name == null ? null : (name.getNodeValue() == null ? null : name.getNodeValue().getUid()), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -5422,6 +6748,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             NameNode name)
     {
         ImportOnDemandNode ret = new ImportOnDemandNodeImpl(this.<NameNode>makeNormalNodeUnion(name), startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateImportOnDemandNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), name == null ? null : name.getUid(), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -5436,6 +6766,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             BsjSourceLocation stopLocation)
     {
         ImportOnDemandNode ret = new ImportOnDemandNodeImpl(name, startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateImportOnDemandNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), name == null ? null : (name.getNodeValue() == null ? null : name.getNodeValue().getUid()), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -5450,6 +6784,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             BsjSourceLocation stopLocation)
     {
         ImportOnDemandNode ret = new ImportOnDemandNodeImpl(this.<NameNode>makeNormalNodeUnion(name), startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateImportOnDemandNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), name == null ? null : name.getUid(), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -5462,6 +6800,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             NodeUnion<? extends NameNode> name)
     {
         ImportSingleTypeNode ret = new ImportSingleTypeNodeImpl(name, startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateImportSingleTypeNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), name == null ? null : (name.getNodeValue() == null ? null : name.getNodeValue().getUid()), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -5474,6 +6816,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             NameNode name)
     {
         ImportSingleTypeNode ret = new ImportSingleTypeNodeImpl(this.<NameNode>makeNormalNodeUnion(name), startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateImportSingleTypeNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), name == null ? null : name.getUid(), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -5488,6 +6834,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             BsjSourceLocation stopLocation)
     {
         ImportSingleTypeNode ret = new ImportSingleTypeNodeImpl(name, startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateImportSingleTypeNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), name == null ? null : (name.getNodeValue() == null ? null : name.getNodeValue().getUid()), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -5502,6 +6852,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             BsjSourceLocation stopLocation)
     {
         ImportSingleTypeNode ret = new ImportSingleTypeNodeImpl(this.<NameNode>makeNormalNodeUnion(name), startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateImportSingleTypeNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), name == null ? null : name.getUid(), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -5516,6 +6870,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             NodeUnion<? extends MetaAnnotationListNode> metaAnnotations)
     {
         InitializerDeclarationNode ret = new InitializerDeclarationNodeImpl(staticInitializer, body, metaAnnotations, startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateInitializerDeclarationNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), staticInitializer, body == null ? null : (body.getNodeValue() == null ? null : body.getNodeValue().getUid()), metaAnnotations == null ? null : (metaAnnotations.getNodeValue() == null ? null : metaAnnotations.getNodeValue().getUid()), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -5530,6 +6888,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             MetaAnnotationListNode metaAnnotations)
     {
         InitializerDeclarationNode ret = new InitializerDeclarationNodeImpl(staticInitializer, this.<BlockStatementListNode>makeNormalNodeUnion(body), this.<MetaAnnotationListNode>makeNormalNodeUnion(metaAnnotations), startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateInitializerDeclarationNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), staticInitializer, body == null ? null : body.getUid(), metaAnnotations == null ? null : metaAnnotations.getUid(), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -5546,6 +6908,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             BsjSourceLocation stopLocation)
     {
         InitializerDeclarationNode ret = new InitializerDeclarationNodeImpl(staticInitializer, body, metaAnnotations, startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateInitializerDeclarationNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), staticInitializer, body == null ? null : (body.getNodeValue() == null ? null : body.getNodeValue().getUid()), metaAnnotations == null ? null : (metaAnnotations.getNodeValue() == null ? null : metaAnnotations.getNodeValue().getUid()), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -5562,6 +6928,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             BsjSourceLocation stopLocation)
     {
         InitializerDeclarationNode ret = new InitializerDeclarationNodeImpl(staticInitializer, this.<BlockStatementListNode>makeNormalNodeUnion(body), this.<MetaAnnotationListNode>makeNormalNodeUnion(metaAnnotations), startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateInitializerDeclarationNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), staticInitializer, body == null ? null : body.getUid(), metaAnnotations == null ? null : metaAnnotations.getUid(), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -5575,6 +6945,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             BlockStatementListNode body)
     {
         InitializerDeclarationNode ret = new InitializerDeclarationNodeImpl(staticInitializer, this.<BlockStatementListNode>makeNormalNodeUnion(body), this.<MetaAnnotationListNode>makeNormalNodeUnion(makeMetaAnnotationListNode()), startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateInitializerDeclarationNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), staticInitializer, body == null ? null : body.getUid(), ret.getMetaAnnotations() == null ? null : ret.getMetaAnnotations().getUid(), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -5590,6 +6964,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             BsjSourceLocation stopLocation)
     {
         InitializerDeclarationNode ret = new InitializerDeclarationNodeImpl(staticInitializer, this.<BlockStatementListNode>makeNormalNodeUnion(body), this.<MetaAnnotationListNode>makeNormalNodeUnion(makeMetaAnnotationListNode()), startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateInitializerDeclarationNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), staticInitializer, body == null ? null : body.getUid(), ret.getMetaAnnotations() == null ? null : ret.getMetaAnnotations().getUid(), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -5603,6 +6981,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             NodeUnion<? extends TypeNode> type)
     {
         InstanceOfNode ret = new InstanceOfNodeImpl(expression, type, startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateInstanceOfNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), expression == null ? null : (expression.getNodeValue() == null ? null : expression.getNodeValue().getUid()), type == null ? null : (type.getNodeValue() == null ? null : type.getNodeValue().getUid()), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -5616,6 +6998,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             TypeNode type)
     {
         InstanceOfNode ret = new InstanceOfNodeImpl(this.<ExpressionNode>makeNormalNodeUnion(expression), this.<TypeNode>makeNormalNodeUnion(type), startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateInstanceOfNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), expression == null ? null : expression.getUid(), type == null ? null : type.getUid(), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -5631,6 +7017,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             BsjSourceLocation stopLocation)
     {
         InstanceOfNode ret = new InstanceOfNodeImpl(expression, type, startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateInstanceOfNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), expression == null ? null : (expression.getNodeValue() == null ? null : expression.getNodeValue().getUid()), type == null ? null : (type.getNodeValue() == null ? null : type.getNodeValue().getUid()), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -5646,6 +7036,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             BsjSourceLocation stopLocation)
     {
         InstanceOfNode ret = new InstanceOfNodeImpl(this.<ExpressionNode>makeNormalNodeUnion(expression), this.<TypeNode>makeNormalNodeUnion(type), startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateInstanceOfNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), expression == null ? null : expression.getUid(), type == null ? null : type.getUid(), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -5658,6 +7052,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             Integer value)
     {
         IntLiteralNode ret = new IntLiteralNodeImpl(value, startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateIntLiteralNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), value, startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -5672,6 +7070,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             BsjSourceLocation stopLocation)
     {
         IntLiteralNode ret = new IntLiteralNodeImpl(value, startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateIntLiteralNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), value, startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -5684,6 +7086,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             NodeUnion<? extends InterfaceMemberListNode> members)
     {
         InterfaceBodyNode ret = new InterfaceBodyNodeImpl(members, startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateInterfaceBodyNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), members == null ? null : (members.getNodeValue() == null ? null : members.getNodeValue().getUid()), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -5696,6 +7102,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             InterfaceMemberListNode members)
     {
         InterfaceBodyNode ret = new InterfaceBodyNodeImpl(this.<InterfaceMemberListNode>makeNormalNodeUnion(members), startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateInterfaceBodyNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), members == null ? null : members.getUid(), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -5710,6 +7120,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             BsjSourceLocation stopLocation)
     {
         InterfaceBodyNode ret = new InterfaceBodyNodeImpl(members, startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateInterfaceBodyNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), members == null ? null : (members.getNodeValue() == null ? null : members.getNodeValue().getUid()), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -5724,6 +7138,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             BsjSourceLocation stopLocation)
     {
         InterfaceBodyNode ret = new InterfaceBodyNodeImpl(this.<InterfaceMemberListNode>makeNormalNodeUnion(members), startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateInterfaceBodyNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), members == null ? null : members.getUid(), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -5741,6 +7159,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             NodeUnion<? extends JavadocNode> javadoc)
     {
         InterfaceDeclarationNode ret = new InterfaceDeclarationNodeImpl(modifiers, extendsClause, body, typeParameters, identifier, javadoc, startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateInterfaceDeclarationNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), modifiers == null ? null : (modifiers.getNodeValue() == null ? null : modifiers.getNodeValue().getUid()), extendsClause == null ? null : (extendsClause.getNodeValue() == null ? null : extendsClause.getNodeValue().getUid()), body == null ? null : (body.getNodeValue() == null ? null : body.getNodeValue().getUid()), typeParameters == null ? null : (typeParameters.getNodeValue() == null ? null : typeParameters.getNodeValue().getUid()), identifier == null ? null : (identifier.getNodeValue() == null ? null : identifier.getNodeValue().getUid()), javadoc == null ? null : (javadoc.getNodeValue() == null ? null : javadoc.getNodeValue().getUid()), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -5758,6 +7180,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             JavadocNode javadoc)
     {
         InterfaceDeclarationNode ret = new InterfaceDeclarationNodeImpl(this.<InterfaceModifiersNode>makeNormalNodeUnion(modifiers), this.<DeclaredTypeListNode>makeNormalNodeUnion(extendsClause), this.<InterfaceBodyNode>makeNormalNodeUnion(body), this.<TypeParameterListNode>makeNormalNodeUnion(typeParameters), this.<IdentifierNode>makeNormalNodeUnion(identifier), this.<JavadocNode>makeNormalNodeUnion(javadoc), startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateInterfaceDeclarationNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), modifiers == null ? null : modifiers.getUid(), extendsClause == null ? null : extendsClause.getUid(), body == null ? null : body.getUid(), typeParameters == null ? null : typeParameters.getUid(), identifier == null ? null : identifier.getUid(), javadoc == null ? null : javadoc.getUid(), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -5777,6 +7203,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             BsjSourceLocation stopLocation)
     {
         InterfaceDeclarationNode ret = new InterfaceDeclarationNodeImpl(modifiers, extendsClause, body, typeParameters, identifier, javadoc, startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateInterfaceDeclarationNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), modifiers == null ? null : (modifiers.getNodeValue() == null ? null : modifiers.getNodeValue().getUid()), extendsClause == null ? null : (extendsClause.getNodeValue() == null ? null : extendsClause.getNodeValue().getUid()), body == null ? null : (body.getNodeValue() == null ? null : body.getNodeValue().getUid()), typeParameters == null ? null : (typeParameters.getNodeValue() == null ? null : typeParameters.getNodeValue().getUid()), identifier == null ? null : (identifier.getNodeValue() == null ? null : identifier.getNodeValue().getUid()), javadoc == null ? null : (javadoc.getNodeValue() == null ? null : javadoc.getNodeValue().getUid()), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -5796,6 +7226,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             BsjSourceLocation stopLocation)
     {
         InterfaceDeclarationNode ret = new InterfaceDeclarationNodeImpl(this.<InterfaceModifiersNode>makeNormalNodeUnion(modifiers), this.<DeclaredTypeListNode>makeNormalNodeUnion(extendsClause), this.<InterfaceBodyNode>makeNormalNodeUnion(body), this.<TypeParameterListNode>makeNormalNodeUnion(typeParameters), this.<IdentifierNode>makeNormalNodeUnion(identifier), this.<JavadocNode>makeNormalNodeUnion(javadoc), startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateInterfaceDeclarationNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), modifiers == null ? null : modifiers.getUid(), extendsClause == null ? null : extendsClause.getUid(), body == null ? null : body.getUid(), typeParameters == null ? null : typeParameters.getUid(), identifier == null ? null : identifier.getUid(), javadoc == null ? null : javadoc.getUid(), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -5808,6 +7242,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             List<NodeUnion<? extends InterfaceMemberNode>> children)
     {
         InterfaceMemberListNode ret = new InterfaceMemberListNodeImpl(children, startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateInterfaceMemberListNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), EditScriptUtilities.getNodeUnionUids(children), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -5820,6 +7258,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             List<InterfaceMemberNode> children)
     {
         InterfaceMemberListNode ret = new InterfaceMemberListNodeImpl(unionWrapList(children), startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateInterfaceMemberListNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), EditScriptUtilities.getNodeUids(children), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -5846,6 +7288,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             BsjSourceLocation stopLocation)
     {
         InterfaceMemberListNode ret = new InterfaceMemberListNodeImpl(children, startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateInterfaceMemberListNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), EditScriptUtilities.getNodeUnionUids(children), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -5860,6 +7306,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             BsjSourceLocation stopLocation)
     {
         InterfaceMemberListNode ret = new InterfaceMemberListNodeImpl(unionWrapList(children), startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateInterfaceMemberListNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), EditScriptUtilities.getNodeUids(children), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -5886,6 +7336,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             NodeUnion<? extends MetaprogramNode> metaprogram)
     {
         InterfaceMemberMetaprogramAnchorNode ret = new InterfaceMemberMetaprogramAnchorNodeImpl(metaprogram, startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateInterfaceMemberMetaprogramAnchorNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), metaprogram == null ? null : (metaprogram.getNodeValue() == null ? null : metaprogram.getNodeValue().getUid()), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -5898,6 +7352,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             MetaprogramNode metaprogram)
     {
         InterfaceMemberMetaprogramAnchorNode ret = new InterfaceMemberMetaprogramAnchorNodeImpl(this.<MetaprogramNode>makeNormalNodeUnion(metaprogram), startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateInterfaceMemberMetaprogramAnchorNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), metaprogram == null ? null : metaprogram.getUid(), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -5912,6 +7370,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             BsjSourceLocation stopLocation)
     {
         InterfaceMemberMetaprogramAnchorNode ret = new InterfaceMemberMetaprogramAnchorNodeImpl(metaprogram, startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateInterfaceMemberMetaprogramAnchorNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), metaprogram == null ? null : (metaprogram.getNodeValue() == null ? null : metaprogram.getNodeValue().getUid()), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -5926,6 +7388,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             BsjSourceLocation stopLocation)
     {
         InterfaceMemberMetaprogramAnchorNode ret = new InterfaceMemberMetaprogramAnchorNodeImpl(this.<MetaprogramNode>makeNormalNodeUnion(metaprogram), startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateInterfaceMemberMetaprogramAnchorNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), metaprogram == null ? null : metaprogram.getUid(), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -5942,6 +7408,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             NodeUnion<? extends AnnotationListNode> annotations)
     {
         InterfaceModifiersNode ret = new InterfaceModifiersNodeImpl(access, staticFlag, strictfpFlag, metaAnnotations, annotations, startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateInterfaceModifiersNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), access, staticFlag, strictfpFlag, metaAnnotations == null ? null : (metaAnnotations.getNodeValue() == null ? null : metaAnnotations.getNodeValue().getUid()), annotations == null ? null : (annotations.getNodeValue() == null ? null : annotations.getNodeValue().getUid()), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -5958,6 +7428,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             AnnotationListNode annotations)
     {
         InterfaceModifiersNode ret = new InterfaceModifiersNodeImpl(access, staticFlag, strictfpFlag, this.<MetaAnnotationListNode>makeNormalNodeUnion(metaAnnotations), this.<AnnotationListNode>makeNormalNodeUnion(annotations), startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateInterfaceModifiersNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), access, staticFlag, strictfpFlag, metaAnnotations == null ? null : metaAnnotations.getUid(), annotations == null ? null : annotations.getUid(), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -5976,6 +7450,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             BsjSourceLocation stopLocation)
     {
         InterfaceModifiersNode ret = new InterfaceModifiersNodeImpl(access, staticFlag, strictfpFlag, metaAnnotations, annotations, startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateInterfaceModifiersNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), access, staticFlag, strictfpFlag, metaAnnotations == null ? null : (metaAnnotations.getNodeValue() == null ? null : metaAnnotations.getNodeValue().getUid()), annotations == null ? null : (annotations.getNodeValue() == null ? null : annotations.getNodeValue().getUid()), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -5994,6 +7472,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             BsjSourceLocation stopLocation)
     {
         InterfaceModifiersNode ret = new InterfaceModifiersNodeImpl(access, staticFlag, strictfpFlag, this.<MetaAnnotationListNode>makeNormalNodeUnion(metaAnnotations), this.<AnnotationListNode>makeNormalNodeUnion(annotations), startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateInterfaceModifiersNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), access, staticFlag, strictfpFlag, metaAnnotations == null ? null : metaAnnotations.getUid(), annotations == null ? null : annotations.getUid(), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -6006,6 +7488,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             AccessModifier access)
     {
         InterfaceModifiersNode ret = new InterfaceModifiersNodeImpl(access, false, false, this.<MetaAnnotationListNode>makeNormalNodeUnion(makeMetaAnnotationListNode()), this.<AnnotationListNode>makeNormalNodeUnion(makeAnnotationListNode()), startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateInterfaceModifiersNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), access, ret.getStaticFlag(), ret.getStrictfpFlag(), ret.getMetaAnnotations() == null ? null : ret.getMetaAnnotations().getUid(), ret.getAnnotations() == null ? null : ret.getAnnotations().getUid(), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -6020,6 +7506,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             BsjSourceLocation stopLocation)
     {
         InterfaceModifiersNode ret = new InterfaceModifiersNodeImpl(access, false, false, this.<MetaAnnotationListNode>makeNormalNodeUnion(makeMetaAnnotationListNode()), this.<AnnotationListNode>makeNormalNodeUnion(makeAnnotationListNode()), startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateInterfaceModifiersNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), access, ret.getStaticFlag(), ret.getStrictfpFlag(), ret.getMetaAnnotations() == null ? null : ret.getMetaAnnotations().getUid(), ret.getAnnotations() == null ? null : ret.getAnnotations().getUid(), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -6032,6 +7522,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             String text)
     {
         JavadocNode ret = new JavadocNodeImpl(text, startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateJavadocNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), text, startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -6046,6 +7540,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             BsjSourceLocation stopLocation)
     {
         JavadocNode ret = new JavadocNodeImpl(text, startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateJavadocNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), text, startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -6060,6 +7558,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             NodeUnion<? extends MetaAnnotationListNode> metaAnnotations)
     {
         LabeledStatementNode ret = new LabeledStatementNodeImpl(label, statement, metaAnnotations, startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateLabeledStatementNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), label == null ? null : (label.getNodeValue() == null ? null : label.getNodeValue().getUid()), statement == null ? null : (statement.getNodeValue() == null ? null : statement.getNodeValue().getUid()), metaAnnotations == null ? null : (metaAnnotations.getNodeValue() == null ? null : metaAnnotations.getNodeValue().getUid()), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -6074,6 +7576,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             MetaAnnotationListNode metaAnnotations)
     {
         LabeledStatementNode ret = new LabeledStatementNodeImpl(this.<IdentifierNode>makeNormalNodeUnion(label), this.<StatementNode>makeNormalNodeUnion(statement), this.<MetaAnnotationListNode>makeNormalNodeUnion(metaAnnotations), startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateLabeledStatementNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), label == null ? null : label.getUid(), statement == null ? null : statement.getUid(), metaAnnotations == null ? null : metaAnnotations.getUid(), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -6090,6 +7596,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             BsjSourceLocation stopLocation)
     {
         LabeledStatementNode ret = new LabeledStatementNodeImpl(label, statement, metaAnnotations, startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateLabeledStatementNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), label == null ? null : (label.getNodeValue() == null ? null : label.getNodeValue().getUid()), statement == null ? null : (statement.getNodeValue() == null ? null : statement.getNodeValue().getUid()), metaAnnotations == null ? null : (metaAnnotations.getNodeValue() == null ? null : metaAnnotations.getNodeValue().getUid()), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -6106,6 +7616,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             BsjSourceLocation stopLocation)
     {
         LabeledStatementNode ret = new LabeledStatementNodeImpl(this.<IdentifierNode>makeNormalNodeUnion(label), this.<StatementNode>makeNormalNodeUnion(statement), this.<MetaAnnotationListNode>makeNormalNodeUnion(metaAnnotations), startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateLabeledStatementNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), label == null ? null : label.getUid(), statement == null ? null : statement.getUid(), metaAnnotations == null ? null : metaAnnotations.getUid(), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -6119,6 +7633,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             StatementNode statement)
     {
         LabeledStatementNode ret = new LabeledStatementNodeImpl(this.<IdentifierNode>makeNormalNodeUnion(label), this.<StatementNode>makeNormalNodeUnion(statement), this.<MetaAnnotationListNode>makeNormalNodeUnion(makeMetaAnnotationListNode()), startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateLabeledStatementNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), label == null ? null : label.getUid(), statement == null ? null : statement.getUid(), ret.getMetaAnnotations() == null ? null : ret.getMetaAnnotations().getUid(), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -6134,6 +7652,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             BsjSourceLocation stopLocation)
     {
         LabeledStatementNode ret = new LabeledStatementNodeImpl(this.<IdentifierNode>makeNormalNodeUnion(label), this.<StatementNode>makeNormalNodeUnion(statement), this.<MetaAnnotationListNode>makeNormalNodeUnion(makeMetaAnnotationListNode()), startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateLabeledStatementNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), label == null ? null : label.getUid(), statement == null ? null : statement.getUid(), ret.getMetaAnnotations() == null ? null : ret.getMetaAnnotations().getUid(), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -6152,6 +7674,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             NodeUnion<? extends JavadocNode> javadoc)
     {
         LocalClassDeclarationNode ret = new LocalClassDeclarationNodeImpl(modifiers, extendsClause, implementsClause, body, typeParameters, identifier, javadoc, startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateLocalClassDeclarationNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), modifiers == null ? null : (modifiers.getNodeValue() == null ? null : modifiers.getNodeValue().getUid()), extendsClause == null ? null : (extendsClause.getNodeValue() == null ? null : extendsClause.getNodeValue().getUid()), implementsClause == null ? null : (implementsClause.getNodeValue() == null ? null : implementsClause.getNodeValue().getUid()), body == null ? null : (body.getNodeValue() == null ? null : body.getNodeValue().getUid()), typeParameters == null ? null : (typeParameters.getNodeValue() == null ? null : typeParameters.getNodeValue().getUid()), identifier == null ? null : (identifier.getNodeValue() == null ? null : identifier.getNodeValue().getUid()), javadoc == null ? null : (javadoc.getNodeValue() == null ? null : javadoc.getNodeValue().getUid()), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -6170,6 +7696,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             JavadocNode javadoc)
     {
         LocalClassDeclarationNode ret = new LocalClassDeclarationNodeImpl(this.<LocalClassModifiersNode>makeNormalNodeUnion(modifiers), this.<DeclaredTypeNode>makeNormalNodeUnion(extendsClause), this.<DeclaredTypeListNode>makeNormalNodeUnion(implementsClause), this.<ClassBodyNode>makeNormalNodeUnion(body), this.<TypeParameterListNode>makeNormalNodeUnion(typeParameters), this.<IdentifierNode>makeNormalNodeUnion(identifier), this.<JavadocNode>makeNormalNodeUnion(javadoc), startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateLocalClassDeclarationNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), modifiers == null ? null : modifiers.getUid(), extendsClause == null ? null : extendsClause.getUid(), implementsClause == null ? null : implementsClause.getUid(), body == null ? null : body.getUid(), typeParameters == null ? null : typeParameters.getUid(), identifier == null ? null : identifier.getUid(), javadoc == null ? null : javadoc.getUid(), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -6190,6 +7720,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             BsjSourceLocation stopLocation)
     {
         LocalClassDeclarationNode ret = new LocalClassDeclarationNodeImpl(modifiers, extendsClause, implementsClause, body, typeParameters, identifier, javadoc, startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateLocalClassDeclarationNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), modifiers == null ? null : (modifiers.getNodeValue() == null ? null : modifiers.getNodeValue().getUid()), extendsClause == null ? null : (extendsClause.getNodeValue() == null ? null : extendsClause.getNodeValue().getUid()), implementsClause == null ? null : (implementsClause.getNodeValue() == null ? null : implementsClause.getNodeValue().getUid()), body == null ? null : (body.getNodeValue() == null ? null : body.getNodeValue().getUid()), typeParameters == null ? null : (typeParameters.getNodeValue() == null ? null : typeParameters.getNodeValue().getUid()), identifier == null ? null : (identifier.getNodeValue() == null ? null : identifier.getNodeValue().getUid()), javadoc == null ? null : (javadoc.getNodeValue() == null ? null : javadoc.getNodeValue().getUid()), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -6210,6 +7744,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             BsjSourceLocation stopLocation)
     {
         LocalClassDeclarationNode ret = new LocalClassDeclarationNodeImpl(this.<LocalClassModifiersNode>makeNormalNodeUnion(modifiers), this.<DeclaredTypeNode>makeNormalNodeUnion(extendsClause), this.<DeclaredTypeListNode>makeNormalNodeUnion(implementsClause), this.<ClassBodyNode>makeNormalNodeUnion(body), this.<TypeParameterListNode>makeNormalNodeUnion(typeParameters), this.<IdentifierNode>makeNormalNodeUnion(identifier), this.<JavadocNode>makeNormalNodeUnion(javadoc), startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateLocalClassDeclarationNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), modifiers == null ? null : modifiers.getUid(), extendsClause == null ? null : extendsClause.getUid(), implementsClause == null ? null : implementsClause.getUid(), body == null ? null : body.getUid(), typeParameters == null ? null : typeParameters.getUid(), identifier == null ? null : identifier.getUid(), javadoc == null ? null : javadoc.getUid(), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -6226,6 +7764,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             NodeUnion<? extends AnnotationListNode> annotations)
     {
         LocalClassModifiersNode ret = new LocalClassModifiersNodeImpl(abstractFlag, finalFlag, strictfpFlag, metaAnnotations, annotations, startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateLocalClassModifiersNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), abstractFlag, finalFlag, strictfpFlag, metaAnnotations == null ? null : (metaAnnotations.getNodeValue() == null ? null : metaAnnotations.getNodeValue().getUid()), annotations == null ? null : (annotations.getNodeValue() == null ? null : annotations.getNodeValue().getUid()), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -6242,6 +7784,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             AnnotationListNode annotations)
     {
         LocalClassModifiersNode ret = new LocalClassModifiersNodeImpl(abstractFlag, finalFlag, strictfpFlag, this.<MetaAnnotationListNode>makeNormalNodeUnion(metaAnnotations), this.<AnnotationListNode>makeNormalNodeUnion(annotations), startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateLocalClassModifiersNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), abstractFlag, finalFlag, strictfpFlag, metaAnnotations == null ? null : metaAnnotations.getUid(), annotations == null ? null : annotations.getUid(), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -6260,6 +7806,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             BsjSourceLocation stopLocation)
     {
         LocalClassModifiersNode ret = new LocalClassModifiersNodeImpl(abstractFlag, finalFlag, strictfpFlag, metaAnnotations, annotations, startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateLocalClassModifiersNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), abstractFlag, finalFlag, strictfpFlag, metaAnnotations == null ? null : (metaAnnotations.getNodeValue() == null ? null : metaAnnotations.getNodeValue().getUid()), annotations == null ? null : (annotations.getNodeValue() == null ? null : annotations.getNodeValue().getUid()), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -6278,6 +7828,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             BsjSourceLocation stopLocation)
     {
         LocalClassModifiersNode ret = new LocalClassModifiersNodeImpl(abstractFlag, finalFlag, strictfpFlag, this.<MetaAnnotationListNode>makeNormalNodeUnion(metaAnnotations), this.<AnnotationListNode>makeNormalNodeUnion(annotations), startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateLocalClassModifiersNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), abstractFlag, finalFlag, strictfpFlag, metaAnnotations == null ? null : metaAnnotations.getUid(), annotations == null ? null : annotations.getUid(), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -6290,6 +7844,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
     )
     {
         LocalClassModifiersNode ret = new LocalClassModifiersNodeImpl(false, false, false, this.<MetaAnnotationListNode>makeNormalNodeUnion(makeMetaAnnotationListNode()), this.<AnnotationListNode>makeNormalNodeUnion(makeAnnotationListNode()), startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateLocalClassModifiersNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), ret.getAbstractFlag(), ret.getFinalFlag(), ret.getStrictfpFlag(), ret.getMetaAnnotations() == null ? null : ret.getMetaAnnotations().getUid(), ret.getAnnotations() == null ? null : ret.getAnnotations().getUid(), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -6303,6 +7861,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             BsjSourceLocation stopLocation)
     {
         LocalClassModifiersNode ret = new LocalClassModifiersNodeImpl(false, false, false, this.<MetaAnnotationListNode>makeNormalNodeUnion(makeMetaAnnotationListNode()), this.<AnnotationListNode>makeNormalNodeUnion(makeAnnotationListNode()), startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateLocalClassModifiersNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), ret.getAbstractFlag(), ret.getFinalFlag(), ret.getStrictfpFlag(), ret.getMetaAnnotations() == null ? null : ret.getMetaAnnotations().getUid(), ret.getAnnotations() == null ? null : ret.getAnnotations().getUid(), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -6317,6 +7879,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             NodeUnion<? extends VariableDeclaratorListNode> declarators)
     {
         LocalVariableDeclarationNode ret = new LocalVariableDeclarationNodeImpl(modifiers, type, declarators, startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateLocalVariableDeclarationNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), modifiers == null ? null : (modifiers.getNodeValue() == null ? null : modifiers.getNodeValue().getUid()), type == null ? null : (type.getNodeValue() == null ? null : type.getNodeValue().getUid()), declarators == null ? null : (declarators.getNodeValue() == null ? null : declarators.getNodeValue().getUid()), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -6331,6 +7897,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             VariableDeclaratorListNode declarators)
     {
         LocalVariableDeclarationNode ret = new LocalVariableDeclarationNodeImpl(this.<VariableModifiersNode>makeNormalNodeUnion(modifiers), this.<TypeNode>makeNormalNodeUnion(type), this.<VariableDeclaratorListNode>makeNormalNodeUnion(declarators), startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateLocalVariableDeclarationNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), modifiers == null ? null : modifiers.getUid(), type == null ? null : type.getUid(), declarators == null ? null : declarators.getUid(), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -6347,6 +7917,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             BsjSourceLocation stopLocation)
     {
         LocalVariableDeclarationNode ret = new LocalVariableDeclarationNodeImpl(modifiers, type, declarators, startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateLocalVariableDeclarationNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), modifiers == null ? null : (modifiers.getNodeValue() == null ? null : modifiers.getNodeValue().getUid()), type == null ? null : (type.getNodeValue() == null ? null : type.getNodeValue().getUid()), declarators == null ? null : (declarators.getNodeValue() == null ? null : declarators.getNodeValue().getUid()), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -6363,6 +7937,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             BsjSourceLocation stopLocation)
     {
         LocalVariableDeclarationNode ret = new LocalVariableDeclarationNodeImpl(this.<VariableModifiersNode>makeNormalNodeUnion(modifiers), this.<TypeNode>makeNormalNodeUnion(type), this.<VariableDeclaratorListNode>makeNormalNodeUnion(declarators), startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateLocalVariableDeclarationNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), modifiers == null ? null : modifiers.getUid(), type == null ? null : type.getUid(), declarators == null ? null : declarators.getUid(), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -6376,6 +7954,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             VariableDeclaratorListNode declarators)
     {
         LocalVariableDeclarationNode ret = new LocalVariableDeclarationNodeImpl(this.<VariableModifiersNode>makeNormalNodeUnion(makeVariableModifiersNode()), this.<TypeNode>makeNormalNodeUnion(type), this.<VariableDeclaratorListNode>makeNormalNodeUnion(declarators), startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateLocalVariableDeclarationNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), ret.getModifiers() == null ? null : ret.getModifiers().getUid(), type == null ? null : type.getUid(), declarators == null ? null : declarators.getUid(), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -6391,6 +7973,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             BsjSourceLocation stopLocation)
     {
         LocalVariableDeclarationNode ret = new LocalVariableDeclarationNodeImpl(this.<VariableModifiersNode>makeNormalNodeUnion(makeVariableModifiersNode()), this.<TypeNode>makeNormalNodeUnion(type), this.<VariableDeclaratorListNode>makeNormalNodeUnion(declarators), startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateLocalVariableDeclarationNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), ret.getModifiers() == null ? null : ret.getModifiers().getUid(), type == null ? null : type.getUid(), declarators == null ? null : declarators.getUid(), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -6403,6 +7989,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             Long value)
     {
         LongLiteralNode ret = new LongLiteralNodeImpl(value, startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateLongLiteralNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), value, startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -6417,6 +8007,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             BsjSourceLocation stopLocation)
     {
         LongLiteralNode ret = new LongLiteralNodeImpl(value, startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateLongLiteralNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), value, startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -6429,6 +8023,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             NodeUnion<? extends MetaAnnotationValueListNode> values)
     {
         MetaAnnotationArrayValueNode ret = new MetaAnnotationArrayValueNodeImpl(values, startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateMetaAnnotationArrayValueNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), values == null ? null : (values.getNodeValue() == null ? null : values.getNodeValue().getUid()), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -6441,6 +8039,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             MetaAnnotationValueListNode values)
     {
         MetaAnnotationArrayValueNode ret = new MetaAnnotationArrayValueNodeImpl(this.<MetaAnnotationValueListNode>makeNormalNodeUnion(values), startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateMetaAnnotationArrayValueNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), values == null ? null : values.getUid(), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -6455,6 +8057,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             BsjSourceLocation stopLocation)
     {
         MetaAnnotationArrayValueNode ret = new MetaAnnotationArrayValueNodeImpl(values, startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateMetaAnnotationArrayValueNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), values == null ? null : (values.getNodeValue() == null ? null : values.getNodeValue().getUid()), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -6469,6 +8075,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             BsjSourceLocation stopLocation)
     {
         MetaAnnotationArrayValueNode ret = new MetaAnnotationArrayValueNodeImpl(this.<MetaAnnotationValueListNode>makeNormalNodeUnion(values), startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateMetaAnnotationArrayValueNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), values == null ? null : values.getUid(), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -6481,6 +8091,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             List<NodeUnion<? extends MetaAnnotationElementNode>> children)
     {
         MetaAnnotationElementListNode ret = new MetaAnnotationElementListNodeImpl(children, startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateMetaAnnotationElementListNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), EditScriptUtilities.getNodeUnionUids(children), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -6493,6 +8107,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             List<MetaAnnotationElementNode> children)
     {
         MetaAnnotationElementListNode ret = new MetaAnnotationElementListNodeImpl(unionWrapList(children), startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateMetaAnnotationElementListNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), EditScriptUtilities.getNodeUids(children), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -6519,6 +8137,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             BsjSourceLocation stopLocation)
     {
         MetaAnnotationElementListNode ret = new MetaAnnotationElementListNodeImpl(children, startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateMetaAnnotationElementListNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), EditScriptUtilities.getNodeUnionUids(children), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -6533,6 +8155,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             BsjSourceLocation stopLocation)
     {
         MetaAnnotationElementListNode ret = new MetaAnnotationElementListNodeImpl(unionWrapList(children), startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateMetaAnnotationElementListNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), EditScriptUtilities.getNodeUids(children), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -6560,6 +8186,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             NodeUnion<? extends MetaAnnotationValueNode> value)
     {
         MetaAnnotationElementNode ret = new MetaAnnotationElementNodeImpl(identifier, value, startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateMetaAnnotationElementNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), identifier == null ? null : (identifier.getNodeValue() == null ? null : identifier.getNodeValue().getUid()), value == null ? null : (value.getNodeValue() == null ? null : value.getNodeValue().getUid()), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -6573,6 +8203,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             MetaAnnotationValueNode value)
     {
         MetaAnnotationElementNode ret = new MetaAnnotationElementNodeImpl(this.<IdentifierNode>makeNormalNodeUnion(identifier), this.<MetaAnnotationValueNode>makeNormalNodeUnion(value), startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateMetaAnnotationElementNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), identifier == null ? null : identifier.getUid(), value == null ? null : value.getUid(), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -6588,6 +8222,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             BsjSourceLocation stopLocation)
     {
         MetaAnnotationElementNode ret = new MetaAnnotationElementNodeImpl(identifier, value, startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateMetaAnnotationElementNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), identifier == null ? null : (identifier.getNodeValue() == null ? null : identifier.getNodeValue().getUid()), value == null ? null : (value.getNodeValue() == null ? null : value.getNodeValue().getUid()), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -6603,6 +8241,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             BsjSourceLocation stopLocation)
     {
         MetaAnnotationElementNode ret = new MetaAnnotationElementNodeImpl(this.<IdentifierNode>makeNormalNodeUnion(identifier), this.<MetaAnnotationValueNode>makeNormalNodeUnion(value), startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateMetaAnnotationElementNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), identifier == null ? null : identifier.getUid(), value == null ? null : value.getUid(), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -6615,6 +8257,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             NodeUnion<? extends NonAssignmentExpressionNode> expression)
     {
         MetaAnnotationExpressionValueNode ret = new MetaAnnotationExpressionValueNodeImpl(expression, startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateMetaAnnotationExpressionValueNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), expression == null ? null : (expression.getNodeValue() == null ? null : expression.getNodeValue().getUid()), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -6627,6 +8273,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             NonAssignmentExpressionNode expression)
     {
         MetaAnnotationExpressionValueNode ret = new MetaAnnotationExpressionValueNodeImpl(this.<NonAssignmentExpressionNode>makeNormalNodeUnion(expression), startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateMetaAnnotationExpressionValueNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), expression == null ? null : expression.getUid(), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -6641,6 +8291,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             BsjSourceLocation stopLocation)
     {
         MetaAnnotationExpressionValueNode ret = new MetaAnnotationExpressionValueNodeImpl(expression, startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateMetaAnnotationExpressionValueNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), expression == null ? null : (expression.getNodeValue() == null ? null : expression.getNodeValue().getUid()), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -6655,6 +8309,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             BsjSourceLocation stopLocation)
     {
         MetaAnnotationExpressionValueNode ret = new MetaAnnotationExpressionValueNodeImpl(this.<NonAssignmentExpressionNode>makeNormalNodeUnion(expression), startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateMetaAnnotationExpressionValueNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), expression == null ? null : expression.getUid(), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -6667,6 +8325,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             List<NodeUnion<? extends MetaAnnotationNode>> children)
     {
         MetaAnnotationListNode ret = new MetaAnnotationListNodeImpl(children, startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateMetaAnnotationListNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), EditScriptUtilities.getNodeUnionUids(children), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -6679,6 +8341,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             List<MetaAnnotationNode> children)
     {
         MetaAnnotationListNode ret = new MetaAnnotationListNodeImpl(unionWrapList(children), startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateMetaAnnotationListNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), EditScriptUtilities.getNodeUids(children), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -6705,6 +8371,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             BsjSourceLocation stopLocation)
     {
         MetaAnnotationListNode ret = new MetaAnnotationListNodeImpl(children, startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateMetaAnnotationListNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), EditScriptUtilities.getNodeUnionUids(children), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -6719,6 +8389,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             BsjSourceLocation stopLocation)
     {
         MetaAnnotationListNode ret = new MetaAnnotationListNodeImpl(unionWrapList(children), startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateMetaAnnotationListNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), EditScriptUtilities.getNodeUids(children), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -6745,6 +8419,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             NodeUnion<? extends MetaAnnotationNode> annotation)
     {
         MetaAnnotationMetaAnnotationValueNode ret = new MetaAnnotationMetaAnnotationValueNodeImpl(annotation, startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateMetaAnnotationMetaAnnotationValueNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), annotation == null ? null : (annotation.getNodeValue() == null ? null : annotation.getNodeValue().getUid()), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -6757,6 +8435,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             MetaAnnotationNode annotation)
     {
         MetaAnnotationMetaAnnotationValueNode ret = new MetaAnnotationMetaAnnotationValueNodeImpl(this.<MetaAnnotationNode>makeNormalNodeUnion(annotation), startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateMetaAnnotationMetaAnnotationValueNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), annotation == null ? null : annotation.getUid(), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -6771,6 +8453,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             BsjSourceLocation stopLocation)
     {
         MetaAnnotationMetaAnnotationValueNode ret = new MetaAnnotationMetaAnnotationValueNodeImpl(annotation, startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateMetaAnnotationMetaAnnotationValueNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), annotation == null ? null : (annotation.getNodeValue() == null ? null : annotation.getNodeValue().getUid()), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -6785,6 +8471,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             BsjSourceLocation stopLocation)
     {
         MetaAnnotationMetaAnnotationValueNode ret = new MetaAnnotationMetaAnnotationValueNodeImpl(this.<MetaAnnotationNode>makeNormalNodeUnion(annotation), startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateMetaAnnotationMetaAnnotationValueNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), annotation == null ? null : annotation.getUid(), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -6797,6 +8487,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
     )
     {
         MetaAnnotationMetaprogramAnchorNode ret = new MetaAnnotationMetaprogramAnchorNodeImpl(startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateMetaAnnotationMetaprogramAnchorNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -6810,6 +8504,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             BsjSourceLocation stopLocation)
     {
         MetaAnnotationMetaprogramAnchorNode ret = new MetaAnnotationMetaprogramAnchorNodeImpl(startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateMetaAnnotationMetaprogramAnchorNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -6822,6 +8520,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             List<NodeUnion<? extends MetaAnnotationValueNode>> children)
     {
         MetaAnnotationValueListNode ret = new MetaAnnotationValueListNodeImpl(children, startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateMetaAnnotationValueListNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), EditScriptUtilities.getNodeUnionUids(children), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -6834,6 +8536,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             List<MetaAnnotationValueNode> children)
     {
         MetaAnnotationValueListNode ret = new MetaAnnotationValueListNodeImpl(unionWrapList(children), startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateMetaAnnotationValueListNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), EditScriptUtilities.getNodeUids(children), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -6860,6 +8566,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             BsjSourceLocation stopLocation)
     {
         MetaAnnotationValueListNode ret = new MetaAnnotationValueListNodeImpl(children, startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateMetaAnnotationValueListNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), EditScriptUtilities.getNodeUnionUids(children), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -6874,6 +8584,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             BsjSourceLocation stopLocation)
     {
         MetaAnnotationValueListNode ret = new MetaAnnotationValueListNodeImpl(unionWrapList(children), startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateMetaAnnotationValueListNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), EditScriptUtilities.getNodeUids(children), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -6900,6 +8614,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             List<NodeUnion<? extends MetaprogramDependencyDeclarationNode>> children)
     {
         MetaprogramDependencyDeclarationListNode ret = new MetaprogramDependencyDeclarationListNodeImpl(children, startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateMetaprogramDependencyDeclarationListNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), EditScriptUtilities.getNodeUnionUids(children), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -6912,6 +8630,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             List<MetaprogramDependencyDeclarationNode> children)
     {
         MetaprogramDependencyDeclarationListNode ret = new MetaprogramDependencyDeclarationListNodeImpl(unionWrapList(children), startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateMetaprogramDependencyDeclarationListNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), EditScriptUtilities.getNodeUids(children), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -6938,6 +8660,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             BsjSourceLocation stopLocation)
     {
         MetaprogramDependencyDeclarationListNode ret = new MetaprogramDependencyDeclarationListNodeImpl(children, startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateMetaprogramDependencyDeclarationListNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), EditScriptUtilities.getNodeUnionUids(children), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -6952,6 +8678,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             BsjSourceLocation stopLocation)
     {
         MetaprogramDependencyDeclarationListNode ret = new MetaprogramDependencyDeclarationListNodeImpl(unionWrapList(children), startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateMetaprogramDependencyDeclarationListNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), EditScriptUtilities.getNodeUids(children), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -6978,6 +8708,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             NodeUnion<? extends MetaprogramDependencyListNode> targets)
     {
         MetaprogramDependencyDeclarationNode ret = new MetaprogramDependencyDeclarationNodeImpl(targets, startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateMetaprogramDependencyDeclarationNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), targets == null ? null : (targets.getNodeValue() == null ? null : targets.getNodeValue().getUid()), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -6990,6 +8724,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             MetaprogramDependencyListNode targets)
     {
         MetaprogramDependencyDeclarationNode ret = new MetaprogramDependencyDeclarationNodeImpl(this.<MetaprogramDependencyListNode>makeNormalNodeUnion(targets), startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateMetaprogramDependencyDeclarationNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), targets == null ? null : targets.getUid(), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -7004,6 +8742,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             BsjSourceLocation stopLocation)
     {
         MetaprogramDependencyDeclarationNode ret = new MetaprogramDependencyDeclarationNodeImpl(targets, startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateMetaprogramDependencyDeclarationNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), targets == null ? null : (targets.getNodeValue() == null ? null : targets.getNodeValue().getUid()), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -7018,6 +8760,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             BsjSourceLocation stopLocation)
     {
         MetaprogramDependencyDeclarationNode ret = new MetaprogramDependencyDeclarationNodeImpl(this.<MetaprogramDependencyListNode>makeNormalNodeUnion(targets), startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateMetaprogramDependencyDeclarationNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), targets == null ? null : targets.getUid(), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -7030,6 +8776,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             List<NodeUnion<? extends MetaprogramDependencyNode>> children)
     {
         MetaprogramDependencyListNode ret = new MetaprogramDependencyListNodeImpl(children, startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateMetaprogramDependencyListNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), EditScriptUtilities.getNodeUnionUids(children), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -7042,6 +8792,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             List<MetaprogramDependencyNode> children)
     {
         MetaprogramDependencyListNode ret = new MetaprogramDependencyListNodeImpl(unionWrapList(children), startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateMetaprogramDependencyListNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), EditScriptUtilities.getNodeUids(children), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -7068,6 +8822,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             BsjSourceLocation stopLocation)
     {
         MetaprogramDependencyListNode ret = new MetaprogramDependencyListNodeImpl(children, startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateMetaprogramDependencyListNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), EditScriptUtilities.getNodeUnionUids(children), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -7082,6 +8840,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             BsjSourceLocation stopLocation)
     {
         MetaprogramDependencyListNode ret = new MetaprogramDependencyListNodeImpl(unionWrapList(children), startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateMetaprogramDependencyListNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), EditScriptUtilities.getNodeUids(children), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -7109,6 +8871,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             boolean weak)
     {
         MetaprogramDependencyNode ret = new MetaprogramDependencyNodeImpl(targetName, weak, startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateMetaprogramDependencyNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), targetName == null ? null : (targetName.getNodeValue() == null ? null : targetName.getNodeValue().getUid()), weak, startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -7122,6 +8888,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             boolean weak)
     {
         MetaprogramDependencyNode ret = new MetaprogramDependencyNodeImpl(this.<NameNode>makeNormalNodeUnion(targetName), weak, startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateMetaprogramDependencyNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), targetName == null ? null : targetName.getUid(), weak, startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -7137,6 +8907,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             BsjSourceLocation stopLocation)
     {
         MetaprogramDependencyNode ret = new MetaprogramDependencyNodeImpl(targetName, weak, startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateMetaprogramDependencyNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), targetName == null ? null : (targetName.getNodeValue() == null ? null : targetName.getNodeValue().getUid()), weak, startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -7152,6 +8926,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             BsjSourceLocation stopLocation)
     {
         MetaprogramDependencyNode ret = new MetaprogramDependencyNodeImpl(this.<NameNode>makeNormalNodeUnion(targetName), weak, startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateMetaprogramDependencyNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), targetName == null ? null : targetName.getUid(), weak, startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -7164,6 +8942,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             NameNode targetName)
     {
         MetaprogramDependencyNode ret = new MetaprogramDependencyNodeImpl(this.<NameNode>makeNormalNodeUnion(targetName), false, startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateMetaprogramDependencyNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), targetName == null ? null : targetName.getUid(), ret.getWeak(), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -7178,6 +8960,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             BsjSourceLocation stopLocation)
     {
         MetaprogramDependencyNode ret = new MetaprogramDependencyNodeImpl(this.<NameNode>makeNormalNodeUnion(targetName), false, startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateMetaprogramDependencyNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), targetName == null ? null : targetName.getUid(), ret.getWeak(), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -7190,6 +8976,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             List<NodeUnion<? extends MetaprogramImportNode>> children)
     {
         MetaprogramImportListNode ret = new MetaprogramImportListNodeImpl(children, startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateMetaprogramImportListNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), EditScriptUtilities.getNodeUnionUids(children), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -7202,6 +8992,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             List<MetaprogramImportNode> children)
     {
         MetaprogramImportListNode ret = new MetaprogramImportListNodeImpl(unionWrapList(children), startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateMetaprogramImportListNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), EditScriptUtilities.getNodeUids(children), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -7228,6 +9022,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             BsjSourceLocation stopLocation)
     {
         MetaprogramImportListNode ret = new MetaprogramImportListNodeImpl(children, startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateMetaprogramImportListNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), EditScriptUtilities.getNodeUnionUids(children), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -7242,6 +9040,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             BsjSourceLocation stopLocation)
     {
         MetaprogramImportListNode ret = new MetaprogramImportListNodeImpl(unionWrapList(children), startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateMetaprogramImportListNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), EditScriptUtilities.getNodeUids(children), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -7268,6 +9070,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             NodeUnion<? extends ImportNode> importNode)
     {
         MetaprogramImportNode ret = new MetaprogramImportNodeImpl(importNode, startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateMetaprogramImportNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), importNode == null ? null : (importNode.getNodeValue() == null ? null : importNode.getNodeValue().getUid()), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -7280,6 +9086,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             ImportNode importNode)
     {
         MetaprogramImportNode ret = new MetaprogramImportNodeImpl(this.<ImportNode>makeNormalNodeUnion(importNode), startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateMetaprogramImportNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), importNode == null ? null : importNode.getUid(), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -7294,6 +9104,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             BsjSourceLocation stopLocation)
     {
         MetaprogramImportNode ret = new MetaprogramImportNodeImpl(importNode, startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateMetaprogramImportNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), importNode == null ? null : (importNode.getNodeValue() == null ? null : importNode.getNodeValue().getUid()), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -7308,6 +9122,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             BsjSourceLocation stopLocation)
     {
         MetaprogramImportNode ret = new MetaprogramImportNodeImpl(this.<ImportNode>makeNormalNodeUnion(importNode), startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateMetaprogramImportNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), importNode == null ? null : importNode.getUid(), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -7321,6 +9139,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             NodeUnion<? extends BlockStatementListNode> body)
     {
         MetaprogramNode ret = new MetaprogramNodeImpl(preamble, body, startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateMetaprogramNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), preamble == null ? null : (preamble.getNodeValue() == null ? null : preamble.getNodeValue().getUid()), body == null ? null : (body.getNodeValue() == null ? null : body.getNodeValue().getUid()), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -7334,6 +9156,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             BlockStatementListNode body)
     {
         MetaprogramNode ret = new MetaprogramNodeImpl(this.<MetaprogramPreambleNode>makeNormalNodeUnion(preamble), this.<BlockStatementListNode>makeNormalNodeUnion(body), startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateMetaprogramNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), preamble == null ? null : preamble.getUid(), body == null ? null : body.getUid(), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -7349,6 +9175,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             BsjSourceLocation stopLocation)
     {
         MetaprogramNode ret = new MetaprogramNodeImpl(preamble, body, startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateMetaprogramNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), preamble == null ? null : (preamble.getNodeValue() == null ? null : preamble.getNodeValue().getUid()), body == null ? null : (body.getNodeValue() == null ? null : body.getNodeValue().getUid()), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -7364,6 +9194,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             BsjSourceLocation stopLocation)
     {
         MetaprogramNode ret = new MetaprogramNodeImpl(this.<MetaprogramPreambleNode>makeNormalNodeUnion(preamble), this.<BlockStatementListNode>makeNormalNodeUnion(body), startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateMetaprogramNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), preamble == null ? null : preamble.getUid(), body == null ? null : body.getUid(), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -7380,6 +9214,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             NodeUnion<? extends MetaprogramDependencyDeclarationListNode> dependencies)
     {
         MetaprogramPreambleNode ret = new MetaprogramPreambleNodeImpl(imports, localMode, packageMode, targets, dependencies, startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateMetaprogramPreambleNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), imports == null ? null : (imports.getNodeValue() == null ? null : imports.getNodeValue().getUid()), localMode, packageMode, targets == null ? null : (targets.getNodeValue() == null ? null : targets.getNodeValue().getUid()), dependencies == null ? null : (dependencies.getNodeValue() == null ? null : dependencies.getNodeValue().getUid()), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -7396,6 +9234,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             MetaprogramDependencyDeclarationListNode dependencies)
     {
         MetaprogramPreambleNode ret = new MetaprogramPreambleNodeImpl(this.<MetaprogramImportListNode>makeNormalNodeUnion(imports), localMode, packageMode, this.<MetaprogramTargetListNode>makeNormalNodeUnion(targets), this.<MetaprogramDependencyDeclarationListNode>makeNormalNodeUnion(dependencies), startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateMetaprogramPreambleNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), imports == null ? null : imports.getUid(), localMode, packageMode, targets == null ? null : targets.getUid(), dependencies == null ? null : dependencies.getUid(), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -7414,6 +9256,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             BsjSourceLocation stopLocation)
     {
         MetaprogramPreambleNode ret = new MetaprogramPreambleNodeImpl(imports, localMode, packageMode, targets, dependencies, startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateMetaprogramPreambleNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), imports == null ? null : (imports.getNodeValue() == null ? null : imports.getNodeValue().getUid()), localMode, packageMode, targets == null ? null : (targets.getNodeValue() == null ? null : targets.getNodeValue().getUid()), dependencies == null ? null : (dependencies.getNodeValue() == null ? null : dependencies.getNodeValue().getUid()), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -7432,6 +9278,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             BsjSourceLocation stopLocation)
     {
         MetaprogramPreambleNode ret = new MetaprogramPreambleNodeImpl(this.<MetaprogramImportListNode>makeNormalNodeUnion(imports), localMode, packageMode, this.<MetaprogramTargetListNode>makeNormalNodeUnion(targets), this.<MetaprogramDependencyDeclarationListNode>makeNormalNodeUnion(dependencies), startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateMetaprogramPreambleNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), imports == null ? null : imports.getUid(), localMode, packageMode, targets == null ? null : targets.getUid(), dependencies == null ? null : dependencies.getUid(), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -7446,6 +9296,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             MetaprogramDependencyDeclarationListNode dependencies)
     {
         MetaprogramPreambleNode ret = new MetaprogramPreambleNodeImpl(this.<MetaprogramImportListNode>makeNormalNodeUnion(imports), MetaprogramLocalMode.INSERT, MetaprogramPackageMode.READ_ONLY, this.<MetaprogramTargetListNode>makeNormalNodeUnion(targets), this.<MetaprogramDependencyDeclarationListNode>makeNormalNodeUnion(dependencies), startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateMetaprogramPreambleNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), imports == null ? null : imports.getUid(), ret.getLocalMode(), ret.getPackageMode(), targets == null ? null : targets.getUid(), dependencies == null ? null : dependencies.getUid(), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -7462,6 +9316,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             BsjSourceLocation stopLocation)
     {
         MetaprogramPreambleNode ret = new MetaprogramPreambleNodeImpl(this.<MetaprogramImportListNode>makeNormalNodeUnion(imports), MetaprogramLocalMode.INSERT, MetaprogramPackageMode.READ_ONLY, this.<MetaprogramTargetListNode>makeNormalNodeUnion(targets), this.<MetaprogramDependencyDeclarationListNode>makeNormalNodeUnion(dependencies), startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateMetaprogramPreambleNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), imports == null ? null : imports.getUid(), ret.getLocalMode(), ret.getPackageMode(), targets == null ? null : targets.getUid(), dependencies == null ? null : dependencies.getUid(), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -7474,6 +9332,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             List<NodeUnion<? extends MetaprogramTargetNode>> children)
     {
         MetaprogramTargetListNode ret = new MetaprogramTargetListNodeImpl(children, startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateMetaprogramTargetListNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), EditScriptUtilities.getNodeUnionUids(children), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -7486,6 +9348,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             List<MetaprogramTargetNode> children)
     {
         MetaprogramTargetListNode ret = new MetaprogramTargetListNodeImpl(unionWrapList(children), startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateMetaprogramTargetListNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), EditScriptUtilities.getNodeUids(children), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -7512,6 +9378,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             BsjSourceLocation stopLocation)
     {
         MetaprogramTargetListNode ret = new MetaprogramTargetListNodeImpl(children, startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateMetaprogramTargetListNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), EditScriptUtilities.getNodeUnionUids(children), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -7526,6 +9396,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             BsjSourceLocation stopLocation)
     {
         MetaprogramTargetListNode ret = new MetaprogramTargetListNodeImpl(unionWrapList(children), startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateMetaprogramTargetListNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), EditScriptUtilities.getNodeUids(children), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -7552,6 +9426,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             NodeUnion<? extends IdentifierListNode> targets)
     {
         MetaprogramTargetNode ret = new MetaprogramTargetNodeImpl(targets, startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateMetaprogramTargetNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), targets == null ? null : (targets.getNodeValue() == null ? null : targets.getNodeValue().getUid()), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -7564,6 +9442,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             IdentifierListNode targets)
     {
         MetaprogramTargetNode ret = new MetaprogramTargetNodeImpl(this.<IdentifierListNode>makeNormalNodeUnion(targets), startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateMetaprogramTargetNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), targets == null ? null : targets.getUid(), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -7578,6 +9460,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             BsjSourceLocation stopLocation)
     {
         MetaprogramTargetNode ret = new MetaprogramTargetNodeImpl(targets, startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateMetaprogramTargetNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), targets == null ? null : (targets.getNodeValue() == null ? null : targets.getNodeValue().getUid()), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -7592,6 +9478,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             BsjSourceLocation stopLocation)
     {
         MetaprogramTargetNode ret = new MetaprogramTargetNodeImpl(this.<IdentifierListNode>makeNormalNodeUnion(targets), startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateMetaprogramTargetNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), targets == null ? null : targets.getUid(), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -7612,6 +9502,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             NodeUnion<? extends JavadocNode> javadoc)
     {
         MethodDeclarationNode ret = new MethodDeclarationNodeImpl(body, modifiers, identifier, parameters, varargParameter, returnType, throwTypes, typeParameters, javadoc, startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateMethodDeclarationNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), body == null ? null : (body.getNodeValue() == null ? null : body.getNodeValue().getUid()), modifiers == null ? null : (modifiers.getNodeValue() == null ? null : modifiers.getNodeValue().getUid()), identifier == null ? null : (identifier.getNodeValue() == null ? null : identifier.getNodeValue().getUid()), parameters == null ? null : (parameters.getNodeValue() == null ? null : parameters.getNodeValue().getUid()), varargParameter == null ? null : (varargParameter.getNodeValue() == null ? null : varargParameter.getNodeValue().getUid()), returnType == null ? null : (returnType.getNodeValue() == null ? null : returnType.getNodeValue().getUid()), throwTypes == null ? null : (throwTypes.getNodeValue() == null ? null : throwTypes.getNodeValue().getUid()), typeParameters == null ? null : (typeParameters.getNodeValue() == null ? null : typeParameters.getNodeValue().getUid()), javadoc == null ? null : (javadoc.getNodeValue() == null ? null : javadoc.getNodeValue().getUid()), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -7632,6 +9526,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             JavadocNode javadoc)
     {
         MethodDeclarationNode ret = new MethodDeclarationNodeImpl(this.<BlockStatementListNode>makeNormalNodeUnion(body), this.<MethodModifiersNode>makeNormalNodeUnion(modifiers), this.<IdentifierNode>makeNormalNodeUnion(identifier), this.<VariableListNode>makeNormalNodeUnion(parameters), this.<VariableNode>makeNormalNodeUnion(varargParameter), this.<TypeNode>makeNormalNodeUnion(returnType), this.<UnparameterizedTypeListNode>makeNormalNodeUnion(throwTypes), this.<TypeParameterListNode>makeNormalNodeUnion(typeParameters), this.<JavadocNode>makeNormalNodeUnion(javadoc), startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateMethodDeclarationNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), body == null ? null : body.getUid(), modifiers == null ? null : modifiers.getUid(), identifier == null ? null : identifier.getUid(), parameters == null ? null : parameters.getUid(), varargParameter == null ? null : varargParameter.getUid(), returnType == null ? null : returnType.getUid(), throwTypes == null ? null : throwTypes.getUid(), typeParameters == null ? null : typeParameters.getUid(), javadoc == null ? null : javadoc.getUid(), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -7654,6 +9552,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             BsjSourceLocation stopLocation)
     {
         MethodDeclarationNode ret = new MethodDeclarationNodeImpl(body, modifiers, identifier, parameters, varargParameter, returnType, throwTypes, typeParameters, javadoc, startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateMethodDeclarationNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), body == null ? null : (body.getNodeValue() == null ? null : body.getNodeValue().getUid()), modifiers == null ? null : (modifiers.getNodeValue() == null ? null : modifiers.getNodeValue().getUid()), identifier == null ? null : (identifier.getNodeValue() == null ? null : identifier.getNodeValue().getUid()), parameters == null ? null : (parameters.getNodeValue() == null ? null : parameters.getNodeValue().getUid()), varargParameter == null ? null : (varargParameter.getNodeValue() == null ? null : varargParameter.getNodeValue().getUid()), returnType == null ? null : (returnType.getNodeValue() == null ? null : returnType.getNodeValue().getUid()), throwTypes == null ? null : (throwTypes.getNodeValue() == null ? null : throwTypes.getNodeValue().getUid()), typeParameters == null ? null : (typeParameters.getNodeValue() == null ? null : typeParameters.getNodeValue().getUid()), javadoc == null ? null : (javadoc.getNodeValue() == null ? null : javadoc.getNodeValue().getUid()), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -7676,6 +9578,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             BsjSourceLocation stopLocation)
     {
         MethodDeclarationNode ret = new MethodDeclarationNodeImpl(this.<BlockStatementListNode>makeNormalNodeUnion(body), this.<MethodModifiersNode>makeNormalNodeUnion(modifiers), this.<IdentifierNode>makeNormalNodeUnion(identifier), this.<VariableListNode>makeNormalNodeUnion(parameters), this.<VariableNode>makeNormalNodeUnion(varargParameter), this.<TypeNode>makeNormalNodeUnion(returnType), this.<UnparameterizedTypeListNode>makeNormalNodeUnion(throwTypes), this.<TypeParameterListNode>makeNormalNodeUnion(typeParameters), this.<JavadocNode>makeNormalNodeUnion(javadoc), startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateMethodDeclarationNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), body == null ? null : body.getUid(), modifiers == null ? null : modifiers.getUid(), identifier == null ? null : identifier.getUid(), parameters == null ? null : parameters.getUid(), varargParameter == null ? null : varargParameter.getUid(), returnType == null ? null : returnType.getUid(), throwTypes == null ? null : throwTypes.getUid(), typeParameters == null ? null : typeParameters.getUid(), javadoc == null ? null : javadoc.getUid(), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -7693,6 +9599,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             JavadocNode javadoc)
     {
         MethodDeclarationNode ret = new MethodDeclarationNodeImpl(this.<BlockStatementListNode>makeNormalNodeUnion(body), this.<MethodModifiersNode>makeNormalNodeUnion(modifiers), this.<IdentifierNode>makeNormalNodeUnion(identifier), this.<VariableListNode>makeNormalNodeUnion(parameters), this.<VariableNode>makeNormalNodeUnion(null), this.<TypeNode>makeNormalNodeUnion(returnType), this.<UnparameterizedTypeListNode>makeNormalNodeUnion(makeUnparameterizedTypeListNode()), this.<TypeParameterListNode>makeNormalNodeUnion(makeTypeParameterListNode()), this.<JavadocNode>makeNormalNodeUnion(javadoc), startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateMethodDeclarationNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), body == null ? null : body.getUid(), modifiers == null ? null : modifiers.getUid(), identifier == null ? null : identifier.getUid(), parameters == null ? null : parameters.getUid(), ret.getVarargParameter() == null ? null : ret.getVarargParameter().getUid(), returnType == null ? null : returnType.getUid(), ret.getThrowTypes() == null ? null : ret.getThrowTypes().getUid(), ret.getTypeParameters() == null ? null : ret.getTypeParameters().getUid(), javadoc == null ? null : javadoc.getUid(), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -7712,6 +9622,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             BsjSourceLocation stopLocation)
     {
         MethodDeclarationNode ret = new MethodDeclarationNodeImpl(this.<BlockStatementListNode>makeNormalNodeUnion(body), this.<MethodModifiersNode>makeNormalNodeUnion(modifiers), this.<IdentifierNode>makeNormalNodeUnion(identifier), this.<VariableListNode>makeNormalNodeUnion(parameters), this.<VariableNode>makeNormalNodeUnion(null), this.<TypeNode>makeNormalNodeUnion(returnType), this.<UnparameterizedTypeListNode>makeNormalNodeUnion(makeUnparameterizedTypeListNode()), this.<TypeParameterListNode>makeNormalNodeUnion(makeTypeParameterListNode()), this.<JavadocNode>makeNormalNodeUnion(javadoc), startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateMethodDeclarationNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), body == null ? null : body.getUid(), modifiers == null ? null : modifiers.getUid(), identifier == null ? null : identifier.getUid(), parameters == null ? null : parameters.getUid(), ret.getVarargParameter() == null ? null : ret.getVarargParameter().getUid(), returnType == null ? null : returnType.getUid(), ret.getThrowTypes() == null ? null : ret.getThrowTypes().getUid(), ret.getTypeParameters() == null ? null : ret.getTypeParameters().getUid(), javadoc == null ? null : javadoc.getUid(), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -7727,6 +9641,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             NodeUnion<? extends ReferenceTypeListNode> typeArguments)
     {
         MethodInvocationNode ret = new MethodInvocationNodeImpl(expression, identifier, arguments, typeArguments, startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateMethodInvocationNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), expression == null ? null : (expression.getNodeValue() == null ? null : expression.getNodeValue().getUid()), identifier == null ? null : (identifier.getNodeValue() == null ? null : identifier.getNodeValue().getUid()), arguments == null ? null : (arguments.getNodeValue() == null ? null : arguments.getNodeValue().getUid()), typeArguments == null ? null : (typeArguments.getNodeValue() == null ? null : typeArguments.getNodeValue().getUid()), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -7742,6 +9660,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             ReferenceTypeListNode typeArguments)
     {
         MethodInvocationNode ret = new MethodInvocationNodeImpl(this.<PrimaryExpressionNode>makeNormalNodeUnion(expression), this.<IdentifierNode>makeNormalNodeUnion(identifier), this.<ExpressionListNode>makeNormalNodeUnion(arguments), this.<ReferenceTypeListNode>makeNormalNodeUnion(typeArguments), startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateMethodInvocationNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), expression == null ? null : expression.getUid(), identifier == null ? null : identifier.getUid(), arguments == null ? null : arguments.getUid(), typeArguments == null ? null : typeArguments.getUid(), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -7759,6 +9681,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             BsjSourceLocation stopLocation)
     {
         MethodInvocationNode ret = new MethodInvocationNodeImpl(expression, identifier, arguments, typeArguments, startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateMethodInvocationNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), expression == null ? null : (expression.getNodeValue() == null ? null : expression.getNodeValue().getUid()), identifier == null ? null : (identifier.getNodeValue() == null ? null : identifier.getNodeValue().getUid()), arguments == null ? null : (arguments.getNodeValue() == null ? null : arguments.getNodeValue().getUid()), typeArguments == null ? null : (typeArguments.getNodeValue() == null ? null : typeArguments.getNodeValue().getUid()), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -7776,6 +9702,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             BsjSourceLocation stopLocation)
     {
         MethodInvocationNode ret = new MethodInvocationNodeImpl(this.<PrimaryExpressionNode>makeNormalNodeUnion(expression), this.<IdentifierNode>makeNormalNodeUnion(identifier), this.<ExpressionListNode>makeNormalNodeUnion(arguments), this.<ReferenceTypeListNode>makeNormalNodeUnion(typeArguments), startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateMethodInvocationNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), expression == null ? null : expression.getUid(), identifier == null ? null : identifier.getUid(), arguments == null ? null : arguments.getUid(), typeArguments == null ? null : typeArguments.getUid(), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -7788,6 +9718,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             IdentifierNode identifier)
     {
         MethodInvocationNode ret = new MethodInvocationNodeImpl(this.<PrimaryExpressionNode>makeNormalNodeUnion(null), this.<IdentifierNode>makeNormalNodeUnion(identifier), this.<ExpressionListNode>makeNormalNodeUnion(makeExpressionListNode()), this.<ReferenceTypeListNode>makeNormalNodeUnion(makeReferenceTypeListNode()), startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateMethodInvocationNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), ret.getExpression() == null ? null : ret.getExpression().getUid(), identifier == null ? null : identifier.getUid(), ret.getArguments() == null ? null : ret.getArguments().getUid(), ret.getTypeArguments() == null ? null : ret.getTypeArguments().getUid(), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -7802,6 +9736,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             BsjSourceLocation stopLocation)
     {
         MethodInvocationNode ret = new MethodInvocationNodeImpl(this.<PrimaryExpressionNode>makeNormalNodeUnion(null), this.<IdentifierNode>makeNormalNodeUnion(identifier), this.<ExpressionListNode>makeNormalNodeUnion(makeExpressionListNode()), this.<ReferenceTypeListNode>makeNormalNodeUnion(makeReferenceTypeListNode()), startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateMethodInvocationNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), ret.getExpression() == null ? null : ret.getExpression().getUid(), identifier == null ? null : identifier.getUid(), ret.getArguments() == null ? null : ret.getArguments().getUid(), ret.getTypeArguments() == null ? null : ret.getTypeArguments().getUid(), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -7815,6 +9753,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             IdentifierNode identifier)
     {
         MethodInvocationNode ret = new MethodInvocationNodeImpl(this.<PrimaryExpressionNode>makeNormalNodeUnion(expression), this.<IdentifierNode>makeNormalNodeUnion(identifier), this.<ExpressionListNode>makeNormalNodeUnion(makeExpressionListNode()), this.<ReferenceTypeListNode>makeNormalNodeUnion(makeReferenceTypeListNode()), startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateMethodInvocationNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), expression == null ? null : expression.getUid(), identifier == null ? null : identifier.getUid(), ret.getArguments() == null ? null : ret.getArguments().getUid(), ret.getTypeArguments() == null ? null : ret.getTypeArguments().getUid(), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -7830,6 +9772,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             BsjSourceLocation stopLocation)
     {
         MethodInvocationNode ret = new MethodInvocationNodeImpl(this.<PrimaryExpressionNode>makeNormalNodeUnion(expression), this.<IdentifierNode>makeNormalNodeUnion(identifier), this.<ExpressionListNode>makeNormalNodeUnion(makeExpressionListNode()), this.<ReferenceTypeListNode>makeNormalNodeUnion(makeReferenceTypeListNode()), startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateMethodInvocationNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), expression == null ? null : expression.getUid(), identifier == null ? null : identifier.getUid(), ret.getArguments() == null ? null : ret.getArguments().getUid(), ret.getTypeArguments() == null ? null : ret.getTypeArguments().getUid(), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -7843,6 +9789,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             ExpressionListNode arguments)
     {
         MethodInvocationNode ret = new MethodInvocationNodeImpl(this.<PrimaryExpressionNode>makeNormalNodeUnion(null), this.<IdentifierNode>makeNormalNodeUnion(identifier), this.<ExpressionListNode>makeNormalNodeUnion(arguments), this.<ReferenceTypeListNode>makeNormalNodeUnion(makeReferenceTypeListNode()), startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateMethodInvocationNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), ret.getExpression() == null ? null : ret.getExpression().getUid(), identifier == null ? null : identifier.getUid(), arguments == null ? null : arguments.getUid(), ret.getTypeArguments() == null ? null : ret.getTypeArguments().getUid(), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -7858,6 +9808,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             BsjSourceLocation stopLocation)
     {
         MethodInvocationNode ret = new MethodInvocationNodeImpl(this.<PrimaryExpressionNode>makeNormalNodeUnion(null), this.<IdentifierNode>makeNormalNodeUnion(identifier), this.<ExpressionListNode>makeNormalNodeUnion(arguments), this.<ReferenceTypeListNode>makeNormalNodeUnion(makeReferenceTypeListNode()), startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateMethodInvocationNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), ret.getExpression() == null ? null : ret.getExpression().getUid(), identifier == null ? null : identifier.getUid(), arguments == null ? null : arguments.getUid(), ret.getTypeArguments() == null ? null : ret.getTypeArguments().getUid(), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -7872,6 +9826,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             ExpressionListNode arguments)
     {
         MethodInvocationNode ret = new MethodInvocationNodeImpl(this.<PrimaryExpressionNode>makeNormalNodeUnion(expression), this.<IdentifierNode>makeNormalNodeUnion(identifier), this.<ExpressionListNode>makeNormalNodeUnion(arguments), this.<ReferenceTypeListNode>makeNormalNodeUnion(makeReferenceTypeListNode()), startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateMethodInvocationNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), expression == null ? null : expression.getUid(), identifier == null ? null : identifier.getUid(), arguments == null ? null : arguments.getUid(), ret.getTypeArguments() == null ? null : ret.getTypeArguments().getUid(), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -7888,6 +9846,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             BsjSourceLocation stopLocation)
     {
         MethodInvocationNode ret = new MethodInvocationNodeImpl(this.<PrimaryExpressionNode>makeNormalNodeUnion(expression), this.<IdentifierNode>makeNormalNodeUnion(identifier), this.<ExpressionListNode>makeNormalNodeUnion(arguments), this.<ReferenceTypeListNode>makeNormalNodeUnion(makeReferenceTypeListNode()), startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateMethodInvocationNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), expression == null ? null : expression.getUid(), identifier == null ? null : identifier.getUid(), arguments == null ? null : arguments.getUid(), ret.getTypeArguments() == null ? null : ret.getTypeArguments().getUid(), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -7908,6 +9870,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             NodeUnion<? extends AnnotationListNode> annotations)
     {
         MethodModifiersNode ret = new MethodModifiersNodeImpl(access, abstractFlag, staticFlag, finalFlag, synchronizedFlag, nativeFlag, strictfpFlag, metaAnnotations, annotations, startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateMethodModifiersNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), access, abstractFlag, staticFlag, finalFlag, synchronizedFlag, nativeFlag, strictfpFlag, metaAnnotations == null ? null : (metaAnnotations.getNodeValue() == null ? null : metaAnnotations.getNodeValue().getUid()), annotations == null ? null : (annotations.getNodeValue() == null ? null : annotations.getNodeValue().getUid()), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -7928,6 +9894,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             AnnotationListNode annotations)
     {
         MethodModifiersNode ret = new MethodModifiersNodeImpl(access, abstractFlag, staticFlag, finalFlag, synchronizedFlag, nativeFlag, strictfpFlag, this.<MetaAnnotationListNode>makeNormalNodeUnion(metaAnnotations), this.<AnnotationListNode>makeNormalNodeUnion(annotations), startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateMethodModifiersNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), access, abstractFlag, staticFlag, finalFlag, synchronizedFlag, nativeFlag, strictfpFlag, metaAnnotations == null ? null : metaAnnotations.getUid(), annotations == null ? null : annotations.getUid(), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -7950,6 +9920,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             BsjSourceLocation stopLocation)
     {
         MethodModifiersNode ret = new MethodModifiersNodeImpl(access, abstractFlag, staticFlag, finalFlag, synchronizedFlag, nativeFlag, strictfpFlag, metaAnnotations, annotations, startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateMethodModifiersNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), access, abstractFlag, staticFlag, finalFlag, synchronizedFlag, nativeFlag, strictfpFlag, metaAnnotations == null ? null : (metaAnnotations.getNodeValue() == null ? null : metaAnnotations.getNodeValue().getUid()), annotations == null ? null : (annotations.getNodeValue() == null ? null : annotations.getNodeValue().getUid()), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -7972,6 +9946,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             BsjSourceLocation stopLocation)
     {
         MethodModifiersNode ret = new MethodModifiersNodeImpl(access, abstractFlag, staticFlag, finalFlag, synchronizedFlag, nativeFlag, strictfpFlag, this.<MetaAnnotationListNode>makeNormalNodeUnion(metaAnnotations), this.<AnnotationListNode>makeNormalNodeUnion(annotations), startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateMethodModifiersNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), access, abstractFlag, staticFlag, finalFlag, synchronizedFlag, nativeFlag, strictfpFlag, metaAnnotations == null ? null : metaAnnotations.getUid(), annotations == null ? null : annotations.getUid(), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -7984,6 +9962,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             AccessModifier access)
     {
         MethodModifiersNode ret = new MethodModifiersNodeImpl(access, false, false, false, false, false, false, this.<MetaAnnotationListNode>makeNormalNodeUnion(makeMetaAnnotationListNode()), this.<AnnotationListNode>makeNormalNodeUnion(makeAnnotationListNode()), startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateMethodModifiersNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), access, ret.getAbstractFlag(), ret.getStaticFlag(), ret.getFinalFlag(), ret.getSynchronizedFlag(), ret.getNativeFlag(), ret.getStrictfpFlag(), ret.getMetaAnnotations() == null ? null : ret.getMetaAnnotations().getUid(), ret.getAnnotations() == null ? null : ret.getAnnotations().getUid(), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -7998,6 +9980,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             BsjSourceLocation stopLocation)
     {
         MethodModifiersNode ret = new MethodModifiersNodeImpl(access, false, false, false, false, false, false, this.<MetaAnnotationListNode>makeNormalNodeUnion(makeMetaAnnotationListNode()), this.<AnnotationListNode>makeNormalNodeUnion(makeAnnotationListNode()), startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateMethodModifiersNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), access, ret.getAbstractFlag(), ret.getStaticFlag(), ret.getFinalFlag(), ret.getSynchronizedFlag(), ret.getNativeFlag(), ret.getStrictfpFlag(), ret.getMetaAnnotations() == null ? null : ret.getMetaAnnotations().getUid(), ret.getAnnotations() == null ? null : ret.getAnnotations().getUid(), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -8010,6 +9996,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             NodeUnion<? extends MetaAnnotationListNode> metaAnnotations)
     {
         NoOperationNode ret = new NoOperationNodeImpl(metaAnnotations, startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateNoOperationNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), metaAnnotations == null ? null : (metaAnnotations.getNodeValue() == null ? null : metaAnnotations.getNodeValue().getUid()), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -8022,6 +10012,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             MetaAnnotationListNode metaAnnotations)
     {
         NoOperationNode ret = new NoOperationNodeImpl(this.<MetaAnnotationListNode>makeNormalNodeUnion(metaAnnotations), startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateNoOperationNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), metaAnnotations == null ? null : metaAnnotations.getUid(), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -8036,6 +10030,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             BsjSourceLocation stopLocation)
     {
         NoOperationNode ret = new NoOperationNodeImpl(metaAnnotations, startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateNoOperationNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), metaAnnotations == null ? null : (metaAnnotations.getNodeValue() == null ? null : metaAnnotations.getNodeValue().getUid()), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -8050,6 +10048,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             BsjSourceLocation stopLocation)
     {
         NoOperationNode ret = new NoOperationNodeImpl(this.<MetaAnnotationListNode>makeNormalNodeUnion(metaAnnotations), startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateNoOperationNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), metaAnnotations == null ? null : metaAnnotations.getUid(), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -8062,6 +10064,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
     )
     {
         NoOperationNode ret = new NoOperationNodeImpl(this.<MetaAnnotationListNode>makeNormalNodeUnion(makeMetaAnnotationListNode()), startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateNoOperationNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), ret.getMetaAnnotations() == null ? null : ret.getMetaAnnotations().getUid(), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -8075,6 +10081,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             BsjSourceLocation stopLocation)
     {
         NoOperationNode ret = new NoOperationNodeImpl(this.<MetaAnnotationListNode>makeNormalNodeUnion(makeMetaAnnotationListNode()), startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateNoOperationNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), ret.getMetaAnnotations() == null ? null : ret.getMetaAnnotations().getUid(), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -8088,6 +10098,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             NodeUnion<? extends UnparameterizedTypeNode> annotationType)
     {
         NormalAnnotationNode ret = new NormalAnnotationNodeImpl(arguments, annotationType, startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateNormalAnnotationNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), arguments == null ? null : (arguments.getNodeValue() == null ? null : arguments.getNodeValue().getUid()), annotationType == null ? null : (annotationType.getNodeValue() == null ? null : annotationType.getNodeValue().getUid()), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -8101,6 +10115,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             UnparameterizedTypeNode annotationType)
     {
         NormalAnnotationNode ret = new NormalAnnotationNodeImpl(this.<AnnotationElementListNode>makeNormalNodeUnion(arguments), this.<UnparameterizedTypeNode>makeNormalNodeUnion(annotationType), startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateNormalAnnotationNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), arguments == null ? null : arguments.getUid(), annotationType == null ? null : annotationType.getUid(), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -8116,6 +10134,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             BsjSourceLocation stopLocation)
     {
         NormalAnnotationNode ret = new NormalAnnotationNodeImpl(arguments, annotationType, startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateNormalAnnotationNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), arguments == null ? null : (arguments.getNodeValue() == null ? null : arguments.getNodeValue().getUid()), annotationType == null ? null : (annotationType.getNodeValue() == null ? null : annotationType.getNodeValue().getUid()), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -8131,6 +10153,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             BsjSourceLocation stopLocation)
     {
         NormalAnnotationNode ret = new NormalAnnotationNodeImpl(this.<AnnotationElementListNode>makeNormalNodeUnion(arguments), this.<UnparameterizedTypeNode>makeNormalNodeUnion(annotationType), startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateNormalAnnotationNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), arguments == null ? null : arguments.getUid(), annotationType == null ? null : annotationType.getUid(), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -8141,9 +10167,72 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
     @Override
     public NormalMetaAnnotationNode makeNormalMetaAnnotationNodeWithUnions(
             NodeUnion<? extends MetaAnnotationElementListNode> arguments,
-            NodeUnion<? extends UnparameterizedTypeNode> annotationType)
+            NodeUnion<? extends UnparameterizedTypeNode> annotationType,
+            MetaAnnotationMetaprogramAnchorNode metaprogramAnchor)
     {
-        NormalMetaAnnotationNode ret = new NormalMetaAnnotationNodeImpl(arguments, annotationType, null, startLocation, stopLocation, manager, binary);
+        NormalMetaAnnotationNode ret = new NormalMetaAnnotationNodeImpl(arguments, annotationType, metaprogramAnchor, startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateNormalMetaAnnotationNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), arguments == null ? null : (arguments.getNodeValue() == null ? null : arguments.getNodeValue().getUid()), annotationType == null ? null : (annotationType.getNodeValue() == null ? null : annotationType.getNodeValue().getUid()), metaprogramAnchor == null ? null : metaprogramAnchor.getUid(), startLocation, stopLocation));
+        }
+        return ret;
+    }
+    
+    /**
+     * Creates a NormalMetaAnnotationNode.
+     * The start and stop locations which have been set as properties of this factory are used.
+     */
+    @Override
+    public NormalMetaAnnotationNode makeNormalMetaAnnotationNode(
+            MetaAnnotationElementListNode arguments,
+            UnparameterizedTypeNode annotationType,
+            MetaAnnotationMetaprogramAnchorNode metaprogramAnchor)
+    {
+        NormalMetaAnnotationNode ret = new NormalMetaAnnotationNodeImpl(this.<MetaAnnotationElementListNode>makeNormalNodeUnion(arguments), this.<UnparameterizedTypeNode>makeNormalNodeUnion(annotationType), metaprogramAnchor, startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateNormalMetaAnnotationNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), arguments == null ? null : arguments.getUid(), annotationType == null ? null : annotationType.getUid(), metaprogramAnchor == null ? null : metaprogramAnchor.getUid(), startLocation, stopLocation));
+        }
+        return ret;
+    }
+    
+    /**
+     * Creates a NormalMetaAnnotationNode.
+     * The specified start and stop locations are used.
+     */
+    @Override
+    public NormalMetaAnnotationNode makeNormalMetaAnnotationNodeWithUnions(
+            NodeUnion<? extends MetaAnnotationElementListNode> arguments,
+            NodeUnion<? extends UnparameterizedTypeNode> annotationType,
+            MetaAnnotationMetaprogramAnchorNode metaprogramAnchor,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation)
+    {
+        NormalMetaAnnotationNode ret = new NormalMetaAnnotationNodeImpl(arguments, annotationType, metaprogramAnchor, startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateNormalMetaAnnotationNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), arguments == null ? null : (arguments.getNodeValue() == null ? null : arguments.getNodeValue().getUid()), annotationType == null ? null : (annotationType.getNodeValue() == null ? null : annotationType.getNodeValue().getUid()), metaprogramAnchor == null ? null : metaprogramAnchor.getUid(), startLocation, stopLocation));
+        }
+        return ret;
+    }
+    
+    /**
+     * Creates a NormalMetaAnnotationNode.
+     * The specified start and stop locations are used.
+     */
+    @Override
+    public NormalMetaAnnotationNode makeNormalMetaAnnotationNode(
+            MetaAnnotationElementListNode arguments,
+            UnparameterizedTypeNode annotationType,
+            MetaAnnotationMetaprogramAnchorNode metaprogramAnchor,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation)
+    {
+        NormalMetaAnnotationNode ret = new NormalMetaAnnotationNodeImpl(this.<MetaAnnotationElementListNode>makeNormalNodeUnion(arguments), this.<UnparameterizedTypeNode>makeNormalNodeUnion(annotationType), metaprogramAnchor, startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateNormalMetaAnnotationNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), arguments == null ? null : arguments.getUid(), annotationType == null ? null : annotationType.getUid(), metaprogramAnchor == null ? null : metaprogramAnchor.getUid(), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -8156,22 +10245,11 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             MetaAnnotationElementListNode arguments,
             UnparameterizedTypeNode annotationType)
     {
-        NormalMetaAnnotationNode ret = new NormalMetaAnnotationNodeImpl(this.<MetaAnnotationElementListNode>makeNormalNodeUnion(arguments), this.<UnparameterizedTypeNode>makeNormalNodeUnion(annotationType), null, startLocation, stopLocation, manager, binary);
-        return ret;
-    }
-    
-    /**
-     * Creates a NormalMetaAnnotationNode.
-     * The specified start and stop locations are used.
-     */
-    @Override
-    public NormalMetaAnnotationNode makeNormalMetaAnnotationNodeWithUnions(
-            NodeUnion<? extends MetaAnnotationElementListNode> arguments,
-            NodeUnion<? extends UnparameterizedTypeNode> annotationType,
-            BsjSourceLocation startLocation,
-            BsjSourceLocation stopLocation)
-    {
-        NormalMetaAnnotationNode ret = new NormalMetaAnnotationNodeImpl(arguments, annotationType, null, startLocation, stopLocation, manager, binary);
+        NormalMetaAnnotationNode ret = new NormalMetaAnnotationNodeImpl(this.<MetaAnnotationElementListNode>makeNormalNodeUnion(arguments), this.<UnparameterizedTypeNode>makeNormalNodeUnion(annotationType), makeMetaAnnotationMetaprogramAnchorNode(), startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateNormalMetaAnnotationNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), arguments == null ? null : arguments.getUid(), annotationType == null ? null : annotationType.getUid(), ret.getMetaprogramAnchor() == null ? null : ret.getMetaprogramAnchor().getUid(), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -8186,7 +10264,11 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation)
     {
-        NormalMetaAnnotationNode ret = new NormalMetaAnnotationNodeImpl(this.<MetaAnnotationElementListNode>makeNormalNodeUnion(arguments), this.<UnparameterizedTypeNode>makeNormalNodeUnion(annotationType), null, startLocation, stopLocation, manager, binary);
+        NormalMetaAnnotationNode ret = new NormalMetaAnnotationNodeImpl(this.<MetaAnnotationElementListNode>makeNormalNodeUnion(arguments), this.<UnparameterizedTypeNode>makeNormalNodeUnion(annotationType), makeMetaAnnotationMetaprogramAnchorNode(), startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateNormalMetaAnnotationNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), arguments == null ? null : arguments.getUid(), annotationType == null ? null : annotationType.getUid(), ret.getMetaprogramAnchor() == null ? null : ret.getMetaprogramAnchor().getUid(), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -8199,6 +10281,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
     )
     {
         NullLiteralNode ret = new NullLiteralNodeImpl(null, startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateNullLiteralNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -8212,6 +10298,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             BsjSourceLocation stopLocation)
     {
         NullLiteralNode ret = new NullLiteralNodeImpl(null, startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateNullLiteralNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -8226,6 +10316,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             NodeUnion<? extends AnnotationListNode> annotations)
     {
         PackageDeclarationNode ret = new PackageDeclarationNodeImpl(name, metaAnnotations, annotations, startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreatePackageDeclarationNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), name == null ? null : (name.getNodeValue() == null ? null : name.getNodeValue().getUid()), metaAnnotations == null ? null : (metaAnnotations.getNodeValue() == null ? null : metaAnnotations.getNodeValue().getUid()), annotations == null ? null : (annotations.getNodeValue() == null ? null : annotations.getNodeValue().getUid()), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -8240,6 +10334,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             AnnotationListNode annotations)
     {
         PackageDeclarationNode ret = new PackageDeclarationNodeImpl(this.<NameNode>makeNormalNodeUnion(name), this.<MetaAnnotationListNode>makeNormalNodeUnion(metaAnnotations), this.<AnnotationListNode>makeNormalNodeUnion(annotations), startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreatePackageDeclarationNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), name == null ? null : name.getUid(), metaAnnotations == null ? null : metaAnnotations.getUid(), annotations == null ? null : annotations.getUid(), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -8256,6 +10354,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             BsjSourceLocation stopLocation)
     {
         PackageDeclarationNode ret = new PackageDeclarationNodeImpl(name, metaAnnotations, annotations, startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreatePackageDeclarationNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), name == null ? null : (name.getNodeValue() == null ? null : name.getNodeValue().getUid()), metaAnnotations == null ? null : (metaAnnotations.getNodeValue() == null ? null : metaAnnotations.getNodeValue().getUid()), annotations == null ? null : (annotations.getNodeValue() == null ? null : annotations.getNodeValue().getUid()), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -8272,6 +10374,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             BsjSourceLocation stopLocation)
     {
         PackageDeclarationNode ret = new PackageDeclarationNodeImpl(this.<NameNode>makeNormalNodeUnion(name), this.<MetaAnnotationListNode>makeNormalNodeUnion(metaAnnotations), this.<AnnotationListNode>makeNormalNodeUnion(annotations), startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreatePackageDeclarationNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), name == null ? null : name.getUid(), metaAnnotations == null ? null : metaAnnotations.getUid(), annotations == null ? null : annotations.getUid(), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -8284,6 +10390,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             NameNode name)
     {
         PackageDeclarationNode ret = new PackageDeclarationNodeImpl(this.<NameNode>makeNormalNodeUnion(name), this.<MetaAnnotationListNode>makeNormalNodeUnion(makeMetaAnnotationListNode()), this.<AnnotationListNode>makeNormalNodeUnion(makeAnnotationListNode()), startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreatePackageDeclarationNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), name == null ? null : name.getUid(), ret.getMetaAnnotations() == null ? null : ret.getMetaAnnotations().getUid(), ret.getAnnotations() == null ? null : ret.getAnnotations().getUid(), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -8298,6 +10408,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             BsjSourceLocation stopLocation)
     {
         PackageDeclarationNode ret = new PackageDeclarationNodeImpl(this.<NameNode>makeNormalNodeUnion(name), this.<MetaAnnotationListNode>makeNormalNodeUnion(makeMetaAnnotationListNode()), this.<AnnotationListNode>makeNormalNodeUnion(makeAnnotationListNode()), startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreatePackageDeclarationNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), name == null ? null : name.getUid(), ret.getMetaAnnotations() == null ? null : ret.getMetaAnnotations().getUid(), ret.getAnnotations() == null ? null : ret.getAnnotations().getUid(), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -8310,6 +10424,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             NodeUnion<? extends IdentifierNode> name)
     {
         PackageNode ret = new PackageNodeImpl(name, startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreatePackageNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), name == null ? null : (name.getNodeValue() == null ? null : name.getNodeValue().getUid()), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -8322,6 +10440,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             IdentifierNode name)
     {
         PackageNode ret = new PackageNodeImpl(this.<IdentifierNode>makeNormalNodeUnion(name), startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreatePackageNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), name == null ? null : name.getUid(), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -8336,6 +10458,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             BsjSourceLocation stopLocation)
     {
         PackageNode ret = new PackageNodeImpl(name, startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreatePackageNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), name == null ? null : (name.getNodeValue() == null ? null : name.getNodeValue().getUid()), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -8350,6 +10476,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             BsjSourceLocation stopLocation)
     {
         PackageNode ret = new PackageNodeImpl(this.<IdentifierNode>makeNormalNodeUnion(name), startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreatePackageNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), name == null ? null : name.getUid(), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -8363,6 +10493,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             NodeUnion<? extends TypeArgumentListNode> typeArguments)
     {
         ParameterizedTypeNode ret = new ParameterizedTypeNodeImpl(baseType, typeArguments, startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateParameterizedTypeNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), baseType == null ? null : (baseType.getNodeValue() == null ? null : baseType.getNodeValue().getUid()), typeArguments == null ? null : (typeArguments.getNodeValue() == null ? null : typeArguments.getNodeValue().getUid()), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -8376,6 +10510,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             TypeArgumentListNode typeArguments)
     {
         ParameterizedTypeNode ret = new ParameterizedTypeNodeImpl(this.<UnparameterizedTypeNode>makeNormalNodeUnion(baseType), this.<TypeArgumentListNode>makeNormalNodeUnion(typeArguments), startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateParameterizedTypeNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), baseType == null ? null : baseType.getUid(), typeArguments == null ? null : typeArguments.getUid(), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -8391,6 +10529,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             BsjSourceLocation stopLocation)
     {
         ParameterizedTypeNode ret = new ParameterizedTypeNodeImpl(baseType, typeArguments, startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateParameterizedTypeNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), baseType == null ? null : (baseType.getNodeValue() == null ? null : baseType.getNodeValue().getUid()), typeArguments == null ? null : (typeArguments.getNodeValue() == null ? null : typeArguments.getNodeValue().getUid()), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -8406,6 +10548,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             BsjSourceLocation stopLocation)
     {
         ParameterizedTypeNode ret = new ParameterizedTypeNodeImpl(this.<UnparameterizedTypeNode>makeNormalNodeUnion(baseType), this.<TypeArgumentListNode>makeNormalNodeUnion(typeArguments), startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateParameterizedTypeNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), baseType == null ? null : baseType.getUid(), typeArguments == null ? null : typeArguments.getUid(), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -8419,6 +10565,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             NodeUnion<? extends DeclaredTypeNode> select)
     {
         ParameterizedTypeSelectNode ret = new ParameterizedTypeSelectNodeImpl(base, select, startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateParameterizedTypeSelectNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), base == null ? null : (base.getNodeValue() == null ? null : base.getNodeValue().getUid()), select == null ? null : (select.getNodeValue() == null ? null : select.getNodeValue().getUid()), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -8432,6 +10582,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             DeclaredTypeNode select)
     {
         ParameterizedTypeSelectNode ret = new ParameterizedTypeSelectNodeImpl(this.<ParameterizedTypeNode>makeNormalNodeUnion(base), this.<DeclaredTypeNode>makeNormalNodeUnion(select), startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateParameterizedTypeSelectNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), base == null ? null : base.getUid(), select == null ? null : select.getUid(), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -8447,6 +10601,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             BsjSourceLocation stopLocation)
     {
         ParameterizedTypeSelectNode ret = new ParameterizedTypeSelectNodeImpl(base, select, startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateParameterizedTypeSelectNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), base == null ? null : (base.getNodeValue() == null ? null : base.getNodeValue().getUid()), select == null ? null : (select.getNodeValue() == null ? null : select.getNodeValue().getUid()), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -8462,6 +10620,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             BsjSourceLocation stopLocation)
     {
         ParameterizedTypeSelectNode ret = new ParameterizedTypeSelectNodeImpl(this.<ParameterizedTypeNode>makeNormalNodeUnion(base), this.<DeclaredTypeNode>makeNormalNodeUnion(select), startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateParameterizedTypeSelectNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), base == null ? null : base.getUid(), select == null ? null : select.getUid(), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -8474,6 +10636,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             NodeUnion<? extends ExpressionNode> expression)
     {
         ParenthesizedExpressionNode ret = new ParenthesizedExpressionNodeImpl(expression, startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateParenthesizedExpressionNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), expression == null ? null : (expression.getNodeValue() == null ? null : expression.getNodeValue().getUid()), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -8486,6 +10652,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             ExpressionNode expression)
     {
         ParenthesizedExpressionNode ret = new ParenthesizedExpressionNodeImpl(this.<ExpressionNode>makeNormalNodeUnion(expression), startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateParenthesizedExpressionNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), expression == null ? null : expression.getUid(), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -8500,6 +10670,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             BsjSourceLocation stopLocation)
     {
         ParenthesizedExpressionNode ret = new ParenthesizedExpressionNodeImpl(expression, startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateParenthesizedExpressionNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), expression == null ? null : (expression.getNodeValue() == null ? null : expression.getNodeValue().getUid()), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -8514,6 +10688,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             BsjSourceLocation stopLocation)
     {
         ParenthesizedExpressionNode ret = new ParenthesizedExpressionNodeImpl(this.<ExpressionNode>makeNormalNodeUnion(expression), startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateParenthesizedExpressionNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), expression == null ? null : expression.getUid(), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -8526,6 +10704,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             PrimitiveType primitiveType)
     {
         PrimitiveTypeNode ret = new PrimitiveTypeNodeImpl(primitiveType, startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreatePrimitiveTypeNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), primitiveType, startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -8540,6 +10722,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             BsjSourceLocation stopLocation)
     {
         PrimitiveTypeNode ret = new PrimitiveTypeNodeImpl(primitiveType, startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreatePrimitiveTypeNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), primitiveType, startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -8557,6 +10743,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             NodeUnion<? extends AnonymousClassBodyNode> body)
     {
         QualifiedClassInstantiationNode ret = new QualifiedClassInstantiationNodeImpl(enclosingExpression, identifier, typeArguments, constructorTypeArguments, arguments, body, startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateQualifiedClassInstantiationNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), enclosingExpression == null ? null : (enclosingExpression.getNodeValue() == null ? null : enclosingExpression.getNodeValue().getUid()), identifier == null ? null : (identifier.getNodeValue() == null ? null : identifier.getNodeValue().getUid()), typeArguments == null ? null : (typeArguments.getNodeValue() == null ? null : typeArguments.getNodeValue().getUid()), constructorTypeArguments == null ? null : (constructorTypeArguments.getNodeValue() == null ? null : constructorTypeArguments.getNodeValue().getUid()), arguments == null ? null : (arguments.getNodeValue() == null ? null : arguments.getNodeValue().getUid()), body == null ? null : (body.getNodeValue() == null ? null : body.getNodeValue().getUid()), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -8574,6 +10764,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             AnonymousClassBodyNode body)
     {
         QualifiedClassInstantiationNode ret = new QualifiedClassInstantiationNodeImpl(this.<ExpressionNode>makeNormalNodeUnion(enclosingExpression), this.<IdentifierNode>makeNormalNodeUnion(identifier), this.<TypeArgumentListNode>makeNormalNodeUnion(typeArguments), this.<TypeArgumentListNode>makeNormalNodeUnion(constructorTypeArguments), this.<ExpressionListNode>makeNormalNodeUnion(arguments), this.<AnonymousClassBodyNode>makeNormalNodeUnion(body), startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateQualifiedClassInstantiationNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), enclosingExpression == null ? null : enclosingExpression.getUid(), identifier == null ? null : identifier.getUid(), typeArguments == null ? null : typeArguments.getUid(), constructorTypeArguments == null ? null : constructorTypeArguments.getUid(), arguments == null ? null : arguments.getUid(), body == null ? null : body.getUid(), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -8593,6 +10787,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             BsjSourceLocation stopLocation)
     {
         QualifiedClassInstantiationNode ret = new QualifiedClassInstantiationNodeImpl(enclosingExpression, identifier, typeArguments, constructorTypeArguments, arguments, body, startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateQualifiedClassInstantiationNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), enclosingExpression == null ? null : (enclosingExpression.getNodeValue() == null ? null : enclosingExpression.getNodeValue().getUid()), identifier == null ? null : (identifier.getNodeValue() == null ? null : identifier.getNodeValue().getUid()), typeArguments == null ? null : (typeArguments.getNodeValue() == null ? null : typeArguments.getNodeValue().getUid()), constructorTypeArguments == null ? null : (constructorTypeArguments.getNodeValue() == null ? null : constructorTypeArguments.getNodeValue().getUid()), arguments == null ? null : (arguments.getNodeValue() == null ? null : arguments.getNodeValue().getUid()), body == null ? null : (body.getNodeValue() == null ? null : body.getNodeValue().getUid()), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -8612,6 +10810,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             BsjSourceLocation stopLocation)
     {
         QualifiedClassInstantiationNode ret = new QualifiedClassInstantiationNodeImpl(this.<ExpressionNode>makeNormalNodeUnion(enclosingExpression), this.<IdentifierNode>makeNormalNodeUnion(identifier), this.<TypeArgumentListNode>makeNormalNodeUnion(typeArguments), this.<TypeArgumentListNode>makeNormalNodeUnion(constructorTypeArguments), this.<ExpressionListNode>makeNormalNodeUnion(arguments), this.<AnonymousClassBodyNode>makeNormalNodeUnion(body), startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateQualifiedClassInstantiationNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), enclosingExpression == null ? null : enclosingExpression.getUid(), identifier == null ? null : identifier.getUid(), typeArguments == null ? null : typeArguments.getUid(), constructorTypeArguments == null ? null : constructorTypeArguments.getUid(), arguments == null ? null : arguments.getUid(), body == null ? null : body.getUid(), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -8626,6 +10828,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             TypeArgumentListNode typeArguments)
     {
         QualifiedClassInstantiationNode ret = new QualifiedClassInstantiationNodeImpl(this.<ExpressionNode>makeNormalNodeUnion(enclosingExpression), this.<IdentifierNode>makeNormalNodeUnion(identifier), this.<TypeArgumentListNode>makeNormalNodeUnion(typeArguments), this.<TypeArgumentListNode>makeNormalNodeUnion(makeTypeArgumentListNode()), this.<ExpressionListNode>makeNormalNodeUnion(makeExpressionListNode()), this.<AnonymousClassBodyNode>makeNormalNodeUnion(null), startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateQualifiedClassInstantiationNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), enclosingExpression == null ? null : enclosingExpression.getUid(), identifier == null ? null : identifier.getUid(), typeArguments == null ? null : typeArguments.getUid(), ret.getConstructorTypeArguments() == null ? null : ret.getConstructorTypeArguments().getUid(), ret.getArguments() == null ? null : ret.getArguments().getUid(), ret.getBody() == null ? null : ret.getBody().getUid(), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -8642,6 +10848,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             BsjSourceLocation stopLocation)
     {
         QualifiedClassInstantiationNode ret = new QualifiedClassInstantiationNodeImpl(this.<ExpressionNode>makeNormalNodeUnion(enclosingExpression), this.<IdentifierNode>makeNormalNodeUnion(identifier), this.<TypeArgumentListNode>makeNormalNodeUnion(typeArguments), this.<TypeArgumentListNode>makeNormalNodeUnion(makeTypeArgumentListNode()), this.<ExpressionListNode>makeNormalNodeUnion(makeExpressionListNode()), this.<AnonymousClassBodyNode>makeNormalNodeUnion(null), startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateQualifiedClassInstantiationNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), enclosingExpression == null ? null : enclosingExpression.getUid(), identifier == null ? null : identifier.getUid(), typeArguments == null ? null : typeArguments.getUid(), ret.getConstructorTypeArguments() == null ? null : ret.getConstructorTypeArguments().getUid(), ret.getArguments() == null ? null : ret.getArguments().getUid(), ret.getBody() == null ? null : ret.getBody().getUid(), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -8655,6 +10865,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             NodeUnion<? extends IdentifierNode> identifier)
     {
         QualifiedNameNode ret = new QualifiedNameNodeImpl(base, identifier, startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateQualifiedNameNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), base == null ? null : (base.getNodeValue() == null ? null : base.getNodeValue().getUid()), identifier == null ? null : (identifier.getNodeValue() == null ? null : identifier.getNodeValue().getUid()), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -8668,6 +10882,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             IdentifierNode identifier)
     {
         QualifiedNameNode ret = new QualifiedNameNodeImpl(this.<NameNode>makeNormalNodeUnion(base), this.<IdentifierNode>makeNormalNodeUnion(identifier), startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateQualifiedNameNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), base == null ? null : base.getUid(), identifier == null ? null : identifier.getUid(), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -8683,6 +10901,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             BsjSourceLocation stopLocation)
     {
         QualifiedNameNode ret = new QualifiedNameNodeImpl(base, identifier, startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateQualifiedNameNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), base == null ? null : (base.getNodeValue() == null ? null : base.getNodeValue().getUid()), identifier == null ? null : (identifier.getNodeValue() == null ? null : identifier.getNodeValue().getUid()), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -8698,6 +10920,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             BsjSourceLocation stopLocation)
     {
         QualifiedNameNode ret = new QualifiedNameNodeImpl(this.<NameNode>makeNormalNodeUnion(base), this.<IdentifierNode>makeNormalNodeUnion(identifier), startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateQualifiedNameNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), base == null ? null : base.getUid(), identifier == null ? null : identifier.getUid(), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -8710,6 +10936,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             BsjRawCodeLiteralPayload value)
     {
         RawCodeLiteralNode ret = new RawCodeLiteralNodeImpl(value, startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateRawCodeLiteralNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), value, startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -8724,6 +10954,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             BsjSourceLocation stopLocation)
     {
         RawCodeLiteralNode ret = new RawCodeLiteralNodeImpl(value, startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateRawCodeLiteralNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), value, startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -8736,6 +10970,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             List<NodeUnion<? extends ReferenceTypeNode>> children)
     {
         ReferenceTypeListNode ret = new ReferenceTypeListNodeImpl(children, startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateReferenceTypeListNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), EditScriptUtilities.getNodeUnionUids(children), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -8748,6 +10986,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             List<ReferenceTypeNode> children)
     {
         ReferenceTypeListNode ret = new ReferenceTypeListNodeImpl(unionWrapList(children), startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateReferenceTypeListNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), EditScriptUtilities.getNodeUids(children), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -8774,6 +11016,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             BsjSourceLocation stopLocation)
     {
         ReferenceTypeListNode ret = new ReferenceTypeListNodeImpl(children, startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateReferenceTypeListNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), EditScriptUtilities.getNodeUnionUids(children), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -8788,6 +11034,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             BsjSourceLocation stopLocation)
     {
         ReferenceTypeListNode ret = new ReferenceTypeListNodeImpl(unionWrapList(children), startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateReferenceTypeListNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), EditScriptUtilities.getNodeUids(children), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -8815,6 +11065,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             NodeUnion<? extends MetaAnnotationListNode> metaAnnotations)
     {
         ReturnNode ret = new ReturnNodeImpl(expression, metaAnnotations, startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateReturnNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), expression == null ? null : (expression.getNodeValue() == null ? null : expression.getNodeValue().getUid()), metaAnnotations == null ? null : (metaAnnotations.getNodeValue() == null ? null : metaAnnotations.getNodeValue().getUid()), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -8828,6 +11082,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             MetaAnnotationListNode metaAnnotations)
     {
         ReturnNode ret = new ReturnNodeImpl(this.<ExpressionNode>makeNormalNodeUnion(expression), this.<MetaAnnotationListNode>makeNormalNodeUnion(metaAnnotations), startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateReturnNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), expression == null ? null : expression.getUid(), metaAnnotations == null ? null : metaAnnotations.getUid(), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -8843,6 +11101,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             BsjSourceLocation stopLocation)
     {
         ReturnNode ret = new ReturnNodeImpl(expression, metaAnnotations, startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateReturnNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), expression == null ? null : (expression.getNodeValue() == null ? null : expression.getNodeValue().getUid()), metaAnnotations == null ? null : (metaAnnotations.getNodeValue() == null ? null : metaAnnotations.getNodeValue().getUid()), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -8858,6 +11120,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             BsjSourceLocation stopLocation)
     {
         ReturnNode ret = new ReturnNodeImpl(this.<ExpressionNode>makeNormalNodeUnion(expression), this.<MetaAnnotationListNode>makeNormalNodeUnion(metaAnnotations), startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateReturnNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), expression == null ? null : expression.getUid(), metaAnnotations == null ? null : metaAnnotations.getUid(), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -8870,6 +11136,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             ExpressionNode expression)
     {
         ReturnNode ret = new ReturnNodeImpl(this.<ExpressionNode>makeNormalNodeUnion(expression), this.<MetaAnnotationListNode>makeNormalNodeUnion(makeMetaAnnotationListNode()), startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateReturnNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), expression == null ? null : expression.getUid(), ret.getMetaAnnotations() == null ? null : ret.getMetaAnnotations().getUid(), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -8884,6 +11154,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             BsjSourceLocation stopLocation)
     {
         ReturnNode ret = new ReturnNodeImpl(this.<ExpressionNode>makeNormalNodeUnion(expression), this.<MetaAnnotationListNode>makeNormalNodeUnion(makeMetaAnnotationListNode()), startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateReturnNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), expression == null ? null : expression.getUid(), ret.getMetaAnnotations() == null ? null : ret.getMetaAnnotations().getUid(), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -8896,6 +11170,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             NodeUnion<? extends IdentifierNode> identifier)
     {
         SimpleNameNode ret = new SimpleNameNodeImpl(identifier, startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateSimpleNameNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), identifier == null ? null : (identifier.getNodeValue() == null ? null : identifier.getNodeValue().getUid()), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -8908,6 +11186,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             IdentifierNode identifier)
     {
         SimpleNameNode ret = new SimpleNameNodeImpl(this.<IdentifierNode>makeNormalNodeUnion(identifier), startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateSimpleNameNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), identifier == null ? null : identifier.getUid(), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -8922,6 +11204,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             BsjSourceLocation stopLocation)
     {
         SimpleNameNode ret = new SimpleNameNodeImpl(identifier, startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateSimpleNameNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), identifier == null ? null : (identifier.getNodeValue() == null ? null : identifier.getNodeValue().getUid()), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -8936,6 +11222,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             BsjSourceLocation stopLocation)
     {
         SimpleNameNode ret = new SimpleNameNodeImpl(this.<IdentifierNode>makeNormalNodeUnion(identifier), startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateSimpleNameNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), identifier == null ? null : identifier.getUid(), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -8949,6 +11239,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             NodeUnion<? extends UnparameterizedTypeNode> annotationType)
     {
         SingleElementAnnotationNode ret = new SingleElementAnnotationNodeImpl(value, annotationType, startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateSingleElementAnnotationNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), value == null ? null : (value.getNodeValue() == null ? null : value.getNodeValue().getUid()), annotationType == null ? null : (annotationType.getNodeValue() == null ? null : annotationType.getNodeValue().getUid()), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -8962,6 +11256,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             UnparameterizedTypeNode annotationType)
     {
         SingleElementAnnotationNode ret = new SingleElementAnnotationNodeImpl(this.<AnnotationValueNode>makeNormalNodeUnion(value), this.<UnparameterizedTypeNode>makeNormalNodeUnion(annotationType), startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateSingleElementAnnotationNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), value == null ? null : value.getUid(), annotationType == null ? null : annotationType.getUid(), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -8977,6 +11275,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             BsjSourceLocation stopLocation)
     {
         SingleElementAnnotationNode ret = new SingleElementAnnotationNodeImpl(value, annotationType, startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateSingleElementAnnotationNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), value == null ? null : (value.getNodeValue() == null ? null : value.getNodeValue().getUid()), annotationType == null ? null : (annotationType.getNodeValue() == null ? null : annotationType.getNodeValue().getUid()), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -8992,6 +11294,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             BsjSourceLocation stopLocation)
     {
         SingleElementAnnotationNode ret = new SingleElementAnnotationNodeImpl(this.<AnnotationValueNode>makeNormalNodeUnion(value), this.<UnparameterizedTypeNode>makeNormalNodeUnion(annotationType), startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateSingleElementAnnotationNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), value == null ? null : value.getUid(), annotationType == null ? null : annotationType.getUid(), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -9002,9 +11308,72 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
     @Override
     public SingleElementMetaAnnotationNode makeSingleElementMetaAnnotationNodeWithUnions(
             NodeUnion<? extends MetaAnnotationValueNode> value,
-            NodeUnion<? extends UnparameterizedTypeNode> annotationType)
+            NodeUnion<? extends UnparameterizedTypeNode> annotationType,
+            MetaAnnotationMetaprogramAnchorNode metaprogramAnchor)
     {
-        SingleElementMetaAnnotationNode ret = new SingleElementMetaAnnotationNodeImpl(value, annotationType, null, startLocation, stopLocation, manager, binary);
+        SingleElementMetaAnnotationNode ret = new SingleElementMetaAnnotationNodeImpl(value, annotationType, metaprogramAnchor, startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateSingleElementMetaAnnotationNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), value == null ? null : (value.getNodeValue() == null ? null : value.getNodeValue().getUid()), annotationType == null ? null : (annotationType.getNodeValue() == null ? null : annotationType.getNodeValue().getUid()), metaprogramAnchor == null ? null : metaprogramAnchor.getUid(), startLocation, stopLocation));
+        }
+        return ret;
+    }
+    
+    /**
+     * Creates a SingleElementMetaAnnotationNode.
+     * The start and stop locations which have been set as properties of this factory are used.
+     */
+    @Override
+    public SingleElementMetaAnnotationNode makeSingleElementMetaAnnotationNode(
+            MetaAnnotationValueNode value,
+            UnparameterizedTypeNode annotationType,
+            MetaAnnotationMetaprogramAnchorNode metaprogramAnchor)
+    {
+        SingleElementMetaAnnotationNode ret = new SingleElementMetaAnnotationNodeImpl(this.<MetaAnnotationValueNode>makeNormalNodeUnion(value), this.<UnparameterizedTypeNode>makeNormalNodeUnion(annotationType), metaprogramAnchor, startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateSingleElementMetaAnnotationNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), value == null ? null : value.getUid(), annotationType == null ? null : annotationType.getUid(), metaprogramAnchor == null ? null : metaprogramAnchor.getUid(), startLocation, stopLocation));
+        }
+        return ret;
+    }
+    
+    /**
+     * Creates a SingleElementMetaAnnotationNode.
+     * The specified start and stop locations are used.
+     */
+    @Override
+    public SingleElementMetaAnnotationNode makeSingleElementMetaAnnotationNodeWithUnions(
+            NodeUnion<? extends MetaAnnotationValueNode> value,
+            NodeUnion<? extends UnparameterizedTypeNode> annotationType,
+            MetaAnnotationMetaprogramAnchorNode metaprogramAnchor,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation)
+    {
+        SingleElementMetaAnnotationNode ret = new SingleElementMetaAnnotationNodeImpl(value, annotationType, metaprogramAnchor, startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateSingleElementMetaAnnotationNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), value == null ? null : (value.getNodeValue() == null ? null : value.getNodeValue().getUid()), annotationType == null ? null : (annotationType.getNodeValue() == null ? null : annotationType.getNodeValue().getUid()), metaprogramAnchor == null ? null : metaprogramAnchor.getUid(), startLocation, stopLocation));
+        }
+        return ret;
+    }
+    
+    /**
+     * Creates a SingleElementMetaAnnotationNode.
+     * The specified start and stop locations are used.
+     */
+    @Override
+    public SingleElementMetaAnnotationNode makeSingleElementMetaAnnotationNode(
+            MetaAnnotationValueNode value,
+            UnparameterizedTypeNode annotationType,
+            MetaAnnotationMetaprogramAnchorNode metaprogramAnchor,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation)
+    {
+        SingleElementMetaAnnotationNode ret = new SingleElementMetaAnnotationNodeImpl(this.<MetaAnnotationValueNode>makeNormalNodeUnion(value), this.<UnparameterizedTypeNode>makeNormalNodeUnion(annotationType), metaprogramAnchor, startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateSingleElementMetaAnnotationNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), value == null ? null : value.getUid(), annotationType == null ? null : annotationType.getUid(), metaprogramAnchor == null ? null : metaprogramAnchor.getUid(), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -9017,22 +11386,11 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             MetaAnnotationValueNode value,
             UnparameterizedTypeNode annotationType)
     {
-        SingleElementMetaAnnotationNode ret = new SingleElementMetaAnnotationNodeImpl(this.<MetaAnnotationValueNode>makeNormalNodeUnion(value), this.<UnparameterizedTypeNode>makeNormalNodeUnion(annotationType), null, startLocation, stopLocation, manager, binary);
-        return ret;
-    }
-    
-    /**
-     * Creates a SingleElementMetaAnnotationNode.
-     * The specified start and stop locations are used.
-     */
-    @Override
-    public SingleElementMetaAnnotationNode makeSingleElementMetaAnnotationNodeWithUnions(
-            NodeUnion<? extends MetaAnnotationValueNode> value,
-            NodeUnion<? extends UnparameterizedTypeNode> annotationType,
-            BsjSourceLocation startLocation,
-            BsjSourceLocation stopLocation)
-    {
-        SingleElementMetaAnnotationNode ret = new SingleElementMetaAnnotationNodeImpl(value, annotationType, null, startLocation, stopLocation, manager, binary);
+        SingleElementMetaAnnotationNode ret = new SingleElementMetaAnnotationNodeImpl(this.<MetaAnnotationValueNode>makeNormalNodeUnion(value), this.<UnparameterizedTypeNode>makeNormalNodeUnion(annotationType), makeMetaAnnotationMetaprogramAnchorNode(), startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateSingleElementMetaAnnotationNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), value == null ? null : value.getUid(), annotationType == null ? null : annotationType.getUid(), ret.getMetaprogramAnchor() == null ? null : ret.getMetaprogramAnchor().getUid(), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -9047,7 +11405,11 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation)
     {
-        SingleElementMetaAnnotationNode ret = new SingleElementMetaAnnotationNodeImpl(this.<MetaAnnotationValueNode>makeNormalNodeUnion(value), this.<UnparameterizedTypeNode>makeNormalNodeUnion(annotationType), null, startLocation, stopLocation, manager, binary);
+        SingleElementMetaAnnotationNode ret = new SingleElementMetaAnnotationNodeImpl(this.<MetaAnnotationValueNode>makeNormalNodeUnion(value), this.<UnparameterizedTypeNode>makeNormalNodeUnion(annotationType), makeMetaAnnotationMetaprogramAnchorNode(), startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateSingleElementMetaAnnotationNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), value == null ? null : value.getUid(), annotationType == null ? null : annotationType.getUid(), ret.getMetaprogramAnchor() == null ? null : ret.getMetaprogramAnchor().getUid(), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -9061,6 +11423,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             NodeUnion<? extends IdentifierNode> identifier)
     {
         SingleStaticImportNode ret = new SingleStaticImportNodeImpl(name, identifier, startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateSingleStaticImportNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), name == null ? null : (name.getNodeValue() == null ? null : name.getNodeValue().getUid()), identifier == null ? null : (identifier.getNodeValue() == null ? null : identifier.getNodeValue().getUid()), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -9074,6 +11440,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             IdentifierNode identifier)
     {
         SingleStaticImportNode ret = new SingleStaticImportNodeImpl(this.<NameNode>makeNormalNodeUnion(name), this.<IdentifierNode>makeNormalNodeUnion(identifier), startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateSingleStaticImportNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), name == null ? null : name.getUid(), identifier == null ? null : identifier.getUid(), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -9089,6 +11459,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             BsjSourceLocation stopLocation)
     {
         SingleStaticImportNode ret = new SingleStaticImportNodeImpl(name, identifier, startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateSingleStaticImportNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), name == null ? null : (name.getNodeValue() == null ? null : name.getNodeValue().getUid()), identifier == null ? null : (identifier.getNodeValue() == null ? null : identifier.getNodeValue().getUid()), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -9104,6 +11478,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             BsjSourceLocation stopLocation)
     {
         SingleStaticImportNode ret = new SingleStaticImportNodeImpl(this.<NameNode>makeNormalNodeUnion(name), this.<IdentifierNode>makeNormalNodeUnion(identifier), startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateSingleStaticImportNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), name == null ? null : name.getUid(), identifier == null ? null : identifier.getUid(), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -9116,6 +11494,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             ExpressionNode spliceExpression)
     {
         SpliceNode ret = new SpliceNodeImpl(spliceExpression, startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateSpliceNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), spliceExpression == null ? null : spliceExpression.getUid(), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -9130,6 +11512,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             BsjSourceLocation stopLocation)
     {
         SpliceNode ret = new SpliceNodeImpl(spliceExpression, startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateSpliceNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), spliceExpression == null ? null : spliceExpression.getUid(), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -9142,6 +11528,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             List<NodeUnion<? extends StatementExpressionNode>> children)
     {
         StatementExpressionListNode ret = new StatementExpressionListNodeImpl(children, startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateStatementExpressionListNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), EditScriptUtilities.getNodeUnionUids(children), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -9154,6 +11544,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             List<StatementExpressionNode> children)
     {
         StatementExpressionListNode ret = new StatementExpressionListNodeImpl(unionWrapList(children), startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateStatementExpressionListNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), EditScriptUtilities.getNodeUids(children), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -9180,6 +11574,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             BsjSourceLocation stopLocation)
     {
         StatementExpressionListNode ret = new StatementExpressionListNodeImpl(children, startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateStatementExpressionListNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), EditScriptUtilities.getNodeUnionUids(children), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -9194,6 +11592,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             BsjSourceLocation stopLocation)
     {
         StatementExpressionListNode ret = new StatementExpressionListNodeImpl(unionWrapList(children), startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateStatementExpressionListNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), EditScriptUtilities.getNodeUids(children), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -9220,6 +11622,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             NodeUnion<? extends NameNode> name)
     {
         StaticImportOnDemandNode ret = new StaticImportOnDemandNodeImpl(name, startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateStaticImportOnDemandNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), name == null ? null : (name.getNodeValue() == null ? null : name.getNodeValue().getUid()), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -9232,6 +11638,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             NameNode name)
     {
         StaticImportOnDemandNode ret = new StaticImportOnDemandNodeImpl(this.<NameNode>makeNormalNodeUnion(name), startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateStaticImportOnDemandNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), name == null ? null : name.getUid(), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -9246,6 +11656,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             BsjSourceLocation stopLocation)
     {
         StaticImportOnDemandNode ret = new StaticImportOnDemandNodeImpl(name, startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateStaticImportOnDemandNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), name == null ? null : (name.getNodeValue() == null ? null : name.getNodeValue().getUid()), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -9260,6 +11674,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             BsjSourceLocation stopLocation)
     {
         StaticImportOnDemandNode ret = new StaticImportOnDemandNodeImpl(this.<NameNode>makeNormalNodeUnion(name), startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateStaticImportOnDemandNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), name == null ? null : name.getUid(), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -9272,6 +11690,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             String value)
     {
         StringLiteralNode ret = new StringLiteralNodeImpl(value, startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateStringLiteralNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), value, startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -9286,6 +11708,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             BsjSourceLocation stopLocation)
     {
         StringLiteralNode ret = new StringLiteralNodeImpl(value, startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateStringLiteralNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), value, startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -9299,6 +11725,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             NodeUnion<? extends IdentifierNode> identifier)
     {
         SuperFieldAccessNode ret = new SuperFieldAccessNodeImpl(type, identifier, startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateSuperFieldAccessNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), type == null ? null : (type.getNodeValue() == null ? null : type.getNodeValue().getUid()), identifier == null ? null : (identifier.getNodeValue() == null ? null : identifier.getNodeValue().getUid()), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -9312,6 +11742,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             IdentifierNode identifier)
     {
         SuperFieldAccessNode ret = new SuperFieldAccessNodeImpl(this.<UnparameterizedTypeNode>makeNormalNodeUnion(type), this.<IdentifierNode>makeNormalNodeUnion(identifier), startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateSuperFieldAccessNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), type == null ? null : type.getUid(), identifier == null ? null : identifier.getUid(), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -9327,6 +11761,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             BsjSourceLocation stopLocation)
     {
         SuperFieldAccessNode ret = new SuperFieldAccessNodeImpl(type, identifier, startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateSuperFieldAccessNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), type == null ? null : (type.getNodeValue() == null ? null : type.getNodeValue().getUid()), identifier == null ? null : (identifier.getNodeValue() == null ? null : identifier.getNodeValue().getUid()), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -9342,6 +11780,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             BsjSourceLocation stopLocation)
     {
         SuperFieldAccessNode ret = new SuperFieldAccessNodeImpl(this.<UnparameterizedTypeNode>makeNormalNodeUnion(type), this.<IdentifierNode>makeNormalNodeUnion(identifier), startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateSuperFieldAccessNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), type == null ? null : type.getUid(), identifier == null ? null : identifier.getUid(), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -9354,6 +11796,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             IdentifierNode identifier)
     {
         SuperFieldAccessNode ret = new SuperFieldAccessNodeImpl(this.<UnparameterizedTypeNode>makeNormalNodeUnion(null), this.<IdentifierNode>makeNormalNodeUnion(identifier), startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateSuperFieldAccessNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), ret.getType() == null ? null : ret.getType().getUid(), identifier == null ? null : identifier.getUid(), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -9368,6 +11814,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             BsjSourceLocation stopLocation)
     {
         SuperFieldAccessNode ret = new SuperFieldAccessNodeImpl(this.<UnparameterizedTypeNode>makeNormalNodeUnion(null), this.<IdentifierNode>makeNormalNodeUnion(identifier), startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateSuperFieldAccessNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), ret.getType() == null ? null : ret.getType().getUid(), identifier == null ? null : identifier.getUid(), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -9383,6 +11833,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             NodeUnion<? extends ReferenceTypeListNode> typeArguments)
     {
         SuperMethodInvocationNode ret = new SuperMethodInvocationNodeImpl(type, identifier, arguments, typeArguments, startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateSuperMethodInvocationNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), type == null ? null : (type.getNodeValue() == null ? null : type.getNodeValue().getUid()), identifier == null ? null : (identifier.getNodeValue() == null ? null : identifier.getNodeValue().getUid()), arguments == null ? null : (arguments.getNodeValue() == null ? null : arguments.getNodeValue().getUid()), typeArguments == null ? null : (typeArguments.getNodeValue() == null ? null : typeArguments.getNodeValue().getUid()), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -9398,6 +11852,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             ReferenceTypeListNode typeArguments)
     {
         SuperMethodInvocationNode ret = new SuperMethodInvocationNodeImpl(this.<UnparameterizedTypeNode>makeNormalNodeUnion(type), this.<IdentifierNode>makeNormalNodeUnion(identifier), this.<ExpressionListNode>makeNormalNodeUnion(arguments), this.<ReferenceTypeListNode>makeNormalNodeUnion(typeArguments), startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateSuperMethodInvocationNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), type == null ? null : type.getUid(), identifier == null ? null : identifier.getUid(), arguments == null ? null : arguments.getUid(), typeArguments == null ? null : typeArguments.getUid(), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -9415,6 +11873,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             BsjSourceLocation stopLocation)
     {
         SuperMethodInvocationNode ret = new SuperMethodInvocationNodeImpl(type, identifier, arguments, typeArguments, startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateSuperMethodInvocationNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), type == null ? null : (type.getNodeValue() == null ? null : type.getNodeValue().getUid()), identifier == null ? null : (identifier.getNodeValue() == null ? null : identifier.getNodeValue().getUid()), arguments == null ? null : (arguments.getNodeValue() == null ? null : arguments.getNodeValue().getUid()), typeArguments == null ? null : (typeArguments.getNodeValue() == null ? null : typeArguments.getNodeValue().getUid()), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -9432,6 +11894,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             BsjSourceLocation stopLocation)
     {
         SuperMethodInvocationNode ret = new SuperMethodInvocationNodeImpl(this.<UnparameterizedTypeNode>makeNormalNodeUnion(type), this.<IdentifierNode>makeNormalNodeUnion(identifier), this.<ExpressionListNode>makeNormalNodeUnion(arguments), this.<ReferenceTypeListNode>makeNormalNodeUnion(typeArguments), startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateSuperMethodInvocationNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), type == null ? null : type.getUid(), identifier == null ? null : identifier.getUid(), arguments == null ? null : arguments.getUid(), typeArguments == null ? null : typeArguments.getUid(), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -9445,6 +11911,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             ExpressionListNode arguments)
     {
         SuperMethodInvocationNode ret = new SuperMethodInvocationNodeImpl(this.<UnparameterizedTypeNode>makeNormalNodeUnion(null), this.<IdentifierNode>makeNormalNodeUnion(identifier), this.<ExpressionListNode>makeNormalNodeUnion(arguments), this.<ReferenceTypeListNode>makeNormalNodeUnion(makeReferenceTypeListNode()), startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateSuperMethodInvocationNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), ret.getType() == null ? null : ret.getType().getUid(), identifier == null ? null : identifier.getUid(), arguments == null ? null : arguments.getUid(), ret.getTypeArguments() == null ? null : ret.getTypeArguments().getUid(), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -9460,6 +11930,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             BsjSourceLocation stopLocation)
     {
         SuperMethodInvocationNode ret = new SuperMethodInvocationNodeImpl(this.<UnparameterizedTypeNode>makeNormalNodeUnion(null), this.<IdentifierNode>makeNormalNodeUnion(identifier), this.<ExpressionListNode>makeNormalNodeUnion(arguments), this.<ReferenceTypeListNode>makeNormalNodeUnion(makeReferenceTypeListNode()), startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateSuperMethodInvocationNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), ret.getType() == null ? null : ret.getType().getUid(), identifier == null ? null : identifier.getUid(), arguments == null ? null : arguments.getUid(), ret.getTypeArguments() == null ? null : ret.getTypeArguments().getUid(), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -9474,6 +11948,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             ReferenceTypeListNode typeArguments)
     {
         SuperMethodInvocationNode ret = new SuperMethodInvocationNodeImpl(this.<UnparameterizedTypeNode>makeNormalNodeUnion(null), this.<IdentifierNode>makeNormalNodeUnion(identifier), this.<ExpressionListNode>makeNormalNodeUnion(arguments), this.<ReferenceTypeListNode>makeNormalNodeUnion(typeArguments), startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateSuperMethodInvocationNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), ret.getType() == null ? null : ret.getType().getUid(), identifier == null ? null : identifier.getUid(), arguments == null ? null : arguments.getUid(), typeArguments == null ? null : typeArguments.getUid(), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -9490,6 +11968,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             BsjSourceLocation stopLocation)
     {
         SuperMethodInvocationNode ret = new SuperMethodInvocationNodeImpl(this.<UnparameterizedTypeNode>makeNormalNodeUnion(null), this.<IdentifierNode>makeNormalNodeUnion(identifier), this.<ExpressionListNode>makeNormalNodeUnion(arguments), this.<ReferenceTypeListNode>makeNormalNodeUnion(typeArguments), startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateSuperMethodInvocationNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), ret.getType() == null ? null : ret.getType().getUid(), identifier == null ? null : identifier.getUid(), arguments == null ? null : arguments.getUid(), typeArguments == null ? null : typeArguments.getUid(), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -9504,6 +11986,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             NodeUnion<? extends ReferenceTypeListNode> typeArguments)
     {
         SuperclassConstructorInvocationNode ret = new SuperclassConstructorInvocationNodeImpl(qualifyingExpression, arguments, typeArguments, startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateSuperclassConstructorInvocationNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), qualifyingExpression == null ? null : (qualifyingExpression.getNodeValue() == null ? null : qualifyingExpression.getNodeValue().getUid()), arguments == null ? null : (arguments.getNodeValue() == null ? null : arguments.getNodeValue().getUid()), typeArguments == null ? null : (typeArguments.getNodeValue() == null ? null : typeArguments.getNodeValue().getUid()), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -9518,6 +12004,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             ReferenceTypeListNode typeArguments)
     {
         SuperclassConstructorInvocationNode ret = new SuperclassConstructorInvocationNodeImpl(this.<PrimaryExpressionNode>makeNormalNodeUnion(qualifyingExpression), this.<ExpressionListNode>makeNormalNodeUnion(arguments), this.<ReferenceTypeListNode>makeNormalNodeUnion(typeArguments), startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateSuperclassConstructorInvocationNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), qualifyingExpression == null ? null : qualifyingExpression.getUid(), arguments == null ? null : arguments.getUid(), typeArguments == null ? null : typeArguments.getUid(), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -9534,6 +12024,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             BsjSourceLocation stopLocation)
     {
         SuperclassConstructorInvocationNode ret = new SuperclassConstructorInvocationNodeImpl(qualifyingExpression, arguments, typeArguments, startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateSuperclassConstructorInvocationNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), qualifyingExpression == null ? null : (qualifyingExpression.getNodeValue() == null ? null : qualifyingExpression.getNodeValue().getUid()), arguments == null ? null : (arguments.getNodeValue() == null ? null : arguments.getNodeValue().getUid()), typeArguments == null ? null : (typeArguments.getNodeValue() == null ? null : typeArguments.getNodeValue().getUid()), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -9550,6 +12044,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             BsjSourceLocation stopLocation)
     {
         SuperclassConstructorInvocationNode ret = new SuperclassConstructorInvocationNodeImpl(this.<PrimaryExpressionNode>makeNormalNodeUnion(qualifyingExpression), this.<ExpressionListNode>makeNormalNodeUnion(arguments), this.<ReferenceTypeListNode>makeNormalNodeUnion(typeArguments), startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateSuperclassConstructorInvocationNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), qualifyingExpression == null ? null : qualifyingExpression.getUid(), arguments == null ? null : arguments.getUid(), typeArguments == null ? null : typeArguments.getUid(), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -9562,6 +12060,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             ExpressionListNode arguments)
     {
         SuperclassConstructorInvocationNode ret = new SuperclassConstructorInvocationNodeImpl(this.<PrimaryExpressionNode>makeNormalNodeUnion(null), this.<ExpressionListNode>makeNormalNodeUnion(arguments), this.<ReferenceTypeListNode>makeNormalNodeUnion(makeReferenceTypeListNode()), startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateSuperclassConstructorInvocationNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), ret.getQualifyingExpression() == null ? null : ret.getQualifyingExpression().getUid(), arguments == null ? null : arguments.getUid(), ret.getTypeArguments() == null ? null : ret.getTypeArguments().getUid(), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -9576,6 +12078,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             BsjSourceLocation stopLocation)
     {
         SuperclassConstructorInvocationNode ret = new SuperclassConstructorInvocationNodeImpl(this.<PrimaryExpressionNode>makeNormalNodeUnion(null), this.<ExpressionListNode>makeNormalNodeUnion(arguments), this.<ReferenceTypeListNode>makeNormalNodeUnion(makeReferenceTypeListNode()), startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateSuperclassConstructorInvocationNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), ret.getQualifyingExpression() == null ? null : ret.getQualifyingExpression().getUid(), arguments == null ? null : arguments.getUid(), ret.getTypeArguments() == null ? null : ret.getTypeArguments().getUid(), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -9590,6 +12096,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             NodeUnion<? extends MetaAnnotationListNode> metaAnnotations)
     {
         SwitchNode ret = new SwitchNodeImpl(expression, cases, metaAnnotations, startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateSwitchNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), expression == null ? null : (expression.getNodeValue() == null ? null : expression.getNodeValue().getUid()), cases == null ? null : (cases.getNodeValue() == null ? null : cases.getNodeValue().getUid()), metaAnnotations == null ? null : (metaAnnotations.getNodeValue() == null ? null : metaAnnotations.getNodeValue().getUid()), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -9604,6 +12114,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             MetaAnnotationListNode metaAnnotations)
     {
         SwitchNode ret = new SwitchNodeImpl(this.<ExpressionNode>makeNormalNodeUnion(expression), this.<CaseListNode>makeNormalNodeUnion(cases), this.<MetaAnnotationListNode>makeNormalNodeUnion(metaAnnotations), startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateSwitchNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), expression == null ? null : expression.getUid(), cases == null ? null : cases.getUid(), metaAnnotations == null ? null : metaAnnotations.getUid(), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -9620,6 +12134,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             BsjSourceLocation stopLocation)
     {
         SwitchNode ret = new SwitchNodeImpl(expression, cases, metaAnnotations, startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateSwitchNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), expression == null ? null : (expression.getNodeValue() == null ? null : expression.getNodeValue().getUid()), cases == null ? null : (cases.getNodeValue() == null ? null : cases.getNodeValue().getUid()), metaAnnotations == null ? null : (metaAnnotations.getNodeValue() == null ? null : metaAnnotations.getNodeValue().getUid()), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -9636,6 +12154,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             BsjSourceLocation stopLocation)
     {
         SwitchNode ret = new SwitchNodeImpl(this.<ExpressionNode>makeNormalNodeUnion(expression), this.<CaseListNode>makeNormalNodeUnion(cases), this.<MetaAnnotationListNode>makeNormalNodeUnion(metaAnnotations), startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateSwitchNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), expression == null ? null : expression.getUid(), cases == null ? null : cases.getUid(), metaAnnotations == null ? null : metaAnnotations.getUid(), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -9649,6 +12171,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             CaseListNode cases)
     {
         SwitchNode ret = new SwitchNodeImpl(this.<ExpressionNode>makeNormalNodeUnion(expression), this.<CaseListNode>makeNormalNodeUnion(cases), this.<MetaAnnotationListNode>makeNormalNodeUnion(makeMetaAnnotationListNode()), startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateSwitchNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), expression == null ? null : expression.getUid(), cases == null ? null : cases.getUid(), ret.getMetaAnnotations() == null ? null : ret.getMetaAnnotations().getUid(), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -9664,6 +12190,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             BsjSourceLocation stopLocation)
     {
         SwitchNode ret = new SwitchNodeImpl(this.<ExpressionNode>makeNormalNodeUnion(expression), this.<CaseListNode>makeNormalNodeUnion(cases), this.<MetaAnnotationListNode>makeNormalNodeUnion(makeMetaAnnotationListNode()), startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateSwitchNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), expression == null ? null : expression.getUid(), cases == null ? null : cases.getUid(), ret.getMetaAnnotations() == null ? null : ret.getMetaAnnotations().getUid(), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -9678,6 +12208,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             NodeUnion<? extends MetaAnnotationListNode> metaAnnotations)
     {
         SynchronizedNode ret = new SynchronizedNodeImpl(expression, body, metaAnnotations, startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateSynchronizedNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), expression == null ? null : (expression.getNodeValue() == null ? null : expression.getNodeValue().getUid()), body == null ? null : (body.getNodeValue() == null ? null : body.getNodeValue().getUid()), metaAnnotations == null ? null : (metaAnnotations.getNodeValue() == null ? null : metaAnnotations.getNodeValue().getUid()), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -9692,6 +12226,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             MetaAnnotationListNode metaAnnotations)
     {
         SynchronizedNode ret = new SynchronizedNodeImpl(this.<ExpressionNode>makeNormalNodeUnion(expression), this.<BlockStatementListNode>makeNormalNodeUnion(body), this.<MetaAnnotationListNode>makeNormalNodeUnion(metaAnnotations), startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateSynchronizedNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), expression == null ? null : expression.getUid(), body == null ? null : body.getUid(), metaAnnotations == null ? null : metaAnnotations.getUid(), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -9708,6 +12246,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             BsjSourceLocation stopLocation)
     {
         SynchronizedNode ret = new SynchronizedNodeImpl(expression, body, metaAnnotations, startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateSynchronizedNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), expression == null ? null : (expression.getNodeValue() == null ? null : expression.getNodeValue().getUid()), body == null ? null : (body.getNodeValue() == null ? null : body.getNodeValue().getUid()), metaAnnotations == null ? null : (metaAnnotations.getNodeValue() == null ? null : metaAnnotations.getNodeValue().getUid()), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -9724,6 +12266,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             BsjSourceLocation stopLocation)
     {
         SynchronizedNode ret = new SynchronizedNodeImpl(this.<ExpressionNode>makeNormalNodeUnion(expression), this.<BlockStatementListNode>makeNormalNodeUnion(body), this.<MetaAnnotationListNode>makeNormalNodeUnion(metaAnnotations), startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateSynchronizedNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), expression == null ? null : expression.getUid(), body == null ? null : body.getUid(), metaAnnotations == null ? null : metaAnnotations.getUid(), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -9737,6 +12283,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             BlockStatementListNode body)
     {
         SynchronizedNode ret = new SynchronizedNodeImpl(this.<ExpressionNode>makeNormalNodeUnion(expression), this.<BlockStatementListNode>makeNormalNodeUnion(body), this.<MetaAnnotationListNode>makeNormalNodeUnion(makeMetaAnnotationListNode()), startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateSynchronizedNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), expression == null ? null : expression.getUid(), body == null ? null : body.getUid(), ret.getMetaAnnotations() == null ? null : ret.getMetaAnnotations().getUid(), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -9752,6 +12302,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             BsjSourceLocation stopLocation)
     {
         SynchronizedNode ret = new SynchronizedNodeImpl(this.<ExpressionNode>makeNormalNodeUnion(expression), this.<BlockStatementListNode>makeNormalNodeUnion(body), this.<MetaAnnotationListNode>makeNormalNodeUnion(makeMetaAnnotationListNode()), startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateSynchronizedNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), expression == null ? null : expression.getUid(), body == null ? null : body.getUid(), ret.getMetaAnnotations() == null ? null : ret.getMetaAnnotations().getUid(), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -9764,6 +12318,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             NodeUnion<? extends UnparameterizedTypeNode> type)
     {
         ThisNode ret = new ThisNodeImpl(type, startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateThisNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), type == null ? null : (type.getNodeValue() == null ? null : type.getNodeValue().getUid()), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -9776,6 +12334,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             UnparameterizedTypeNode type)
     {
         ThisNode ret = new ThisNodeImpl(this.<UnparameterizedTypeNode>makeNormalNodeUnion(type), startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateThisNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), type == null ? null : type.getUid(), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -9790,6 +12352,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             BsjSourceLocation stopLocation)
     {
         ThisNode ret = new ThisNodeImpl(type, startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateThisNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), type == null ? null : (type.getNodeValue() == null ? null : type.getNodeValue().getUid()), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -9804,6 +12370,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             BsjSourceLocation stopLocation)
     {
         ThisNode ret = new ThisNodeImpl(this.<UnparameterizedTypeNode>makeNormalNodeUnion(type), startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateThisNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), type == null ? null : type.getUid(), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -9815,6 +12385,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
     public ThisNode makeThisNode()
     {
         ThisNode ret = new ThisNodeImpl(this.<UnparameterizedTypeNode>makeNormalNodeUnion(null), startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateThisNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), ret.getType() == null ? null : ret.getType().getUid(), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -9828,6 +12402,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             BsjSourceLocation stopLocation)
     {
         ThisNode ret = new ThisNodeImpl(this.<UnparameterizedTypeNode>makeNormalNodeUnion(null), startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateThisNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), ret.getType() == null ? null : ret.getType().getUid(), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -9841,6 +12419,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             NodeUnion<? extends MetaAnnotationListNode> metaAnnotations)
     {
         ThrowNode ret = new ThrowNodeImpl(expression, metaAnnotations, startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateThrowNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), expression == null ? null : (expression.getNodeValue() == null ? null : expression.getNodeValue().getUid()), metaAnnotations == null ? null : (metaAnnotations.getNodeValue() == null ? null : metaAnnotations.getNodeValue().getUid()), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -9854,6 +12436,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             MetaAnnotationListNode metaAnnotations)
     {
         ThrowNode ret = new ThrowNodeImpl(this.<ExpressionNode>makeNormalNodeUnion(expression), this.<MetaAnnotationListNode>makeNormalNodeUnion(metaAnnotations), startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateThrowNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), expression == null ? null : expression.getUid(), metaAnnotations == null ? null : metaAnnotations.getUid(), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -9869,6 +12455,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             BsjSourceLocation stopLocation)
     {
         ThrowNode ret = new ThrowNodeImpl(expression, metaAnnotations, startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateThrowNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), expression == null ? null : (expression.getNodeValue() == null ? null : expression.getNodeValue().getUid()), metaAnnotations == null ? null : (metaAnnotations.getNodeValue() == null ? null : metaAnnotations.getNodeValue().getUid()), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -9884,6 +12474,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             BsjSourceLocation stopLocation)
     {
         ThrowNode ret = new ThrowNodeImpl(this.<ExpressionNode>makeNormalNodeUnion(expression), this.<MetaAnnotationListNode>makeNormalNodeUnion(metaAnnotations), startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateThrowNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), expression == null ? null : expression.getUid(), metaAnnotations == null ? null : metaAnnotations.getUid(), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -9896,6 +12490,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             ExpressionNode expression)
     {
         ThrowNode ret = new ThrowNodeImpl(this.<ExpressionNode>makeNormalNodeUnion(expression), this.<MetaAnnotationListNode>makeNormalNodeUnion(makeMetaAnnotationListNode()), startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateThrowNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), expression == null ? null : expression.getUid(), ret.getMetaAnnotations() == null ? null : ret.getMetaAnnotations().getUid(), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -9910,6 +12508,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             BsjSourceLocation stopLocation)
     {
         ThrowNode ret = new ThrowNodeImpl(this.<ExpressionNode>makeNormalNodeUnion(expression), this.<MetaAnnotationListNode>makeNormalNodeUnion(makeMetaAnnotationListNode()), startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateThrowNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), expression == null ? null : expression.getUid(), ret.getMetaAnnotations() == null ? null : ret.getMetaAnnotations().getUid(), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -9925,6 +12527,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             NodeUnion<? extends MetaAnnotationListNode> metaAnnotations)
     {
         TryNode ret = new TryNodeImpl(body, catches, finallyBlock, metaAnnotations, startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateTryNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), body == null ? null : (body.getNodeValue() == null ? null : body.getNodeValue().getUid()), catches == null ? null : (catches.getNodeValue() == null ? null : catches.getNodeValue().getUid()), finallyBlock == null ? null : (finallyBlock.getNodeValue() == null ? null : finallyBlock.getNodeValue().getUid()), metaAnnotations == null ? null : (metaAnnotations.getNodeValue() == null ? null : metaAnnotations.getNodeValue().getUid()), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -9940,6 +12546,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             MetaAnnotationListNode metaAnnotations)
     {
         TryNode ret = new TryNodeImpl(this.<BlockStatementListNode>makeNormalNodeUnion(body), this.<CatchListNode>makeNormalNodeUnion(catches), this.<BlockStatementListNode>makeNormalNodeUnion(finallyBlock), this.<MetaAnnotationListNode>makeNormalNodeUnion(metaAnnotations), startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateTryNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), body == null ? null : body.getUid(), catches == null ? null : catches.getUid(), finallyBlock == null ? null : finallyBlock.getUid(), metaAnnotations == null ? null : metaAnnotations.getUid(), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -9957,6 +12567,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             BsjSourceLocation stopLocation)
     {
         TryNode ret = new TryNodeImpl(body, catches, finallyBlock, metaAnnotations, startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateTryNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), body == null ? null : (body.getNodeValue() == null ? null : body.getNodeValue().getUid()), catches == null ? null : (catches.getNodeValue() == null ? null : catches.getNodeValue().getUid()), finallyBlock == null ? null : (finallyBlock.getNodeValue() == null ? null : finallyBlock.getNodeValue().getUid()), metaAnnotations == null ? null : (metaAnnotations.getNodeValue() == null ? null : metaAnnotations.getNodeValue().getUid()), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -9974,6 +12588,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             BsjSourceLocation stopLocation)
     {
         TryNode ret = new TryNodeImpl(this.<BlockStatementListNode>makeNormalNodeUnion(body), this.<CatchListNode>makeNormalNodeUnion(catches), this.<BlockStatementListNode>makeNormalNodeUnion(finallyBlock), this.<MetaAnnotationListNode>makeNormalNodeUnion(metaAnnotations), startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateTryNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), body == null ? null : body.getUid(), catches == null ? null : catches.getUid(), finallyBlock == null ? null : finallyBlock.getUid(), metaAnnotations == null ? null : metaAnnotations.getUid(), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -9987,6 +12605,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             BlockStatementListNode finallyBlock)
     {
         TryNode ret = new TryNodeImpl(this.<BlockStatementListNode>makeNormalNodeUnion(body), this.<CatchListNode>makeNormalNodeUnion(makeCatchListNode()), this.<BlockStatementListNode>makeNormalNodeUnion(finallyBlock), this.<MetaAnnotationListNode>makeNormalNodeUnion(makeMetaAnnotationListNode()), startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateTryNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), body == null ? null : body.getUid(), ret.getCatches() == null ? null : ret.getCatches().getUid(), finallyBlock == null ? null : finallyBlock.getUid(), ret.getMetaAnnotations() == null ? null : ret.getMetaAnnotations().getUid(), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -10002,6 +12624,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             BsjSourceLocation stopLocation)
     {
         TryNode ret = new TryNodeImpl(this.<BlockStatementListNode>makeNormalNodeUnion(body), this.<CatchListNode>makeNormalNodeUnion(makeCatchListNode()), this.<BlockStatementListNode>makeNormalNodeUnion(finallyBlock), this.<MetaAnnotationListNode>makeNormalNodeUnion(makeMetaAnnotationListNode()), startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateTryNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), body == null ? null : body.getUid(), ret.getCatches() == null ? null : ret.getCatches().getUid(), finallyBlock == null ? null : finallyBlock.getUid(), ret.getMetaAnnotations() == null ? null : ret.getMetaAnnotations().getUid(), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -10015,6 +12641,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             CatchListNode catches)
     {
         TryNode ret = new TryNodeImpl(this.<BlockStatementListNode>makeNormalNodeUnion(body), this.<CatchListNode>makeNormalNodeUnion(catches), this.<BlockStatementListNode>makeNormalNodeUnion(makeBlockStatementListNode()), this.<MetaAnnotationListNode>makeNormalNodeUnion(makeMetaAnnotationListNode()), startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateTryNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), body == null ? null : body.getUid(), catches == null ? null : catches.getUid(), ret.getFinallyBlock() == null ? null : ret.getFinallyBlock().getUid(), ret.getMetaAnnotations() == null ? null : ret.getMetaAnnotations().getUid(), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -10030,6 +12660,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             BsjSourceLocation stopLocation)
     {
         TryNode ret = new TryNodeImpl(this.<BlockStatementListNode>makeNormalNodeUnion(body), this.<CatchListNode>makeNormalNodeUnion(catches), this.<BlockStatementListNode>makeNormalNodeUnion(makeBlockStatementListNode()), this.<MetaAnnotationListNode>makeNormalNodeUnion(makeMetaAnnotationListNode()), startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateTryNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), body == null ? null : body.getUid(), catches == null ? null : catches.getUid(), ret.getFinallyBlock() == null ? null : ret.getFinallyBlock().getUid(), ret.getMetaAnnotations() == null ? null : ret.getMetaAnnotations().getUid(), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -10044,6 +12678,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             BlockStatementListNode finallyBlock)
     {
         TryNode ret = new TryNodeImpl(this.<BlockStatementListNode>makeNormalNodeUnion(body), this.<CatchListNode>makeNormalNodeUnion(catches), this.<BlockStatementListNode>makeNormalNodeUnion(finallyBlock), this.<MetaAnnotationListNode>makeNormalNodeUnion(makeMetaAnnotationListNode()), startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateTryNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), body == null ? null : body.getUid(), catches == null ? null : catches.getUid(), finallyBlock == null ? null : finallyBlock.getUid(), ret.getMetaAnnotations() == null ? null : ret.getMetaAnnotations().getUid(), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -10060,6 +12698,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             BsjSourceLocation stopLocation)
     {
         TryNode ret = new TryNodeImpl(this.<BlockStatementListNode>makeNormalNodeUnion(body), this.<CatchListNode>makeNormalNodeUnion(catches), this.<BlockStatementListNode>makeNormalNodeUnion(finallyBlock), this.<MetaAnnotationListNode>makeNormalNodeUnion(makeMetaAnnotationListNode()), startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateTryNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), body == null ? null : body.getUid(), catches == null ? null : catches.getUid(), finallyBlock == null ? null : finallyBlock.getUid(), ret.getMetaAnnotations() == null ? null : ret.getMetaAnnotations().getUid(), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -10072,6 +12714,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             List<NodeUnion<? extends TypeArgumentNode>> children)
     {
         TypeArgumentListNode ret = new TypeArgumentListNodeImpl(children, startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateTypeArgumentListNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), EditScriptUtilities.getNodeUnionUids(children), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -10084,6 +12730,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             List<TypeArgumentNode> children)
     {
         TypeArgumentListNode ret = new TypeArgumentListNodeImpl(unionWrapList(children), startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateTypeArgumentListNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), EditScriptUtilities.getNodeUids(children), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -10110,6 +12760,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             BsjSourceLocation stopLocation)
     {
         TypeArgumentListNode ret = new TypeArgumentListNodeImpl(children, startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateTypeArgumentListNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), EditScriptUtilities.getNodeUnionUids(children), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -10124,6 +12778,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             BsjSourceLocation stopLocation)
     {
         TypeArgumentListNode ret = new TypeArgumentListNodeImpl(unionWrapList(children), startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateTypeArgumentListNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), EditScriptUtilities.getNodeUids(children), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -10151,6 +12809,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             NodeUnion<? extends TypeNode> type)
     {
         TypeCastNode ret = new TypeCastNodeImpl(expression, type, startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateTypeCastNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), expression == null ? null : (expression.getNodeValue() == null ? null : expression.getNodeValue().getUid()), type == null ? null : (type.getNodeValue() == null ? null : type.getNodeValue().getUid()), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -10164,6 +12826,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             TypeNode type)
     {
         TypeCastNode ret = new TypeCastNodeImpl(this.<ExpressionNode>makeNormalNodeUnion(expression), this.<TypeNode>makeNormalNodeUnion(type), startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateTypeCastNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), expression == null ? null : expression.getUid(), type == null ? null : type.getUid(), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -10179,6 +12845,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             BsjSourceLocation stopLocation)
     {
         TypeCastNode ret = new TypeCastNodeImpl(expression, type, startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateTypeCastNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), expression == null ? null : (expression.getNodeValue() == null ? null : expression.getNodeValue().getUid()), type == null ? null : (type.getNodeValue() == null ? null : type.getNodeValue().getUid()), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -10194,6 +12864,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             BsjSourceLocation stopLocation)
     {
         TypeCastNode ret = new TypeCastNodeImpl(this.<ExpressionNode>makeNormalNodeUnion(expression), this.<TypeNode>makeNormalNodeUnion(type), startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateTypeCastNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), expression == null ? null : expression.getUid(), type == null ? null : type.getUid(), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -10206,6 +12880,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             List<NodeUnion<? extends TypeDeclarationNode>> children)
     {
         TypeDeclarationListNode ret = new TypeDeclarationListNodeImpl(children, startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateTypeDeclarationListNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), EditScriptUtilities.getNodeUnionUids(children), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -10218,6 +12896,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             List<TypeDeclarationNode> children)
     {
         TypeDeclarationListNode ret = new TypeDeclarationListNodeImpl(unionWrapList(children), startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateTypeDeclarationListNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), EditScriptUtilities.getNodeUids(children), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -10244,6 +12926,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             BsjSourceLocation stopLocation)
     {
         TypeDeclarationListNode ret = new TypeDeclarationListNodeImpl(children, startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateTypeDeclarationListNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), EditScriptUtilities.getNodeUnionUids(children), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -10258,6 +12944,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             BsjSourceLocation stopLocation)
     {
         TypeDeclarationListNode ret = new TypeDeclarationListNodeImpl(unionWrapList(children), startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateTypeDeclarationListNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), EditScriptUtilities.getNodeUids(children), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -10284,6 +12974,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             NodeUnion<? extends MetaprogramNode> metaprogram)
     {
         TypeDeclarationMetaprogramAnchorNode ret = new TypeDeclarationMetaprogramAnchorNodeImpl(metaprogram, startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateTypeDeclarationMetaprogramAnchorNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), metaprogram == null ? null : (metaprogram.getNodeValue() == null ? null : metaprogram.getNodeValue().getUid()), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -10296,6 +12990,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             MetaprogramNode metaprogram)
     {
         TypeDeclarationMetaprogramAnchorNode ret = new TypeDeclarationMetaprogramAnchorNodeImpl(this.<MetaprogramNode>makeNormalNodeUnion(metaprogram), startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateTypeDeclarationMetaprogramAnchorNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), metaprogram == null ? null : metaprogram.getUid(), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -10310,6 +13008,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             BsjSourceLocation stopLocation)
     {
         TypeDeclarationMetaprogramAnchorNode ret = new TypeDeclarationMetaprogramAnchorNodeImpl(metaprogram, startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateTypeDeclarationMetaprogramAnchorNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), metaprogram == null ? null : (metaprogram.getNodeValue() == null ? null : metaprogram.getNodeValue().getUid()), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -10324,6 +13026,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             BsjSourceLocation stopLocation)
     {
         TypeDeclarationMetaprogramAnchorNode ret = new TypeDeclarationMetaprogramAnchorNodeImpl(this.<MetaprogramNode>makeNormalNodeUnion(metaprogram), startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateTypeDeclarationMetaprogramAnchorNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), metaprogram == null ? null : metaprogram.getUid(), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -10336,6 +13042,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             List<NodeUnion<? extends TypeParameterNode>> children)
     {
         TypeParameterListNode ret = new TypeParameterListNodeImpl(children, startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateTypeParameterListNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), EditScriptUtilities.getNodeUnionUids(children), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -10348,6 +13058,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             List<TypeParameterNode> children)
     {
         TypeParameterListNode ret = new TypeParameterListNodeImpl(unionWrapList(children), startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateTypeParameterListNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), EditScriptUtilities.getNodeUids(children), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -10374,6 +13088,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             BsjSourceLocation stopLocation)
     {
         TypeParameterListNode ret = new TypeParameterListNodeImpl(children, startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateTypeParameterListNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), EditScriptUtilities.getNodeUnionUids(children), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -10388,6 +13106,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             BsjSourceLocation stopLocation)
     {
         TypeParameterListNode ret = new TypeParameterListNodeImpl(unionWrapList(children), startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateTypeParameterListNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), EditScriptUtilities.getNodeUids(children), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -10415,6 +13137,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             NodeUnion<? extends DeclaredTypeListNode> bounds)
     {
         TypeParameterNode ret = new TypeParameterNodeImpl(identifier, bounds, startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateTypeParameterNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), identifier == null ? null : (identifier.getNodeValue() == null ? null : identifier.getNodeValue().getUid()), bounds == null ? null : (bounds.getNodeValue() == null ? null : bounds.getNodeValue().getUid()), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -10428,6 +13154,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             DeclaredTypeListNode bounds)
     {
         TypeParameterNode ret = new TypeParameterNodeImpl(this.<IdentifierNode>makeNormalNodeUnion(identifier), this.<DeclaredTypeListNode>makeNormalNodeUnion(bounds), startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateTypeParameterNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), identifier == null ? null : identifier.getUid(), bounds == null ? null : bounds.getUid(), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -10443,6 +13173,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             BsjSourceLocation stopLocation)
     {
         TypeParameterNode ret = new TypeParameterNodeImpl(identifier, bounds, startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateTypeParameterNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), identifier == null ? null : (identifier.getNodeValue() == null ? null : identifier.getNodeValue().getUid()), bounds == null ? null : (bounds.getNodeValue() == null ? null : bounds.getNodeValue().getUid()), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -10458,6 +13192,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             BsjSourceLocation stopLocation)
     {
         TypeParameterNode ret = new TypeParameterNodeImpl(this.<IdentifierNode>makeNormalNodeUnion(identifier), this.<DeclaredTypeListNode>makeNormalNodeUnion(bounds), startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateTypeParameterNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), identifier == null ? null : identifier.getUid(), bounds == null ? null : bounds.getUid(), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -10471,6 +13209,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             UnaryOperator operator)
     {
         UnaryExpressionNode ret = new UnaryExpressionNodeImpl(expression, operator, startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateUnaryExpressionNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), expression == null ? null : (expression.getNodeValue() == null ? null : expression.getNodeValue().getUid()), operator, startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -10484,6 +13226,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             UnaryOperator operator)
     {
         UnaryExpressionNode ret = new UnaryExpressionNodeImpl(this.<ExpressionNode>makeNormalNodeUnion(expression), operator, startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateUnaryExpressionNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), expression == null ? null : expression.getUid(), operator, startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -10499,6 +13245,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             BsjSourceLocation stopLocation)
     {
         UnaryExpressionNode ret = new UnaryExpressionNodeImpl(expression, operator, startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateUnaryExpressionNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), expression == null ? null : (expression.getNodeValue() == null ? null : expression.getNodeValue().getUid()), operator, startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -10514,6 +13264,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             BsjSourceLocation stopLocation)
     {
         UnaryExpressionNode ret = new UnaryExpressionNodeImpl(this.<ExpressionNode>makeNormalNodeUnion(expression), operator, startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateUnaryExpressionNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), expression == null ? null : expression.getUid(), operator, startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -10527,6 +13281,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             UnaryStatementOperator operator)
     {
         UnaryStatementExpressionNode ret = new UnaryStatementExpressionNodeImpl(expression, operator, startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateUnaryStatementExpressionNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), expression == null ? null : (expression.getNodeValue() == null ? null : expression.getNodeValue().getUid()), operator, startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -10540,6 +13298,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             UnaryStatementOperator operator)
     {
         UnaryStatementExpressionNode ret = new UnaryStatementExpressionNodeImpl(this.<ExpressionNode>makeNormalNodeUnion(expression), operator, startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateUnaryStatementExpressionNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), expression == null ? null : expression.getUid(), operator, startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -10555,6 +13317,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             BsjSourceLocation stopLocation)
     {
         UnaryStatementExpressionNode ret = new UnaryStatementExpressionNodeImpl(expression, operator, startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateUnaryStatementExpressionNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), expression == null ? null : (expression.getNodeValue() == null ? null : expression.getNodeValue().getUid()), operator, startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -10570,6 +13336,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             BsjSourceLocation stopLocation)
     {
         UnaryStatementExpressionNode ret = new UnaryStatementExpressionNodeImpl(this.<ExpressionNode>makeNormalNodeUnion(expression), operator, startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateUnaryStatementExpressionNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), expression == null ? null : expression.getUid(), operator, startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -10582,6 +13352,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             List<NodeUnion<? extends UnparameterizedTypeNode>> children)
     {
         UnparameterizedTypeListNode ret = new UnparameterizedTypeListNodeImpl(children, startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateUnparameterizedTypeListNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), EditScriptUtilities.getNodeUnionUids(children), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -10594,6 +13368,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             List<UnparameterizedTypeNode> children)
     {
         UnparameterizedTypeListNode ret = new UnparameterizedTypeListNodeImpl(unionWrapList(children), startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateUnparameterizedTypeListNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), EditScriptUtilities.getNodeUids(children), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -10620,6 +13398,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             BsjSourceLocation stopLocation)
     {
         UnparameterizedTypeListNode ret = new UnparameterizedTypeListNodeImpl(children, startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateUnparameterizedTypeListNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), EditScriptUtilities.getNodeUnionUids(children), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -10634,6 +13416,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             BsjSourceLocation stopLocation)
     {
         UnparameterizedTypeListNode ret = new UnparameterizedTypeListNodeImpl(unionWrapList(children), startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateUnparameterizedTypeListNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), EditScriptUtilities.getNodeUids(children), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -10660,6 +13446,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             NodeUnion<? extends NameNode> name)
     {
         UnparameterizedTypeNode ret = new UnparameterizedTypeNodeImpl(name, startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateUnparameterizedTypeNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), name == null ? null : (name.getNodeValue() == null ? null : name.getNodeValue().getUid()), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -10672,6 +13462,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             NameNode name)
     {
         UnparameterizedTypeNode ret = new UnparameterizedTypeNodeImpl(this.<NameNode>makeNormalNodeUnion(name), startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateUnparameterizedTypeNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), name == null ? null : name.getUid(), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -10686,6 +13480,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             BsjSourceLocation stopLocation)
     {
         UnparameterizedTypeNode ret = new UnparameterizedTypeNodeImpl(name, startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateUnparameterizedTypeNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), name == null ? null : (name.getNodeValue() == null ? null : name.getNodeValue().getUid()), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -10700,6 +13498,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             BsjSourceLocation stopLocation)
     {
         UnparameterizedTypeNode ret = new UnparameterizedTypeNodeImpl(this.<NameNode>makeNormalNodeUnion(name), startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateUnparameterizedTypeNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), name == null ? null : name.getUid(), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -10715,6 +13517,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             NodeUnion<? extends AnonymousClassBodyNode> body)
     {
         UnqualifiedClassInstantiationNode ret = new UnqualifiedClassInstantiationNodeImpl(type, constructorTypeArguments, arguments, body, startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateUnqualifiedClassInstantiationNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), type == null ? null : (type.getNodeValue() == null ? null : type.getNodeValue().getUid()), constructorTypeArguments == null ? null : (constructorTypeArguments.getNodeValue() == null ? null : constructorTypeArguments.getNodeValue().getUid()), arguments == null ? null : (arguments.getNodeValue() == null ? null : arguments.getNodeValue().getUid()), body == null ? null : (body.getNodeValue() == null ? null : body.getNodeValue().getUid()), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -10730,6 +13536,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             AnonymousClassBodyNode body)
     {
         UnqualifiedClassInstantiationNode ret = new UnqualifiedClassInstantiationNodeImpl(this.<DeclaredTypeNode>makeNormalNodeUnion(type), this.<TypeArgumentListNode>makeNormalNodeUnion(constructorTypeArguments), this.<ExpressionListNode>makeNormalNodeUnion(arguments), this.<AnonymousClassBodyNode>makeNormalNodeUnion(body), startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateUnqualifiedClassInstantiationNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), type == null ? null : type.getUid(), constructorTypeArguments == null ? null : constructorTypeArguments.getUid(), arguments == null ? null : arguments.getUid(), body == null ? null : body.getUid(), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -10747,6 +13557,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             BsjSourceLocation stopLocation)
     {
         UnqualifiedClassInstantiationNode ret = new UnqualifiedClassInstantiationNodeImpl(type, constructorTypeArguments, arguments, body, startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateUnqualifiedClassInstantiationNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), type == null ? null : (type.getNodeValue() == null ? null : type.getNodeValue().getUid()), constructorTypeArguments == null ? null : (constructorTypeArguments.getNodeValue() == null ? null : constructorTypeArguments.getNodeValue().getUid()), arguments == null ? null : (arguments.getNodeValue() == null ? null : arguments.getNodeValue().getUid()), body == null ? null : (body.getNodeValue() == null ? null : body.getNodeValue().getUid()), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -10764,6 +13578,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             BsjSourceLocation stopLocation)
     {
         UnqualifiedClassInstantiationNode ret = new UnqualifiedClassInstantiationNodeImpl(this.<DeclaredTypeNode>makeNormalNodeUnion(type), this.<TypeArgumentListNode>makeNormalNodeUnion(constructorTypeArguments), this.<ExpressionListNode>makeNormalNodeUnion(arguments), this.<AnonymousClassBodyNode>makeNormalNodeUnion(body), startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateUnqualifiedClassInstantiationNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), type == null ? null : type.getUid(), constructorTypeArguments == null ? null : constructorTypeArguments.getUid(), arguments == null ? null : arguments.getUid(), body == null ? null : body.getUid(), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -10776,6 +13594,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             DeclaredTypeNode type)
     {
         UnqualifiedClassInstantiationNode ret = new UnqualifiedClassInstantiationNodeImpl(this.<DeclaredTypeNode>makeNormalNodeUnion(type), this.<TypeArgumentListNode>makeNormalNodeUnion(makeTypeArgumentListNode()), this.<ExpressionListNode>makeNormalNodeUnion(makeExpressionListNode()), this.<AnonymousClassBodyNode>makeNormalNodeUnion(null), startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateUnqualifiedClassInstantiationNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), type == null ? null : type.getUid(), ret.getConstructorTypeArguments() == null ? null : ret.getConstructorTypeArguments().getUid(), ret.getArguments() == null ? null : ret.getArguments().getUid(), ret.getBody() == null ? null : ret.getBody().getUid(), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -10790,6 +13612,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             BsjSourceLocation stopLocation)
     {
         UnqualifiedClassInstantiationNode ret = new UnqualifiedClassInstantiationNodeImpl(this.<DeclaredTypeNode>makeNormalNodeUnion(type), this.<TypeArgumentListNode>makeNormalNodeUnion(makeTypeArgumentListNode()), this.<ExpressionListNode>makeNormalNodeUnion(makeExpressionListNode()), this.<AnonymousClassBodyNode>makeNormalNodeUnion(null), startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateUnqualifiedClassInstantiationNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), type == null ? null : type.getUid(), ret.getConstructorTypeArguments() == null ? null : ret.getConstructorTypeArguments().getUid(), ret.getArguments() == null ? null : ret.getArguments().getUid(), ret.getBody() == null ? null : ret.getBody().getUid(), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -10803,6 +13629,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             ExpressionListNode arguments)
     {
         UnqualifiedClassInstantiationNode ret = new UnqualifiedClassInstantiationNodeImpl(this.<DeclaredTypeNode>makeNormalNodeUnion(type), this.<TypeArgumentListNode>makeNormalNodeUnion(makeTypeArgumentListNode()), this.<ExpressionListNode>makeNormalNodeUnion(arguments), this.<AnonymousClassBodyNode>makeNormalNodeUnion(null), startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateUnqualifiedClassInstantiationNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), type == null ? null : type.getUid(), ret.getConstructorTypeArguments() == null ? null : ret.getConstructorTypeArguments().getUid(), arguments == null ? null : arguments.getUid(), ret.getBody() == null ? null : ret.getBody().getUid(), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -10818,6 +13648,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             BsjSourceLocation stopLocation)
     {
         UnqualifiedClassInstantiationNode ret = new UnqualifiedClassInstantiationNodeImpl(this.<DeclaredTypeNode>makeNormalNodeUnion(type), this.<TypeArgumentListNode>makeNormalNodeUnion(makeTypeArgumentListNode()), this.<ExpressionListNode>makeNormalNodeUnion(arguments), this.<AnonymousClassBodyNode>makeNormalNodeUnion(null), startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateUnqualifiedClassInstantiationNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), type == null ? null : type.getUid(), ret.getConstructorTypeArguments() == null ? null : ret.getConstructorTypeArguments().getUid(), arguments == null ? null : arguments.getUid(), ret.getBody() == null ? null : ret.getBody().getUid(), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -10831,6 +13665,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             NodeUnion<? extends IdentifierNode> identifier)
     {
         VariableAccessNode ret = new VariableAccessNodeImpl(expression, identifier, startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateVariableAccessNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), expression == null ? null : (expression.getNodeValue() == null ? null : expression.getNodeValue().getUid()), identifier == null ? null : (identifier.getNodeValue() == null ? null : identifier.getNodeValue().getUid()), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -10844,6 +13682,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             IdentifierNode identifier)
     {
         VariableAccessNode ret = new VariableAccessNodeImpl(this.<PrimaryExpressionNode>makeNormalNodeUnion(expression), this.<IdentifierNode>makeNormalNodeUnion(identifier), startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateVariableAccessNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), expression == null ? null : expression.getUid(), identifier == null ? null : identifier.getUid(), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -10859,6 +13701,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             BsjSourceLocation stopLocation)
     {
         VariableAccessNode ret = new VariableAccessNodeImpl(expression, identifier, startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateVariableAccessNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), expression == null ? null : (expression.getNodeValue() == null ? null : expression.getNodeValue().getUid()), identifier == null ? null : (identifier.getNodeValue() == null ? null : identifier.getNodeValue().getUid()), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -10874,6 +13720,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             BsjSourceLocation stopLocation)
     {
         VariableAccessNode ret = new VariableAccessNodeImpl(this.<PrimaryExpressionNode>makeNormalNodeUnion(expression), this.<IdentifierNode>makeNormalNodeUnion(identifier), startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateVariableAccessNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), expression == null ? null : expression.getUid(), identifier == null ? null : identifier.getUid(), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -10886,6 +13736,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             IdentifierNode identifier)
     {
         VariableAccessNode ret = new VariableAccessNodeImpl(this.<PrimaryExpressionNode>makeNormalNodeUnion(null), this.<IdentifierNode>makeNormalNodeUnion(identifier), startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateVariableAccessNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), ret.getExpression() == null ? null : ret.getExpression().getUid(), identifier == null ? null : identifier.getUid(), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -10900,6 +13754,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             BsjSourceLocation stopLocation)
     {
         VariableAccessNode ret = new VariableAccessNodeImpl(this.<PrimaryExpressionNode>makeNormalNodeUnion(null), this.<IdentifierNode>makeNormalNodeUnion(identifier), startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateVariableAccessNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), ret.getExpression() == null ? null : ret.getExpression().getUid(), identifier == null ? null : identifier.getUid(), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -10912,6 +13770,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             List<NodeUnion<? extends VariableDeclaratorNode>> children)
     {
         VariableDeclaratorListNode ret = new VariableDeclaratorListNodeImpl(children, startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateVariableDeclaratorListNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), EditScriptUtilities.getNodeUnionUids(children), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -10924,6 +13786,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             List<VariableDeclaratorNode> children)
     {
         VariableDeclaratorListNode ret = new VariableDeclaratorListNodeImpl(unionWrapList(children), startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateVariableDeclaratorListNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), EditScriptUtilities.getNodeUids(children), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -10950,6 +13816,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             BsjSourceLocation stopLocation)
     {
         VariableDeclaratorListNode ret = new VariableDeclaratorListNodeImpl(children, startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateVariableDeclaratorListNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), EditScriptUtilities.getNodeUnionUids(children), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -10964,6 +13834,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             BsjSourceLocation stopLocation)
     {
         VariableDeclaratorListNode ret = new VariableDeclaratorListNodeImpl(unionWrapList(children), startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateVariableDeclaratorListNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), EditScriptUtilities.getNodeUids(children), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -10992,6 +13866,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             NodeUnion<? extends VariableInitializerNode> initializer)
     {
         VariableDeclaratorNode ret = new VariableDeclaratorNodeImpl(identifier, arrayLevels, initializer, startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateVariableDeclaratorNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), identifier == null ? null : (identifier.getNodeValue() == null ? null : identifier.getNodeValue().getUid()), arrayLevels, initializer == null ? null : (initializer.getNodeValue() == null ? null : initializer.getNodeValue().getUid()), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -11006,6 +13884,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             VariableInitializerNode initializer)
     {
         VariableDeclaratorNode ret = new VariableDeclaratorNodeImpl(this.<IdentifierNode>makeNormalNodeUnion(identifier), arrayLevels, this.<VariableInitializerNode>makeNormalNodeUnion(initializer), startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateVariableDeclaratorNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), identifier == null ? null : identifier.getUid(), arrayLevels, initializer == null ? null : initializer.getUid(), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -11022,6 +13904,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             BsjSourceLocation stopLocation)
     {
         VariableDeclaratorNode ret = new VariableDeclaratorNodeImpl(identifier, arrayLevels, initializer, startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateVariableDeclaratorNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), identifier == null ? null : (identifier.getNodeValue() == null ? null : identifier.getNodeValue().getUid()), arrayLevels, initializer == null ? null : (initializer.getNodeValue() == null ? null : initializer.getNodeValue().getUid()), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -11038,6 +13924,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             BsjSourceLocation stopLocation)
     {
         VariableDeclaratorNode ret = new VariableDeclaratorNodeImpl(this.<IdentifierNode>makeNormalNodeUnion(identifier), arrayLevels, this.<VariableInitializerNode>makeNormalNodeUnion(initializer), startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateVariableDeclaratorNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), identifier == null ? null : identifier.getUid(), arrayLevels, initializer == null ? null : initializer.getUid(), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -11051,6 +13941,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             VariableInitializerNode initializer)
     {
         VariableDeclaratorNode ret = new VariableDeclaratorNodeImpl(this.<IdentifierNode>makeNormalNodeUnion(identifier), 0, this.<VariableInitializerNode>makeNormalNodeUnion(initializer), startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateVariableDeclaratorNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), identifier == null ? null : identifier.getUid(), ret.getArrayLevels(), initializer == null ? null : initializer.getUid(), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -11066,6 +13960,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             BsjSourceLocation stopLocation)
     {
         VariableDeclaratorNode ret = new VariableDeclaratorNodeImpl(this.<IdentifierNode>makeNormalNodeUnion(identifier), 0, this.<VariableInitializerNode>makeNormalNodeUnion(initializer), startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateVariableDeclaratorNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), identifier == null ? null : identifier.getUid(), ret.getArrayLevels(), initializer == null ? null : initializer.getUid(), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -11078,6 +13976,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             List<NodeUnion<? extends VariableInitializerNode>> children)
     {
         VariableInitializerListNode ret = new VariableInitializerListNodeImpl(children, startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateVariableInitializerListNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), EditScriptUtilities.getNodeUnionUids(children), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -11090,6 +13992,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             List<VariableInitializerNode> children)
     {
         VariableInitializerListNode ret = new VariableInitializerListNodeImpl(unionWrapList(children), startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateVariableInitializerListNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), EditScriptUtilities.getNodeUids(children), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -11116,6 +14022,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             BsjSourceLocation stopLocation)
     {
         VariableInitializerListNode ret = new VariableInitializerListNodeImpl(children, startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateVariableInitializerListNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), EditScriptUtilities.getNodeUnionUids(children), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -11130,6 +14040,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             BsjSourceLocation stopLocation)
     {
         VariableInitializerListNode ret = new VariableInitializerListNodeImpl(unionWrapList(children), startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateVariableInitializerListNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), EditScriptUtilities.getNodeUids(children), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -11156,6 +14070,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             List<NodeUnion<? extends VariableNode>> children)
     {
         VariableListNode ret = new VariableListNodeImpl(children, startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateVariableListNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), EditScriptUtilities.getNodeUnionUids(children), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -11168,6 +14086,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             List<VariableNode> children)
     {
         VariableListNode ret = new VariableListNodeImpl(unionWrapList(children), startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateVariableListNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), EditScriptUtilities.getNodeUids(children), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -11194,6 +14116,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             BsjSourceLocation stopLocation)
     {
         VariableListNode ret = new VariableListNodeImpl(children, startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateVariableListNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), EditScriptUtilities.getNodeUnionUids(children), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -11208,6 +14134,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             BsjSourceLocation stopLocation)
     {
         VariableListNode ret = new VariableListNodeImpl(unionWrapList(children), startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateVariableListNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), EditScriptUtilities.getNodeUids(children), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -11236,6 +14166,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             NodeUnion<? extends AnnotationListNode> annotations)
     {
         VariableModifiersNode ret = new VariableModifiersNodeImpl(finalFlag, metaAnnotations, annotations, startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateVariableModifiersNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), finalFlag, metaAnnotations == null ? null : (metaAnnotations.getNodeValue() == null ? null : metaAnnotations.getNodeValue().getUid()), annotations == null ? null : (annotations.getNodeValue() == null ? null : annotations.getNodeValue().getUid()), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -11250,6 +14184,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             AnnotationListNode annotations)
     {
         VariableModifiersNode ret = new VariableModifiersNodeImpl(finalFlag, this.<MetaAnnotationListNode>makeNormalNodeUnion(metaAnnotations), this.<AnnotationListNode>makeNormalNodeUnion(annotations), startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateVariableModifiersNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), finalFlag, metaAnnotations == null ? null : metaAnnotations.getUid(), annotations == null ? null : annotations.getUid(), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -11266,6 +14204,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             BsjSourceLocation stopLocation)
     {
         VariableModifiersNode ret = new VariableModifiersNodeImpl(finalFlag, metaAnnotations, annotations, startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateVariableModifiersNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), finalFlag, metaAnnotations == null ? null : (metaAnnotations.getNodeValue() == null ? null : metaAnnotations.getNodeValue().getUid()), annotations == null ? null : (annotations.getNodeValue() == null ? null : annotations.getNodeValue().getUid()), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -11282,6 +14224,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             BsjSourceLocation stopLocation)
     {
         VariableModifiersNode ret = new VariableModifiersNodeImpl(finalFlag, this.<MetaAnnotationListNode>makeNormalNodeUnion(metaAnnotations), this.<AnnotationListNode>makeNormalNodeUnion(annotations), startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateVariableModifiersNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), finalFlag, metaAnnotations == null ? null : metaAnnotations.getUid(), annotations == null ? null : annotations.getUid(), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -11293,6 +14239,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
     public VariableModifiersNode makeVariableModifiersNode()
     {
         VariableModifiersNode ret = new VariableModifiersNodeImpl(false, this.<MetaAnnotationListNode>makeNormalNodeUnion(makeMetaAnnotationListNode()), this.<AnnotationListNode>makeNormalNodeUnion(makeAnnotationListNode()), startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateVariableModifiersNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), ret.getFinalFlag(), ret.getMetaAnnotations() == null ? null : ret.getMetaAnnotations().getUid(), ret.getAnnotations() == null ? null : ret.getAnnotations().getUid(), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -11306,6 +14256,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             BsjSourceLocation stopLocation)
     {
         VariableModifiersNode ret = new VariableModifiersNodeImpl(false, this.<MetaAnnotationListNode>makeNormalNodeUnion(makeMetaAnnotationListNode()), this.<AnnotationListNode>makeNormalNodeUnion(makeAnnotationListNode()), startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateVariableModifiersNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), ret.getFinalFlag(), ret.getMetaAnnotations() == null ? null : ret.getMetaAnnotations().getUid(), ret.getAnnotations() == null ? null : ret.getAnnotations().getUid(), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -11320,6 +14274,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             NodeUnion<? extends IdentifierNode> identifier)
     {
         VariableNode ret = new VariableNodeImpl(modifiers, type, identifier, startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateVariableNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), modifiers == null ? null : (modifiers.getNodeValue() == null ? null : modifiers.getNodeValue().getUid()), type == null ? null : (type.getNodeValue() == null ? null : type.getNodeValue().getUid()), identifier == null ? null : (identifier.getNodeValue() == null ? null : identifier.getNodeValue().getUid()), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -11334,6 +14292,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             IdentifierNode identifier)
     {
         VariableNode ret = new VariableNodeImpl(this.<VariableModifiersNode>makeNormalNodeUnion(modifiers), this.<TypeNode>makeNormalNodeUnion(type), this.<IdentifierNode>makeNormalNodeUnion(identifier), startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateVariableNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), modifiers == null ? null : modifiers.getUid(), type == null ? null : type.getUid(), identifier == null ? null : identifier.getUid(), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -11350,6 +14312,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             BsjSourceLocation stopLocation)
     {
         VariableNode ret = new VariableNodeImpl(modifiers, type, identifier, startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateVariableNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), modifiers == null ? null : (modifiers.getNodeValue() == null ? null : modifiers.getNodeValue().getUid()), type == null ? null : (type.getNodeValue() == null ? null : type.getNodeValue().getUid()), identifier == null ? null : (identifier.getNodeValue() == null ? null : identifier.getNodeValue().getUid()), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -11366,6 +14332,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             BsjSourceLocation stopLocation)
     {
         VariableNode ret = new VariableNodeImpl(this.<VariableModifiersNode>makeNormalNodeUnion(modifiers), this.<TypeNode>makeNormalNodeUnion(type), this.<IdentifierNode>makeNormalNodeUnion(identifier), startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateVariableNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), modifiers == null ? null : modifiers.getUid(), type == null ? null : type.getUid(), identifier == null ? null : identifier.getUid(), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -11379,6 +14349,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             IdentifierNode identifier)
     {
         VariableNode ret = new VariableNodeImpl(this.<VariableModifiersNode>makeNormalNodeUnion(makeVariableModifiersNode()), this.<TypeNode>makeNormalNodeUnion(type), this.<IdentifierNode>makeNormalNodeUnion(identifier), startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateVariableNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), ret.getModifiers() == null ? null : ret.getModifiers().getUid(), type == null ? null : type.getUid(), identifier == null ? null : identifier.getUid(), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -11394,6 +14368,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             BsjSourceLocation stopLocation)
     {
         VariableNode ret = new VariableNodeImpl(this.<VariableModifiersNode>makeNormalNodeUnion(makeVariableModifiersNode()), this.<TypeNode>makeNormalNodeUnion(type), this.<IdentifierNode>makeNormalNodeUnion(identifier), startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateVariableNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), ret.getModifiers() == null ? null : ret.getModifiers().getUid(), type == null ? null : type.getUid(), identifier == null ? null : identifier.getUid(), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -11406,6 +14384,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
     )
     {
         VoidTypeNode ret = new VoidTypeNodeImpl(startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateVoidTypeNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -11419,6 +14401,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             BsjSourceLocation stopLocation)
     {
         VoidTypeNode ret = new VoidTypeNodeImpl(startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateVoidTypeNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -11433,6 +14419,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             NodeUnion<? extends MetaAnnotationListNode> metaAnnotations)
     {
         WhileLoopNode ret = new WhileLoopNodeImpl(condition, statement, metaAnnotations, startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateWhileLoopNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), condition == null ? null : (condition.getNodeValue() == null ? null : condition.getNodeValue().getUid()), statement == null ? null : (statement.getNodeValue() == null ? null : statement.getNodeValue().getUid()), metaAnnotations == null ? null : (metaAnnotations.getNodeValue() == null ? null : metaAnnotations.getNodeValue().getUid()), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -11447,6 +14437,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             MetaAnnotationListNode metaAnnotations)
     {
         WhileLoopNode ret = new WhileLoopNodeImpl(this.<ExpressionNode>makeNormalNodeUnion(condition), this.<StatementNode>makeNormalNodeUnion(statement), this.<MetaAnnotationListNode>makeNormalNodeUnion(metaAnnotations), startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateWhileLoopNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), condition == null ? null : condition.getUid(), statement == null ? null : statement.getUid(), metaAnnotations == null ? null : metaAnnotations.getUid(), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -11463,6 +14457,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             BsjSourceLocation stopLocation)
     {
         WhileLoopNode ret = new WhileLoopNodeImpl(condition, statement, metaAnnotations, startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateWhileLoopNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), condition == null ? null : (condition.getNodeValue() == null ? null : condition.getNodeValue().getUid()), statement == null ? null : (statement.getNodeValue() == null ? null : statement.getNodeValue().getUid()), metaAnnotations == null ? null : (metaAnnotations.getNodeValue() == null ? null : metaAnnotations.getNodeValue().getUid()), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -11479,6 +14477,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             BsjSourceLocation stopLocation)
     {
         WhileLoopNode ret = new WhileLoopNodeImpl(this.<ExpressionNode>makeNormalNodeUnion(condition), this.<StatementNode>makeNormalNodeUnion(statement), this.<MetaAnnotationListNode>makeNormalNodeUnion(metaAnnotations), startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateWhileLoopNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), condition == null ? null : condition.getUid(), statement == null ? null : statement.getUid(), metaAnnotations == null ? null : metaAnnotations.getUid(), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -11492,6 +14494,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             StatementNode statement)
     {
         WhileLoopNode ret = new WhileLoopNodeImpl(this.<ExpressionNode>makeNormalNodeUnion(condition), this.<StatementNode>makeNormalNodeUnion(statement), this.<MetaAnnotationListNode>makeNormalNodeUnion(makeMetaAnnotationListNode()), startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateWhileLoopNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), condition == null ? null : condition.getUid(), statement == null ? null : statement.getUid(), ret.getMetaAnnotations() == null ? null : ret.getMetaAnnotations().getUid(), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -11507,6 +14513,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             BsjSourceLocation stopLocation)
     {
         WhileLoopNode ret = new WhileLoopNodeImpl(this.<ExpressionNode>makeNormalNodeUnion(condition), this.<StatementNode>makeNormalNodeUnion(statement), this.<MetaAnnotationListNode>makeNormalNodeUnion(makeMetaAnnotationListNode()), startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateWhileLoopNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), condition == null ? null : condition.getUid(), statement == null ? null : statement.getUid(), ret.getMetaAnnotations() == null ? null : ret.getMetaAnnotations().getUid(), startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -11520,6 +14530,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             boolean upperBound)
     {
         WildcardTypeNode ret = new WildcardTypeNodeImpl(bound, upperBound, startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateWildcardTypeNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), bound == null ? null : (bound.getNodeValue() == null ? null : bound.getNodeValue().getUid()), upperBound, startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -11533,6 +14547,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             boolean upperBound)
     {
         WildcardTypeNode ret = new WildcardTypeNodeImpl(this.<ReferenceTypeNode>makeNormalNodeUnion(bound), upperBound, startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateWildcardTypeNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), bound == null ? null : bound.getUid(), upperBound, startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -11548,6 +14566,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             BsjSourceLocation stopLocation)
     {
         WildcardTypeNode ret = new WildcardTypeNodeImpl(bound, upperBound, startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateWildcardTypeNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), bound == null ? null : (bound.getNodeValue() == null ? null : bound.getNodeValue().getUid()), upperBound, startLocation, stopLocation));
+        }
         return ret;
     }
     
@@ -11563,6 +14585,10 @@ public <T extends Node> NodeUnion<T> makeSpliceNodeUnion(SpliceNode node)
             BsjSourceLocation stopLocation)
     {
         WildcardTypeNode ret = new WildcardTypeNodeImpl(this.<ReferenceTypeNode>makeNormalNodeUnion(bound), upperBound, startLocation, stopLocation, manager, binary);
+        if (this.manager.isRecordingEdits())
+        {
+            this.manager.recordEdit(new CreateWildcardTypeNodeEditScriptElementImpl(this.manager.getCurrentMetaprogramId(), ret.getUid(), bound == null ? null : bound.getUid(), upperBound, startLocation, stopLocation));
+        }
         return ret;
     }
     

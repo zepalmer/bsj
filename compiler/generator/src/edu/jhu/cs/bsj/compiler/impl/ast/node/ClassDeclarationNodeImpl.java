@@ -23,6 +23,7 @@ import edu.jhu.cs.bsj.compiler.ast.node.Node;
 import edu.jhu.cs.bsj.compiler.ast.node.list.DeclaredTypeListNode;
 import edu.jhu.cs.bsj.compiler.ast.node.list.TypeParameterListNode;
 import edu.jhu.cs.bsj.compiler.impl.ast.BsjNodeManager;
+import edu.jhu.cs.bsj.compiler.impl.ast.BsjNodeProxyFactory;
 
 @Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
 public class ClassDeclarationNodeImpl extends AbstractlyUnmodifiedClassDeclarationNodeImpl<ClassModifiersNode> implements ClassDeclarationNode
@@ -42,6 +43,18 @@ public class ClassDeclarationNodeImpl extends AbstractlyUnmodifiedClassDeclarati
             boolean binary)
     {
         super(modifiers, extendsClause, implementsClause, body, typeParameters, identifier, javadoc, startLocation, stopLocation, manager, binary);
+    }
+    
+    /** Proxy constructor. */
+    public ClassDeclarationNodeImpl(BsjNodeManager manager, BsjNodeProxyFactory proxyFactory, ClassDeclarationNode backingNode)
+    {
+        super(manager, proxyFactory, backingNode);
+    }
+    
+    /** Retrieves this node's backing node (if one exists). */
+    protected ClassDeclarationNode getBackingNode()
+    {
+        return (ClassDeclarationNode)super.getBackingNode();
     }
     
     /**
@@ -132,6 +145,8 @@ public class ClassDeclarationNodeImpl extends AbstractlyUnmodifiedClassDeclarati
     {
         StringBuilder sb = new StringBuilder();
         sb.append(this.getClass().getSimpleName());
+        sb.append('#');
+        sb.append(this.getUid());
         sb.append('[');
         sb.append("modifiers=");
         sb.append(this.getUnionForModifiers().getNodeValue() == null? "null" : this.getUnionForModifiers().getNodeValue().getClass().getSimpleName());

@@ -17,6 +17,7 @@ import edu.jhu.cs.bsj.compiler.ast.node.AnnotationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.Node;
 import edu.jhu.cs.bsj.compiler.ast.node.list.AnnotationListNode;
 import edu.jhu.cs.bsj.compiler.impl.ast.BsjNodeManager;
+import edu.jhu.cs.bsj.compiler.impl.ast.BsjNodeProxyFactory;
 
 @Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
 public class AnnotationListNodeImpl extends ListNodeImpl<AnnotationNode> implements AnnotationListNode
@@ -30,6 +31,18 @@ public class AnnotationListNodeImpl extends ListNodeImpl<AnnotationNode> impleme
             boolean binary)
     {
         super(children, startLocation, stopLocation, manager, binary);
+    }
+    
+    /** Proxy constructor. */
+    public AnnotationListNodeImpl(BsjNodeManager manager, BsjNodeProxyFactory proxyFactory, AnnotationListNode backingNode)
+    {
+        super(manager, proxyFactory, backingNode);
+    }
+    
+    /** Retrieves this node's backing node (if one exists). */
+    protected AnnotationListNode getBackingNode()
+    {
+        return (AnnotationListNode)super.getBackingNode();
     }
     
     /**
@@ -136,6 +149,8 @@ public class AnnotationListNodeImpl extends ListNodeImpl<AnnotationNode> impleme
     {
         StringBuilder sb = new StringBuilder();
         sb.append(this.getClass().getSimpleName());
+        sb.append('#');
+        sb.append(this.getUid());
         sb.append('[');
         sb.append("children=");
         sb.append(this.getUnionForChildren() == null? "null" : this.getUnionForChildren().getClass().getSimpleName());
@@ -227,6 +242,14 @@ public class AnnotationListNodeImpl extends ListNodeImpl<AnnotationNode> impleme
     public Class<AnnotationNode> getElementType()
     {
         return AnnotationNode.class;
+    }
+    
+    /**
+     * Wraps an element of this list's type.
+     */
+    protected AnnotationNode wrapElement(AnnotationNode element)
+    {
+        return getProxyFactory().makeAnnotationNode(element);
     }
     
 }

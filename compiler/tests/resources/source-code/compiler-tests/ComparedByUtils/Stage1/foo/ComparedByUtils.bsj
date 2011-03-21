@@ -1,0 +1,30 @@
+package foo;
+
+import edu.jhu.cs.bsj.compiler.ast.*;
+import edu.jhu.cs.bsj.compiler.ast.node.*;
+import edu.jhu.cs.bsj.compiler.ast.node.list.*;
+import edu.jhu.cs.bsj.compiler.ast.node.meta.*;
+import edu.jhu.cs.bsj.compiler.metaprogram.*;
+
+public class ComparedByUtils {
+    public static void generateComparedBy(Context<?,?> context,
+            IdentifierNode... vars) {
+        ClassDeclarationNode n = context.getAnchor().
+                <ClassDeclarationNode>getNearestAncestorOfType(ClassDeclarationNode.class);
+        BsjNodeFactory factory = context.getFactory();
+        // create compareTo method
+        BlockStatementListNode list = factory.makeBlockStatementListNode();
+        list.add(<:int c;:>);
+        for (IdentifierNode var : vars) {
+            list.add(<:c = this.~:var.deepCopy(factory):~.
+                compareTo(other.~:var:~);:>);
+            list.add(<:if (c != 0) return c;:>);
+        }
+        list.add(<:return 0;:>);
+        n.getBody().getMembers().addLast(<:
+                public int compareTo(Person other) { ~:list:~ }
+            :>);
+        // create implements clause
+        n.getImplementsClause().addLast(<:Comparable<Person>:>);
+    }
+}

@@ -1,10 +1,10 @@
 package edu.jhu.cs.bsj.compiler.impl.ast.node;
 
 import java.util.Arrays;
-import java.util.EnumMap;
+import java.util.EnumSet;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
+import java.util.Set;
 
 import javax.annotation.Generated;
 
@@ -27,9 +27,18 @@ import edu.jhu.cs.bsj.compiler.ast.node.list.TypeParameterListNode;
 import edu.jhu.cs.bsj.compiler.ast.node.list.UnparameterizedTypeListNode;
 import edu.jhu.cs.bsj.compiler.ast.node.list.VariableListNode;
 import edu.jhu.cs.bsj.compiler.impl.ast.BsjNodeManager;
+import edu.jhu.cs.bsj.compiler.impl.ast.BsjNodeProxyFactory;
 import edu.jhu.cs.bsj.compiler.impl.ast.NormalNodeUnion;
-import edu.jhu.cs.bsj.compiler.impl.ast.attribute.AttributeName;
-import edu.jhu.cs.bsj.compiler.impl.ast.attribute.ReadWriteAttribute;
+import edu.jhu.cs.bsj.compiler.impl.ast.delta.property.MethodDeclarationNodeSetBodyPropertyEditScriptElementImpl;
+import edu.jhu.cs.bsj.compiler.impl.ast.delta.property.MethodDeclarationNodeSetIdentifierPropertyEditScriptElementImpl;
+import edu.jhu.cs.bsj.compiler.impl.ast.delta.property.MethodDeclarationNodeSetJavadocPropertyEditScriptElementImpl;
+import edu.jhu.cs.bsj.compiler.impl.ast.delta.property.MethodDeclarationNodeSetModifiersPropertyEditScriptElementImpl;
+import edu.jhu.cs.bsj.compiler.impl.ast.delta.property.MethodDeclarationNodeSetParametersPropertyEditScriptElementImpl;
+import edu.jhu.cs.bsj.compiler.impl.ast.delta.property.MethodDeclarationNodeSetReturnTypePropertyEditScriptElementImpl;
+import edu.jhu.cs.bsj.compiler.impl.ast.delta.property.MethodDeclarationNodeSetThrowTypesPropertyEditScriptElementImpl;
+import edu.jhu.cs.bsj.compiler.impl.ast.delta.property.MethodDeclarationNodeSetTypeParametersPropertyEditScriptElementImpl;
+import edu.jhu.cs.bsj.compiler.impl.ast.delta.property.MethodDeclarationNodeSetVarargParameterPropertyEditScriptElementImpl;
+import edu.jhu.cs.bsj.compiler.impl.ast.properties.MethodDeclarationNodeProperties;
 
 @Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
 public class MethodDeclarationNodeImpl extends NodeImpl implements MethodDeclarationNode
@@ -61,38 +70,11 @@ public class MethodDeclarationNodeImpl extends NodeImpl implements MethodDeclara
     /** The associated javadoc comment for this node. */
     private NodeUnion<? extends JavadocNode> javadoc;
     
-    private Map<LocalAttribute,ReadWriteAttribute> localAttributes = new EnumMap<LocalAttribute,ReadWriteAttribute>(LocalAttribute.class);
-    private ReadWriteAttribute getAttribute(LocalAttribute attributeName)
-    {
-        ReadWriteAttribute attribute = localAttributes.get(attributeName);
-        if (attribute == null)
-        {
-            attribute = new ReadWriteAttribute(MethodDeclarationNodeImpl.this, attributeName);
-            localAttributes.put(attributeName, attribute);
-        }
-        return attribute;
-    }
-    private static enum LocalAttribute implements AttributeName
-    {
-        /** Attribute identifier for the body property. */
-        BODY,
-        /** Attribute identifier for the modifiers property. */
-        MODIFIERS,
-        /** Attribute identifier for the identifier property. */
-        IDENTIFIER,
-        /** Attribute identifier for the parameters property. */
-        PARAMETERS,
-        /** Attribute identifier for the varargParameter property. */
-        VARARG_PARAMETER,
-        /** Attribute identifier for the returnType property. */
-        RETURN_TYPE,
-        /** Attribute identifier for the throwTypes property. */
-        THROW_TYPES,
-        /** Attribute identifier for the typeParameters property. */
-        TYPE_PARAMETERS,
-        /** Attribute identifier for the javadoc property. */
-        JAVADOC,
-    }
+    /**
+     * A set of those properties which have been populated from the backing node.
+     * This field is <code>null</code> if <tt>backingNode</tt> is <code>null</code>.
+     */
+    private Set<MethodDeclarationNodeProperties> populatedProperties;
     
     /** General constructor. */
     public MethodDeclarationNodeImpl(
@@ -111,15 +93,281 @@ public class MethodDeclarationNodeImpl extends NodeImpl implements MethodDeclara
             boolean binary)
     {
         super(startLocation, stopLocation, manager, binary);
-        setUnionForBody(body, false);
-        setUnionForModifiers(modifiers, false);
-        setUnionForIdentifier(identifier, false);
-        setUnionForParameters(parameters, false);
-        setUnionForVarargParameter(varargParameter, false);
-        setUnionForReturnType(returnType, false);
-        setUnionForThrowTypes(throwTypes, false);
-        setUnionForTypeParameters(typeParameters, false);
-        setUnionForJavadoc(javadoc, false);
+        this.populatedProperties = null;
+        doSetBody(body);
+        doSetModifiers(modifiers);
+        doSetIdentifier(identifier);
+        doSetParameters(parameters);
+        doSetVarargParameter(varargParameter);
+        doSetReturnType(returnType);
+        doSetThrowTypes(throwTypes);
+        doSetTypeParameters(typeParameters);
+        doSetJavadoc(javadoc);
+    }
+    
+    /** Proxy constructor. */
+    public MethodDeclarationNodeImpl(BsjNodeManager manager, BsjNodeProxyFactory proxyFactory, MethodDeclarationNode backingNode)
+    {
+        super(manager, proxyFactory, backingNode);
+        this.populatedProperties = EnumSet.noneOf(MethodDeclarationNodeProperties.class);
+    }
+    
+    /** Retrieves this node's backing node (if one exists). */
+    protected MethodDeclarationNode getBackingNode()
+    {
+        return (MethodDeclarationNode)super.getBackingNode();
+    }
+    
+    /**
+     * Ensures that the body value has been populated from proxy.
+     * If this node is not backed by a proxy or if the value has already been
+     * populated, this method does nothing.
+     */
+    private void checkBodyWrapped()
+    {
+        if (this.populatedProperties == null || this.populatedProperties.contains(
+                MethodDeclarationNodeProperties.BODY))
+            return;
+        this.populatedProperties.add(MethodDeclarationNodeProperties.BODY);
+        NodeUnion<? extends BlockStatementListNode> union = this.getBackingNode().getUnionForBody();
+        switch (union.getType())
+        {
+            case NORMAL:
+                union = this.getProxyFactory().makeNormalNodeUnion(
+                        this.getProxyFactory().makeBlockStatementListNode(union.getNormalNode()));
+                break;
+            case SPLICE:
+                union = this.getProxyFactory().makeSpliceNodeUnion(
+                        this.getProxyFactory().makeSpliceNode(union.getSpliceNode()));
+                break;
+            default:
+                throw new IllegalStateException("Unrecognized union type: " + union.getType());
+        }
+        this.body = union;
+    }
+    
+    /**
+     * Ensures that the modifiers value has been populated from proxy.
+     * If this node is not backed by a proxy or if the value has already been
+     * populated, this method does nothing.
+     */
+    private void checkModifiersWrapped()
+    {
+        if (this.populatedProperties == null || this.populatedProperties.contains(
+                MethodDeclarationNodeProperties.MODIFIERS))
+            return;
+        this.populatedProperties.add(MethodDeclarationNodeProperties.MODIFIERS);
+        NodeUnion<? extends MethodModifiersNode> union = this.getBackingNode().getUnionForModifiers();
+        switch (union.getType())
+        {
+            case NORMAL:
+                union = this.getProxyFactory().makeNormalNodeUnion(
+                        this.getProxyFactory().makeMethodModifiersNode(union.getNormalNode()));
+                break;
+            case SPLICE:
+                union = this.getProxyFactory().makeSpliceNodeUnion(
+                        this.getProxyFactory().makeSpliceNode(union.getSpliceNode()));
+                break;
+            default:
+                throw new IllegalStateException("Unrecognized union type: " + union.getType());
+        }
+        this.modifiers = union;
+    }
+    
+    /**
+     * Ensures that the identifier value has been populated from proxy.
+     * If this node is not backed by a proxy or if the value has already been
+     * populated, this method does nothing.
+     */
+    private void checkIdentifierWrapped()
+    {
+        if (this.populatedProperties == null || this.populatedProperties.contains(
+                MethodDeclarationNodeProperties.IDENTIFIER))
+            return;
+        this.populatedProperties.add(MethodDeclarationNodeProperties.IDENTIFIER);
+        NodeUnion<? extends IdentifierNode> union = this.getBackingNode().getUnionForIdentifier();
+        switch (union.getType())
+        {
+            case NORMAL:
+                union = this.getProxyFactory().makeNormalNodeUnion(
+                        this.getProxyFactory().makeIdentifierNode(union.getNormalNode()));
+                break;
+            case SPLICE:
+                union = this.getProxyFactory().makeSpliceNodeUnion(
+                        this.getProxyFactory().makeSpliceNode(union.getSpliceNode()));
+                break;
+            default:
+                throw new IllegalStateException("Unrecognized union type: " + union.getType());
+        }
+        this.identifier = union;
+    }
+    
+    /**
+     * Ensures that the parameters value has been populated from proxy.
+     * If this node is not backed by a proxy or if the value has already been
+     * populated, this method does nothing.
+     */
+    private void checkParametersWrapped()
+    {
+        if (this.populatedProperties == null || this.populatedProperties.contains(
+                MethodDeclarationNodeProperties.PARAMETERS))
+            return;
+        this.populatedProperties.add(MethodDeclarationNodeProperties.PARAMETERS);
+        NodeUnion<? extends VariableListNode> union = this.getBackingNode().getUnionForParameters();
+        switch (union.getType())
+        {
+            case NORMAL:
+                union = this.getProxyFactory().makeNormalNodeUnion(
+                        this.getProxyFactory().makeVariableListNode(union.getNormalNode()));
+                break;
+            case SPLICE:
+                union = this.getProxyFactory().makeSpliceNodeUnion(
+                        this.getProxyFactory().makeSpliceNode(union.getSpliceNode()));
+                break;
+            default:
+                throw new IllegalStateException("Unrecognized union type: " + union.getType());
+        }
+        this.parameters = union;
+    }
+    
+    /**
+     * Ensures that the varargParameter value has been populated from proxy.
+     * If this node is not backed by a proxy or if the value has already been
+     * populated, this method does nothing.
+     */
+    private void checkVarargParameterWrapped()
+    {
+        if (this.populatedProperties == null || this.populatedProperties.contains(
+                MethodDeclarationNodeProperties.VARARG_PARAMETER))
+            return;
+        this.populatedProperties.add(MethodDeclarationNodeProperties.VARARG_PARAMETER);
+        NodeUnion<? extends VariableNode> union = this.getBackingNode().getUnionForVarargParameter();
+        switch (union.getType())
+        {
+            case NORMAL:
+                union = this.getProxyFactory().makeNormalNodeUnion(
+                        this.getProxyFactory().makeVariableNode(union.getNormalNode()));
+                break;
+            case SPLICE:
+                union = this.getProxyFactory().makeSpliceNodeUnion(
+                        this.getProxyFactory().makeSpliceNode(union.getSpliceNode()));
+                break;
+            default:
+                throw new IllegalStateException("Unrecognized union type: " + union.getType());
+        }
+        this.varargParameter = union;
+    }
+    
+    /**
+     * Ensures that the returnType value has been populated from proxy.
+     * If this node is not backed by a proxy or if the value has already been
+     * populated, this method does nothing.
+     */
+    private void checkReturnTypeWrapped()
+    {
+        if (this.populatedProperties == null || this.populatedProperties.contains(
+                MethodDeclarationNodeProperties.RETURN_TYPE))
+            return;
+        this.populatedProperties.add(MethodDeclarationNodeProperties.RETURN_TYPE);
+        NodeUnion<? extends TypeNode> union = this.getBackingNode().getUnionForReturnType();
+        switch (union.getType())
+        {
+            case NORMAL:
+                union = this.getProxyFactory().makeNormalNodeUnion(
+                        this.getProxyFactory().makeTypeNode(union.getNormalNode()));
+                break;
+            case SPLICE:
+                union = this.getProxyFactory().makeSpliceNodeUnion(
+                        this.getProxyFactory().makeSpliceNode(union.getSpliceNode()));
+                break;
+            default:
+                throw new IllegalStateException("Unrecognized union type: " + union.getType());
+        }
+        this.returnType = union;
+    }
+    
+    /**
+     * Ensures that the throwTypes value has been populated from proxy.
+     * If this node is not backed by a proxy or if the value has already been
+     * populated, this method does nothing.
+     */
+    private void checkThrowTypesWrapped()
+    {
+        if (this.populatedProperties == null || this.populatedProperties.contains(
+                MethodDeclarationNodeProperties.THROW_TYPES))
+            return;
+        this.populatedProperties.add(MethodDeclarationNodeProperties.THROW_TYPES);
+        NodeUnion<? extends UnparameterizedTypeListNode> union = this.getBackingNode().getUnionForThrowTypes();
+        switch (union.getType())
+        {
+            case NORMAL:
+                union = this.getProxyFactory().makeNormalNodeUnion(
+                        this.getProxyFactory().makeUnparameterizedTypeListNode(union.getNormalNode()));
+                break;
+            case SPLICE:
+                union = this.getProxyFactory().makeSpliceNodeUnion(
+                        this.getProxyFactory().makeSpliceNode(union.getSpliceNode()));
+                break;
+            default:
+                throw new IllegalStateException("Unrecognized union type: " + union.getType());
+        }
+        this.throwTypes = union;
+    }
+    
+    /**
+     * Ensures that the typeParameters value has been populated from proxy.
+     * If this node is not backed by a proxy or if the value has already been
+     * populated, this method does nothing.
+     */
+    private void checkTypeParametersWrapped()
+    {
+        if (this.populatedProperties == null || this.populatedProperties.contains(
+                MethodDeclarationNodeProperties.TYPE_PARAMETERS))
+            return;
+        this.populatedProperties.add(MethodDeclarationNodeProperties.TYPE_PARAMETERS);
+        NodeUnion<? extends TypeParameterListNode> union = this.getBackingNode().getUnionForTypeParameters();
+        switch (union.getType())
+        {
+            case NORMAL:
+                union = this.getProxyFactory().makeNormalNodeUnion(
+                        this.getProxyFactory().makeTypeParameterListNode(union.getNormalNode()));
+                break;
+            case SPLICE:
+                union = this.getProxyFactory().makeSpliceNodeUnion(
+                        this.getProxyFactory().makeSpliceNode(union.getSpliceNode()));
+                break;
+            default:
+                throw new IllegalStateException("Unrecognized union type: " + union.getType());
+        }
+        this.typeParameters = union;
+    }
+    
+    /**
+     * Ensures that the javadoc value has been populated from proxy.
+     * If this node is not backed by a proxy or if the value has already been
+     * populated, this method does nothing.
+     */
+    private void checkJavadocWrapped()
+    {
+        if (this.populatedProperties == null || this.populatedProperties.contains(
+                MethodDeclarationNodeProperties.JAVADOC))
+            return;
+        this.populatedProperties.add(MethodDeclarationNodeProperties.JAVADOC);
+        NodeUnion<? extends JavadocNode> union = this.getBackingNode().getUnionForJavadoc();
+        switch (union.getType())
+        {
+            case NORMAL:
+                union = this.getProxyFactory().makeNormalNodeUnion(
+                        this.getProxyFactory().makeJavadocNode(union.getNormalNode()));
+                break;
+            case SPLICE:
+                union = this.getProxyFactory().makeSpliceNodeUnion(
+                        this.getProxyFactory().makeSpliceNode(union.getSpliceNode()));
+                break;
+            default:
+                throw new IllegalStateException("Unrecognized union type: " + union.getType());
+        }
+        this.javadoc = union;
     }
     
     /**
@@ -129,7 +377,7 @@ public class MethodDeclarationNodeImpl extends NodeImpl implements MethodDeclara
      */
     public BlockStatementListNode getBody()
     {
-        getAttribute(LocalAttribute.BODY).recordAccess(ReadWriteAttribute.AccessType.READ);
+        checkBodyWrapped();
         if (this.body == null)
         {
             return null;
@@ -145,7 +393,7 @@ public class MethodDeclarationNodeImpl extends NodeImpl implements MethodDeclara
      */
     public NodeUnion<? extends BlockStatementListNode> getUnionForBody()
     {
-        getAttribute(LocalAttribute.BODY).recordAccess(ReadWriteAttribute.AccessType.READ);
+        checkBodyWrapped();
         if (this.body == null)
         {
             this.body = new NormalNodeUnion<BlockStatementListNode>(null);
@@ -159,24 +407,8 @@ public class MethodDeclarationNodeImpl extends NodeImpl implements MethodDeclara
      */
     public void setBody(BlockStatementListNode body)
     {
-            setBody(body, true);
-            getManager().notifyChange(this);
-    }
-    
-    private void setBody(BlockStatementListNode body, boolean checkPermissions)
-    {
-        if (checkPermissions)
-        {
-            getManager().assertMutatable(this);
-            getAttribute(LocalAttribute.BODY).recordAccess(ReadWriteAttribute.AccessType.WRITE);
-        }
-        
-        if (this.body != null)
-        {
-            setAsChild(this.body.getNodeValue(), false);
-        }
-        this.body = new NormalNodeUnion<BlockStatementListNode>(body);
-        setAsChild(body, true);
+        checkBodyWrapped();
+        this.setUnionForBody(new NormalNodeUnion<BlockStatementListNode>(body));
     }
     
     /**
@@ -185,18 +417,15 @@ public class MethodDeclarationNodeImpl extends NodeImpl implements MethodDeclara
      */
     public void setUnionForBody(NodeUnion<? extends BlockStatementListNode> body)
     {
-            setUnionForBody(body, true);
-            getManager().notifyChange(this);
+        checkBodyWrapped();
+        this.getManager().assertMutatable(this);
+        this.doSetBody(body);
+        if (this.getManager().isRecordingEdits())
+            super.recordEdit(new MethodDeclarationNodeSetBodyPropertyEditScriptElementImpl(this.getManager().getCurrentMetaprogramId(), this.getUid(), body.getNodeValue() == null ? null : body.getNodeValue().getUid()));
     }
     
-    private void setUnionForBody(NodeUnion<? extends BlockStatementListNode> body, boolean checkPermissions)
+    private void doSetBody(NodeUnion<? extends BlockStatementListNode> body)
     {
-        if (checkPermissions)
-        {
-            getManager().assertMutatable(this);
-            getAttribute(LocalAttribute.BODY).recordAccess(ReadWriteAttribute.AccessType.WRITE);
-        }
-        
         if (body == null)
         {
             body = new NormalNodeUnion<BlockStatementListNode>(null);
@@ -216,7 +445,7 @@ public class MethodDeclarationNodeImpl extends NodeImpl implements MethodDeclara
      */
     public MethodModifiersNode getModifiers()
     {
-        getAttribute(LocalAttribute.MODIFIERS).recordAccess(ReadWriteAttribute.AccessType.READ);
+        checkModifiersWrapped();
         if (this.modifiers == null)
         {
             return null;
@@ -232,7 +461,7 @@ public class MethodDeclarationNodeImpl extends NodeImpl implements MethodDeclara
      */
     public NodeUnion<? extends MethodModifiersNode> getUnionForModifiers()
     {
-        getAttribute(LocalAttribute.MODIFIERS).recordAccess(ReadWriteAttribute.AccessType.READ);
+        checkModifiersWrapped();
         if (this.modifiers == null)
         {
             this.modifiers = new NormalNodeUnion<MethodModifiersNode>(null);
@@ -246,24 +475,8 @@ public class MethodDeclarationNodeImpl extends NodeImpl implements MethodDeclara
      */
     public void setModifiers(MethodModifiersNode modifiers)
     {
-            setModifiers(modifiers, true);
-            getManager().notifyChange(this);
-    }
-    
-    private void setModifiers(MethodModifiersNode modifiers, boolean checkPermissions)
-    {
-        if (checkPermissions)
-        {
-            getManager().assertMutatable(this);
-            getAttribute(LocalAttribute.MODIFIERS).recordAccess(ReadWriteAttribute.AccessType.WRITE);
-        }
-        
-        if (this.modifiers != null)
-        {
-            setAsChild(this.modifiers.getNodeValue(), false);
-        }
-        this.modifiers = new NormalNodeUnion<MethodModifiersNode>(modifiers);
-        setAsChild(modifiers, true);
+        checkModifiersWrapped();
+        this.setUnionForModifiers(new NormalNodeUnion<MethodModifiersNode>(modifiers));
     }
     
     /**
@@ -272,18 +485,15 @@ public class MethodDeclarationNodeImpl extends NodeImpl implements MethodDeclara
      */
     public void setUnionForModifiers(NodeUnion<? extends MethodModifiersNode> modifiers)
     {
-            setUnionForModifiers(modifiers, true);
-            getManager().notifyChange(this);
+        checkModifiersWrapped();
+        this.getManager().assertMutatable(this);
+        this.doSetModifiers(modifiers);
+        if (this.getManager().isRecordingEdits())
+            super.recordEdit(new MethodDeclarationNodeSetModifiersPropertyEditScriptElementImpl(this.getManager().getCurrentMetaprogramId(), this.getUid(), modifiers.getNodeValue() == null ? null : modifiers.getNodeValue().getUid()));
     }
     
-    private void setUnionForModifiers(NodeUnion<? extends MethodModifiersNode> modifiers, boolean checkPermissions)
+    private void doSetModifiers(NodeUnion<? extends MethodModifiersNode> modifiers)
     {
-        if (checkPermissions)
-        {
-            getManager().assertMutatable(this);
-            getAttribute(LocalAttribute.MODIFIERS).recordAccess(ReadWriteAttribute.AccessType.WRITE);
-        }
-        
         if (modifiers == null)
         {
             modifiers = new NormalNodeUnion<MethodModifiersNode>(null);
@@ -303,7 +513,7 @@ public class MethodDeclarationNodeImpl extends NodeImpl implements MethodDeclara
      */
     public IdentifierNode getIdentifier()
     {
-        getAttribute(LocalAttribute.IDENTIFIER).recordAccess(ReadWriteAttribute.AccessType.READ);
+        checkIdentifierWrapped();
         if (this.identifier == null)
         {
             return null;
@@ -319,7 +529,7 @@ public class MethodDeclarationNodeImpl extends NodeImpl implements MethodDeclara
      */
     public NodeUnion<? extends IdentifierNode> getUnionForIdentifier()
     {
-        getAttribute(LocalAttribute.IDENTIFIER).recordAccess(ReadWriteAttribute.AccessType.READ);
+        checkIdentifierWrapped();
         if (this.identifier == null)
         {
             this.identifier = new NormalNodeUnion<IdentifierNode>(null);
@@ -333,24 +543,8 @@ public class MethodDeclarationNodeImpl extends NodeImpl implements MethodDeclara
      */
     public void setIdentifier(IdentifierNode identifier)
     {
-            setIdentifier(identifier, true);
-            getManager().notifyChange(this);
-    }
-    
-    private void setIdentifier(IdentifierNode identifier, boolean checkPermissions)
-    {
-        if (checkPermissions)
-        {
-            getManager().assertMutatable(this);
-            getAttribute(LocalAttribute.IDENTIFIER).recordAccess(ReadWriteAttribute.AccessType.WRITE);
-        }
-        
-        if (this.identifier != null)
-        {
-            setAsChild(this.identifier.getNodeValue(), false);
-        }
-        this.identifier = new NormalNodeUnion<IdentifierNode>(identifier);
-        setAsChild(identifier, true);
+        checkIdentifierWrapped();
+        this.setUnionForIdentifier(new NormalNodeUnion<IdentifierNode>(identifier));
     }
     
     /**
@@ -359,18 +553,15 @@ public class MethodDeclarationNodeImpl extends NodeImpl implements MethodDeclara
      */
     public void setUnionForIdentifier(NodeUnion<? extends IdentifierNode> identifier)
     {
-            setUnionForIdentifier(identifier, true);
-            getManager().notifyChange(this);
+        checkIdentifierWrapped();
+        this.getManager().assertMutatable(this);
+        this.doSetIdentifier(identifier);
+        if (this.getManager().isRecordingEdits())
+            super.recordEdit(new MethodDeclarationNodeSetIdentifierPropertyEditScriptElementImpl(this.getManager().getCurrentMetaprogramId(), this.getUid(), identifier.getNodeValue() == null ? null : identifier.getNodeValue().getUid()));
     }
     
-    private void setUnionForIdentifier(NodeUnion<? extends IdentifierNode> identifier, boolean checkPermissions)
+    private void doSetIdentifier(NodeUnion<? extends IdentifierNode> identifier)
     {
-        if (checkPermissions)
-        {
-            getManager().assertMutatable(this);
-            getAttribute(LocalAttribute.IDENTIFIER).recordAccess(ReadWriteAttribute.AccessType.WRITE);
-        }
-        
         if (identifier == null)
         {
             identifier = new NormalNodeUnion<IdentifierNode>(null);
@@ -390,7 +581,7 @@ public class MethodDeclarationNodeImpl extends NodeImpl implements MethodDeclara
      */
     public VariableListNode getParameters()
     {
-        getAttribute(LocalAttribute.PARAMETERS).recordAccess(ReadWriteAttribute.AccessType.READ);
+        checkParametersWrapped();
         if (this.parameters == null)
         {
             return null;
@@ -406,7 +597,7 @@ public class MethodDeclarationNodeImpl extends NodeImpl implements MethodDeclara
      */
     public NodeUnion<? extends VariableListNode> getUnionForParameters()
     {
-        getAttribute(LocalAttribute.PARAMETERS).recordAccess(ReadWriteAttribute.AccessType.READ);
+        checkParametersWrapped();
         if (this.parameters == null)
         {
             this.parameters = new NormalNodeUnion<VariableListNode>(null);
@@ -420,24 +611,8 @@ public class MethodDeclarationNodeImpl extends NodeImpl implements MethodDeclara
      */
     public void setParameters(VariableListNode parameters)
     {
-            setParameters(parameters, true);
-            getManager().notifyChange(this);
-    }
-    
-    private void setParameters(VariableListNode parameters, boolean checkPermissions)
-    {
-        if (checkPermissions)
-        {
-            getManager().assertMutatable(this);
-            getAttribute(LocalAttribute.PARAMETERS).recordAccess(ReadWriteAttribute.AccessType.WRITE);
-        }
-        
-        if (this.parameters != null)
-        {
-            setAsChild(this.parameters.getNodeValue(), false);
-        }
-        this.parameters = new NormalNodeUnion<VariableListNode>(parameters);
-        setAsChild(parameters, true);
+        checkParametersWrapped();
+        this.setUnionForParameters(new NormalNodeUnion<VariableListNode>(parameters));
     }
     
     /**
@@ -446,18 +621,15 @@ public class MethodDeclarationNodeImpl extends NodeImpl implements MethodDeclara
      */
     public void setUnionForParameters(NodeUnion<? extends VariableListNode> parameters)
     {
-            setUnionForParameters(parameters, true);
-            getManager().notifyChange(this);
+        checkParametersWrapped();
+        this.getManager().assertMutatable(this);
+        this.doSetParameters(parameters);
+        if (this.getManager().isRecordingEdits())
+            super.recordEdit(new MethodDeclarationNodeSetParametersPropertyEditScriptElementImpl(this.getManager().getCurrentMetaprogramId(), this.getUid(), parameters.getNodeValue() == null ? null : parameters.getNodeValue().getUid()));
     }
     
-    private void setUnionForParameters(NodeUnion<? extends VariableListNode> parameters, boolean checkPermissions)
+    private void doSetParameters(NodeUnion<? extends VariableListNode> parameters)
     {
-        if (checkPermissions)
-        {
-            getManager().assertMutatable(this);
-            getAttribute(LocalAttribute.PARAMETERS).recordAccess(ReadWriteAttribute.AccessType.WRITE);
-        }
-        
         if (parameters == null)
         {
             parameters = new NormalNodeUnion<VariableListNode>(null);
@@ -477,7 +649,7 @@ public class MethodDeclarationNodeImpl extends NodeImpl implements MethodDeclara
      */
     public VariableNode getVarargParameter()
     {
-        getAttribute(LocalAttribute.VARARG_PARAMETER).recordAccess(ReadWriteAttribute.AccessType.READ);
+        checkVarargParameterWrapped();
         if (this.varargParameter == null)
         {
             return null;
@@ -493,7 +665,7 @@ public class MethodDeclarationNodeImpl extends NodeImpl implements MethodDeclara
      */
     public NodeUnion<? extends VariableNode> getUnionForVarargParameter()
     {
-        getAttribute(LocalAttribute.VARARG_PARAMETER).recordAccess(ReadWriteAttribute.AccessType.READ);
+        checkVarargParameterWrapped();
         if (this.varargParameter == null)
         {
             this.varargParameter = new NormalNodeUnion<VariableNode>(null);
@@ -507,24 +679,8 @@ public class MethodDeclarationNodeImpl extends NodeImpl implements MethodDeclara
      */
     public void setVarargParameter(VariableNode varargParameter)
     {
-            setVarargParameter(varargParameter, true);
-            getManager().notifyChange(this);
-    }
-    
-    private void setVarargParameter(VariableNode varargParameter, boolean checkPermissions)
-    {
-        if (checkPermissions)
-        {
-            getManager().assertMutatable(this);
-            getAttribute(LocalAttribute.VARARG_PARAMETER).recordAccess(ReadWriteAttribute.AccessType.WRITE);
-        }
-        
-        if (this.varargParameter != null)
-        {
-            setAsChild(this.varargParameter.getNodeValue(), false);
-        }
-        this.varargParameter = new NormalNodeUnion<VariableNode>(varargParameter);
-        setAsChild(varargParameter, true);
+        checkVarargParameterWrapped();
+        this.setUnionForVarargParameter(new NormalNodeUnion<VariableNode>(varargParameter));
     }
     
     /**
@@ -533,18 +689,15 @@ public class MethodDeclarationNodeImpl extends NodeImpl implements MethodDeclara
      */
     public void setUnionForVarargParameter(NodeUnion<? extends VariableNode> varargParameter)
     {
-            setUnionForVarargParameter(varargParameter, true);
-            getManager().notifyChange(this);
+        checkVarargParameterWrapped();
+        this.getManager().assertMutatable(this);
+        this.doSetVarargParameter(varargParameter);
+        if (this.getManager().isRecordingEdits())
+            super.recordEdit(new MethodDeclarationNodeSetVarargParameterPropertyEditScriptElementImpl(this.getManager().getCurrentMetaprogramId(), this.getUid(), varargParameter.getNodeValue() == null ? null : varargParameter.getNodeValue().getUid()));
     }
     
-    private void setUnionForVarargParameter(NodeUnion<? extends VariableNode> varargParameter, boolean checkPermissions)
+    private void doSetVarargParameter(NodeUnion<? extends VariableNode> varargParameter)
     {
-        if (checkPermissions)
-        {
-            getManager().assertMutatable(this);
-            getAttribute(LocalAttribute.VARARG_PARAMETER).recordAccess(ReadWriteAttribute.AccessType.WRITE);
-        }
-        
         if (varargParameter == null)
         {
             varargParameter = new NormalNodeUnion<VariableNode>(null);
@@ -564,7 +717,7 @@ public class MethodDeclarationNodeImpl extends NodeImpl implements MethodDeclara
      */
     public TypeNode getReturnType()
     {
-        getAttribute(LocalAttribute.RETURN_TYPE).recordAccess(ReadWriteAttribute.AccessType.READ);
+        checkReturnTypeWrapped();
         if (this.returnType == null)
         {
             return null;
@@ -580,7 +733,7 @@ public class MethodDeclarationNodeImpl extends NodeImpl implements MethodDeclara
      */
     public NodeUnion<? extends TypeNode> getUnionForReturnType()
     {
-        getAttribute(LocalAttribute.RETURN_TYPE).recordAccess(ReadWriteAttribute.AccessType.READ);
+        checkReturnTypeWrapped();
         if (this.returnType == null)
         {
             this.returnType = new NormalNodeUnion<TypeNode>(null);
@@ -594,24 +747,8 @@ public class MethodDeclarationNodeImpl extends NodeImpl implements MethodDeclara
      */
     public void setReturnType(TypeNode returnType)
     {
-            setReturnType(returnType, true);
-            getManager().notifyChange(this);
-    }
-    
-    private void setReturnType(TypeNode returnType, boolean checkPermissions)
-    {
-        if (checkPermissions)
-        {
-            getManager().assertMutatable(this);
-            getAttribute(LocalAttribute.RETURN_TYPE).recordAccess(ReadWriteAttribute.AccessType.WRITE);
-        }
-        
-        if (this.returnType != null)
-        {
-            setAsChild(this.returnType.getNodeValue(), false);
-        }
-        this.returnType = new NormalNodeUnion<TypeNode>(returnType);
-        setAsChild(returnType, true);
+        checkReturnTypeWrapped();
+        this.setUnionForReturnType(new NormalNodeUnion<TypeNode>(returnType));
     }
     
     /**
@@ -620,18 +757,15 @@ public class MethodDeclarationNodeImpl extends NodeImpl implements MethodDeclara
      */
     public void setUnionForReturnType(NodeUnion<? extends TypeNode> returnType)
     {
-            setUnionForReturnType(returnType, true);
-            getManager().notifyChange(this);
+        checkReturnTypeWrapped();
+        this.getManager().assertMutatable(this);
+        this.doSetReturnType(returnType);
+        if (this.getManager().isRecordingEdits())
+            super.recordEdit(new MethodDeclarationNodeSetReturnTypePropertyEditScriptElementImpl(this.getManager().getCurrentMetaprogramId(), this.getUid(), returnType.getNodeValue() == null ? null : returnType.getNodeValue().getUid()));
     }
     
-    private void setUnionForReturnType(NodeUnion<? extends TypeNode> returnType, boolean checkPermissions)
+    private void doSetReturnType(NodeUnion<? extends TypeNode> returnType)
     {
-        if (checkPermissions)
-        {
-            getManager().assertMutatable(this);
-            getAttribute(LocalAttribute.RETURN_TYPE).recordAccess(ReadWriteAttribute.AccessType.WRITE);
-        }
-        
         if (returnType == null)
         {
             returnType = new NormalNodeUnion<TypeNode>(null);
@@ -651,7 +785,7 @@ public class MethodDeclarationNodeImpl extends NodeImpl implements MethodDeclara
      */
     public UnparameterizedTypeListNode getThrowTypes()
     {
-        getAttribute(LocalAttribute.THROW_TYPES).recordAccess(ReadWriteAttribute.AccessType.READ);
+        checkThrowTypesWrapped();
         if (this.throwTypes == null)
         {
             return null;
@@ -667,7 +801,7 @@ public class MethodDeclarationNodeImpl extends NodeImpl implements MethodDeclara
      */
     public NodeUnion<? extends UnparameterizedTypeListNode> getUnionForThrowTypes()
     {
-        getAttribute(LocalAttribute.THROW_TYPES).recordAccess(ReadWriteAttribute.AccessType.READ);
+        checkThrowTypesWrapped();
         if (this.throwTypes == null)
         {
             this.throwTypes = new NormalNodeUnion<UnparameterizedTypeListNode>(null);
@@ -681,24 +815,8 @@ public class MethodDeclarationNodeImpl extends NodeImpl implements MethodDeclara
      */
     public void setThrowTypes(UnparameterizedTypeListNode throwTypes)
     {
-            setThrowTypes(throwTypes, true);
-            getManager().notifyChange(this);
-    }
-    
-    private void setThrowTypes(UnparameterizedTypeListNode throwTypes, boolean checkPermissions)
-    {
-        if (checkPermissions)
-        {
-            getManager().assertMutatable(this);
-            getAttribute(LocalAttribute.THROW_TYPES).recordAccess(ReadWriteAttribute.AccessType.WRITE);
-        }
-        
-        if (this.throwTypes != null)
-        {
-            setAsChild(this.throwTypes.getNodeValue(), false);
-        }
-        this.throwTypes = new NormalNodeUnion<UnparameterizedTypeListNode>(throwTypes);
-        setAsChild(throwTypes, true);
+        checkThrowTypesWrapped();
+        this.setUnionForThrowTypes(new NormalNodeUnion<UnparameterizedTypeListNode>(throwTypes));
     }
     
     /**
@@ -707,18 +825,15 @@ public class MethodDeclarationNodeImpl extends NodeImpl implements MethodDeclara
      */
     public void setUnionForThrowTypes(NodeUnion<? extends UnparameterizedTypeListNode> throwTypes)
     {
-            setUnionForThrowTypes(throwTypes, true);
-            getManager().notifyChange(this);
+        checkThrowTypesWrapped();
+        this.getManager().assertMutatable(this);
+        this.doSetThrowTypes(throwTypes);
+        if (this.getManager().isRecordingEdits())
+            super.recordEdit(new MethodDeclarationNodeSetThrowTypesPropertyEditScriptElementImpl(this.getManager().getCurrentMetaprogramId(), this.getUid(), throwTypes.getNodeValue() == null ? null : throwTypes.getNodeValue().getUid()));
     }
     
-    private void setUnionForThrowTypes(NodeUnion<? extends UnparameterizedTypeListNode> throwTypes, boolean checkPermissions)
+    private void doSetThrowTypes(NodeUnion<? extends UnparameterizedTypeListNode> throwTypes)
     {
-        if (checkPermissions)
-        {
-            getManager().assertMutatable(this);
-            getAttribute(LocalAttribute.THROW_TYPES).recordAccess(ReadWriteAttribute.AccessType.WRITE);
-        }
-        
         if (throwTypes == null)
         {
             throwTypes = new NormalNodeUnion<UnparameterizedTypeListNode>(null);
@@ -738,7 +853,7 @@ public class MethodDeclarationNodeImpl extends NodeImpl implements MethodDeclara
      */
     public TypeParameterListNode getTypeParameters()
     {
-        getAttribute(LocalAttribute.TYPE_PARAMETERS).recordAccess(ReadWriteAttribute.AccessType.READ);
+        checkTypeParametersWrapped();
         if (this.typeParameters == null)
         {
             return null;
@@ -754,7 +869,7 @@ public class MethodDeclarationNodeImpl extends NodeImpl implements MethodDeclara
      */
     public NodeUnion<? extends TypeParameterListNode> getUnionForTypeParameters()
     {
-        getAttribute(LocalAttribute.TYPE_PARAMETERS).recordAccess(ReadWriteAttribute.AccessType.READ);
+        checkTypeParametersWrapped();
         if (this.typeParameters == null)
         {
             this.typeParameters = new NormalNodeUnion<TypeParameterListNode>(null);
@@ -768,24 +883,8 @@ public class MethodDeclarationNodeImpl extends NodeImpl implements MethodDeclara
      */
     public void setTypeParameters(TypeParameterListNode typeParameters)
     {
-            setTypeParameters(typeParameters, true);
-            getManager().notifyChange(this);
-    }
-    
-    private void setTypeParameters(TypeParameterListNode typeParameters, boolean checkPermissions)
-    {
-        if (checkPermissions)
-        {
-            getManager().assertMutatable(this);
-            getAttribute(LocalAttribute.TYPE_PARAMETERS).recordAccess(ReadWriteAttribute.AccessType.WRITE);
-        }
-        
-        if (this.typeParameters != null)
-        {
-            setAsChild(this.typeParameters.getNodeValue(), false);
-        }
-        this.typeParameters = new NormalNodeUnion<TypeParameterListNode>(typeParameters);
-        setAsChild(typeParameters, true);
+        checkTypeParametersWrapped();
+        this.setUnionForTypeParameters(new NormalNodeUnion<TypeParameterListNode>(typeParameters));
     }
     
     /**
@@ -794,18 +893,15 @@ public class MethodDeclarationNodeImpl extends NodeImpl implements MethodDeclara
      */
     public void setUnionForTypeParameters(NodeUnion<? extends TypeParameterListNode> typeParameters)
     {
-            setUnionForTypeParameters(typeParameters, true);
-            getManager().notifyChange(this);
+        checkTypeParametersWrapped();
+        this.getManager().assertMutatable(this);
+        this.doSetTypeParameters(typeParameters);
+        if (this.getManager().isRecordingEdits())
+            super.recordEdit(new MethodDeclarationNodeSetTypeParametersPropertyEditScriptElementImpl(this.getManager().getCurrentMetaprogramId(), this.getUid(), typeParameters.getNodeValue() == null ? null : typeParameters.getNodeValue().getUid()));
     }
     
-    private void setUnionForTypeParameters(NodeUnion<? extends TypeParameterListNode> typeParameters, boolean checkPermissions)
+    private void doSetTypeParameters(NodeUnion<? extends TypeParameterListNode> typeParameters)
     {
-        if (checkPermissions)
-        {
-            getManager().assertMutatable(this);
-            getAttribute(LocalAttribute.TYPE_PARAMETERS).recordAccess(ReadWriteAttribute.AccessType.WRITE);
-        }
-        
         if (typeParameters == null)
         {
             typeParameters = new NormalNodeUnion<TypeParameterListNode>(null);
@@ -825,7 +921,7 @@ public class MethodDeclarationNodeImpl extends NodeImpl implements MethodDeclara
      */
     public JavadocNode getJavadoc()
     {
-        getAttribute(LocalAttribute.JAVADOC).recordAccess(ReadWriteAttribute.AccessType.READ);
+        checkJavadocWrapped();
         if (this.javadoc == null)
         {
             return null;
@@ -841,7 +937,7 @@ public class MethodDeclarationNodeImpl extends NodeImpl implements MethodDeclara
      */
     public NodeUnion<? extends JavadocNode> getUnionForJavadoc()
     {
-        getAttribute(LocalAttribute.JAVADOC).recordAccess(ReadWriteAttribute.AccessType.READ);
+        checkJavadocWrapped();
         if (this.javadoc == null)
         {
             this.javadoc = new NormalNodeUnion<JavadocNode>(null);
@@ -855,24 +951,8 @@ public class MethodDeclarationNodeImpl extends NodeImpl implements MethodDeclara
      */
     public void setJavadoc(JavadocNode javadoc)
     {
-            setJavadoc(javadoc, true);
-            getManager().notifyChange(this);
-    }
-    
-    private void setJavadoc(JavadocNode javadoc, boolean checkPermissions)
-    {
-        if (checkPermissions)
-        {
-            getManager().assertMutatable(this);
-            getAttribute(LocalAttribute.JAVADOC).recordAccess(ReadWriteAttribute.AccessType.WRITE);
-        }
-        
-        if (this.javadoc != null)
-        {
-            setAsChild(this.javadoc.getNodeValue(), false);
-        }
-        this.javadoc = new NormalNodeUnion<JavadocNode>(javadoc);
-        setAsChild(javadoc, true);
+        checkJavadocWrapped();
+        this.setUnionForJavadoc(new NormalNodeUnion<JavadocNode>(javadoc));
     }
     
     /**
@@ -881,18 +961,15 @@ public class MethodDeclarationNodeImpl extends NodeImpl implements MethodDeclara
      */
     public void setUnionForJavadoc(NodeUnion<? extends JavadocNode> javadoc)
     {
-            setUnionForJavadoc(javadoc, true);
-            getManager().notifyChange(this);
+        checkJavadocWrapped();
+        this.getManager().assertMutatable(this);
+        this.doSetJavadoc(javadoc);
+        if (this.getManager().isRecordingEdits())
+            super.recordEdit(new MethodDeclarationNodeSetJavadocPropertyEditScriptElementImpl(this.getManager().getCurrentMetaprogramId(), this.getUid(), javadoc.getNodeValue() == null ? null : javadoc.getNodeValue().getUid()));
     }
     
-    private void setUnionForJavadoc(NodeUnion<? extends JavadocNode> javadoc, boolean checkPermissions)
+    private void doSetJavadoc(NodeUnion<? extends JavadocNode> javadoc)
     {
-        if (checkPermissions)
-        {
-            getManager().assertMutatable(this);
-            getAttribute(LocalAttribute.JAVADOC).recordAccess(ReadWriteAttribute.AccessType.WRITE);
-        }
-        
         if (javadoc == null)
         {
             javadoc = new NormalNodeUnion<JavadocNode>(null);
@@ -916,41 +993,41 @@ public class MethodDeclarationNodeImpl extends NodeImpl implements MethodDeclara
     protected void receiveToChildren(BsjNodeVisitor visitor)
     {
         super.receiveToChildren(visitor);
-        if (this.body.getNodeValue() != null)
+        if (this.getUnionForBody().getNodeValue() != null)
         {
-            this.body.getNodeValue().receive(visitor);
+            this.getUnionForBody().getNodeValue().receive(visitor);
         }
-        if (this.modifiers.getNodeValue() != null)
+        if (this.getUnionForModifiers().getNodeValue() != null)
         {
-            this.modifiers.getNodeValue().receive(visitor);
+            this.getUnionForModifiers().getNodeValue().receive(visitor);
         }
-        if (this.identifier.getNodeValue() != null)
+        if (this.getUnionForIdentifier().getNodeValue() != null)
         {
-            this.identifier.getNodeValue().receive(visitor);
+            this.getUnionForIdentifier().getNodeValue().receive(visitor);
         }
-        if (this.parameters.getNodeValue() != null)
+        if (this.getUnionForParameters().getNodeValue() != null)
         {
-            this.parameters.getNodeValue().receive(visitor);
+            this.getUnionForParameters().getNodeValue().receive(visitor);
         }
-        if (this.varargParameter.getNodeValue() != null)
+        if (this.getUnionForVarargParameter().getNodeValue() != null)
         {
-            this.varargParameter.getNodeValue().receive(visitor);
+            this.getUnionForVarargParameter().getNodeValue().receive(visitor);
         }
-        if (this.returnType.getNodeValue() != null)
+        if (this.getUnionForReturnType().getNodeValue() != null)
         {
-            this.returnType.getNodeValue().receive(visitor);
+            this.getUnionForReturnType().getNodeValue().receive(visitor);
         }
-        if (this.throwTypes.getNodeValue() != null)
+        if (this.getUnionForThrowTypes().getNodeValue() != null)
         {
-            this.throwTypes.getNodeValue().receive(visitor);
+            this.getUnionForThrowTypes().getNodeValue().receive(visitor);
         }
-        if (this.typeParameters.getNodeValue() != null)
+        if (this.getUnionForTypeParameters().getNodeValue() != null)
         {
-            this.typeParameters.getNodeValue().receive(visitor);
+            this.getUnionForTypeParameters().getNodeValue().receive(visitor);
         }
-        if (this.javadoc.getNodeValue() != null)
+        if (this.getUnionForJavadoc().getNodeValue() != null)
         {
-            this.javadoc.getNodeValue().receive(visitor);
+            this.getUnionForJavadoc().getNodeValue().receive(visitor);
         }
         Iterator<? extends Node> extras = getHiddenVisitorChildren();
         if (extras != null)
@@ -973,41 +1050,41 @@ public class MethodDeclarationNodeImpl extends NodeImpl implements MethodDeclara
     protected void receiveTypedToChildren(BsjTypedNodeVisitor visitor)
     {
         super.receiveTypedToChildren(visitor);
-        if (this.body.getNodeValue() != null)
+        if (this.getUnionForBody().getNodeValue() != null)
         {
-            this.body.getNodeValue().receiveTyped(visitor);
+            this.getUnionForBody().getNodeValue().receiveTyped(visitor);
         }
-        if (this.modifiers.getNodeValue() != null)
+        if (this.getUnionForModifiers().getNodeValue() != null)
         {
-            this.modifiers.getNodeValue().receiveTyped(visitor);
+            this.getUnionForModifiers().getNodeValue().receiveTyped(visitor);
         }
-        if (this.identifier.getNodeValue() != null)
+        if (this.getUnionForIdentifier().getNodeValue() != null)
         {
-            this.identifier.getNodeValue().receiveTyped(visitor);
+            this.getUnionForIdentifier().getNodeValue().receiveTyped(visitor);
         }
-        if (this.parameters.getNodeValue() != null)
+        if (this.getUnionForParameters().getNodeValue() != null)
         {
-            this.parameters.getNodeValue().receiveTyped(visitor);
+            this.getUnionForParameters().getNodeValue().receiveTyped(visitor);
         }
-        if (this.varargParameter.getNodeValue() != null)
+        if (this.getUnionForVarargParameter().getNodeValue() != null)
         {
-            this.varargParameter.getNodeValue().receiveTyped(visitor);
+            this.getUnionForVarargParameter().getNodeValue().receiveTyped(visitor);
         }
-        if (this.returnType.getNodeValue() != null)
+        if (this.getUnionForReturnType().getNodeValue() != null)
         {
-            this.returnType.getNodeValue().receiveTyped(visitor);
+            this.getUnionForReturnType().getNodeValue().receiveTyped(visitor);
         }
-        if (this.throwTypes.getNodeValue() != null)
+        if (this.getUnionForThrowTypes().getNodeValue() != null)
         {
-            this.throwTypes.getNodeValue().receiveTyped(visitor);
+            this.getUnionForThrowTypes().getNodeValue().receiveTyped(visitor);
         }
-        if (this.typeParameters.getNodeValue() != null)
+        if (this.getUnionForTypeParameters().getNodeValue() != null)
         {
-            this.typeParameters.getNodeValue().receiveTyped(visitor);
+            this.getUnionForTypeParameters().getNodeValue().receiveTyped(visitor);
         }
-        if (this.javadoc.getNodeValue() != null)
+        if (this.getUnionForJavadoc().getNodeValue() != null)
         {
-            this.javadoc.getNodeValue().receiveTyped(visitor);
+            this.getUnionForJavadoc().getNodeValue().receiveTyped(visitor);
         }
         Iterator<? extends Node> extras = getHiddenVisitorChildren();
         if (extras != null)
@@ -1080,6 +1157,8 @@ public class MethodDeclarationNodeImpl extends NodeImpl implements MethodDeclara
     {
         StringBuilder sb = new StringBuilder();
         sb.append(this.getClass().getSimpleName());
+        sb.append('#');
+        sb.append(this.getUid());
         sb.append('[');
         sb.append("body=");
         sb.append(this.getUnionForBody().getNodeValue() == null? "null" : this.getUnionForBody().getNodeValue().getClass().getSimpleName());

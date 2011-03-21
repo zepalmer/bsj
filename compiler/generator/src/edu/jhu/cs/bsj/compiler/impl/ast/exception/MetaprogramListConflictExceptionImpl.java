@@ -8,14 +8,12 @@
 
 package edu.jhu.cs.bsj.compiler.impl.ast.exception;
 
-import java.util.Set;
-
 import javax.annotation.Generated;
 
 import edu.jhu.cs.bsj.compiler.ast.BsjSourceLocation;
 import edu.jhu.cs.bsj.compiler.ast.exception.MetaprogramListConflictException;
 import edu.jhu.cs.bsj.compiler.ast.node.Node;
-import edu.jhu.cs.bsj.compiler.ast.node.list.knowledge.ConflictKnowledge;
+import edu.jhu.cs.bsj.compiler.ast.node.list.ListNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramAnchorNode;
 import edu.jhu.cs.bsj.compiler.diagnostic.compiler.MetaprogramListConflictDiagnostic;
 import edu.jhu.cs.bsj.compiler.impl.diagnostic.compiler.MetaprogramListConflictDiagnosticImpl;
@@ -33,14 +31,17 @@ public class MetaprogramListConflictExceptionImpl extends MetaprogramListConflic
             MetaprogramAnchorNode<?> firstAnchor,
             MetaprogramAnchorNode<?> secondAnchor,
             Node conflictNode,
-            Set<? extends ConflictKnowledge<?>> conflicts)
+            ListNode<? extends Node> list,
+            Node reference,
+            boolean after,
+            Node element)
     {
-        super(firstAnchor, secondAnchor, conflictNode, conflicts);
+        super(firstAnchor, secondAnchor, conflictNode, list, reference, after, element);
     }
     @Override
-    public MetaprogramListConflictDiagnostic getDiagnostic(BsjSourceLocation source)
+    public MetaprogramListConflictDiagnostic<?> getDiagnostic(BsjSourceLocation source)
     {
-        return new MetaprogramListConflictDiagnosticImpl(source, this);
+        return new MetaprogramListConflictDiagnosticImpl<Node>(source, this);
     }
     
 }

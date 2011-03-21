@@ -1,10 +1,10 @@
 package edu.jhu.cs.bsj.compiler.impl.ast.node;
 
 import java.util.Arrays;
-import java.util.EnumMap;
+import java.util.EnumSet;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
+import java.util.Set;
 
 import javax.annotation.Generated;
 
@@ -19,9 +19,10 @@ import edu.jhu.cs.bsj.compiler.ast.node.NameNode;
 import edu.jhu.cs.bsj.compiler.ast.node.Node;
 import edu.jhu.cs.bsj.compiler.ast.node.UnparameterizedTypeNode;
 import edu.jhu.cs.bsj.compiler.impl.ast.BsjNodeManager;
+import edu.jhu.cs.bsj.compiler.impl.ast.BsjNodeProxyFactory;
 import edu.jhu.cs.bsj.compiler.impl.ast.NormalNodeUnion;
-import edu.jhu.cs.bsj.compiler.impl.ast.attribute.AttributeName;
-import edu.jhu.cs.bsj.compiler.impl.ast.attribute.ReadWriteAttribute;
+import edu.jhu.cs.bsj.compiler.impl.ast.delta.property.UnparameterizedTypeNodeSetNamePropertyEditScriptElementImpl;
+import edu.jhu.cs.bsj.compiler.impl.ast.properties.UnparameterizedTypeNodeProperties;
 
 @Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
 public class UnparameterizedTypeNodeImpl extends NodeImpl implements UnparameterizedTypeNode
@@ -29,22 +30,11 @@ public class UnparameterizedTypeNodeImpl extends NodeImpl implements Unparameter
     /** The name of the type. */
     private NodeUnion<? extends NameNode> name;
     
-    private Map<LocalAttribute,ReadWriteAttribute> localAttributes = new EnumMap<LocalAttribute,ReadWriteAttribute>(LocalAttribute.class);
-    private ReadWriteAttribute getAttribute(LocalAttribute attributeName)
-    {
-        ReadWriteAttribute attribute = localAttributes.get(attributeName);
-        if (attribute == null)
-        {
-            attribute = new ReadWriteAttribute(UnparameterizedTypeNodeImpl.this, attributeName);
-            localAttributes.put(attributeName, attribute);
-        }
-        return attribute;
-    }
-    private static enum LocalAttribute implements AttributeName
-    {
-        /** Attribute identifier for the name property. */
-        NAME,
-    }
+    /**
+     * A set of those properties which have been populated from the backing node.
+     * This field is <code>null</code> if <tt>backingNode</tt> is <code>null</code>.
+     */
+    private Set<UnparameterizedTypeNodeProperties> populatedProperties;
     
     /** General constructor. */
     public UnparameterizedTypeNodeImpl(
@@ -55,7 +45,49 @@ public class UnparameterizedTypeNodeImpl extends NodeImpl implements Unparameter
             boolean binary)
     {
         super(startLocation, stopLocation, manager, binary);
-        setUnionForName(name, false);
+        this.populatedProperties = null;
+        doSetName(name);
+    }
+    
+    /** Proxy constructor. */
+    public UnparameterizedTypeNodeImpl(BsjNodeManager manager, BsjNodeProxyFactory proxyFactory, UnparameterizedTypeNode backingNode)
+    {
+        super(manager, proxyFactory, backingNode);
+        this.populatedProperties = EnumSet.noneOf(UnparameterizedTypeNodeProperties.class);
+    }
+    
+    /** Retrieves this node's backing node (if one exists). */
+    protected UnparameterizedTypeNode getBackingNode()
+    {
+        return (UnparameterizedTypeNode)super.getBackingNode();
+    }
+    
+    /**
+     * Ensures that the name value has been populated from proxy.
+     * If this node is not backed by a proxy or if the value has already been
+     * populated, this method does nothing.
+     */
+    private void checkNameWrapped()
+    {
+        if (this.populatedProperties == null || this.populatedProperties.contains(
+                UnparameterizedTypeNodeProperties.NAME))
+            return;
+        this.populatedProperties.add(UnparameterizedTypeNodeProperties.NAME);
+        NodeUnion<? extends NameNode> union = this.getBackingNode().getUnionForName();
+        switch (union.getType())
+        {
+            case NORMAL:
+                union = this.getProxyFactory().makeNormalNodeUnion(
+                        this.getProxyFactory().makeNameNode(union.getNormalNode()));
+                break;
+            case SPLICE:
+                union = this.getProxyFactory().makeSpliceNodeUnion(
+                        this.getProxyFactory().makeSpliceNode(union.getSpliceNode()));
+                break;
+            default:
+                throw new IllegalStateException("Unrecognized union type: " + union.getType());
+        }
+        this.name = union;
     }
     
     /**
@@ -65,7 +97,7 @@ public class UnparameterizedTypeNodeImpl extends NodeImpl implements Unparameter
      */
     public NameNode getName()
     {
-        getAttribute(LocalAttribute.NAME).recordAccess(ReadWriteAttribute.AccessType.READ);
+        checkNameWrapped();
         if (this.name == null)
         {
             return null;
@@ -81,7 +113,7 @@ public class UnparameterizedTypeNodeImpl extends NodeImpl implements Unparameter
      */
     public NodeUnion<? extends NameNode> getUnionForName()
     {
-        getAttribute(LocalAttribute.NAME).recordAccess(ReadWriteAttribute.AccessType.READ);
+        checkNameWrapped();
         if (this.name == null)
         {
             this.name = new NormalNodeUnion<NameNode>(null);
@@ -95,24 +127,8 @@ public class UnparameterizedTypeNodeImpl extends NodeImpl implements Unparameter
      */
     public void setName(NameNode name)
     {
-            setName(name, true);
-            getManager().notifyChange(this);
-    }
-    
-    private void setName(NameNode name, boolean checkPermissions)
-    {
-        if (checkPermissions)
-        {
-            getManager().assertMutatable(this);
-            getAttribute(LocalAttribute.NAME).recordAccess(ReadWriteAttribute.AccessType.WRITE);
-        }
-        
-        if (this.name != null)
-        {
-            setAsChild(this.name.getNodeValue(), false);
-        }
-        this.name = new NormalNodeUnion<NameNode>(name);
-        setAsChild(name, true);
+        checkNameWrapped();
+        this.setUnionForName(new NormalNodeUnion<NameNode>(name));
     }
     
     /**
@@ -121,18 +137,15 @@ public class UnparameterizedTypeNodeImpl extends NodeImpl implements Unparameter
      */
     public void setUnionForName(NodeUnion<? extends NameNode> name)
     {
-            setUnionForName(name, true);
-            getManager().notifyChange(this);
+        checkNameWrapped();
+        this.getManager().assertMutatable(this);
+        this.doSetName(name);
+        if (this.getManager().isRecordingEdits())
+            super.recordEdit(new UnparameterizedTypeNodeSetNamePropertyEditScriptElementImpl(this.getManager().getCurrentMetaprogramId(), this.getUid(), name.getNodeValue() == null ? null : name.getNodeValue().getUid()));
     }
     
-    private void setUnionForName(NodeUnion<? extends NameNode> name, boolean checkPermissions)
+    private void doSetName(NodeUnion<? extends NameNode> name)
     {
-        if (checkPermissions)
-        {
-            getManager().assertMutatable(this);
-            getAttribute(LocalAttribute.NAME).recordAccess(ReadWriteAttribute.AccessType.WRITE);
-        }
-        
         if (name == null)
         {
             name = new NormalNodeUnion<NameNode>(null);
@@ -156,9 +169,9 @@ public class UnparameterizedTypeNodeImpl extends NodeImpl implements Unparameter
     protected void receiveToChildren(BsjNodeVisitor visitor)
     {
         super.receiveToChildren(visitor);
-        if (this.name.getNodeValue() != null)
+        if (this.getUnionForName().getNodeValue() != null)
         {
-            this.name.getNodeValue().receive(visitor);
+            this.getUnionForName().getNodeValue().receive(visitor);
         }
         Iterator<? extends Node> extras = getHiddenVisitorChildren();
         if (extras != null)
@@ -181,9 +194,9 @@ public class UnparameterizedTypeNodeImpl extends NodeImpl implements Unparameter
     protected void receiveTypedToChildren(BsjTypedNodeVisitor visitor)
     {
         super.receiveTypedToChildren(visitor);
-        if (this.name.getNodeValue() != null)
+        if (this.getUnionForName().getNodeValue() != null)
         {
-            this.name.getNodeValue().receiveTyped(visitor);
+            this.getUnionForName().getNodeValue().receiveTyped(visitor);
         }
         Iterator<? extends Node> extras = getHiddenVisitorChildren();
         if (extras != null)
@@ -244,6 +257,8 @@ public class UnparameterizedTypeNodeImpl extends NodeImpl implements Unparameter
     {
         StringBuilder sb = new StringBuilder();
         sb.append(this.getClass().getSimpleName());
+        sb.append('#');
+        sb.append(this.getUid());
         sb.append('[');
         sb.append("name=");
         sb.append(this.getUnionForName().getNodeValue() == null? "null" : this.getUnionForName().getNodeValue().getClass().getSimpleName());

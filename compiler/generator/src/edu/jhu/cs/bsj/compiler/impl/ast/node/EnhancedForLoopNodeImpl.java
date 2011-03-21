@@ -1,10 +1,10 @@
 package edu.jhu.cs.bsj.compiler.impl.ast.node;
 
 import java.util.Arrays;
-import java.util.EnumMap;
+import java.util.EnumSet;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
+import java.util.Set;
 
 import javax.annotation.Generated;
 
@@ -22,9 +22,13 @@ import edu.jhu.cs.bsj.compiler.ast.node.StatementNode;
 import edu.jhu.cs.bsj.compiler.ast.node.VariableNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaAnnotationListNode;
 import edu.jhu.cs.bsj.compiler.impl.ast.BsjNodeManager;
+import edu.jhu.cs.bsj.compiler.impl.ast.BsjNodeProxyFactory;
 import edu.jhu.cs.bsj.compiler.impl.ast.NormalNodeUnion;
-import edu.jhu.cs.bsj.compiler.impl.ast.attribute.AttributeName;
-import edu.jhu.cs.bsj.compiler.impl.ast.attribute.ReadWriteAttribute;
+import edu.jhu.cs.bsj.compiler.impl.ast.delta.property.EnhancedForLoopNodeSetExpressionPropertyEditScriptElementImpl;
+import edu.jhu.cs.bsj.compiler.impl.ast.delta.property.EnhancedForLoopNodeSetMetaAnnotationsPropertyEditScriptElementImpl;
+import edu.jhu.cs.bsj.compiler.impl.ast.delta.property.EnhancedForLoopNodeSetStatementPropertyEditScriptElementImpl;
+import edu.jhu.cs.bsj.compiler.impl.ast.delta.property.EnhancedForLoopNodeSetVariablePropertyEditScriptElementImpl;
+import edu.jhu.cs.bsj.compiler.impl.ast.properties.EnhancedForLoopNodeProperties;
 
 @Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
 public class EnhancedForLoopNodeImpl extends NodeImpl implements EnhancedForLoopNode
@@ -41,28 +45,11 @@ public class EnhancedForLoopNodeImpl extends NodeImpl implements EnhancedForLoop
     /** The meta-annotations associated with this node. */
     private NodeUnion<? extends MetaAnnotationListNode> metaAnnotations;
     
-    private Map<LocalAttribute,ReadWriteAttribute> localAttributes = new EnumMap<LocalAttribute,ReadWriteAttribute>(LocalAttribute.class);
-    private ReadWriteAttribute getAttribute(LocalAttribute attributeName)
-    {
-        ReadWriteAttribute attribute = localAttributes.get(attributeName);
-        if (attribute == null)
-        {
-            attribute = new ReadWriteAttribute(EnhancedForLoopNodeImpl.this, attributeName);
-            localAttributes.put(attributeName, attribute);
-        }
-        return attribute;
-    }
-    private static enum LocalAttribute implements AttributeName
-    {
-        /** Attribute identifier for the variable property. */
-        VARIABLE,
-        /** Attribute identifier for the expression property. */
-        EXPRESSION,
-        /** Attribute identifier for the statement property. */
-        STATEMENT,
-        /** Attribute identifier for the metaAnnotations property. */
-        META_ANNOTATIONS,
-    }
+    /**
+     * A set of those properties which have been populated from the backing node.
+     * This field is <code>null</code> if <tt>backingNode</tt> is <code>null</code>.
+     */
+    private Set<EnhancedForLoopNodeProperties> populatedProperties;
     
     /** General constructor. */
     public EnhancedForLoopNodeImpl(
@@ -76,10 +63,136 @@ public class EnhancedForLoopNodeImpl extends NodeImpl implements EnhancedForLoop
             boolean binary)
     {
         super(startLocation, stopLocation, manager, binary);
-        setUnionForVariable(variable, false);
-        setUnionForExpression(expression, false);
-        setUnionForStatement(statement, false);
-        setUnionForMetaAnnotations(metaAnnotations, false);
+        this.populatedProperties = null;
+        doSetVariable(variable);
+        doSetExpression(expression);
+        doSetStatement(statement);
+        doSetMetaAnnotations(metaAnnotations);
+    }
+    
+    /** Proxy constructor. */
+    public EnhancedForLoopNodeImpl(BsjNodeManager manager, BsjNodeProxyFactory proxyFactory, EnhancedForLoopNode backingNode)
+    {
+        super(manager, proxyFactory, backingNode);
+        this.populatedProperties = EnumSet.noneOf(EnhancedForLoopNodeProperties.class);
+    }
+    
+    /** Retrieves this node's backing node (if one exists). */
+    protected EnhancedForLoopNode getBackingNode()
+    {
+        return (EnhancedForLoopNode)super.getBackingNode();
+    }
+    
+    /**
+     * Ensures that the variable value has been populated from proxy.
+     * If this node is not backed by a proxy or if the value has already been
+     * populated, this method does nothing.
+     */
+    private void checkVariableWrapped()
+    {
+        if (this.populatedProperties == null || this.populatedProperties.contains(
+                EnhancedForLoopNodeProperties.VARIABLE))
+            return;
+        this.populatedProperties.add(EnhancedForLoopNodeProperties.VARIABLE);
+        NodeUnion<? extends VariableNode> union = this.getBackingNode().getUnionForVariable();
+        switch (union.getType())
+        {
+            case NORMAL:
+                union = this.getProxyFactory().makeNormalNodeUnion(
+                        this.getProxyFactory().makeVariableNode(union.getNormalNode()));
+                break;
+            case SPLICE:
+                union = this.getProxyFactory().makeSpliceNodeUnion(
+                        this.getProxyFactory().makeSpliceNode(union.getSpliceNode()));
+                break;
+            default:
+                throw new IllegalStateException("Unrecognized union type: " + union.getType());
+        }
+        this.variable = union;
+    }
+    
+    /**
+     * Ensures that the expression value has been populated from proxy.
+     * If this node is not backed by a proxy or if the value has already been
+     * populated, this method does nothing.
+     */
+    private void checkExpressionWrapped()
+    {
+        if (this.populatedProperties == null || this.populatedProperties.contains(
+                EnhancedForLoopNodeProperties.EXPRESSION))
+            return;
+        this.populatedProperties.add(EnhancedForLoopNodeProperties.EXPRESSION);
+        NodeUnion<? extends ExpressionNode> union = this.getBackingNode().getUnionForExpression();
+        switch (union.getType())
+        {
+            case NORMAL:
+                union = this.getProxyFactory().makeNormalNodeUnion(
+                        this.getProxyFactory().makeExpressionNode(union.getNormalNode()));
+                break;
+            case SPLICE:
+                union = this.getProxyFactory().makeSpliceNodeUnion(
+                        this.getProxyFactory().makeSpliceNode(union.getSpliceNode()));
+                break;
+            default:
+                throw new IllegalStateException("Unrecognized union type: " + union.getType());
+        }
+        this.expression = union;
+    }
+    
+    /**
+     * Ensures that the statement value has been populated from proxy.
+     * If this node is not backed by a proxy or if the value has already been
+     * populated, this method does nothing.
+     */
+    private void checkStatementWrapped()
+    {
+        if (this.populatedProperties == null || this.populatedProperties.contains(
+                EnhancedForLoopNodeProperties.STATEMENT))
+            return;
+        this.populatedProperties.add(EnhancedForLoopNodeProperties.STATEMENT);
+        NodeUnion<? extends StatementNode> union = this.getBackingNode().getUnionForStatement();
+        switch (union.getType())
+        {
+            case NORMAL:
+                union = this.getProxyFactory().makeNormalNodeUnion(
+                        this.getProxyFactory().makeStatementNode(union.getNormalNode()));
+                break;
+            case SPLICE:
+                union = this.getProxyFactory().makeSpliceNodeUnion(
+                        this.getProxyFactory().makeSpliceNode(union.getSpliceNode()));
+                break;
+            default:
+                throw new IllegalStateException("Unrecognized union type: " + union.getType());
+        }
+        this.statement = union;
+    }
+    
+    /**
+     * Ensures that the metaAnnotations value has been populated from proxy.
+     * If this node is not backed by a proxy or if the value has already been
+     * populated, this method does nothing.
+     */
+    private void checkMetaAnnotationsWrapped()
+    {
+        if (this.populatedProperties == null || this.populatedProperties.contains(
+                EnhancedForLoopNodeProperties.META_ANNOTATIONS))
+            return;
+        this.populatedProperties.add(EnhancedForLoopNodeProperties.META_ANNOTATIONS);
+        NodeUnion<? extends MetaAnnotationListNode> union = this.getBackingNode().getUnionForMetaAnnotations();
+        switch (union.getType())
+        {
+            case NORMAL:
+                union = this.getProxyFactory().makeNormalNodeUnion(
+                        this.getProxyFactory().makeMetaAnnotationListNode(union.getNormalNode()));
+                break;
+            case SPLICE:
+                union = this.getProxyFactory().makeSpliceNodeUnion(
+                        this.getProxyFactory().makeSpliceNode(union.getSpliceNode()));
+                break;
+            default:
+                throw new IllegalStateException("Unrecognized union type: " + union.getType());
+        }
+        this.metaAnnotations = union;
     }
     
     /**
@@ -89,7 +202,7 @@ public class EnhancedForLoopNodeImpl extends NodeImpl implements EnhancedForLoop
      */
     public VariableNode getVariable()
     {
-        getAttribute(LocalAttribute.VARIABLE).recordAccess(ReadWriteAttribute.AccessType.READ);
+        checkVariableWrapped();
         if (this.variable == null)
         {
             return null;
@@ -105,7 +218,7 @@ public class EnhancedForLoopNodeImpl extends NodeImpl implements EnhancedForLoop
      */
     public NodeUnion<? extends VariableNode> getUnionForVariable()
     {
-        getAttribute(LocalAttribute.VARIABLE).recordAccess(ReadWriteAttribute.AccessType.READ);
+        checkVariableWrapped();
         if (this.variable == null)
         {
             this.variable = new NormalNodeUnion<VariableNode>(null);
@@ -119,24 +232,8 @@ public class EnhancedForLoopNodeImpl extends NodeImpl implements EnhancedForLoop
      */
     public void setVariable(VariableNode variable)
     {
-            setVariable(variable, true);
-            getManager().notifyChange(this);
-    }
-    
-    private void setVariable(VariableNode variable, boolean checkPermissions)
-    {
-        if (checkPermissions)
-        {
-            getManager().assertMutatable(this);
-            getAttribute(LocalAttribute.VARIABLE).recordAccess(ReadWriteAttribute.AccessType.WRITE);
-        }
-        
-        if (this.variable != null)
-        {
-            setAsChild(this.variable.getNodeValue(), false);
-        }
-        this.variable = new NormalNodeUnion<VariableNode>(variable);
-        setAsChild(variable, true);
+        checkVariableWrapped();
+        this.setUnionForVariable(new NormalNodeUnion<VariableNode>(variable));
     }
     
     /**
@@ -145,18 +242,15 @@ public class EnhancedForLoopNodeImpl extends NodeImpl implements EnhancedForLoop
      */
     public void setUnionForVariable(NodeUnion<? extends VariableNode> variable)
     {
-            setUnionForVariable(variable, true);
-            getManager().notifyChange(this);
+        checkVariableWrapped();
+        this.getManager().assertMutatable(this);
+        this.doSetVariable(variable);
+        if (this.getManager().isRecordingEdits())
+            super.recordEdit(new EnhancedForLoopNodeSetVariablePropertyEditScriptElementImpl(this.getManager().getCurrentMetaprogramId(), this.getUid(), variable.getNodeValue() == null ? null : variable.getNodeValue().getUid()));
     }
     
-    private void setUnionForVariable(NodeUnion<? extends VariableNode> variable, boolean checkPermissions)
+    private void doSetVariable(NodeUnion<? extends VariableNode> variable)
     {
-        if (checkPermissions)
-        {
-            getManager().assertMutatable(this);
-            getAttribute(LocalAttribute.VARIABLE).recordAccess(ReadWriteAttribute.AccessType.WRITE);
-        }
-        
         if (variable == null)
         {
             variable = new NormalNodeUnion<VariableNode>(null);
@@ -176,7 +270,7 @@ public class EnhancedForLoopNodeImpl extends NodeImpl implements EnhancedForLoop
      */
     public ExpressionNode getExpression()
     {
-        getAttribute(LocalAttribute.EXPRESSION).recordAccess(ReadWriteAttribute.AccessType.READ);
+        checkExpressionWrapped();
         if (this.expression == null)
         {
             return null;
@@ -192,7 +286,7 @@ public class EnhancedForLoopNodeImpl extends NodeImpl implements EnhancedForLoop
      */
     public NodeUnion<? extends ExpressionNode> getUnionForExpression()
     {
-        getAttribute(LocalAttribute.EXPRESSION).recordAccess(ReadWriteAttribute.AccessType.READ);
+        checkExpressionWrapped();
         if (this.expression == null)
         {
             this.expression = new NormalNodeUnion<ExpressionNode>(null);
@@ -206,24 +300,8 @@ public class EnhancedForLoopNodeImpl extends NodeImpl implements EnhancedForLoop
      */
     public void setExpression(ExpressionNode expression)
     {
-            setExpression(expression, true);
-            getManager().notifyChange(this);
-    }
-    
-    private void setExpression(ExpressionNode expression, boolean checkPermissions)
-    {
-        if (checkPermissions)
-        {
-            getManager().assertMutatable(this);
-            getAttribute(LocalAttribute.EXPRESSION).recordAccess(ReadWriteAttribute.AccessType.WRITE);
-        }
-        
-        if (this.expression != null)
-        {
-            setAsChild(this.expression.getNodeValue(), false);
-        }
-        this.expression = new NormalNodeUnion<ExpressionNode>(expression);
-        setAsChild(expression, true);
+        checkExpressionWrapped();
+        this.setUnionForExpression(new NormalNodeUnion<ExpressionNode>(expression));
     }
     
     /**
@@ -232,18 +310,15 @@ public class EnhancedForLoopNodeImpl extends NodeImpl implements EnhancedForLoop
      */
     public void setUnionForExpression(NodeUnion<? extends ExpressionNode> expression)
     {
-            setUnionForExpression(expression, true);
-            getManager().notifyChange(this);
+        checkExpressionWrapped();
+        this.getManager().assertMutatable(this);
+        this.doSetExpression(expression);
+        if (this.getManager().isRecordingEdits())
+            super.recordEdit(new EnhancedForLoopNodeSetExpressionPropertyEditScriptElementImpl(this.getManager().getCurrentMetaprogramId(), this.getUid(), expression.getNodeValue() == null ? null : expression.getNodeValue().getUid()));
     }
     
-    private void setUnionForExpression(NodeUnion<? extends ExpressionNode> expression, boolean checkPermissions)
+    private void doSetExpression(NodeUnion<? extends ExpressionNode> expression)
     {
-        if (checkPermissions)
-        {
-            getManager().assertMutatable(this);
-            getAttribute(LocalAttribute.EXPRESSION).recordAccess(ReadWriteAttribute.AccessType.WRITE);
-        }
-        
         if (expression == null)
         {
             expression = new NormalNodeUnion<ExpressionNode>(null);
@@ -263,7 +338,7 @@ public class EnhancedForLoopNodeImpl extends NodeImpl implements EnhancedForLoop
      */
     public StatementNode getStatement()
     {
-        getAttribute(LocalAttribute.STATEMENT).recordAccess(ReadWriteAttribute.AccessType.READ);
+        checkStatementWrapped();
         if (this.statement == null)
         {
             return null;
@@ -279,7 +354,7 @@ public class EnhancedForLoopNodeImpl extends NodeImpl implements EnhancedForLoop
      */
     public NodeUnion<? extends StatementNode> getUnionForStatement()
     {
-        getAttribute(LocalAttribute.STATEMENT).recordAccess(ReadWriteAttribute.AccessType.READ);
+        checkStatementWrapped();
         if (this.statement == null)
         {
             this.statement = new NormalNodeUnion<StatementNode>(null);
@@ -293,24 +368,8 @@ public class EnhancedForLoopNodeImpl extends NodeImpl implements EnhancedForLoop
      */
     public void setStatement(StatementNode statement)
     {
-            setStatement(statement, true);
-            getManager().notifyChange(this);
-    }
-    
-    private void setStatement(StatementNode statement, boolean checkPermissions)
-    {
-        if (checkPermissions)
-        {
-            getManager().assertMutatable(this);
-            getAttribute(LocalAttribute.STATEMENT).recordAccess(ReadWriteAttribute.AccessType.WRITE);
-        }
-        
-        if (this.statement != null)
-        {
-            setAsChild(this.statement.getNodeValue(), false);
-        }
-        this.statement = new NormalNodeUnion<StatementNode>(statement);
-        setAsChild(statement, true);
+        checkStatementWrapped();
+        this.setUnionForStatement(new NormalNodeUnion<StatementNode>(statement));
     }
     
     /**
@@ -319,18 +378,15 @@ public class EnhancedForLoopNodeImpl extends NodeImpl implements EnhancedForLoop
      */
     public void setUnionForStatement(NodeUnion<? extends StatementNode> statement)
     {
-            setUnionForStatement(statement, true);
-            getManager().notifyChange(this);
+        checkStatementWrapped();
+        this.getManager().assertMutatable(this);
+        this.doSetStatement(statement);
+        if (this.getManager().isRecordingEdits())
+            super.recordEdit(new EnhancedForLoopNodeSetStatementPropertyEditScriptElementImpl(this.getManager().getCurrentMetaprogramId(), this.getUid(), statement.getNodeValue() == null ? null : statement.getNodeValue().getUid()));
     }
     
-    private void setUnionForStatement(NodeUnion<? extends StatementNode> statement, boolean checkPermissions)
+    private void doSetStatement(NodeUnion<? extends StatementNode> statement)
     {
-        if (checkPermissions)
-        {
-            getManager().assertMutatable(this);
-            getAttribute(LocalAttribute.STATEMENT).recordAccess(ReadWriteAttribute.AccessType.WRITE);
-        }
-        
         if (statement == null)
         {
             statement = new NormalNodeUnion<StatementNode>(null);
@@ -350,7 +406,7 @@ public class EnhancedForLoopNodeImpl extends NodeImpl implements EnhancedForLoop
      */
     public MetaAnnotationListNode getMetaAnnotations()
     {
-        getAttribute(LocalAttribute.META_ANNOTATIONS).recordAccess(ReadWriteAttribute.AccessType.READ);
+        checkMetaAnnotationsWrapped();
         if (this.metaAnnotations == null)
         {
             return null;
@@ -366,7 +422,7 @@ public class EnhancedForLoopNodeImpl extends NodeImpl implements EnhancedForLoop
      */
     public NodeUnion<? extends MetaAnnotationListNode> getUnionForMetaAnnotations()
     {
-        getAttribute(LocalAttribute.META_ANNOTATIONS).recordAccess(ReadWriteAttribute.AccessType.READ);
+        checkMetaAnnotationsWrapped();
         if (this.metaAnnotations == null)
         {
             this.metaAnnotations = new NormalNodeUnion<MetaAnnotationListNode>(null);
@@ -380,24 +436,8 @@ public class EnhancedForLoopNodeImpl extends NodeImpl implements EnhancedForLoop
      */
     public void setMetaAnnotations(MetaAnnotationListNode metaAnnotations)
     {
-            setMetaAnnotations(metaAnnotations, true);
-            getManager().notifyChange(this);
-    }
-    
-    private void setMetaAnnotations(MetaAnnotationListNode metaAnnotations, boolean checkPermissions)
-    {
-        if (checkPermissions)
-        {
-            getManager().assertMutatable(this);
-            getAttribute(LocalAttribute.META_ANNOTATIONS).recordAccess(ReadWriteAttribute.AccessType.WRITE);
-        }
-        
-        if (this.metaAnnotations != null)
-        {
-            setAsChild(this.metaAnnotations.getNodeValue(), false);
-        }
-        this.metaAnnotations = new NormalNodeUnion<MetaAnnotationListNode>(metaAnnotations);
-        setAsChild(metaAnnotations, true);
+        checkMetaAnnotationsWrapped();
+        this.setUnionForMetaAnnotations(new NormalNodeUnion<MetaAnnotationListNode>(metaAnnotations));
     }
     
     /**
@@ -406,18 +446,15 @@ public class EnhancedForLoopNodeImpl extends NodeImpl implements EnhancedForLoop
      */
     public void setUnionForMetaAnnotations(NodeUnion<? extends MetaAnnotationListNode> metaAnnotations)
     {
-            setUnionForMetaAnnotations(metaAnnotations, true);
-            getManager().notifyChange(this);
+        checkMetaAnnotationsWrapped();
+        this.getManager().assertMutatable(this);
+        this.doSetMetaAnnotations(metaAnnotations);
+        if (this.getManager().isRecordingEdits())
+            super.recordEdit(new EnhancedForLoopNodeSetMetaAnnotationsPropertyEditScriptElementImpl(this.getManager().getCurrentMetaprogramId(), this.getUid(), metaAnnotations.getNodeValue() == null ? null : metaAnnotations.getNodeValue().getUid()));
     }
     
-    private void setUnionForMetaAnnotations(NodeUnion<? extends MetaAnnotationListNode> metaAnnotations, boolean checkPermissions)
+    private void doSetMetaAnnotations(NodeUnion<? extends MetaAnnotationListNode> metaAnnotations)
     {
-        if (checkPermissions)
-        {
-            getManager().assertMutatable(this);
-            getAttribute(LocalAttribute.META_ANNOTATIONS).recordAccess(ReadWriteAttribute.AccessType.WRITE);
-        }
-        
         if (metaAnnotations == null)
         {
             metaAnnotations = new NormalNodeUnion<MetaAnnotationListNode>(null);
@@ -441,21 +478,21 @@ public class EnhancedForLoopNodeImpl extends NodeImpl implements EnhancedForLoop
     protected void receiveToChildren(BsjNodeVisitor visitor)
     {
         super.receiveToChildren(visitor);
-        if (this.variable.getNodeValue() != null)
+        if (this.getUnionForVariable().getNodeValue() != null)
         {
-            this.variable.getNodeValue().receive(visitor);
+            this.getUnionForVariable().getNodeValue().receive(visitor);
         }
-        if (this.expression.getNodeValue() != null)
+        if (this.getUnionForExpression().getNodeValue() != null)
         {
-            this.expression.getNodeValue().receive(visitor);
+            this.getUnionForExpression().getNodeValue().receive(visitor);
         }
-        if (this.statement.getNodeValue() != null)
+        if (this.getUnionForStatement().getNodeValue() != null)
         {
-            this.statement.getNodeValue().receive(visitor);
+            this.getUnionForStatement().getNodeValue().receive(visitor);
         }
-        if (this.metaAnnotations.getNodeValue() != null)
+        if (this.getUnionForMetaAnnotations().getNodeValue() != null)
         {
-            this.metaAnnotations.getNodeValue().receive(visitor);
+            this.getUnionForMetaAnnotations().getNodeValue().receive(visitor);
         }
         Iterator<? extends Node> extras = getHiddenVisitorChildren();
         if (extras != null)
@@ -478,21 +515,21 @@ public class EnhancedForLoopNodeImpl extends NodeImpl implements EnhancedForLoop
     protected void receiveTypedToChildren(BsjTypedNodeVisitor visitor)
     {
         super.receiveTypedToChildren(visitor);
-        if (this.variable.getNodeValue() != null)
+        if (this.getUnionForVariable().getNodeValue() != null)
         {
-            this.variable.getNodeValue().receiveTyped(visitor);
+            this.getUnionForVariable().getNodeValue().receiveTyped(visitor);
         }
-        if (this.expression.getNodeValue() != null)
+        if (this.getUnionForExpression().getNodeValue() != null)
         {
-            this.expression.getNodeValue().receiveTyped(visitor);
+            this.getUnionForExpression().getNodeValue().receiveTyped(visitor);
         }
-        if (this.statement.getNodeValue() != null)
+        if (this.getUnionForStatement().getNodeValue() != null)
         {
-            this.statement.getNodeValue().receiveTyped(visitor);
+            this.getUnionForStatement().getNodeValue().receiveTyped(visitor);
         }
-        if (this.metaAnnotations.getNodeValue() != null)
+        if (this.getUnionForMetaAnnotations().getNodeValue() != null)
         {
-            this.metaAnnotations.getNodeValue().receiveTyped(visitor);
+            this.getUnionForMetaAnnotations().getNodeValue().receiveTyped(visitor);
         }
         Iterator<? extends Node> extras = getHiddenVisitorChildren();
         if (extras != null)
@@ -554,6 +591,8 @@ public class EnhancedForLoopNodeImpl extends NodeImpl implements EnhancedForLoop
     {
         StringBuilder sb = new StringBuilder();
         sb.append(this.getClass().getSimpleName());
+        sb.append('#');
+        sb.append(this.getUid());
         sb.append('[');
         sb.append("variable=");
         sb.append(this.getUnionForVariable().getNodeValue() == null? "null" : this.getUnionForVariable().getNodeValue().getClass().getSimpleName());

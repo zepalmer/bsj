@@ -1,10 +1,10 @@
 package edu.jhu.cs.bsj.compiler.impl.ast.node;
 
 import java.util.Arrays;
-import java.util.EnumMap;
+import java.util.EnumSet;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
+import java.util.Set;
 
 import javax.annotation.Generated;
 
@@ -17,8 +17,9 @@ import edu.jhu.cs.bsj.compiler.ast.BsjTypedNodeVisitor;
 import edu.jhu.cs.bsj.compiler.ast.node.JavadocNode;
 import edu.jhu.cs.bsj.compiler.ast.node.Node;
 import edu.jhu.cs.bsj.compiler.impl.ast.BsjNodeManager;
-import edu.jhu.cs.bsj.compiler.impl.ast.attribute.AttributeName;
-import edu.jhu.cs.bsj.compiler.impl.ast.attribute.ReadWriteAttribute;
+import edu.jhu.cs.bsj.compiler.impl.ast.BsjNodeProxyFactory;
+import edu.jhu.cs.bsj.compiler.impl.ast.delta.property.JavadocNodeSetTextPropertyEditScriptElementImpl;
+import edu.jhu.cs.bsj.compiler.impl.ast.properties.JavadocNodeProperties;
 
 @Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
 public class JavadocNodeImpl extends NodeImpl implements JavadocNode
@@ -26,22 +27,11 @@ public class JavadocNodeImpl extends NodeImpl implements JavadocNode
     /** The parsed text of this Javadoc comment. */
     private String text;
     
-    private Map<LocalAttribute,ReadWriteAttribute> localAttributes = new EnumMap<LocalAttribute,ReadWriteAttribute>(LocalAttribute.class);
-    private ReadWriteAttribute getAttribute(LocalAttribute attributeName)
-    {
-        ReadWriteAttribute attribute = localAttributes.get(attributeName);
-        if (attribute == null)
-        {
-            attribute = new ReadWriteAttribute(JavadocNodeImpl.this, attributeName);
-            localAttributes.put(attributeName, attribute);
-        }
-        return attribute;
-    }
-    private static enum LocalAttribute implements AttributeName
-    {
-        /** Attribute identifier for the text property. */
-        TEXT,
-    }
+    /**
+     * A set of those properties which have been populated from the backing node.
+     * This field is <code>null</code> if <tt>backingNode</tt> is <code>null</code>.
+     */
+    private Set<JavadocNodeProperties> populatedProperties;
     
     /** General constructor. */
     public JavadocNodeImpl(
@@ -52,7 +42,35 @@ public class JavadocNodeImpl extends NodeImpl implements JavadocNode
             boolean binary)
     {
         super(startLocation, stopLocation, manager, binary);
-        this.text = text;
+        this.populatedProperties = null;
+        doSetText(text);
+    }
+    
+    /** Proxy constructor. */
+    public JavadocNodeImpl(BsjNodeManager manager, BsjNodeProxyFactory proxyFactory, JavadocNode backingNode)
+    {
+        super(manager, proxyFactory, backingNode);
+        this.populatedProperties = EnumSet.noneOf(JavadocNodeProperties.class);
+    }
+    
+    /** Retrieves this node's backing node (if one exists). */
+    protected JavadocNode getBackingNode()
+    {
+        return (JavadocNode)super.getBackingNode();
+    }
+    
+    /**
+     * Ensures that the text value has been populated from proxy.
+     * If this node is not backed by a proxy or if the value has already been
+     * populated, this method does nothing.
+     */
+    private void checkTextWrapped()
+    {
+        if (this.populatedProperties == null || this.populatedProperties.contains(
+                JavadocNodeProperties.TEXT))
+            return;
+        this.populatedProperties.add(JavadocNodeProperties.TEXT);
+        this.text = this.getBackingNode().getText();
     }
     
     /**
@@ -61,7 +79,7 @@ public class JavadocNodeImpl extends NodeImpl implements JavadocNode
      */
     public String getText()
     {
-        getAttribute(LocalAttribute.TEXT).recordAccess(ReadWriteAttribute.AccessType.READ);
+        checkTextWrapped();
         return this.text;
     }
     
@@ -71,18 +89,15 @@ public class JavadocNodeImpl extends NodeImpl implements JavadocNode
      */
     public void setText(String text)
     {
-            setText(text, true);
-            getManager().notifyChange(this);
+        checkTextWrapped();
+        this.getManager().assertMutatable(this);
+        this.doSetText(text);
+        if (this.getManager().isRecordingEdits())
+            super.recordEdit(new JavadocNodeSetTextPropertyEditScriptElementImpl(this.getManager().getCurrentMetaprogramId(), this.getUid(), text));
     }
     
-    private void setText(String text, boolean checkPermissions)
+    private void doSetText(String text)
     {
-        if (checkPermissions)
-        {
-            getManager().assertMutatable(this);
-            getAttribute(LocalAttribute.TEXT).recordAccess(ReadWriteAttribute.AccessType.WRITE);
-        }
-        
         this.text = text;
     }
     
@@ -173,6 +188,8 @@ public class JavadocNodeImpl extends NodeImpl implements JavadocNode
     {
         StringBuilder sb = new StringBuilder();
         sb.append(this.getClass().getSimpleName());
+        sb.append('#');
+        sb.append(this.getUid());
         sb.append('[');
         sb.append("text=");
         sb.append(String.valueOf(this.getText()) + ":" + (this.getText() != null ? this.getText().getClass().getSimpleName() : "null"));
