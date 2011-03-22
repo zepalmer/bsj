@@ -1,6 +1,7 @@
 package edu.jhu.cs.bsj.compiler.impl.ast.node;
 
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.EnumSet;
 import java.util.Iterator;
 import java.util.List;
@@ -19,12 +20,14 @@ import edu.jhu.cs.bsj.compiler.ast.node.DeclaredTypeNode;
 import edu.jhu.cs.bsj.compiler.ast.node.Node;
 import edu.jhu.cs.bsj.compiler.ast.node.ParameterizedTypeNode;
 import edu.jhu.cs.bsj.compiler.ast.node.ParameterizedTypeSelectNode;
+import edu.jhu.cs.bsj.compiler.ast.node.TypeNameBindingNode;
 import edu.jhu.cs.bsj.compiler.impl.ast.BsjNodeManager;
 import edu.jhu.cs.bsj.compiler.impl.ast.BsjNodeProxyFactory;
 import edu.jhu.cs.bsj.compiler.impl.ast.NormalNodeUnion;
 import edu.jhu.cs.bsj.compiler.impl.ast.delta.property.ParameterizedTypeSelectNodeSetBasePropertyEditScriptElementImpl;
 import edu.jhu.cs.bsj.compiler.impl.ast.delta.property.ParameterizedTypeSelectNodeSetSelectPropertyEditScriptElementImpl;
 import edu.jhu.cs.bsj.compiler.impl.ast.properties.ParameterizedTypeSelectNodeProperties;
+import edu.jhu.cs.bsj.compiler.impl.utils.NotImplementedYetException;
 
 @Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
 public class ParameterizedTypeSelectNodeImpl extends NodeImpl implements ParameterizedTypeSelectNode
@@ -497,4 +500,9 @@ public class ParameterizedTypeSelectNodeImpl extends NodeImpl implements Paramet
         return false;
     }
     
+    @Override
+    public Collection<? extends TypeNameBindingNode> getDeclarations()
+    {
+        throw new NotImplementedYetException();
+    }
 }

@@ -1,6 +1,7 @@
 package edu.jhu.cs.bsj.compiler.impl.ast.node;
 
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.EnumSet;
 import java.util.Iterator;
 import java.util.List;
@@ -17,6 +18,7 @@ import edu.jhu.cs.bsj.compiler.ast.BsjTypedNodeVisitor;
 import edu.jhu.cs.bsj.compiler.ast.NodeUnion;
 import edu.jhu.cs.bsj.compiler.ast.node.Node;
 import edu.jhu.cs.bsj.compiler.ast.node.ParameterizedTypeNode;
+import edu.jhu.cs.bsj.compiler.ast.node.TypeNameBindingNode;
 import edu.jhu.cs.bsj.compiler.ast.node.UnparameterizedTypeNode;
 import edu.jhu.cs.bsj.compiler.ast.node.list.TypeArgumentListNode;
 import edu.jhu.cs.bsj.compiler.impl.ast.BsjNodeManager;
@@ -497,4 +499,9 @@ public class ParameterizedTypeNodeImpl extends NodeImpl implements Parameterized
         return false;
     }
     
+    @Override
+    public Collection<? extends TypeNameBindingNode> getDeclarations()
+    {
+        return getBaseType().getDeclarations();
+    }
 }

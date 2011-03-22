@@ -2,6 +2,16 @@
     <srcgen>
         <srcgen ipkg="edu.jhu.cs.bsj.stdlib.diagnostic" cpkg="edu.jhu.cs.bsj.stdlib.diagnostic.impl"
             itgt="bsjutils" ctgt="bsjutils">
+
+            <userDiagnostic name="UserRelayedDiagnostic" super="BsjUtilDiagnostic" code="bsj.stdlib.diagnostic.relayed">
+                <prop name="diagnostic" type="Diagnostic" typeArg="? extends BsjSourceLocation"
+                    desc="the compiler diagnostic that this user diagnostic is relaying" />
+                <doc><![CDATA[
+                    A diagnostic indicating that the reporting metaprogram received a compiler diagnostic from one of
+                    the compiler utilities.
+                ]]></doc>
+            </userDiagnostic>
+
             <userDiagnostic name="InvalidMetaAnnotationUseDiagnostic" super="BsjUtilDiagnostic">
                 <prop name="metaAnnotationClass" type="Class&lt;? extends AbstractBsjMetaAnnotationMetaprogram&gt;"
                     desc="the class of meta-annotation that was used incorrectly" />

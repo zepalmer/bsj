@@ -262,6 +262,17 @@ public interface Node
 	 */
 	public Collection<? extends TypeNameBindingNode> getTypeDeclarationsInScope(String name);
 
+    /**
+     * Retrieves a type declaration in scope which corresponds to the specified simple name components. This operation
+     * may involve the construction of a symbol table and thus may result in additional nodes being loaded.  If multiple
+     * declarations match these name components, they are all returned; if, however, one declaration shadows another,
+     * only the declaration which is in scope is returned.
+     * 
+     * @param nameComponents The simple name components to use.
+     * @return The nodes corresponding to the declaration of that specified name.
+     */
+    public Collection<? extends TypeNameBindingNode> getTypeDeclarationsInScope(List<String> nameComponents);
+
 	/**
 	 * Retrieves a type declaration in scope which corresponds to the specified simple name component. This operation
 	 * may involve the construction of a symbol table and thus may result in additional nodes being loaded.

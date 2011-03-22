@@ -19,11 +19,17 @@ public class AnnotationMethodExecutableTypeImpl extends AbstractExecutableTypeIm
 		super(manager, backingNode);
 	}
 
-	@Override
-	public List<? extends BsjType> getParameterTypes()
-	{
-		return Collections.emptyList();
-	}
+    @Override
+    public List<? extends BsjType> getParameterTypes()
+    {
+        return Collections.emptyList();
+    }
+
+    @Override
+    public List<String> getParameterNames()
+    {
+        return Collections.emptyList();
+    }
 
 	@Override
 	public BsjType getReturnType()

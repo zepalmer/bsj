@@ -10,6 +10,7 @@ import edu.jhu.cs.bsj.compiler.lang.type.BsjReferenceType;
 import edu.jhu.cs.bsj.compiler.lang.type.BsjType;
 import edu.jhu.cs.bsj.compiler.lang.type.BsjTypeArgument;
 import edu.jhu.cs.bsj.compiler.lang.type.BsjTypeVariable;
+import edu.jhu.cs.bsj.compiler.lang.type.util.AbortableBsjTypeVisitor;
 
 /**
  * Represents a type variable in the Java type space. A type variable is introduced either by a type parameter node or
@@ -145,4 +146,9 @@ public abstract class AbstractTypeVariableImpl<T> extends ReferenceTypeImpl impl
         return this;
     }
 	
+    @Override
+    public <P, R, X extends Exception> R receive(AbortableBsjTypeVisitor<P, R, X> visitor, P param) throws X
+    {
+        return visitor.visitBsjTypeVariable(this, param);
+    }
 }

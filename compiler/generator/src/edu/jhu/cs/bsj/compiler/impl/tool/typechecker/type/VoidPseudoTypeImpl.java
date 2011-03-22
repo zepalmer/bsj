@@ -6,6 +6,7 @@ import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.TypecheckerManager;
 import edu.jhu.cs.bsj.compiler.lang.type.BsjLazyTypeContainer;
 import edu.jhu.cs.bsj.compiler.lang.type.BsjTypeArgument;
 import edu.jhu.cs.bsj.compiler.lang.type.BsjVoidPseudoType;
+import edu.jhu.cs.bsj.compiler.lang.type.util.AbortableBsjTypeVisitor;
 
 public class VoidPseudoTypeImpl extends PseudoTypeImpl implements BsjVoidPseudoType
 {
@@ -44,5 +45,11 @@ public class VoidPseudoTypeImpl extends PseudoTypeImpl implements BsjVoidPseudoT
     public BsjVoidPseudoType evaluate()
     {
         return this;
+    }
+
+    @Override
+    public <P, R, X extends Exception> R receive(AbortableBsjTypeVisitor<P, R, X> visitor, P param) throws X
+    {
+        return visitor.visitBsjVoidPseudoType(this, param);
     }
 }

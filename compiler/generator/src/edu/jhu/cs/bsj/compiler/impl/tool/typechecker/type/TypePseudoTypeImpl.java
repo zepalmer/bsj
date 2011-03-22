@@ -7,6 +7,7 @@ import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.TypecheckerManager;
 import edu.jhu.cs.bsj.compiler.lang.type.BsjLazyTypeContainer;
 import edu.jhu.cs.bsj.compiler.lang.type.BsjTypeArgument;
 import edu.jhu.cs.bsj.compiler.lang.type.BsjTypePseudoType;
+import edu.jhu.cs.bsj.compiler.lang.type.util.AbortableBsjTypeVisitor;
 
 public class TypePseudoTypeImpl extends PseudoTypeImpl implements BsjTypePseudoType
 {
@@ -61,5 +62,11 @@ public class TypePseudoTypeImpl extends PseudoTypeImpl implements BsjTypePseudoT
     public BsjTypePseudoType evaluate()
     {
         return this;
+    }
+
+    @Override
+    public <P, R, X extends Exception> R receive(AbortableBsjTypeVisitor<P, R, X> visitor, P param) throws X
+    {
+        return visitor.visitBsjTypePseudoType(this, param);
     }
 }

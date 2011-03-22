@@ -13,6 +13,8 @@ import javax.lang.model.type.ExecutableType;
 public interface BsjExecutableType extends ExecutableType, BsjActualType
 {
 	public List<? extends BsjType> getParameterTypes();
+	
+	public List<String> getParameterNames();
 
 	public BsjType getReturnType();
 

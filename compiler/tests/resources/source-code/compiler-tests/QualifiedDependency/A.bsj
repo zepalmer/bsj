@@ -1,0 +1,17 @@
+public class A
+{
+    [:
+        #depends pkg.B.Inner.foo;
+        PackageNode pkg = context.getAnchor().getRootPackage().getSubpackage("pkg");
+        ClassMemberListNode members = context.getAnchor().<ClassMemberListNode>getNearestAncestorOfType(ClassMemberListNode.class);
+        ClassDeclarationNode bClass = (ClassDeclarationNode)pkg.getCompilationUnit("B").getTypeDecls().get(0);
+        ClassDeclarationNode innerClass = (ClassDeclarationNode)bClass.getBody().getMembers().get(0);
+        for (ClassMemberNode member : innerClass.getBody().getMembers())
+        {
+            if (member instanceof FieldDeclarationNode)
+            {
+                members.add(member.deepCopy(context.getFactory()));
+            }
+        }
+    :]
+}

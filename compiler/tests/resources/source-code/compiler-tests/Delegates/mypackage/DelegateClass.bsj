@@ -6,13 +6,13 @@ import java.util.Set;
 import java.util.HashSet;
 
 public class DelegateClass {
-	@@Delegate(method="increment")
-	@@Delegate(method="getValue", as="current", depends={"mypackage.Counter.property"})
+	@@Delegate(method=<:increment:>)
+	@@Delegate(method=<:getValue:>, as=<:current:>, depends={<:mypackage.Counter.property:>})
     private Counter counter;
 	
-	@@Delegate(method="add", as="addName")
-	@@Delegate(method="size", as="nameCount")
-	@@Delegate(method="contains")
+	@@Delegate(method=<:add:>, as=<:addName:>)
+	@@Delegate(method=<:size:>, as=<:nameCount:>)
+	@@Delegate(method=<:contains:>)
 	private Set<String> names;
 	
 	public DelegateClass()

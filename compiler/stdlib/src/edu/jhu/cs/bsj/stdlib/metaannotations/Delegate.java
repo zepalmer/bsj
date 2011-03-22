@@ -60,15 +60,15 @@ import edu.jhu.cs.bsj.stdlib.utils.FilterByMethodName;
  * @author Uday Garikipati
  */
 // TODO: replace all uses of strings for identifiers with IdentifierNode
+// TODO: use an approach based on the type of the method to which we're delegating rather than its declaration AST
 public class Delegate extends AbstractBsjMetaAnnotationMetaprogram
 {
 
-    private String method;
-    private String as;
-    private String fieldNameOverride;
+    private IdentifierNode method;
+    private IdentifierNode as;
     private boolean onFieldDeclaration = false;
     BsjTypechecker typeChecker;
-    private String field;
+    private IdentifierNode field;
 
     public Delegate()
     {
@@ -76,87 +76,55 @@ public class Delegate extends AbstractBsjMetaAnnotationMetaprogram
     }
 
     @BsjMetaAnnotationElementGetter
-    public String getMethod()
+    public IdentifierNode getMethod()
     {
         return this.method;
     }
 
     @BsjMetaAnnotationElementSetter
-    public void setMethod(String methodName)
+    public void setMethod(IdentifierNode method)
     {
-        this.method = methodName;
+        this.method = method;
     }
 
     @BsjMetaAnnotationElementGetter
-    public String getField()
+    public IdentifierNode getField()
     {
         return this.field;
     }
 
     @BsjMetaAnnotationElementSetter
-    public void setField(String fieldName)
+    public void setField(IdentifierNode field)
     {
-        this.field = fieldName;
-    }
-
-    @BsjMetaAnnotationElementSetter
-    public void setDepends(String[] depends)
-    {
-        if (depends != null)
-        {
-            changeInstanceDependencies(Arrays.asList(depends));
-        }
+        this.field = field;
     }
 
     @BsjMetaAnnotationElementGetter
-    public String[] getDepends()
-    {
-        return (String[]) retrieveInstanceDependencies().toArray();
-    }
-
-    @BsjMetaAnnotationElementSetter
-    public void setTargets(String[] targets)
-    {
-        if (targets != null)
-        {
-            changeInstanceTargets(Arrays.asList(targets));
-        }
-    }
-
-    @BsjMetaAnnotationElementGetter
-    public String[] getTargets()
-    {
-        return (String[]) retrieveInstanceTargets().toArray();
-    }
-
-    @BsjMetaAnnotationElementGetter
-    public String getAs()
+    public IdentifierNode getAs()
     {
         return as;
-    } // TODO add specify arbitrary targets
+    }
 
     @BsjMetaAnnotationElementSetter
-    public void setAs(String forwardedMethodName)
+    public void setAs(IdentifierNode forwardedMethodName)
     {
         this.as = forwardedMethodName;
-    }
-
-    @BsjMetaAnnotationElementSetter
-    public void setFieldNameOverride(String fieldNameOverride)
-    {
-        this.fieldNameOverride = fieldNameOverride;
-    }
-
-    @BsjMetaAnnotationElementGetter
-    public String getFieldNameOverride()
-    {
-        return fieldNameOverride;
     }
 
     @Override
     public void complete() throws InvalidMetaAnnotationConfigurationException
     {
-
+        // TODO: error checking - what if neither field nor method was specified
+        if (this.as == null)
+        {
+            if (this.method != null)
+            {
+                this.as = this.method;
+            } else
+            {
+                this.as = this.field;
+            }
+        }
     }
 
     @Override
@@ -232,18 +200,18 @@ public class Delegate extends AbstractBsjMetaAnnotationMetaprogram
     {
         int i = 0;
         IdentifierNode fieldName = context.getFactory().makeIdentifierNode(fieldNameString);
-        String methodName = getMethod();
-        if (methodName != null)
+        if (getMethod() != null)
         {
+            String methodName = getMethod().getIdentifier();
             classDeclarationList.addAll(createDelegateMethodforMethods(context, typeScopeNode, fieldType, fieldName,
-                    methodName, this.as));
+                    methodName, this.as.getIdentifier()));
         }
         i = 0;
-        String localFieldName = getField();
-        if (localFieldName != null)
+        if (getField() != null)
         {
+            String localFieldName = getField().getIdentifier();
             classDeclarationList.addAll(createDelegateMethodforFileds(context, typeScopeNode, fieldType, fieldName,
-                    localFieldName, this.as));
+                    localFieldName, this.as.getIdentifier()));
             i++;
         }
     }
@@ -264,8 +232,6 @@ public class Delegate extends AbstractBsjMetaAnnotationMetaprogram
         for (FieldDeclarationNode fieldToAdd : fieldsList)
         {
             // break up the code in pieces and then start working on it
-            // TODO: handle case in which forwardedMethodName is null (meaning to use the field name itself)
-            // TODO: why is it that this doesn't loop over declarators? this can't be right
             IdentifierNode forwardedMethodNameIdentifier = factory.makeIdentifierNode(forwardedMethodName);
             JavadocNode javadoc = getJavaDoc(factory, fieldToAdd);
             TypeNode returnType = fieldToAdd.getType();

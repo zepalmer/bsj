@@ -9,6 +9,7 @@ import java.util.Map;
 import edu.jhu.cs.bsj.compiler.ast.TypedValue;
 import edu.jhu.cs.bsj.compiler.ast.node.NamedTypeDeclarationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.PackageNode;
+import edu.jhu.cs.bsj.compiler.ast.node.TypeNode;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.ArrayTypeImpl;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.DeclaredTypeImpl;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.IntersectionTypeImpl;
@@ -18,6 +19,7 @@ import edu.jhu.cs.bsj.compiler.lang.element.BsjDeclaredTypeElement;
 import edu.jhu.cs.bsj.compiler.lang.type.BsjActualType;
 import edu.jhu.cs.bsj.compiler.lang.type.BsjExplicitlyDeclaredType;
 import edu.jhu.cs.bsj.compiler.lang.type.BsjIntersectionType;
+import edu.jhu.cs.bsj.compiler.lang.type.BsjType;
 import edu.jhu.cs.bsj.compiler.lang.type.BsjTypeArgument;
 import edu.jhu.cs.bsj.compiler.lang.value.SelectionBag;
 
@@ -33,6 +35,13 @@ public class ModelingFactoryImpl implements BsjModelingFactory
     {
         super();
         this.manager = manager;
+    }
+
+    @Override
+    public BsjType makeTypeFromNode(TypeNode node)
+    {
+        // TODO: for now, we'll just envy type builder; eventually, the logic should be contained here
+        return this.manager.getToolkit().getTypeBuilder().makeType(node);
     }
 
     private static class MakeExplicitlyDeclaredTypeCacheKey

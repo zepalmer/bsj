@@ -1,6 +1,8 @@
 package edu.jhu.cs.bsj.compiler.impl.ast.node;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.EnumSet;
 import java.util.Iterator;
 import java.util.List;
@@ -17,6 +19,7 @@ import edu.jhu.cs.bsj.compiler.ast.BsjTypedNodeVisitor;
 import edu.jhu.cs.bsj.compiler.ast.NodeUnion;
 import edu.jhu.cs.bsj.compiler.ast.node.NameNode;
 import edu.jhu.cs.bsj.compiler.ast.node.Node;
+import edu.jhu.cs.bsj.compiler.ast.node.TypeNameBindingNode;
 import edu.jhu.cs.bsj.compiler.ast.node.UnparameterizedTypeNode;
 import edu.jhu.cs.bsj.compiler.impl.ast.BsjNodeManager;
 import edu.jhu.cs.bsj.compiler.impl.ast.BsjNodeProxyFactory;
@@ -354,4 +357,17 @@ public class UnparameterizedTypeNodeImpl extends NodeImpl implements Unparameter
         return false;
     }
     
+    @Override
+    public Collection<? extends TypeNameBindingNode> getDeclarations()
+    {
+        List<TypeNameBindingNode> ret = new ArrayList<TypeNameBindingNode>();
+        for (Node n : getDeclarationsInScope(getName()))
+        {
+            if (n instanceof TypeNameBindingNode)
+            {
+                ret.add((TypeNameBindingNode)n);
+            }
+        }
+        return ret;
+    }
 }

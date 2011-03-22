@@ -13,6 +13,7 @@ import edu.jhu.cs.bsj.compiler.lang.type.BsjReferenceType;
 import edu.jhu.cs.bsj.compiler.lang.type.BsjType;
 import edu.jhu.cs.bsj.compiler.lang.type.BsjTypeArgument;
 import edu.jhu.cs.bsj.compiler.lang.type.BsjTypeVariable;
+import edu.jhu.cs.bsj.compiler.lang.type.util.AbortableBsjTypeVisitor;
 
 public class ArrayTypeImpl extends ReferenceTypeImpl implements BsjArrayType
 {
@@ -143,5 +144,11 @@ public class ArrayTypeImpl extends ReferenceTypeImpl implements BsjArrayType
     public BsjArrayType evaluate()
     {
         return this;
+    }
+
+    @Override
+    public <P, R, X extends Exception> R receive(AbortableBsjTypeVisitor<P, R, X> visitor, P param) throws X
+    {
+        return visitor.visitBsjArrayType(this, param);
     }
 }

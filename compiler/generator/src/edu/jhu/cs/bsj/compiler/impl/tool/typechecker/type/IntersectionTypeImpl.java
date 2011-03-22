@@ -19,6 +19,7 @@ import edu.jhu.cs.bsj.compiler.lang.type.BsjReferenceType;
 import edu.jhu.cs.bsj.compiler.lang.type.BsjType;
 import edu.jhu.cs.bsj.compiler.lang.type.BsjTypeArgument;
 import edu.jhu.cs.bsj.compiler.lang.type.BsjTypeVariable;
+import edu.jhu.cs.bsj.compiler.lang.type.util.AbortableBsjTypeVisitor;
 
 /**
  * This type object represents a Java intersection type. Java intersection types can never be explicitly declared; they
@@ -194,5 +195,11 @@ public class IntersectionTypeImpl extends ReferenceTypeImpl implements BsjInters
     public BsjIntersectionType evaluate()
     {
         return this;
+    }
+
+    @Override
+    public <P, R, X extends Exception> R receive(AbortableBsjTypeVisitor<P, R, X> visitor, P param) throws X
+    {
+        return visitor.visitBsjIntersectionType(this, param);
     }
 }

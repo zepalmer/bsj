@@ -14,6 +14,7 @@ import edu.jhu.cs.bsj.compiler.lang.type.BsjReferenceType;
 import edu.jhu.cs.bsj.compiler.lang.type.BsjType;
 import edu.jhu.cs.bsj.compiler.lang.type.BsjTypeArgument;
 import edu.jhu.cs.bsj.compiler.lang.type.BsjTypeVariable;
+import edu.jhu.cs.bsj.compiler.lang.type.util.AbortableBsjTypeVisitor;
 
 /**
  * Represents a primitive type in the BSJ type checker.
@@ -287,5 +288,11 @@ public class PrimitiveTypeImpl extends ActualTypeImpl implements BsjPrimitiveTyp
     public BsjPrimitiveType evaluate()
     {
         return this;
+    }
+
+    @Override
+    public <P, R, X extends Exception> R receive(AbortableBsjTypeVisitor<P, R, X> visitor, P param) throws X
+    {
+        return visitor.visitBsjPrimitiveType(this, param);
     }
 }

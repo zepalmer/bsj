@@ -12,6 +12,7 @@ import edu.jhu.cs.bsj.compiler.lang.type.BsjReferenceType;
 import edu.jhu.cs.bsj.compiler.lang.type.BsjType;
 import edu.jhu.cs.bsj.compiler.lang.type.BsjTypeArgument;
 import edu.jhu.cs.bsj.compiler.lang.type.BsjTypeVariable;
+import edu.jhu.cs.bsj.compiler.lang.type.util.AbortableBsjTypeVisitor;
 
 public class NullTypeImpl extends ReferenceTypeImpl implements BsjNullType
 {
@@ -90,5 +91,11 @@ public class NullTypeImpl extends ReferenceTypeImpl implements BsjNullType
     public BsjNullType evaluate()
     {
         return this;
+    }
+
+    @Override
+    public <P, R, X extends Exception> R receive(AbortableBsjTypeVisitor<P, R, X> visitor, P param) throws X
+    {
+        return visitor.visitBsjNullType(this, param);
     }
 }

@@ -442,7 +442,7 @@ public class PackageNodeImpl extends NodeImpl implements PackageNode
         }
         return packageNode;
     }
-
+    
     public PackageNode getSubpackage(List<String> name)
     {
         checkPopulated();

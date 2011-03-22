@@ -13,6 +13,7 @@ import edu.jhu.cs.bsj.compiler.lang.type.BsjType;
 import edu.jhu.cs.bsj.compiler.lang.type.BsjTypeArgument;
 import edu.jhu.cs.bsj.compiler.lang.type.BsjTypeVariable;
 import edu.jhu.cs.bsj.compiler.lang.type.CastCompatibility;
+import edu.jhu.cs.bsj.compiler.lang.type.util.AbortableBsjTypeVisitor;
 
 public abstract class AbstractExecutableTypeImpl<T extends Node> extends TypeMirrorImpl implements
 		BsjExecutableType
@@ -36,6 +37,12 @@ public abstract class AbstractExecutableTypeImpl<T extends Node> extends TypeMir
 		return v.visitExecutable(this, p);
 	}
 
+    @Override
+    public <P, R, X extends Exception> R receive(AbortableBsjTypeVisitor<P, R, X> visitor, P param) throws X
+    {
+        return visitor.visitBsjExecutableType(this, param);
+    }
+    
 	@Override
 	public TypeKind getKind()
 	{

@@ -1,8 +1,11 @@
 /* GEN:headerstart */
+import java.util.Collection;
 import java.util.Collections;
+import java.util.List;
 import java.util.concurrent.atomic.AtomicLong;
 
 import edu.jhu.cs.bsj.compiler.ast.node.Node;
+import edu.jhu.cs.bsj.compiler.ast.node.TypeNameBindingNode;
 import edu.jhu.cs.bsj.compiler.impl.ast.BsjNodeProxyFactory;
 import edu.jhu.cs.bsj.compiler.impl.ast.exception.*;
 
@@ -236,6 +239,11 @@ public abstract class NodeImpl
     public Collection<? extends TypeNameBindingNode> getTypeDeclarationsInScope(String name)
     {
         return this.getManager().getTypeDeclarationsInScope(this, name);
+    }
+
+    public Collection<? extends TypeNameBindingNode> getTypeDeclarationsInScope(List<String> nameComponents)
+    {
+        return this.getManager().getTypeDeclarationsInScope(this, nameComponents);
     }
 
     public Collection<? extends InvokableNameBindingNode> getMethodDeclarationsInScope(String name)

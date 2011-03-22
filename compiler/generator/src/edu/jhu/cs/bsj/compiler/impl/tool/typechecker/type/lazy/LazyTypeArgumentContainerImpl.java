@@ -16,6 +16,7 @@ import edu.jhu.cs.bsj.compiler.lang.type.BsjType;
 import edu.jhu.cs.bsj.compiler.lang.type.BsjTypeArgument;
 import edu.jhu.cs.bsj.compiler.lang.type.BsjTypeVariable;
 import edu.jhu.cs.bsj.compiler.lang.type.CastCompatibility;
+import edu.jhu.cs.bsj.compiler.lang.type.util.AbortableBsjTypeVisitor;
 
 /**
  * A lazily-managed type implementation. This class accepts a function which will produce a {@link BsjTypeArgument}. It
@@ -205,6 +206,12 @@ public class LazyTypeArgumentContainerImpl implements BsjLazyTypeArgumentContain
     public boolean equals(Object obj)
     {
         return evaluate().equals(obj);
+    }
+
+    @Override
+    public <P, R, X extends Exception> R receive(AbortableBsjTypeVisitor<P, R, X> visitor, P param) throws X
+    {
+        return evaluate().receive(visitor, param);
     }
 
     @Override

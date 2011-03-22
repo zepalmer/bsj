@@ -14,6 +14,7 @@ import edu.jhu.cs.bsj.compiler.lang.type.BsjSelectionType;
 import edu.jhu.cs.bsj.compiler.lang.type.BsjType;
 import edu.jhu.cs.bsj.compiler.lang.type.BsjTypeArgument;
 import edu.jhu.cs.bsj.compiler.lang.type.BsjTypeVariable;
+import edu.jhu.cs.bsj.compiler.lang.type.util.AbortableBsjTypeVisitor;
 import edu.jhu.cs.bsj.compiler.utils.Bag;
 
 /**
@@ -164,5 +165,11 @@ public class SelectionTypeImpl extends ActualTypeImpl implements BsjSelectionTyp
     public BsjSelectionType evaluate()
     {
         return this;
+    }
+
+    @Override
+    public <P, R, X extends Exception> R receive(AbortableBsjTypeVisitor<P, R, X> visitor, P param) throws X
+    {
+        return visitor.visitBsjSelectionType(this, param);
     }
 }

@@ -3,6 +3,7 @@ package edu.jhu.cs.bsj.compiler.impl.ast;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import javax.tools.DiagnosticListener;
@@ -317,6 +318,8 @@ public class BsjNodeManager
             Set<Node> ret = new HashSet<Node>();
             for (Node base : bases)
             {
+                // TODO: fix this - it doesn't work correctly for inner classes because it doesn't operate against
+                // the body of the declaration
                 ret.addAll(getDeclarationInScope(base, qualifiedName, qualifiedName.getIdentifier().getIdentifier(),
                         category));
             }
@@ -372,6 +375,23 @@ public class BsjNodeManager
             }
             return ret;
         }
+    }
+
+    public Collection<? extends TypeNameBindingNode> getTypeDeclarationsInScope(Node node, List<String> nameComponents)
+    {
+        throw new NotImplementedYetException();
+//        if (nameComponents.size() == 0)
+//            throw new IllegalArgumentException("Must have at least one name component.");
+//        Collection<? extends TypeNameBindingNode> ret = getTypeDeclarationsInScope(node, nameComponents.get(0));
+//        for (int i=1;i<nameComponents.size();i++)
+//        {
+//            Collection<? extends TypeNameBindingNode> lastLevel = ret;
+//            ret = new ArrayList<TypeNameBindingNode>(lastLevel.size());
+//            for (TypeNameBindingNode typeNameBindingNode : lastLevel)
+//            {
+//                ret.addAll(typeNameBindingNode.getTypeDeclarationsInScope(
+//            }
+//        }
     }
 
     public Collection<? extends InvokableNameBindingNode> getMethodDeclarationsInScope(Node node, String name)

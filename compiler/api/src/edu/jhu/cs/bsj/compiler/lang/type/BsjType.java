@@ -4,6 +4,8 @@ import java.util.Map;
 
 import javax.lang.model.type.TypeMirror;
 
+import edu.jhu.cs.bsj.compiler.lang.type.util.AbortableBsjTypeVisitor;
+
 /**
  * A BSJ representation of a type value.
  * 
@@ -175,6 +177,12 @@ public interface BsjType extends TypeMirror
 	 * @return An evaluated type representation of this Java type.
 	 */
 	public BsjType evaluate();
+	
+	/**
+	 * Receives a type visitor and calls the appropriate method on it.  If this is a lazy type container, the visitor
+	 * is received by the evaluation of this type.
+	 */
+	public <P, R, X extends Exception> R receive(AbortableBsjTypeVisitor<P, R, X> visitor, P param) throws X;
 
 	/**
 	 * Determines whether this type is equal to another type.

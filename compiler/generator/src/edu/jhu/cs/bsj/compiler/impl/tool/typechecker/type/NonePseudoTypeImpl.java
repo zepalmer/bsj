@@ -6,6 +6,7 @@ import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.TypecheckerManager;
 import edu.jhu.cs.bsj.compiler.lang.type.BsjLazyTypeContainer;
 import edu.jhu.cs.bsj.compiler.lang.type.BsjNonePseudoType;
 import edu.jhu.cs.bsj.compiler.lang.type.BsjTypeArgument;
+import edu.jhu.cs.bsj.compiler.lang.type.util.AbortableBsjTypeVisitor;
 
 public class NonePseudoTypeImpl extends PseudoTypeImpl implements BsjNonePseudoType
 {
@@ -45,5 +46,11 @@ public class NonePseudoTypeImpl extends PseudoTypeImpl implements BsjNonePseudoT
     public BsjNonePseudoType evaluate()
     {
         return this;
+    }
+
+    @Override
+    public <P, R, X extends Exception> R receive(AbortableBsjTypeVisitor<P, R, X> visitor, P param) throws X
+    {
+        return visitor.visitBsjNonePseudoType(this, param);
     }
 }

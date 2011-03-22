@@ -1,0 +1,11 @@
+public class B
+{
+    public static class Inner
+    {
+        [:
+            #target foo;
+            context.getAnchor().<ClassMemberListNode>getNearestAncestorOfType(ClassMemberListNode.class).add(
+                    <:public static final int X = 5;:>);
+        :]
+    }
+}

@@ -438,6 +438,11 @@ public abstract class NodeImpl implements Node
         return this.getManager().getTypeDeclarationsInScope(this, name);
     }
 
+    public Collection<? extends TypeNameBindingNode> getTypeDeclarationsInScope(List<String> nameComponents)
+    {
+        return this.getManager().getTypeDeclarationsInScope(this, nameComponents);
+    }
+
     public Collection<? extends InvokableNameBindingNode> getMethodDeclarationsInScope(String name)
     {
         return this.getManager().getMethodDeclarationsInScope(this, name);

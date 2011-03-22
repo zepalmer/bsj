@@ -19,6 +19,7 @@ public abstract class AbstractInvokableExecutableTypeImpl<T extends AbstractInvo
 		AbstractExecutableTypeImpl<T>
 {
 	private List<BsjType> parameterTypes;
+	private List<String> parameterNames;
 	private List<BsjType> thrownTypes;
 	private List<BsjTypeVariable> typeVariables;
 
@@ -32,6 +33,7 @@ public abstract class AbstractInvokableExecutableTypeImpl<T extends AbstractInvo
 	{
 		super(manager, backingNode);
 		this.parameterTypes = new ArrayList<BsjType>();
+		this.parameterNames = new ArrayList<String>();
 		this.thrownTypes = new ArrayList<BsjType>();
 		this.typeVariables = new ArrayList<BsjTypeVariable>();
 
@@ -40,6 +42,7 @@ public abstract class AbstractInvokableExecutableTypeImpl<T extends AbstractInvo
 		{
 			BsjType param = getTypeBuilder().makeType(var.getType());
 			parameterTypes.add(param);
+			parameterNames.add(var.getIdentifier().getIdentifier());
 		}
 		// TODO: consider - do we need a special representation for varargs?
 		if (getBackingNode().getVarargParameter() != null)
@@ -48,6 +51,7 @@ public abstract class AbstractInvokableExecutableTypeImpl<T extends AbstractInvo
 			// TODO: flag the array type to indicate that it is a vararg type?
 			BsjType varargsParam = new ArrayTypeImpl(getManager(), getTypeBuilder().makeType(var.getType()));
 			parameterTypes.add(varargsParam);
+			parameterNames.add(var.getIdentifier().getIdentifier());
 		}
 
 		for (TypeNode type : getBackingNode().getThrowTypes())
@@ -116,6 +120,12 @@ public abstract class AbstractInvokableExecutableTypeImpl<T extends AbstractInvo
 	}
 
 	@Override
+    public List<String> getParameterNames()
+    {
+        return this.parameterNames;
+    }
+
+    @Override
 	public List<? extends BsjType> getThrownTypes()
 	{
 		return this.thrownTypes;

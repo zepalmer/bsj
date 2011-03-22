@@ -42,6 +42,7 @@ import edu.jhu.cs.bsj.compiler.lang.type.BsjType;
 import edu.jhu.cs.bsj.compiler.lang.type.BsjTypeArgument;
 import edu.jhu.cs.bsj.compiler.lang.type.BsjTypeVariable;
 import edu.jhu.cs.bsj.compiler.lang.type.BsjWildcardType;
+import edu.jhu.cs.bsj.compiler.lang.type.util.AbortableBsjTypeVisitor;
 
 /**
  * TODO: fix
@@ -761,5 +762,11 @@ public class DeclaredTypeImpl extends ReferenceTypeImpl implements BsjExplicitly
         } else if (!typeElement.equals(other.typeElement))
             return false;
         return true;
+    }
+
+    @Override
+    public <P, R, X extends Exception> R receive(AbortableBsjTypeVisitor<P, R, X> visitor, P param) throws X
+    {
+        return visitor.visitBsjExplicitlyDeclaredType(this, param);
     }
 }

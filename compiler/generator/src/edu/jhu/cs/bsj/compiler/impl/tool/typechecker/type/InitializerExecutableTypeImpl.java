@@ -24,6 +24,12 @@ public class InitializerExecutableTypeImpl extends AbstractExecutableTypeImpl<In
 		return Collections.emptyList();
 	}
 
+    @Override
+    public List<String> getParameterNames()
+    {
+        return Collections.emptyList();
+    }
+
 	@Override
 	public BsjType getReturnType()
 	{

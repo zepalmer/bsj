@@ -4,10 +4,12 @@ import java.util.Collection;
 import java.util.List;
 
 import edu.jhu.cs.bsj.compiler.ast.TypedValue;
+import edu.jhu.cs.bsj.compiler.ast.node.TypeNode;
 import edu.jhu.cs.bsj.compiler.lang.element.BsjDeclaredTypeElement;
 import edu.jhu.cs.bsj.compiler.lang.type.BsjActualType;
 import edu.jhu.cs.bsj.compiler.lang.type.BsjExplicitlyDeclaredType;
 import edu.jhu.cs.bsj.compiler.lang.type.BsjIntersectionType;
+import edu.jhu.cs.bsj.compiler.lang.type.BsjType;
 import edu.jhu.cs.bsj.compiler.lang.type.BsjTypeArgument;
 import edu.jhu.cs.bsj.compiler.lang.value.SelectionBag;
 
@@ -18,6 +20,13 @@ import edu.jhu.cs.bsj.compiler.lang.value.SelectionBag;
  */
 public interface BsjModelingFactory
 {
+    /**
+     * Creates a type based on the provided {@link TypeNode}.
+     * @param node The node on which to base the type.
+     * @return The resulting type.
+     */
+    public BsjType makeTypeFromNode(TypeNode node);
+    
     /**
      * Creates an explicitly declared type using the specified arguments.
      * 
