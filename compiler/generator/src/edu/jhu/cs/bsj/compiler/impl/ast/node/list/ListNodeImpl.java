@@ -539,4 +539,16 @@ public abstract class ListNodeImpl<T extends Node> extends NodeImpl implements L
     {
         return this.getNodeList().filterUnions(filter);
     }
+
+    public <U extends T> List<U> filterByType(Class<U> type)
+    {
+        List<U> ret = new ArrayList<U>();
+        for (T t : this)
+        {
+            if (type.isInstance(t))
+                ret.add(type.cast(t));
+        }
+        return ret;
+    }
+    
 }

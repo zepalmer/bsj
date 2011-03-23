@@ -40,6 +40,14 @@ public interface ListNode<T extends Node> extends Node, List<T>, NodeList<T>
     public List<T> getChildren();
     
     /**
+     * Gets a filtered list of children by type.  The resulting list is independent; changes to it will not be reflected in
+     * this list.
+     * @param type The type of children to return.
+     * @return The list of children of this node which have the specified type.
+     */
+    public <U extends T> List<U> filterByType(Class<U> type);
+    
+    /**
      * Gets the union object for the list of children.
      * @return A union object representing The list of children.
      */
