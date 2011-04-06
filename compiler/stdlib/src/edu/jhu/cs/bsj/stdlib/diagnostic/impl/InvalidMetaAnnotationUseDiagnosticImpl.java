@@ -17,7 +17,7 @@ import java.util.Map;
 import javax.annotation.Generated;
 
 import edu.jhu.cs.bsj.compiler.impl.utils.Pair;
-import edu.jhu.cs.bsj.compiler.metaprogram.AbstractBsjMetaAnnotationMetaprogram;
+import edu.jhu.cs.bsj.compiler.metaprogram.AbstractBsjMetaprogramMetaAnnotation;
 import edu.jhu.cs.bsj.stdlib.diagnostic.InvalidMetaAnnotationUseDiagnostic;
 
 
@@ -28,12 +28,12 @@ import edu.jhu.cs.bsj.stdlib.diagnostic.InvalidMetaAnnotationUseDiagnostic;
 public abstract class InvalidMetaAnnotationUseDiagnosticImpl extends BsjUtilDiagnosticImpl implements InvalidMetaAnnotationUseDiagnostic
 {
     /** The class of meta-annotation that was used incorrectly. */
-    private Class<? extends AbstractBsjMetaAnnotationMetaprogram> metaAnnotationClass;
+    private Class<? extends AbstractBsjMetaprogramMetaAnnotation> metaAnnotationClass;
     
     public InvalidMetaAnnotationUseDiagnosticImpl(
             String code,
             javax.tools.Diagnostic.Kind kind,
-            Class<? extends AbstractBsjMetaAnnotationMetaprogram> metaAnnotationClass)
+            Class<? extends AbstractBsjMetaprogramMetaAnnotation> metaAnnotationClass)
     {
         super(code, kind);
         this.metaAnnotationClass = metaAnnotationClass;
@@ -42,7 +42,7 @@ public abstract class InvalidMetaAnnotationUseDiagnosticImpl extends BsjUtilDiag
     /**
      * {@inheritDoc}
      */
-    public Class<? extends AbstractBsjMetaAnnotationMetaprogram> getMetaAnnotationClass()
+    public Class<? extends AbstractBsjMetaprogramMetaAnnotation> getMetaAnnotationClass()
     {
         return this.metaAnnotationClass;
     }

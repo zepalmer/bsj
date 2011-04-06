@@ -1,0 +1,15 @@
+public class ExplicitContextFeatures
+{
+    private int x;
+    
+    [:
+        context.addBefore(<: { x = 7; } :>);
+        context.addAfter(<: { x++; } :>);
+        context.getPeers().add(<: { x *= 2; } :>);
+    :]
+    
+    public int getX()
+    {
+        return this.x;
+    }
+}

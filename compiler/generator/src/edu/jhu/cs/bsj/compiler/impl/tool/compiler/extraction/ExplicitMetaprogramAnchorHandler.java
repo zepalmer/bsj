@@ -77,7 +77,7 @@ public class ExplicitMetaprogramAnchorHandler<R extends Node> extends
             "edu.jhu.cs.bsj.compiler.diagnostic.user", "edu.jhu.cs.bsj.compiler.ast.node",
             "edu.jhu.cs.bsj.compiler.ast.node.list", "edu.jhu.cs.bsj.compiler.ast.node.meta",
             "edu.jhu.cs.bsj.compiler.metaprogram" };
-    
+
     /** The compilation cache for this handler to use. */
     private ExplicitMetaprogramCompilationCache compilationCache;
 
@@ -208,8 +208,9 @@ public class ExplicitMetaprogramAnchorHandler<R extends Node> extends
         Class<? extends Metaprogram<ExplicitMetaprogramAnchorNode<R>, R>> metaprogramClass = (Class<? extends Metaprogram<ExplicitMetaprogramAnchorNode<R>, R>>) compilationCache.get(getCanonicalAnchor().getUid());
         if (metaprogramClass == null)
         {
-            metaprogramClass = compileMetaprogramClass(metaprogramNode, getCanonicalAnchor(), getTargetAnchor().getClass().getName(), getTargetAnchor().getReplacementType().getName(),
-                this.getDiagnosticListener());
+            metaprogramClass = compileMetaprogramClass(metaprogramNode, getCanonicalAnchor(),
+                    getTargetAnchor().getClass().getName(), getTargetAnchor().getReplacementType().getName(),
+                    this.getDiagnosticListener());
             if (metaprogramClass != null)
             {
                 compilationCache.add(getCanonicalAnchor().getUid(), metaprogramClass);
@@ -219,7 +220,8 @@ public class ExplicitMetaprogramAnchorHandler<R extends Node> extends
             }
         }
 
-        Metaprogram<ExplicitMetaprogramAnchorNode<R>, R> metaprogram = (metaprogramClass == null ? null : instantiateMetaprogramObject(metaprogramClass));
+        Metaprogram<ExplicitMetaprogramAnchorNode<R>, R> metaprogram = (metaprogramClass == null ? null
+                : instantiateMetaprogramObject(metaprogramClass));
 
         if (metaprogram == null)
         {
@@ -310,9 +312,19 @@ public class ExplicitMetaprogramAnchorHandler<R extends Node> extends
         BlockStatementListNode metaprogramBody = metaprogramNode.getBody();
         metaprogramNode.setBody(null);
 
-        // Build the contents of the metaprogram class
+        // Build interface execution method (which proxies the context)
         MethodDeclarationNode executeMethodImplementation = factory.makeMethodDeclarationNode(
-                metaprogramBody,
+                factory.makeBlockStatementListNode(factory.makeExpressionStatementNode(factory.makeMethodInvocationNode(
+                        factory.makeIdentifierNode("executeActual"),
+                        factory.makeExpressionListNode(factory.makeUnqualifiedClassInstantiationNode(
+                                factory.makeParameterizedTypeNode(
+                                        factory.makeUnparameterizedTypeNode(factory.makeSimpleNameNode(factory.makeIdentifierNode("ExplicitContextDecorator"))),
+                                        factory.makeTypeArgumentListNode(
+                                                factory.makeUnparameterizedTypeNode(factory.parseNameNode(anchorClassName)),
+                                                factory.makeUnparameterizedTypeNode(factory.parseNameNode(replacementClassName)))),
+                                factory.makeExpressionListNode(
+                                        factory.makeVariableAccessNode(factory.makeIdentifierNode("context")),
+                                        factory.makeClassLiteralNode(factory.makeUnparameterizedTypeNode(factory.parseNameNode(replacementClassName))))))))),
                 factory.makeMethodModifiersNode(AccessModifier.PUBLIC),
                 factory.makeIdentifierNode("execute"),
                 factory.makeVariableListNode(factory.makeVariableNode(
@@ -324,7 +336,23 @@ public class ExplicitMetaprogramAnchorHandler<R extends Node> extends
                                         factory.makeUnparameterizedTypeNode(factory.parseNameNode(replacementClassName)))),
                         factory.makeIdentifierNode("context"))), factory.makeVoidTypeNode(), null);
 
-        ClassBodyNode body = factory.makeClassBodyNode(factory.makeClassMemberListNode(executeMethodImplementation));
+        // Build the real execution method (which contains the metaprogram body)
+        MethodDeclarationNode realExecuteMethodImplementation = factory.makeMethodDeclarationNode(
+                metaprogramBody,
+                factory.makeMethodModifiersNode(AccessModifier.PRIVATE),
+                factory.makeIdentifierNode("executeActual"),
+                factory.makeVariableListNode(factory.makeVariableNode(
+                        factory.makeVariableModifiersNode(),
+                        factory.makeParameterizedTypeNode(
+                                factory.makeUnparameterizedTypeNode(factory.makeSimpleNameNode(factory.makeIdentifierNode("ExplicitContext"))),
+                                factory.makeTypeArgumentListNode(
+                                        factory.makeUnparameterizedTypeNode(factory.parseNameNode(anchorClassName)),
+                                        factory.makeUnparameterizedTypeNode(factory.parseNameNode(replacementClassName)))),
+                        factory.makeIdentifierNode("context"))), factory.makeVoidTypeNode(), null);
+
+        // Build the rest of the class
+        ClassBodyNode body = factory.makeClassBodyNode(factory.makeClassMemberListNode(executeMethodImplementation,
+                realExecuteMethodImplementation));
 
         TypeDeclarationNode metaprogramClassNode = factory.makeClassDeclarationNode(
                 factory.makeClassModifiersNode(AccessModifier.PUBLIC),
@@ -414,5 +442,4 @@ public class ExplicitMetaprogramAnchorHandler<R extends Node> extends
         }
         return metaprogramClass;
     }
-
 }

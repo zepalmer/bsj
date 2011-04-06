@@ -12,13 +12,13 @@ import edu.jhu.cs.bsj.compiler.impl.utils.Pair;
 import edu.jhu.cs.bsj.compiler.metaannotation.BsjMetaAnnotationElementGetter;
 import edu.jhu.cs.bsj.compiler.metaannotation.BsjMetaAnnotationElementSetter;
 import edu.jhu.cs.bsj.compiler.metaannotation.InvalidMetaAnnotationConfigurationException;
-import edu.jhu.cs.bsj.compiler.metaprogram.AbstractBsjMetaAnnotationMetaprogram;
+import edu.jhu.cs.bsj.compiler.metaprogram.AbstractBsjMetaprogramMetaAnnotation;
 import edu.jhu.cs.bsj.compiler.metaprogram.Context;
 import edu.jhu.cs.bsj.stdlib.utils.TypeDeclUtils;
 
 
 public abstract class AbstractPropertyListMetaannotationMetaprogram extends
-		AbstractBsjMetaAnnotationMetaprogram {
+		AbstractBsjMetaprogramMetaAnnotation {
 
     private IdentifierNode[] properties = null;
 

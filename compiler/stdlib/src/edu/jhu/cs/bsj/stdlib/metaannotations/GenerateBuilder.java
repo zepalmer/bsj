@@ -24,7 +24,7 @@ import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaAnnotationMetaprogramAnchorNode
 import edu.jhu.cs.bsj.compiler.metaannotation.BsjMetaAnnotationElementGetter;
 import edu.jhu.cs.bsj.compiler.metaannotation.BsjMetaAnnotationElementSetter;
 import edu.jhu.cs.bsj.compiler.metaannotation.InvalidMetaAnnotationConfigurationException;
-import edu.jhu.cs.bsj.compiler.metaprogram.AbstractBsjMetaAnnotationMetaprogram;
+import edu.jhu.cs.bsj.compiler.metaprogram.AbstractBsjMetaprogramMetaAnnotation;
 import edu.jhu.cs.bsj.compiler.metaprogram.Context;
 import edu.jhu.cs.bsj.stdlib.metaannotations.utils.Utility;
 import edu.jhu.cs.bsj.stdlib.utils.TypeDeclUtils;
@@ -37,7 +37,7 @@ import edu.jhu.cs.bsj.stdlib.utils.TypeDeclUtils;
  * 
  * @author Joseph Riley
  */
-public class GenerateBuilder extends AbstractBsjMetaAnnotationMetaprogram
+public class GenerateBuilder extends AbstractBsjMetaprogramMetaAnnotation
 {
     /** The explicitly-specified list of properties. */
     private String[] properties = null;

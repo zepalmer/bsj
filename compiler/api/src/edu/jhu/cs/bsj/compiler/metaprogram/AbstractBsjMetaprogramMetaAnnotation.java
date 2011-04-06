@@ -13,14 +13,14 @@ import edu.jhu.cs.bsj.compiler.metaannotation.BsjMetaAnnotationElementGetter;
 import edu.jhu.cs.bsj.compiler.metaannotation.BsjMetaAnnotationElementSetter;
 
 /**
- * This implementation of {@link BsjMetaAnnotationMetaprogram} provides basic functionality which is commonly necessary
- * for meta-annotation metaprograms. It provides an inner class for the implementation of the returned metaprogram that
- * depends upon the abstract methods of this class for its functionality. Specifically, execution of the metaprogram can
- * be defined in the {@link #execute(Context) execute} method.
+ * This implementation of {@link BsjMetaprogramMetaAnnotation} provides basic functionality which is commonly necessary
+ * for meta-annotations which define metaprograms. It provides an inner class for the implementation of the returned
+ * metaprogram that depends upon the abstract methods of this class for its functionality. Specifically, execution of
+ * the metaprogram can be defined in the {@link #execute(Context) execute} method.
  * 
  * @author Zachary Palmer
  */
-public abstract class AbstractBsjMetaAnnotationMetaprogram implements BsjMetaAnnotationMetaprogram
+public abstract class AbstractBsjMetaprogramMetaAnnotation implements BsjMetaprogramMetaAnnotation
 {
     /** The permanent targets that this meta-annotation metaprogram always uses. */
     private List<String> permanentTargets;
@@ -46,7 +46,7 @@ public abstract class AbstractBsjMetaAnnotationMetaprogram implements BsjMetaAnn
      * @param permanentTargets The targets that instances of this meta-annotation class always use.
      * @param permanentDependencies The dependencies that instances of this meta-annotation class always use.
      */
-    public AbstractBsjMetaAnnotationMetaprogram(List<String> permanentTargets, List<String> permanentDependencies)
+    public AbstractBsjMetaprogramMetaAnnotation(List<String> permanentTargets, List<String> permanentDependencies)
     {
         this(permanentTargets, permanentDependencies, Arrays.<String> asList(), MetaprogramLocalMode.INSERT,
                 MetaprogramPackageMode.READ_ONLY);
@@ -60,7 +60,7 @@ public abstract class AbstractBsjMetaAnnotationMetaprogram implements BsjMetaAnn
      * @param permanentDependencies The dependencies that instances of this meta-annotation class always use.
      * @param permanentWeakDependencies The weak dependencies that instances of this meta-annotation class always use.
      */
-    public AbstractBsjMetaAnnotationMetaprogram(List<String> permanentTargets, List<String> permanentDependencies,
+    public AbstractBsjMetaprogramMetaAnnotation(List<String> permanentTargets, List<String> permanentDependencies,
             List<String> permanentWeakDependencies)
     {
         this(permanentTargets, permanentDependencies, permanentWeakDependencies, MetaprogramLocalMode.INSERT,
@@ -76,7 +76,7 @@ public abstract class AbstractBsjMetaAnnotationMetaprogram implements BsjMetaAnn
      * @param localMode The default local mode of this meta-annotation metaprogram.
      * @param packageMode The default package mode of this meta-annotation metaprogram.
      */
-    public AbstractBsjMetaAnnotationMetaprogram(List<String> permanentTargets, List<String> permanentDependencies,
+    public AbstractBsjMetaprogramMetaAnnotation(List<String> permanentTargets, List<String> permanentDependencies,
             List<String> permanentWeakDependencies, MetaprogramLocalMode localMode, MetaprogramPackageMode packageMode)
     {
         this.permanentTargets = permanentTargets;
@@ -163,7 +163,7 @@ public abstract class AbstractBsjMetaAnnotationMetaprogram implements BsjMetaAnn
             Context<MetaAnnotationMetaprogramAnchorNode, MetaAnnotationMetaprogramAnchorNode> context);
 
     @Override
-    public BsjMetaprogram<MetaAnnotationMetaprogramAnchorNode, MetaAnnotationMetaprogramAnchorNode> getMetaprogram()
+    public BsjMetaAnnotationMetaprogram getMetaprogram()
     {
         final List<String> targets = new ArrayList<String>();
         targets.addAll(this.permanentTargets);
@@ -182,14 +182,13 @@ public abstract class AbstractBsjMetaAnnotationMetaprogram implements BsjMetaAnn
 
         final MetaprogramPackageMode packageMode = this.packageMode;
 
-        return new BsjMetaprogram<MetaAnnotationMetaprogramAnchorNode, MetaAnnotationMetaprogramAnchorNode>()
+        return new BsjMetaAnnotationMetaprogram()
         {
 
             @Override
-            public void execute(
-                    Context<MetaAnnotationMetaprogramAnchorNode, MetaAnnotationMetaprogramAnchorNode> context)
+            public void execute(MetaAnnotationContext context)
             {
-                AbstractBsjMetaAnnotationMetaprogram.this.execute(context);
+                AbstractBsjMetaprogramMetaAnnotation.this.execute(context);
             }
 
             @Override

@@ -15,7 +15,7 @@ import edu.jhu.cs.bsj.compiler.ast.node.TypeDeclarationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.TypeNode;
 import edu.jhu.cs.bsj.compiler.ast.node.list.ClassMemberListNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaAnnotationMetaprogramAnchorNode;
-import edu.jhu.cs.bsj.compiler.metaprogram.AbstractBsjMetaAnnotationMetaprogram;
+import edu.jhu.cs.bsj.compiler.metaprogram.AbstractBsjMetaprogramMetaAnnotation;
 import edu.jhu.cs.bsj.compiler.metaprogram.Context;
 import edu.jhu.cs.bsj.stdlib.diagnostic.impl.InvalidEnclosingTypeDiagnosticImpl;
 
@@ -43,7 +43,7 @@ public class TypeDeclUtils
      */
     public static IdentifierNode getEnclosingTypeName(
             Context<MetaAnnotationMetaprogramAnchorNode,MetaAnnotationMetaprogramAnchorNode> context,
-            AbstractBsjMetaAnnotationMetaprogram caller)
+            AbstractBsjMetaprogramMetaAnnotation caller)
     {
         // Find our enclosing type declaration. It must be an enum, class, or interface for this to work.
         TypeDeclarationNode enclosingTypeDeclaration = context.getAnchor().getNearestAncestorOfType(
@@ -81,7 +81,7 @@ public class TypeDeclUtils
      */
     public static ClassMemberListNode getClassMembers(
             Context<MetaAnnotationMetaprogramAnchorNode,MetaAnnotationMetaprogramAnchorNode> context,
-            AbstractBsjMetaAnnotationMetaprogram caller)
+            AbstractBsjMetaprogramMetaAnnotation caller)
     {
         // Find our enclosing type declaration. It must be an enum or a class for this to work.
         TypeDeclarationNode enclosingTypeDeclaration = context.getAnchor().getNearestAncestorOfType(

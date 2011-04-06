@@ -18,7 +18,7 @@ import edu.jhu.cs.bsj.compiler.ast.util.BsjTypedNodeNoOpVisitor;
 import edu.jhu.cs.bsj.compiler.impl.tool.compiler.task.data.CanonicalNodeInfo;
 import edu.jhu.cs.bsj.compiler.impl.tool.compiler.task.data.InjectionInfo;
 import edu.jhu.cs.bsj.compiler.metaannotation.BsjMetaAnnotation;
-import edu.jhu.cs.bsj.compiler.metaprogram.BsjMetaAnnotationMetaprogram;
+import edu.jhu.cs.bsj.compiler.metaprogram.BsjMetaprogramMetaAnnotation;
 import edu.jhu.cs.bsj.compiler.tool.BsjToolkit;
 
 /**
@@ -118,10 +118,10 @@ public class AnchorExtractor
             if (metaAnnotation != null)
             {
                 BsjMetaAnnotation annotationObject = metaAnnotation.getMetaAnnotationObject();
-                if (annotationObject instanceof BsjMetaAnnotationMetaprogram)
+                if (annotationObject instanceof BsjMetaprogramMetaAnnotation)
                 {
                     // register a task to build a metaprogram profile from this object
-                    BsjMetaAnnotationMetaprogram metaprogramObject = (BsjMetaAnnotationMetaprogram) annotationObject;
+                    BsjMetaprogramMetaAnnotation metaprogramObject = (BsjMetaprogramMetaAnnotation) annotationObject;
                     handler = new MetaAnnotationMetaprogramAnchorHandler(
                             this.toolkit, this.diagnosticListener,
                             (MetaAnnotationMetaprogramAnchorNode) targetAnchor, metaAnnotationAnchor, this.injectionInfo,

@@ -21,7 +21,7 @@ import edu.jhu.cs.bsj.compiler.ast.node.list.ClassMemberListNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaAnnotationMetaprogramAnchorNode;
 import edu.jhu.cs.bsj.compiler.impl.utils.NotImplementedYetException;
 import edu.jhu.cs.bsj.compiler.impl.utils.Pair;
-import edu.jhu.cs.bsj.compiler.metaprogram.AbstractBsjMetaAnnotationMetaprogram;
+import edu.jhu.cs.bsj.compiler.metaprogram.AbstractBsjMetaprogramMetaAnnotation;
 import edu.jhu.cs.bsj.compiler.metaprogram.Context;
 import edu.jhu.cs.bsj.stdlib.diagnostic.impl.InvalidAnnotatedDeclarationDiagnosticImpl;
 import edu.jhu.cs.bsj.stdlib.diagnostic.impl.MissingMethodDeclarationDiagnosticImpl;
@@ -29,10 +29,10 @@ import edu.jhu.cs.bsj.stdlib.utils.GetterFilter;
 import edu.jhu.cs.bsj.stdlib.utils.TypeDeclUtils;
 
 public class MetaannotationMetaprogramToolkit {
-	private AbstractBsjMetaAnnotationMetaprogram program;
+	private AbstractBsjMetaprogramMetaAnnotation program;
 	private Context<MetaAnnotationMetaprogramAnchorNode,MetaAnnotationMetaprogramAnchorNode> context;
 	public MetaannotationMetaprogramToolkit(
-			AbstractBsjMetaAnnotationMetaprogram program,
+			AbstractBsjMetaprogramMetaAnnotation program,
 			Context<MetaAnnotationMetaprogramAnchorNode,MetaAnnotationMetaprogramAnchorNode> context) {
 		super();
 		this.program = program;

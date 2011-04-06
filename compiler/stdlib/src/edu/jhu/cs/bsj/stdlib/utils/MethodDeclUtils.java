@@ -3,7 +3,7 @@ package edu.jhu.cs.bsj.stdlib.utils;
 import edu.jhu.cs.bsj.compiler.ast.exception.MetaprogramExecutionFailureException;
 import edu.jhu.cs.bsj.compiler.ast.node.MethodDeclarationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaAnnotationMetaprogramAnchorNode;
-import edu.jhu.cs.bsj.compiler.metaprogram.AbstractBsjMetaAnnotationMetaprogram;
+import edu.jhu.cs.bsj.compiler.metaprogram.AbstractBsjMetaprogramMetaAnnotation;
 import edu.jhu.cs.bsj.compiler.metaprogram.Context;
 
 /**
@@ -30,7 +30,7 @@ public class MethodDeclUtils
      */
     public static MethodDeclarationNode getNearestMethodDeclaration(
             Context<MetaAnnotationMetaprogramAnchorNode,MetaAnnotationMetaprogramAnchorNode> context,
-            AbstractBsjMetaAnnotationMetaprogram caller)
+            AbstractBsjMetaprogramMetaAnnotation caller)
     {
         MethodDeclarationNode enclosingMethodDeclaration = context.getAnchor().getNearestAncestorOfType(
                 MethodDeclarationNode.class);

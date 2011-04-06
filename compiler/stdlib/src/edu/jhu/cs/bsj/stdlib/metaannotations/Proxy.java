@@ -35,14 +35,14 @@ import edu.jhu.cs.bsj.compiler.impl.utils.NotImplementedYetException;
 import edu.jhu.cs.bsj.compiler.metaannotation.BsjMetaAnnotationElementGetter;
 import edu.jhu.cs.bsj.compiler.metaannotation.BsjMetaAnnotationElementSetter;
 import edu.jhu.cs.bsj.compiler.metaannotation.InvalidMetaAnnotationConfigurationException;
-import edu.jhu.cs.bsj.compiler.metaprogram.AbstractBsjMetaAnnotationMetaprogram;
+import edu.jhu.cs.bsj.compiler.metaprogram.AbstractBsjMetaprogramMetaAnnotation;
 import edu.jhu.cs.bsj.compiler.metaprogram.Context;
 
 /*
  * Proxy Class enables the implementation of proxy design pattern in BSJ. It takes in the interface name to be proxied. 
  */
 
-public class Proxy extends AbstractBsjMetaAnnotationMetaprogram {
+public class Proxy extends AbstractBsjMetaprogramMetaAnnotation {
 
 	private String interfaceName;
 	

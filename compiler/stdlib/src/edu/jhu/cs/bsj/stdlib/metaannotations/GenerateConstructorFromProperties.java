@@ -15,7 +15,7 @@ import edu.jhu.cs.bsj.compiler.ast.node.list.VariableListNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaAnnotationMetaprogramAnchorNode;
 import edu.jhu.cs.bsj.compiler.impl.utils.Pair;
 import edu.jhu.cs.bsj.compiler.metaannotation.InvalidMetaAnnotationConfigurationException;
-import edu.jhu.cs.bsj.compiler.metaprogram.AbstractBsjMetaAnnotationMetaprogram;
+import edu.jhu.cs.bsj.compiler.metaprogram.AbstractBsjMetaprogramMetaAnnotation;
 import edu.jhu.cs.bsj.compiler.metaprogram.Context;
 import edu.jhu.cs.bsj.stdlib.metaannotations.utils.NameUtilities;
 import edu.jhu.cs.bsj.stdlib.metaannotations.utils.Utility;
@@ -30,7 +30,7 @@ import edu.jhu.cs.bsj.stdlib.utils.TypeDeclUtils;
  * @author Nathan Krasnopoler
  */
 public class GenerateConstructorFromProperties extends
-        AbstractBsjMetaAnnotationMetaprogram
+        AbstractBsjMetaprogramMetaAnnotation
 {
     public GenerateConstructorFromProperties()
     {

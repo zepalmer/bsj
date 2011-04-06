@@ -11,26 +11,26 @@ import edu.jhu.cs.bsj.compiler.ast.BsjSourceLocation;
 import edu.jhu.cs.bsj.compiler.ast.node.Node;
 import edu.jhu.cs.bsj.compiler.ast.node.PackageNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaAnnotationMetaprogramAnchorNode;
-import edu.jhu.cs.bsj.compiler.impl.metaprogram.UserMetaprogramWrapper;
+import edu.jhu.cs.bsj.compiler.impl.metaprogram.MetaAnnotationMetaprogramWrapper;
 import edu.jhu.cs.bsj.compiler.impl.operations.EnclosingNameOperation;
 import edu.jhu.cs.bsj.compiler.impl.tool.compiler.MetaprogramProfile;
 import edu.jhu.cs.bsj.compiler.impl.tool.compiler.dependency.Dependency;
 import edu.jhu.cs.bsj.compiler.impl.tool.compiler.task.data.InjectionInfo;
 import edu.jhu.cs.bsj.compiler.impl.utils.NotImplementedYetException;
 import edu.jhu.cs.bsj.compiler.impl.utils.StringUtilities;
-import edu.jhu.cs.bsj.compiler.metaprogram.BsjMetaprogram;
+import edu.jhu.cs.bsj.compiler.metaprogram.BsjMetaAnnotationMetaprogram;
 import edu.jhu.cs.bsj.compiler.tool.BsjToolkit;
 
 public class MetaAnnotationMetaprogramAnchorHandler extends
         AbstractAnchorHandler<MetaAnnotationMetaprogramAnchorNode, MetaAnnotationMetaprogramAnchorNode>
 {
     /** The meta-annotation metaprogram for which a profile should be constructed and registered. */
-    private BsjMetaprogram<MetaAnnotationMetaprogramAnchorNode, MetaAnnotationMetaprogramAnchorNode> metaprogramObject;
+    private BsjMetaAnnotationMetaprogram metaprogramObject;
 
     public MetaAnnotationMetaprogramAnchorHandler(BsjToolkit toolkit,
             DiagnosticListener<BsjSourceLocation> diagnosticListener, MetaAnnotationMetaprogramAnchorNode targetAnchor,
             MetaAnnotationMetaprogramAnchorNode canonicalAnchor, InjectionInfo injectionInfo,
-            BsjMetaprogram<MetaAnnotationMetaprogramAnchorNode, MetaAnnotationMetaprogramAnchorNode> metaprogramObject)
+            BsjMetaAnnotationMetaprogram metaprogramObject)
     {
         super(toolkit, diagnosticListener, targetAnchor, canonicalAnchor, injectionInfo);
         this.metaprogramObject = metaprogramObject;
@@ -54,9 +54,8 @@ public class MetaAnnotationMetaprogramAnchorHandler extends
 
         // TODO: validate that the target names and dependency names are not bogus
         MetaprogramProfile<MetaAnnotationMetaprogramAnchorNode, MetaAnnotationMetaprogramAnchorNode> profile = new MetaprogramProfile<MetaAnnotationMetaprogramAnchorNode, MetaAnnotationMetaprogramAnchorNode>(
-                new UserMetaprogramWrapper<MetaAnnotationMetaprogramAnchorNode, MetaAnnotationMetaprogramAnchorNode>(
-                        this.metaprogramObject), this.getCanonicalAnchor(), dependencies, targetNames,
-                this.metaprogramObject.getLocalMode(), this.metaprogramObject.getPackageMode(),
+                new MetaAnnotationMetaprogramWrapper(this.metaprogramObject), this.getCanonicalAnchor(), dependencies,
+                targetNames, this.metaprogramObject.getLocalMode(), this.metaprogramObject.getPackageMode(),
                 this.getInjectionInfo().isPurelyInjected());
         return profile;
     }

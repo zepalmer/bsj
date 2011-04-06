@@ -9,13 +9,14 @@ import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramAnchorNode;
 
 /**
  * This interface is implemented by those classes which are intended to represent metaprograms in the BSJ compilation
- * system. Meta-annotations which represent metaprograms use this interface to provide metaprograms to the BSJ compiler
- * upon request.
+ * system.
  * 
- * @param T The type of metaprogram anchor node used by this metaprogram.
+ * @param <T> The type of metaprogram anchor node used by this metaprogram.
+ * @param <U> The type of node which may replace the metaprogram's anchor.
+ * @param <V> The type of context that this metaprogram expects to receive when executing.
  * @author Zachary Palmer
  */
-public interface BsjMetaprogram<T extends MetaprogramAnchorNode<U>, U extends Node>
+public interface BsjMetaprogram<T extends MetaprogramAnchorNode<U>, U extends Node, V extends Context<T,U>>
 {
 	/**
 	 * Obtains a list of the targets in which this metaprogram participates. The metaprogram object is obligated to
@@ -65,5 +66,5 @@ public interface BsjMetaprogram<T extends MetaprogramAnchorNode<U>, U extends No
 	 * 
 	 * @param context The context in which to execute this metaprogram.
 	 */
-	public void execute(Context<T,U> context);
+	public void execute(V context);
 }

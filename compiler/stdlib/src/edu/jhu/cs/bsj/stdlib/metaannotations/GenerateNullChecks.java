@@ -20,7 +20,7 @@ import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaAnnotationMetaprogramAnchorNode
 import edu.jhu.cs.bsj.compiler.metaannotation.BsjMetaAnnotationElementGetter;
 import edu.jhu.cs.bsj.compiler.metaannotation.BsjMetaAnnotationElementSetter;
 import edu.jhu.cs.bsj.compiler.metaannotation.InvalidMetaAnnotationConfigurationException;
-import edu.jhu.cs.bsj.compiler.metaprogram.AbstractBsjMetaAnnotationMetaprogram;
+import edu.jhu.cs.bsj.compiler.metaprogram.AbstractBsjMetaprogramMetaAnnotation;
 import edu.jhu.cs.bsj.compiler.metaprogram.Context;
 import edu.jhu.cs.bsj.stdlib.utils.MethodDeclUtils;
 
@@ -31,7 +31,7 @@ import edu.jhu.cs.bsj.stdlib.utils.MethodDeclUtils;
  * 
  * @author Joseph Riley
  */
-public class GenerateNullChecks extends AbstractBsjMetaAnnotationMetaprogram
+public class GenerateNullChecks extends AbstractBsjMetaprogramMetaAnnotation
 {
     /** The explicitly-specified list of properties. */
     private String[] parameters = null;

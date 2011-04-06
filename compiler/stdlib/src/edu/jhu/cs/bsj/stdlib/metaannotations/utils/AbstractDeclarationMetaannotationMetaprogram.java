@@ -8,11 +8,11 @@ import edu.jhu.cs.bsj.compiler.ast.MetaprogramPackageMode;
 import edu.jhu.cs.bsj.compiler.ast.exception.MetaprogramExecutionFailureException;
 import edu.jhu.cs.bsj.compiler.ast.node.Node;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaAnnotationMetaprogramAnchorNode;
-import edu.jhu.cs.bsj.compiler.metaprogram.AbstractBsjMetaAnnotationMetaprogram;
+import edu.jhu.cs.bsj.compiler.metaprogram.AbstractBsjMetaprogramMetaAnnotation;
 import edu.jhu.cs.bsj.compiler.metaprogram.Context;
 import edu.jhu.cs.bsj.stdlib.diagnostic.impl.InvalidAnnotatedDeclarationDiagnosticImpl;
 
-public abstract class AbstractDeclarationMetaannotationMetaprogram<T extends Node> extends AbstractBsjMetaAnnotationMetaprogram {
+public abstract class AbstractDeclarationMetaannotationMetaprogram<T extends Node> extends AbstractBsjMetaprogramMetaAnnotation {
 
 	private Class<T> clazz;
 

@@ -24,7 +24,7 @@ import edu.jhu.cs.bsj.compiler.ast.node.list.ExpressionListNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaAnnotationMetaprogramAnchorNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaAnnotationNode;
 import edu.jhu.cs.bsj.compiler.metaannotation.InvalidMetaAnnotationConfigurationException;
-import edu.jhu.cs.bsj.compiler.metaprogram.AbstractBsjMetaAnnotationMetaprogram;
+import edu.jhu.cs.bsj.compiler.metaprogram.AbstractBsjMetaprogramMetaAnnotation;
 import edu.jhu.cs.bsj.compiler.metaprogram.Context;
 import edu.jhu.cs.bsj.stdlib.utils.MethodDeclUtils;
 import edu.jhu.cs.bsj.stdlib.utils.TypeDeclUtils;
@@ -37,7 +37,7 @@ import edu.jhu.cs.bsj.stdlib.utils.TypeDeclUtils;
  * 
  * @author Joseph Riley
  */
-public class Memoized extends AbstractBsjMetaAnnotationMetaprogram
+public class Memoized extends AbstractBsjMetaprogramMetaAnnotation
 {
 	/** The name of the map for storing memoized results. */
 	private String hashMapName;

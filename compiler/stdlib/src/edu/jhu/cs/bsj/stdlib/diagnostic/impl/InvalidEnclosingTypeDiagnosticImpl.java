@@ -17,7 +17,7 @@ import javax.tools.Diagnostic.Kind;
 
 import edu.jhu.cs.bsj.compiler.ast.node.TypeDeclarationNode;
 import edu.jhu.cs.bsj.compiler.impl.utils.Pair;
-import edu.jhu.cs.bsj.compiler.metaprogram.AbstractBsjMetaAnnotationMetaprogram;
+import edu.jhu.cs.bsj.compiler.metaprogram.AbstractBsjMetaprogramMetaAnnotation;
 import edu.jhu.cs.bsj.stdlib.diagnostic.InvalidEnclosingTypeDiagnostic;
 
 
@@ -36,7 +36,7 @@ public class InvalidEnclosingTypeDiagnosticImpl extends InvalidMetaAnnotationUse
     private List<Class<? extends TypeDeclarationNode>> legalTypes;
     
     public InvalidEnclosingTypeDiagnosticImpl(
-            Class<? extends AbstractBsjMetaAnnotationMetaprogram> metaAnnotationClass,
+            Class<? extends AbstractBsjMetaprogramMetaAnnotation> metaAnnotationClass,
             TypeDeclarationNode node,
             List<Class<? extends TypeDeclarationNode>> legalTypes)
     {

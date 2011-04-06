@@ -17,7 +17,7 @@ import javax.tools.Diagnostic.Kind;
 
 import edu.jhu.cs.bsj.compiler.ast.node.Node;
 import edu.jhu.cs.bsj.compiler.impl.utils.Pair;
-import edu.jhu.cs.bsj.compiler.metaprogram.AbstractBsjMetaAnnotationMetaprogram;
+import edu.jhu.cs.bsj.compiler.metaprogram.AbstractBsjMetaprogramMetaAnnotation;
 import edu.jhu.cs.bsj.stdlib.diagnostic.InvalidAnnotatedDeclarationDiagnostic;
 
 
@@ -35,7 +35,7 @@ public class InvalidAnnotatedDeclarationDiagnosticImpl extends InvalidMetaAnnota
     private List<Class<? extends Node>> legalTypes;
     
     public InvalidAnnotatedDeclarationDiagnosticImpl(
-            Class<? extends AbstractBsjMetaAnnotationMetaprogram> metaAnnotationClass,
+            Class<? extends AbstractBsjMetaprogramMetaAnnotation> metaAnnotationClass,
             Node annotatedNode,
             List<Class<? extends Node>> legalTypes)
     {

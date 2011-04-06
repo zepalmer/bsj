@@ -47,7 +47,7 @@ import edu.jhu.cs.bsj.compiler.lang.type.BsjDeclaredType;
 import edu.jhu.cs.bsj.compiler.lang.type.BsjPrimitiveType;
 import edu.jhu.cs.bsj.compiler.lang.type.BsjType;
 import edu.jhu.cs.bsj.compiler.metaannotation.InvalidMetaAnnotationConfigurationException;
-import edu.jhu.cs.bsj.compiler.metaprogram.AbstractBsjMetaAnnotationMetaprogram;
+import edu.jhu.cs.bsj.compiler.metaprogram.AbstractBsjMetaprogramMetaAnnotation;
 import edu.jhu.cs.bsj.compiler.metaprogram.Context;
 import edu.jhu.cs.bsj.compiler.tool.typechecker.BsjTypechecker;
 import edu.jhu.cs.bsj.compiler.tool.typechecker.TypecheckingException;
@@ -58,7 +58,7 @@ import edu.jhu.cs.bsj.compiler.tool.typechecker.TypecheckingException;
  * @author Zachary Palmer
  * @author Uday Garikipati
  */
-public class BigIntegerOperatorOverloading extends AbstractBsjMetaAnnotationMetaprogram
+public class BigIntegerOperatorOverloading extends AbstractBsjMetaprogramMetaAnnotation
 {
 
     private Context<MetaAnnotationMetaprogramAnchorNode, MetaAnnotationMetaprogramAnchorNode> context;

@@ -43,7 +43,7 @@ import edu.jhu.cs.bsj.compiler.impl.utils.NotImplementedYetException;
 import edu.jhu.cs.bsj.compiler.metaannotation.BsjMetaAnnotationElementGetter;
 import edu.jhu.cs.bsj.compiler.metaannotation.BsjMetaAnnotationElementSetter;
 import edu.jhu.cs.bsj.compiler.metaannotation.InvalidMetaAnnotationConfigurationException;
-import edu.jhu.cs.bsj.compiler.metaprogram.AbstractBsjMetaAnnotationMetaprogram;
+import edu.jhu.cs.bsj.compiler.metaprogram.AbstractBsjMetaprogramMetaAnnotation;
 import edu.jhu.cs.bsj.compiler.metaprogram.Context;
 import edu.jhu.cs.bsj.compiler.tool.typechecker.BsjTypechecker;
 import edu.jhu.cs.bsj.stdlib.diagnostic.impl.InvalidAnnotatedDeclarationDiagnosticImpl;
@@ -61,7 +61,7 @@ import edu.jhu.cs.bsj.stdlib.utils.FilterByMethodName;
  */
 // TODO: replace all uses of strings for identifiers with IdentifierNode
 // TODO: use an approach based on the type of the method to which we're delegating rather than its declaration AST
-public class Delegate extends AbstractBsjMetaAnnotationMetaprogram
+public class Delegate extends AbstractBsjMetaprogramMetaAnnotation
 {
 
     private IdentifierNode method;
