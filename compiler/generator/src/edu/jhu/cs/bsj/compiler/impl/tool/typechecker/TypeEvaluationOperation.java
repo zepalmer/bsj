@@ -1430,7 +1430,7 @@ public class TypeEvaluationOperation implements
         // For each potentially applicable method, generate its type variable substitution map and effective
         // parameter
         // types.
-        Map<BsjExecutableType, GenericMethodData> genericMethodDataMap = extractGenericMethodData(node,
+        Map<BsjExecutableType, GenericMethodData> genericMethodDataMap = extractGenericMethodData(node, argumentTypes,
                 potentiallyApplicableMethods);
 
         // §15.12.2.2: Identify matching arity methods applicable by subtyping.
@@ -2817,7 +2817,7 @@ public class TypeEvaluationOperation implements
     }
 
     private Map<BsjExecutableType, GenericMethodData> extractGenericMethodData(MethodInvocationNode node,
-            Collection<? extends BsjExecutableType> potentiallyApplicableMethods)
+            List<BsjType> argumentTypes, Collection<? extends BsjExecutableType> potentiallyApplicableMethods)
     {
         Map<BsjExecutableType, GenericMethodData> genericMethodDataMap = new HashMap<BsjExecutableType, GenericMethodData>();
         for (BsjExecutableType executableType : potentiallyApplicableMethods)
@@ -2831,7 +2831,7 @@ public class TypeEvaluationOperation implements
                 if (node.getTypeArguments().size() == 0)
                 {
                     // Infer type arguments as per §15.12.2.7
-                    MethodTypeInferrer inferrer = new MethodTypeInferrer(node, executableType);
+                    MethodTypeInferrer inferrer = new MethodTypeInferrer(node, argumentTypes, executableType);
                     substitutionMap = inferrer.infer();
                     BsjTypeArgument[] typeArgs = new BsjTypeArgument[executableType.getTypeVariables().size()];
                     for (int i = 0; i < executableType.getTypeVariables().size(); i++)
