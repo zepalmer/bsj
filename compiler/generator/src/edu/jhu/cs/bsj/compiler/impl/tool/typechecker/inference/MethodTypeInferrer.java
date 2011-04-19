@@ -22,7 +22,7 @@ public class MethodTypeInferrer
         // TODO Auto-generated constructor stub
     }
 
-    public Map<BsjTypeVariable, BsjTypeArgument> infer()
+    public Map<BsjTypeVariable, BsjTypeArgument> infer() throws AbstractMethodTypeInferenceException
     {
         throw new NotImplementedYetException();
     }

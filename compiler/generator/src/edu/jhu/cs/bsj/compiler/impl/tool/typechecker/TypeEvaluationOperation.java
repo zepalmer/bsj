@@ -71,6 +71,7 @@ import edu.jhu.cs.bsj.compiler.ast.node.meta.SingleElementMetaAnnotationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.SpliceNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.TypeDeclarationMetaprogramAnchorNode;
 import edu.jhu.cs.bsj.compiler.impl.tool.compiler.codeliteral.CodeLiteralEvaluator;
+import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.inference.AbstractMethodTypeInferenceException;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.inference.MethodTypeInferrer;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.namespace.map.NamespaceMap;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.ArrayTypeImpl;
@@ -2832,7 +2833,13 @@ public class TypeEvaluationOperation implements
                 {
                     // Infer type arguments as per §15.12.2.7
                     MethodTypeInferrer inferrer = new MethodTypeInferrer(node, argumentTypes, executableType);
-                    substitutionMap = inferrer.infer();
+                    try
+                    {
+                        substitutionMap = inferrer.infer();
+                    } catch (AbstractMethodTypeInferenceException e)
+                    {
+                        throw new NotImplementedYetException(e);
+                    }
                     BsjTypeArgument[] typeArgs = new BsjTypeArgument[executableType.getTypeVariables().size()];
                     for (int i = 0; i < executableType.getTypeVariables().size(); i++)
                     {
