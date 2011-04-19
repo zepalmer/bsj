@@ -1,0 +1,17 @@
+public class TypeParameterInference
+{
+//    public class Foo<T>
+//    {
+//        private T t;
+//    }
+//    
+//    public <T> foo(Foo<T> x)
+//    {
+//        
+//    }
+//    
+//    public void bar()
+//    {
+//        foo(new Foo<String>());
+//    }
+}
