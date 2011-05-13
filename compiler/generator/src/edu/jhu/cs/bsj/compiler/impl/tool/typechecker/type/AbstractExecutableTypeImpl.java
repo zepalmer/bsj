@@ -7,6 +7,7 @@ import javax.lang.model.type.TypeVisitor;
 
 import edu.jhu.cs.bsj.compiler.ast.node.Node;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.TypecheckerManager;
+import edu.jhu.cs.bsj.compiler.lang.element.BsjExecutableElement;
 import edu.jhu.cs.bsj.compiler.lang.type.BsjExecutableType;
 import edu.jhu.cs.bsj.compiler.lang.type.BsjLazyTypeContainer;
 import edu.jhu.cs.bsj.compiler.lang.type.BsjType;
@@ -165,5 +166,11 @@ public abstract class AbstractExecutableTypeImpl<T extends Node> extends TypeMir
     public BsjExecutableType evaluate()
     {
         return this;
+    }
+
+    @Override
+    public BsjExecutableElement asElement()
+    {
+        return (BsjExecutableElement)this.getManager().getToolkit().makeElement(this.getBackingNode());
     }
 }

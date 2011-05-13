@@ -5,6 +5,8 @@ import java.util.Map;
 
 import javax.lang.model.type.ExecutableType;
 
+import edu.jhu.cs.bsj.compiler.lang.element.BsjExecutableElement;
+
 /**
  * Represents an executable type as seen by the BSJ typechecker.
  * 
@@ -25,6 +27,8 @@ public interface BsjExecutableType extends ExecutableType, BsjActualType
 	public BsjExecutableType performTypeSubstitution(Map<BsjTypeVariable, BsjTypeArgument> substitutionMap);
 	
 	public boolean isVarargs();
+	
+	public BsjExecutableElement asElement();
 	
     /**
      * @see BsjType#evaluate()
