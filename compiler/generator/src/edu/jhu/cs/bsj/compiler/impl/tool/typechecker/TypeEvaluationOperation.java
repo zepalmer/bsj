@@ -71,8 +71,6 @@ import edu.jhu.cs.bsj.compiler.ast.node.meta.SingleElementMetaAnnotationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.SpliceNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.TypeDeclarationMetaprogramAnchorNode;
 import edu.jhu.cs.bsj.compiler.impl.tool.compiler.codeliteral.CodeLiteralEvaluator;
-import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.inference.AbstractMethodTypeInferenceException;
-import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.inference.MethodTypeInferrer;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.namespace.map.NamespaceMap;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.ArrayTypeImpl;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.NonePseudoTypeImpl;
@@ -1429,8 +1427,7 @@ public class TypeEvaluationOperation implements
         }
 
         // For each potentially applicable method, generate its type variable substitution map and effective
-        // parameter
-        // types.
+        // parameter types.
         Map<BsjExecutableType, GenericMethodData> genericMethodDataMap = extractGenericMethodData(node, argumentTypes,
                 potentiallyApplicableMethods);
 
@@ -2831,21 +2828,23 @@ public class TypeEvaluationOperation implements
                 // For a generic method, consider inferring type arguments
                 if (node.getTypeArguments().size() == 0)
                 {
+                    throw new NotImplementedYetException();
                     // Infer type arguments as per §15.12.2.7
-                    MethodTypeInferrer inferrer = new MethodTypeInferrer(node, argumentTypes, executableType);
-                    try
-                    {
-                        substitutionMap = inferrer.infer();
-                    } catch (AbstractMethodTypeInferenceException e)
-                    {
-                        throw new NotImplementedYetException(e);
-                    }
-                    BsjTypeArgument[] typeArgs = new BsjTypeArgument[executableType.getTypeVariables().size()];
-                    for (int i = 0; i < executableType.getTypeVariables().size(); i++)
-                    {
-                        typeArgs[i] = substitutionMap.get(executableType.getTypeVariables().get(i));
-                    }
-                    typeArguments = Arrays.asList(typeArgs);
+//                    MethodTypeInferrer inferrer = new MethodTypeInferrer();
+//                    TODO: refactor - inferrer might need to be called several times?
+//                    try
+//                    {
+//                        substitutionMap = inferrer.infer();
+//                    } catch (AbstractMethodTypeInferenceException e)
+//                    {
+//                        throw new NotImplementedYetException(e);
+//                    }
+//                    BsjTypeArgument[] typeArgs = new BsjTypeArgument[executableType.getTypeVariables().size()];
+//                    for (int i = 0; i < executableType.getTypeVariables().size(); i++)
+//                    {
+//                        typeArgs[i] = substitutionMap.get(executableType.getTypeVariables().get(i));
+//                    }
+//                    typeArguments = Arrays.asList(typeArgs);
                 } else
                 {
                     typeArguments = new ArrayList<BsjTypeArgument>();
