@@ -2,6 +2,7 @@ package edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type;
 
 import java.util.Arrays;
 import java.util.Map;
+import java.util.Set;
 
 import javax.lang.model.type.TypeKind;
 import javax.lang.model.type.TypeVisitor;
@@ -9,7 +10,10 @@ import javax.lang.model.type.TypeVisitor;
 import edu.jhu.cs.bsj.compiler.ast.node.WildcardTypeNode;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.TypecheckerManager;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.lazy.LazyTypeArgumentContainerImpl;
+import edu.jhu.cs.bsj.compiler.impl.utils.NotImplementedYetException;
 import edu.jhu.cs.bsj.compiler.impl.utils.function.Function;
+import edu.jhu.cs.bsj.compiler.lang.element.BsjDeclaredTypeElement;
+import edu.jhu.cs.bsj.compiler.lang.type.BsjExplicitlyDeclaredType;
 import edu.jhu.cs.bsj.compiler.lang.type.BsjLazyTypeContainer;
 import edu.jhu.cs.bsj.compiler.lang.type.BsjType;
 import edu.jhu.cs.bsj.compiler.lang.type.BsjTypeArgument;
@@ -277,5 +281,23 @@ public class WildcardTypeImpl extends TypeArgumentImpl implements BsjWildcardTyp
     public BsjWildcardType evaluate()
     {
         return this;
+    }
+
+    @Override
+    public Set<BsjTypeVariable> getInvolvedTypeVariables()
+    {
+        throw new NotImplementedYetException();
+    }
+
+    @Override
+    public BsjExplicitlyDeclaredType getSupertypeWithElement(BsjDeclaredTypeElement element)
+    {
+        if (this.extendsBound == null)
+        {
+            return this.getManager().getToolkit().getObjectElement().asType().getSupertypeWithElement(element);
+        } else
+        {
+            return this.extendsBound.getSupertypeWithElement(element);
+        }
     }
 }

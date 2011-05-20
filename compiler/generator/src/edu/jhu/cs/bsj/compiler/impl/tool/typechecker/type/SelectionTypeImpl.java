@@ -1,6 +1,7 @@
 package edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type;
 
 import java.util.Map;
+import java.util.Set;
 
 import javax.lang.model.type.TypeKind;
 import javax.lang.model.type.TypeVisitor;
@@ -8,7 +9,9 @@ import javax.lang.model.type.TypeVisitor;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.TypecheckerManager;
 import edu.jhu.cs.bsj.compiler.impl.utils.StringUtilities;
 import edu.jhu.cs.bsj.compiler.impl.utils.UnmodifiableBag;
+import edu.jhu.cs.bsj.compiler.lang.element.BsjDeclaredTypeElement;
 import edu.jhu.cs.bsj.compiler.lang.type.BsjActualType;
+import edu.jhu.cs.bsj.compiler.lang.type.BsjExplicitlyDeclaredType;
 import edu.jhu.cs.bsj.compiler.lang.type.BsjLazyTypeContainer;
 import edu.jhu.cs.bsj.compiler.lang.type.BsjSelectionType;
 import edu.jhu.cs.bsj.compiler.lang.type.BsjType;
@@ -171,5 +174,17 @@ public class SelectionTypeImpl extends ActualTypeImpl implements BsjSelectionTyp
     public <P, R, X extends Exception> R receive(AbortableBsjTypeVisitor<P, R, X> visitor, P param) throws X
     {
         return visitor.visitBsjSelectionType(this, param);
+    }
+
+    @Override
+    public Set<BsjTypeVariable> getInvolvedTypeVariables()
+    {
+        throw new IllegalStateException("Asked for involved type variables of a selection type!");
+    }
+
+    @Override
+    public BsjExplicitlyDeclaredType getSupertypeWithElement(BsjDeclaredTypeElement element)
+    {
+        return null;
     }
 }

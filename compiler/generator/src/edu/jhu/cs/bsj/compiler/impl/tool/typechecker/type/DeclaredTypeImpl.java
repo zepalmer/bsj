@@ -342,14 +342,16 @@ public class DeclaredTypeImpl extends ReferenceTypeImpl implements BsjExplicitly
         } else
         {
             // If we reach this point, the type is not a type parameter, intersection type, or declared type.
-            // Nothing
-            // else is a supertype of a declared type.
+            // Nothing else is a supertype of a declared type.
             return false;
         }
     }
 
     private Collection<BsjExplicitlyDeclaredType> cachedSupertypes = null;
 
+    /**
+     * Retrieves the <i>immediate</i> supertypes of this type.
+     */
     private Collection<? extends BsjExplicitlyDeclaredType> getSupertypes()
     {
         if (cachedSupertypes == null)
@@ -768,5 +770,34 @@ public class DeclaredTypeImpl extends ReferenceTypeImpl implements BsjExplicitly
     public <P, R, X extends Exception> R receive(AbortableBsjTypeVisitor<P, R, X> visitor, P param) throws X
     {
         return visitor.visitBsjExplicitlyDeclaredType(this, param);
+    }
+
+    @Override
+    public Set<BsjTypeVariable> getInvolvedTypeVariables()
+    {
+        Set<BsjTypeVariable> ret = new HashSet<BsjTypeVariable>();
+        for (BsjTypeArgument a : this.getTypeArguments())
+        {
+            ret.addAll(a.getInvolvedTypeVariables());
+        }
+        return ret;
+    }
+
+    @Override
+    public BsjExplicitlyDeclaredType getSupertypeWithElement(BsjDeclaredTypeElement element)
+    {
+        if (this.typeElement.equals(element))
+        {
+            return this;
+        }
+        for (BsjExplicitlyDeclaredType supertype : getSupertypes())
+        {
+            BsjExplicitlyDeclaredType ret = supertype.getSupertypeWithElement(element);
+            if (ret != null)
+            {
+                return ret;
+            }
+        }
+        return null;
     }
 }

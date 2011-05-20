@@ -1,9 +1,11 @@
 package edu.jhu.cs.bsj.compiler.lang.type;
 
 import java.util.Map;
+import java.util.Set;
 
 import javax.lang.model.type.TypeMirror;
 
+import edu.jhu.cs.bsj.compiler.lang.element.BsjDeclaredTypeElement;
 import edu.jhu.cs.bsj.compiler.lang.type.util.AbortableBsjTypeVisitor;
 
 /**
@@ -193,4 +195,18 @@ public interface BsjType extends TypeMirror
 	 * Calculates a hash code for this type.
 	 */
 	public int hashCode();
+
+    /**
+     * Obtains all type variables that this type "involves".  An "involved" type variable is one which is recursively
+     * contained within this type.
+     */
+    public Set<BsjTypeVariable> getInvolvedTypeVariables();
+    
+    /**
+     * Finds a type which is a supertype of this type, is an explicitly declared type and is defined over the provided
+     * element.  If no such supertype exists, <code>null</code> is returned.
+     * @param element The {@link BsjDeclaredTypeElement} which specifies the element for the required supertype.
+     * @return The corresponding supertype.  This is not necessarily a strict supertype; this type may return itself.
+     */
+    public BsjExplicitlyDeclaredType getSupertypeWithElement(BsjDeclaredTypeElement element);
 }

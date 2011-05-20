@@ -1,12 +1,15 @@
 package edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type;
 
 import java.util.Map;
+import java.util.Set;
 
 import javax.lang.model.type.TypeKind;
 import javax.lang.model.type.TypeVisitor;
 
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.TypecheckerManager;
+import edu.jhu.cs.bsj.compiler.lang.element.BsjDeclaredTypeElement;
 import edu.jhu.cs.bsj.compiler.lang.type.BsjArrayType;
+import edu.jhu.cs.bsj.compiler.lang.type.BsjExplicitlyDeclaredType;
 import edu.jhu.cs.bsj.compiler.lang.type.BsjIntersectionType;
 import edu.jhu.cs.bsj.compiler.lang.type.BsjLazyTypeContainer;
 import edu.jhu.cs.bsj.compiler.lang.type.BsjReferenceType;
@@ -150,5 +153,28 @@ public class ArrayTypeImpl extends ReferenceTypeImpl implements BsjArrayType
     public <P, R, X extends Exception> R receive(AbortableBsjTypeVisitor<P, R, X> visitor, P param) throws X
     {
         return visitor.visitBsjArrayType(this, param);
+    }
+
+    @Override
+    public Set<BsjTypeVariable> getInvolvedTypeVariables()
+    {
+        return this.getComponentType().getInvolvedTypeVariables();
+    }
+
+    @Override
+    public BsjExplicitlyDeclaredType getSupertypeWithElement(BsjDeclaredTypeElement element)
+    {
+        for (BsjDeclaredTypeElement candidate : new BsjDeclaredTypeElement[]{
+                this.getManager().getToolkit().getCloneableElement(),
+                this.getManager().getToolkit().getSerializableElement(),
+                this.getManager().getToolkit().getObjectElement()
+        })
+        {
+            if (element.equals(candidate))
+            {
+                return candidate.asType();
+            }
+        }
+        return null;
     }
 }

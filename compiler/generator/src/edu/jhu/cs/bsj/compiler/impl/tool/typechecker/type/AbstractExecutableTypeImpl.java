@@ -1,14 +1,17 @@
 package edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type;
 
 import java.util.Map;
+import java.util.Set;
 
 import javax.lang.model.type.TypeKind;
 import javax.lang.model.type.TypeVisitor;
 
 import edu.jhu.cs.bsj.compiler.ast.node.Node;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.TypecheckerManager;
+import edu.jhu.cs.bsj.compiler.lang.element.BsjDeclaredTypeElement;
 import edu.jhu.cs.bsj.compiler.lang.element.BsjExecutableElement;
 import edu.jhu.cs.bsj.compiler.lang.type.BsjExecutableType;
+import edu.jhu.cs.bsj.compiler.lang.type.BsjExplicitlyDeclaredType;
 import edu.jhu.cs.bsj.compiler.lang.type.BsjLazyTypeContainer;
 import edu.jhu.cs.bsj.compiler.lang.type.BsjType;
 import edu.jhu.cs.bsj.compiler.lang.type.BsjTypeArgument;
@@ -172,5 +175,20 @@ public abstract class AbstractExecutableTypeImpl<T extends Node> extends TypeMir
     public BsjExecutableElement asElement()
     {
         return (BsjExecutableElement)this.getManager().getToolkit().makeElement(this.getBackingNode());
+    }
+
+    @Override
+    public Set<BsjTypeVariable> getInvolvedTypeVariables()
+    {
+        // NOTE: Strictly speaking, an executable type involves the type variables in its signature.
+        // But the context in which this method is invoked is in the type inference mechanism, which never makes use
+        // of this method.
+        throw new IllegalStateException("Requested type variables involved in executable type!");
+    }
+
+    @Override
+    public BsjExplicitlyDeclaredType getSupertypeWithElement(BsjDeclaredTypeElement element)
+    {
+        return null;
     }
 }

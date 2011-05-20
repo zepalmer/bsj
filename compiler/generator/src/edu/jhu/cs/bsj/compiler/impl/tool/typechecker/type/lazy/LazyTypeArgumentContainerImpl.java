@@ -3,12 +3,15 @@ package edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.lazy;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
 
 import javax.lang.model.type.TypeKind;
 import javax.lang.model.type.TypeVisitor;
 
 import edu.jhu.cs.bsj.compiler.impl.utils.StringUtilities;
 import edu.jhu.cs.bsj.compiler.impl.utils.function.Function;
+import edu.jhu.cs.bsj.compiler.lang.element.BsjDeclaredTypeElement;
+import edu.jhu.cs.bsj.compiler.lang.type.BsjExplicitlyDeclaredType;
 import edu.jhu.cs.bsj.compiler.lang.type.BsjLazyTypeArgumentContainer;
 import edu.jhu.cs.bsj.compiler.lang.type.BsjLazyTypeContainer;
 import edu.jhu.cs.bsj.compiler.lang.type.BsjPrimitiveType;
@@ -224,5 +227,17 @@ public class LazyTypeArgumentContainerImpl implements BsjLazyTypeArgumentContain
         {
             return thunkValue.toString();
         }
+    }
+
+    @Override
+    public Set<BsjTypeVariable> getInvolvedTypeVariables()
+    {
+        return evaluate().getInvolvedTypeVariables();
+    }
+
+    @Override
+    public BsjExplicitlyDeclaredType getSupertypeWithElement(BsjDeclaredTypeElement element)
+    {
+        return evaluate().getSupertypeWithElement(element);
     }
 }

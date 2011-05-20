@@ -1,6 +1,8 @@
 package edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type;
 
+import java.util.Collections;
 import java.util.Map;
+import java.util.Set;
 
 import javax.lang.model.type.TypeKind;
 import javax.lang.model.type.TypeVisitor;
@@ -8,6 +10,8 @@ import javax.lang.model.type.TypeVisitor;
 import edu.jhu.cs.bsj.compiler.ast.PrimitiveType;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.TypecheckerManager;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.TypecheckerToolkit;
+import edu.jhu.cs.bsj.compiler.lang.element.BsjDeclaredTypeElement;
+import edu.jhu.cs.bsj.compiler.lang.type.BsjExplicitlyDeclaredType;
 import edu.jhu.cs.bsj.compiler.lang.type.BsjLazyTypeContainer;
 import edu.jhu.cs.bsj.compiler.lang.type.BsjPrimitiveType;
 import edu.jhu.cs.bsj.compiler.lang.type.BsjReferenceType;
@@ -294,5 +298,17 @@ public class PrimitiveTypeImpl extends ActualTypeImpl implements BsjPrimitiveTyp
     public <P, R, X extends Exception> R receive(AbortableBsjTypeVisitor<P, R, X> visitor, P param) throws X
     {
         return visitor.visitBsjPrimitiveType(this, param);
+    }
+
+    @Override
+    public Set<BsjTypeVariable> getInvolvedTypeVariables()
+    {
+        return Collections.emptySet();
+    }
+
+    @Override
+    public BsjExplicitlyDeclaredType getSupertypeWithElement(BsjDeclaredTypeElement element)
+    {
+        return null;
     }
 }

@@ -1,6 +1,6 @@
 package edu.jhu.cs.bsj.compiler.impl.tool.typechecker.inference;
 
-import edu.jhu.cs.bsj.compiler.lang.type.BsjType;
+import edu.jhu.cs.bsj.compiler.lang.type.BsjActualType;
 
 /**
  * This class implements method invocation conversions used by the type argument inference system. system.
@@ -19,11 +19,11 @@ public class MethodInvocationConversionConstraint
         EQUAL
     }
 
-    private BsjType actualType;
+    private BsjActualType actualType;
     private ConstraintKind constraintKind;
-    private BsjType formalType;
+    private BsjActualType formalType;
 
-    public MethodInvocationConversionConstraint(BsjType actualType, ConstraintKind constraintKind, BsjType formalType)
+    public MethodInvocationConversionConstraint(BsjActualType actualType, ConstraintKind constraintKind, BsjActualType formalType)
     {
         super();
         this.actualType = actualType;
@@ -31,7 +31,7 @@ public class MethodInvocationConversionConstraint
         this.formalType = formalType;
     }
 
-    public BsjType getActualType()
+    public BsjActualType getActualType()
     {
         return actualType;
     }
@@ -41,7 +41,7 @@ public class MethodInvocationConversionConstraint
         return constraintKind;
     }
 
-    public BsjType getFormalType()
+    public BsjActualType getFormalType()
     {
         return formalType;
     }

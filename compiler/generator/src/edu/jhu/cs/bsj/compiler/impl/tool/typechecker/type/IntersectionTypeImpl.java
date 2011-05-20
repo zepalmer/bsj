@@ -2,8 +2,10 @@ package edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import javax.lang.model.type.TypeKind;
 import javax.lang.model.type.TypeVisitor;
@@ -11,8 +13,10 @@ import javax.lang.model.type.TypeVisitor;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.TypecheckerManager;
 import edu.jhu.cs.bsj.compiler.impl.utils.NotImplementedYetException;
 import edu.jhu.cs.bsj.compiler.impl.utils.StringUtilities;
+import edu.jhu.cs.bsj.compiler.lang.element.BsjDeclaredTypeElement;
 import edu.jhu.cs.bsj.compiler.lang.element.BsjTypeParameterElement;
 import edu.jhu.cs.bsj.compiler.lang.type.BsjDeclaredType;
+import edu.jhu.cs.bsj.compiler.lang.type.BsjExplicitlyDeclaredType;
 import edu.jhu.cs.bsj.compiler.lang.type.BsjIntersectionType;
 import edu.jhu.cs.bsj.compiler.lang.type.BsjLazyTypeContainer;
 import edu.jhu.cs.bsj.compiler.lang.type.BsjReferenceType;
@@ -201,5 +205,30 @@ public class IntersectionTypeImpl extends ReferenceTypeImpl implements BsjInters
     public <P, R, X extends Exception> R receive(AbortableBsjTypeVisitor<P, R, X> visitor, P param) throws X
     {
         return visitor.visitBsjIntersectionType(this, param);
+    }
+
+    @Override
+    public Set<BsjTypeVariable> getInvolvedTypeVariables()
+    {
+        Set<BsjTypeVariable> ret = new HashSet<BsjTypeVariable>();
+        for (BsjTypeArgument a : this.getSupertypes())
+        {
+            ret.addAll(a.getInvolvedTypeVariables());
+        }
+        return ret;
+    }
+
+    @Override
+    public BsjExplicitlyDeclaredType getSupertypeWithElement(BsjDeclaredTypeElement element)
+    {
+        for (BsjTypeArgument supertype : getSupertypes())
+        {
+            BsjExplicitlyDeclaredType ret = supertype.getSupertypeWithElement(element);
+            if (ret != null)
+            {
+                return ret;
+            }
+        }
+        return null;
     }
 }
