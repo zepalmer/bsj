@@ -71,6 +71,8 @@ import edu.jhu.cs.bsj.compiler.ast.node.meta.SingleElementMetaAnnotationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.SpliceNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.TypeDeclarationMetaprogramAnchorNode;
 import edu.jhu.cs.bsj.compiler.impl.tool.compiler.codeliteral.CodeLiteralEvaluator;
+import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.inference.AbstractMethodTypeInferenceException;
+import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.inference.MethodInvocationConversionConstraint;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.inference.MethodTypeInferrer;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.namespace.map.NamespaceMap;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.ArrayTypeImpl;
@@ -2642,7 +2644,7 @@ public class TypeEvaluationOperation implements
             }
 
             GenericMethodData genericMethodData = this.calculateGenericMethodDataFor(node, argumentTypes,
-                    executableType);
+                    executableType, false);
 
             // Create the effective list of parameter types
             List<BsjType> parameterTypes = new ArrayList<BsjType>();
@@ -2812,7 +2814,7 @@ public class TypeEvaluationOperation implements
     }
 
     private GenericMethodData calculateGenericMethodDataFor(MethodInvocationNode node, List<BsjType> argumentTypes,
-            BsjExecutableType executableType)
+            BsjExecutableType executableType, boolean varargs)
     {
         // Create a substitution map for type variables
         Map<BsjTypeVariable, BsjTypeArgument> substitutionMap;
@@ -2824,21 +2826,37 @@ public class TypeEvaluationOperation implements
             {
                 // Infer type arguments as per §15.12.2.7
                 MethodTypeInferrer inferrer = new MethodTypeInferrer();
-                // TODO: construct constraints and invoke inferrer
-                throw new NotImplementedYetException();
-                // try
-                // {
-                // substitutionMap = inferrer.infer();
-                // } catch (AbstractMethodTypeInferenceException e)
-                // {
-                // throw new NotImplementedYetException(e);
-                // }
-                // BsjTypeArgument[] typeArgs = new BsjTypeArgument[executableType.getTypeVariables().size()];
-                // for (int i = 0; i < executableType.getTypeVariables().size(); i++)
-                // {
-                // typeArgs[i] = substitutionMap.get(executableType.getTypeVariables().get(i));
-                // }
-                // typeArguments = Arrays.asList(typeArgs);
+                Set<MethodInvocationConversionConstraint> constraints = new HashSet<MethodInvocationConversionConstraint>();
+                if (varargs)
+                {
+                    throw new NotImplementedYetException();
+                } else
+                {
+                    Iterator<? extends BsjType> argIt = argumentTypes.iterator();
+                    Iterator<? extends BsjType> paramIt = executableType.getParameterTypes().iterator();
+                    while (argIt.hasNext() && paramIt.hasNext())
+                    {
+                        constraints.add(new MethodInvocationConversionConstraint(argIt.next(),
+                                MethodInvocationConversionConstraint.ConstraintKind.TO, paramIt.next()));
+                    }
+                    if (argIt.hasNext() || paramIt.hasNext())
+                    {
+                        throw new IllegalStateException("Argument and parameter count differed!");
+                    }
+                }
+                try
+                {
+                    substitutionMap = inferrer.infer(constraints);
+                } catch (AbstractMethodTypeInferenceException e)
+                {
+                    throw new NotImplementedYetException(e);
+                }
+                BsjTypeArgument[] typeArgs = new BsjTypeArgument[executableType.getTypeVariables().size()];
+                for (int i = 0; i < executableType.getTypeVariables().size(); i++)
+                {
+                    typeArgs[i] = substitutionMap.get(executableType.getTypeVariables().get(i));
+                }
+                typeArguments = Arrays.asList(typeArgs);
             } else
             {
                 typeArguments = new ArrayList<BsjTypeArgument>();

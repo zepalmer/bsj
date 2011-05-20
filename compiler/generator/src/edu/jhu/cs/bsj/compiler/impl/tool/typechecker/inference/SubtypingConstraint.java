@@ -1,6 +1,6 @@
 package edu.jhu.cs.bsj.compiler.impl.tool.typechecker.inference;
 
-import edu.jhu.cs.bsj.compiler.lang.type.BsjActualType;
+import edu.jhu.cs.bsj.compiler.lang.type.BsjType;
 
 /**
  * This class represents the subtyping constraints implied by an execution of the type argument inference algorithm.
@@ -19,11 +19,11 @@ public class SubtypingConstraint
         EQUAL_TO
     }
 
-    private BsjActualType constrainedType;
+    private BsjType constrainedType;
     private ConstraintKind constraintKind;
-    private BsjActualType boundType;
+    private BsjType boundType;
 
-    public SubtypingConstraint(BsjActualType constrainedType, ConstraintKind constraintKind, BsjActualType boundType)
+    public SubtypingConstraint(BsjType constrainedType, ConstraintKind constraintKind, BsjType boundType)
     {
         super();
         this.constrainedType = constrainedType;
@@ -31,7 +31,7 @@ public class SubtypingConstraint
         this.boundType = boundType;
     }
 
-    public BsjActualType getConstrainedType()
+    public BsjType getConstrainedType()
     {
         return constrainedType;
     }
@@ -41,7 +41,7 @@ public class SubtypingConstraint
         return constraintKind;
     }
 
-    public BsjActualType getBoundType()
+    public BsjType getBoundType()
     {
         return boundType;
     }
