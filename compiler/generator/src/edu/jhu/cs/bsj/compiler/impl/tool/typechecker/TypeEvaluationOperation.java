@@ -71,6 +71,7 @@ import edu.jhu.cs.bsj.compiler.ast.node.meta.SingleElementMetaAnnotationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.SpliceNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.TypeDeclarationMetaprogramAnchorNode;
 import edu.jhu.cs.bsj.compiler.impl.tool.compiler.codeliteral.CodeLiteralEvaluator;
+import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.inference.MethodTypeInferrer;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.namespace.map.NamespaceMap;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.ArrayTypeImpl;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.NonePseudoTypeImpl;
@@ -80,6 +81,7 @@ import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.TypePseudoTypeImpl;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.type.VoidPseudoTypeImpl;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.value.CodeLiteralSelectionBagImpl;
 import edu.jhu.cs.bsj.compiler.impl.utils.NotImplementedYetException;
+import edu.jhu.cs.bsj.compiler.impl.utils.Pair;
 import edu.jhu.cs.bsj.compiler.impl.utils.TwoElementImmutableSet;
 import edu.jhu.cs.bsj.compiler.lang.element.BsjDeclaredTypeElement;
 import edu.jhu.cs.bsj.compiler.lang.element.BsjTypeLikeElement;
@@ -1426,31 +1428,23 @@ public class TypeEvaluationOperation implements
             throw new TypecheckingException();
         }
 
-        // For each potentially applicable method, generate its type variable substitution map and effective
-        // parameter types.
-        Map<BsjExecutableType, GenericMethodData> genericMethodDataMap = extractGenericMethodData(node, argumentTypes,
-                potentiallyApplicableMethods);
-
         // §15.12.2.2: Identify matching arity methods applicable by subtyping.
-        Set<BsjExecutableType> applicableMethods;
-        applicableMethods = identifyMatchingArityMethods(node, argumentTypes, potentiallyApplicableMethods,
-                genericMethodDataMap, false);
+        Set<Pair<BsjExecutableType, GenericMethodData>> applicableMethods;
+        applicableMethods = identifyMatchingArityMethods(node, argumentTypes, potentiallyApplicableMethods, false);
 
         // If we have found at least one applicable method, we can carry on at this point. Otherwise, we must try
         // again with method invocation conversion.
         if (applicableMethods.size() == 0)
         {
             // §15.12.2.3: Identify matching arity methods applicable by the method invocation conversion.
-            applicableMethods = identifyMatchingArityMethods(node, argumentTypes, potentiallyApplicableMethods,
-                    genericMethodDataMap, true);
+            applicableMethods = identifyMatchingArityMethods(node, argumentTypes, potentiallyApplicableMethods, true);
         }
 
         // If we still haven't found at least one applicable method, we must now try the last option: varargs.
         if (applicableMethods.size() == 0)
         {
             // §15.12.2.4: Identify applicable variable arity methods.
-            applicableMethods = identifyVariableArityMethods(node, argumentTypes, potentiallyApplicableMethods,
-                    genericMethodDataMap);
+            applicableMethods = identifyVariableArityMethods(node, argumentTypes, potentiallyApplicableMethods);
         }
 
         // If we still haven't found at least one applicable method, there is no such method. Report an error.
@@ -1461,12 +1455,12 @@ public class TypeEvaluationOperation implements
         }
 
         // §15.12.2.5: Determine the most specific method from those which are applicable
-        BsjExecutableType mostSpecificMethod = null;
-        outer: for (BsjExecutableType candidateMethod : applicableMethods)
+        Pair<BsjExecutableType, GenericMethodData> mostSpecificMethod = null;
+        outer: for (Pair<BsjExecutableType, GenericMethodData> candidateMethod : applicableMethods)
         {
-            for (BsjExecutableType competitorMethod : applicableMethods)
+            for (Pair<BsjExecutableType, GenericMethodData> competitorMethod : applicableMethods)
             {
-                if (!isMoreSpecific(candidateMethod, competitorMethod))
+                if (!isMoreSpecific(candidateMethod.getFirst(), competitorMethod.getFirst()))
                 {
                     break outer;
                 }
@@ -1483,9 +1477,9 @@ public class TypeEvaluationOperation implements
         }
 
         // §15.12.2.6: Determine method return and throws types
-        BsjType returnType = mostSpecificMethod.getReturnType();
+        BsjType returnType = mostSpecificMethod.getFirst().getReturnType();
         // TODO: if an unchecked conversion was necessary for applicability, then the return type should be erased
-        returnType = returnType.performTypeSubstitution(genericMethodDataMap.get(mostSpecificMethod).getSubstitutionMap());
+        returnType = returnType.performTypeSubstitution(mostSpecificMethod.getSecond().getSubstitutionMap());
         returnType = returnType.captureConvert();
 
         // §15.12.2.13: Is the chosen method appropriate?
@@ -1498,12 +1492,12 @@ public class TypeEvaluationOperation implements
 
         // Once a method has been selected, impose the appropriate context on each of the code literals
         Iterator<Set<RawCodeLiteralNode>> lackingContextIterator = responsibleCodeLiterals.iterator();
-        Iterator<? extends BsjType> parameterTypeIterator = mostSpecificMethod.getParameterTypes().iterator();
+        Iterator<? extends BsjType> parameterTypeIterator = mostSpecificMethod.getFirst().getParameterTypes().iterator();
         BsjType parameterType = null;
         while (lackingContextIterator.hasNext())
         {
             Set<RawCodeLiteralNode> lackingContext = lackingContextIterator.next();
-            if (mostSpecificMethod.isVarargs())
+            if (mostSpecificMethod.getFirst().isVarargs())
             {
                 if (parameterTypeIterator.hasNext())
                 {
@@ -2630,14 +2624,15 @@ public class TypeEvaluationOperation implements
      * @param genericMethodDataMap The precalculated data about the generic method data to use.
      * @param methodInvocationConversion <code>true</code> to use the method invocation conversion; <code>false</code>
      *            to use the subtyping conversion.
-     * @return A set of applicable methods based on the above information.
+     * @return A set of pairs. The first element in each pair is an applicable method based on the above information.
+     *         The second element is a {@link GenericMethodData} object describing the type variable substitution (which
+     *         was either specified or inferred) for this invocation.
      */
-    private Set<BsjExecutableType> identifyMatchingArityMethods(MethodInvocationNode node, List<BsjType> argumentTypes,
-            Collection<? extends BsjExecutableType> potentiallyApplicableMethods,
-            Map<BsjExecutableType, GenericMethodData> genericMethodDataMap, boolean methodInvocationConversion)
+    private Set<Pair<BsjExecutableType, GenericMethodData>> identifyMatchingArityMethods(MethodInvocationNode node,
+            List<BsjType> argumentTypes, Collection<? extends BsjExecutableType> potentiallyApplicableMethods,
+            boolean methodInvocationConversion)
     {
-        Set<BsjExecutableType> applicableMethods;
-        applicableMethods = new HashSet<BsjExecutableType>();
+        Set<Pair<BsjExecutableType, GenericMethodData>> applicableMethods = new HashSet<Pair<BsjExecutableType, GenericMethodData>>();
         for (BsjExecutableType executableType : potentiallyApplicableMethods)
         {
             if (executableType.getParameterTypes().size() != node.getArguments().size())
@@ -2646,7 +2641,8 @@ public class TypeEvaluationOperation implements
                 continue;
             }
 
-            GenericMethodData genericMethodData = genericMethodDataMap.get(executableType);
+            GenericMethodData genericMethodData = this.calculateGenericMethodDataFor(node, argumentTypes,
+                    executableType);
 
             // Create the effective list of parameter types
             List<BsjType> parameterTypes = new ArrayList<BsjType>();
@@ -2677,8 +2673,7 @@ public class TypeEvaluationOperation implements
                     } else if (argumentType.isSubtypeOf(parameterType.calculateErasure()))
                     {
                         // TODO: Produce an unchecked warning because of unchecked conversion? We don't want to do
-                        // this
-                        // all the time, do we? Just when this is the method which is selected?
+                        // this all the time, do we? Just when this is the method which is selected?
                     } else
                     {
                         applicable = false;
@@ -2708,7 +2703,7 @@ public class TypeEvaluationOperation implements
 
             if (applicable)
             {
-                applicableMethods.add(executableType);
+                applicableMethods.add(new Pair<BsjExecutableType, GenericMethodData>(executableType, genericMethodData));
             }
         }
         return applicableMethods;
@@ -2721,14 +2716,14 @@ public class TypeEvaluationOperation implements
      * @param argumentTypes The types of the arguments being examined.
      * @param potentiallyApplicableMethods A set of potentially applicable methods.
      * @param genericMethodDataMap The precalculated data about the generic method data to use.
-     * @return A set of applicable methods based on the above information.
+     * @return A set of pairs. The first element in each pair is an applicable method based on the above information.
+     *         The second element is a {@link GenericMethodData} object describing the type variable substitution (which
+     *         was either specified or inferred) for this invocation.
      */
-    private Set<BsjExecutableType> identifyVariableArityMethods(MethodInvocationNode node, List<BsjType> argumentTypes,
-            Collection<? extends BsjExecutableType> potentiallyApplicableMethods,
-            Map<BsjExecutableType, GenericMethodData> genericMethodDataMap)
+    private Set<Pair<BsjExecutableType, GenericMethodData>> identifyVariableArityMethods(MethodInvocationNode node,
+            List<BsjType> argumentTypes, Collection<? extends BsjExecutableType> potentiallyApplicableMethods)
     {
-        Set<BsjExecutableType> applicableMethods;
-        applicableMethods = new HashSet<BsjExecutableType>();
+        Set<Pair<BsjExecutableType, GenericMethodData>> applicableMethods = new HashSet<Pair<BsjExecutableType, GenericMethodData>>();
         for (BsjExecutableType executableType : potentiallyApplicableMethods)
         {
             if (executableType.getTypeVariables().size() > 0)
@@ -2769,7 +2764,9 @@ public class TypeEvaluationOperation implements
 
             if (applicable)
             {
-                applicableMethods.add(executableType);
+                applicableMethods.add(new Pair<BsjExecutableType, GenericMethodData>(executableType,
+                        new GenericMethodData(Collections.<BsjTypeVariable, BsjTypeArgument> emptyMap(),
+                                Collections.<BsjTypeArgument> emptyList())));
             }
         }
         return applicableMethods;
@@ -2814,60 +2811,55 @@ public class TypeEvaluationOperation implements
         return false;
     }
 
-    private Map<BsjExecutableType, GenericMethodData> extractGenericMethodData(MethodInvocationNode node,
-            List<BsjType> argumentTypes, Collection<? extends BsjExecutableType> potentiallyApplicableMethods)
+    private GenericMethodData calculateGenericMethodDataFor(MethodInvocationNode node, List<BsjType> argumentTypes,
+            BsjExecutableType executableType)
     {
-        Map<BsjExecutableType, GenericMethodData> genericMethodDataMap = new HashMap<BsjExecutableType, GenericMethodData>();
-        for (BsjExecutableType executableType : potentiallyApplicableMethods)
+        // Create a substitution map for type variables
+        Map<BsjTypeVariable, BsjTypeArgument> substitutionMap;
+        List<BsjTypeArgument> typeArguments;
+        if (executableType.getTypeVariables().size() > 0)
         {
-            // Create a substitution map for type variables
-            Map<BsjTypeVariable, BsjTypeArgument> substitutionMap;
-            List<BsjTypeArgument> typeArguments;
-            if (executableType.getTypeVariables().size() > 0)
+            // For a generic method, consider inferring type arguments
+            if (node.getTypeArguments().size() == 0)
             {
-                // For a generic method, consider inferring type arguments
-                if (node.getTypeArguments().size() == 0)
-                {
-                    throw new NotImplementedYetException();
-                    // Infer type arguments as per §15.12.2.7
-//                    MethodTypeInferrer inferrer = new MethodTypeInferrer();
-//                    TODO: refactor - inferrer might need to be called several times?
-//                    try
-//                    {
-//                        substitutionMap = inferrer.infer();
-//                    } catch (AbstractMethodTypeInferenceException e)
-//                    {
-//                        throw new NotImplementedYetException(e);
-//                    }
-//                    BsjTypeArgument[] typeArgs = new BsjTypeArgument[executableType.getTypeVariables().size()];
-//                    for (int i = 0; i < executableType.getTypeVariables().size(); i++)
-//                    {
-//                        typeArgs[i] = substitutionMap.get(executableType.getTypeVariables().get(i));
-//                    }
-//                    typeArguments = Arrays.asList(typeArgs);
-                } else
-                {
-                    typeArguments = new ArrayList<BsjTypeArgument>();
-                    for (TypeArgumentNode typeArgumentNode : node.getTypeArguments())
-                    {
-                        typeArguments.add(this.manager.getToolkit().getTypeBuilder().makeArgumentType(typeArgumentNode));
-                    }
-                }
-
-                substitutionMap = new HashMap<BsjTypeVariable, BsjTypeArgument>();
-                for (int i = 0; i < typeArguments.size(); i++)
-                {
-                    substitutionMap.put(executableType.getTypeVariables().get(i), typeArguments.get(i));
-                }
+                // Infer type arguments as per §15.12.2.7
+                MethodTypeInferrer inferrer = new MethodTypeInferrer();
+                // TODO: construct constraints and invoke inferrer
+                throw new NotImplementedYetException();
+                // try
+                // {
+                // substitutionMap = inferrer.infer();
+                // } catch (AbstractMethodTypeInferenceException e)
+                // {
+                // throw new NotImplementedYetException(e);
+                // }
+                // BsjTypeArgument[] typeArgs = new BsjTypeArgument[executableType.getTypeVariables().size()];
+                // for (int i = 0; i < executableType.getTypeVariables().size(); i++)
+                // {
+                // typeArgs[i] = substitutionMap.get(executableType.getTypeVariables().get(i));
+                // }
+                // typeArguments = Arrays.asList(typeArgs);
             } else
             {
-                substitutionMap = Collections.emptyMap();
-                typeArguments = Collections.emptyList();
+                typeArguments = new ArrayList<BsjTypeArgument>();
+                for (TypeArgumentNode typeArgumentNode : node.getTypeArguments())
+                {
+                    typeArguments.add(this.manager.getToolkit().getTypeBuilder().makeArgumentType(typeArgumentNode));
+                }
             }
 
-            genericMethodDataMap.put(executableType, new GenericMethodData(substitutionMap, typeArguments));
+            substitutionMap = new HashMap<BsjTypeVariable, BsjTypeArgument>();
+            for (int i = 0; i < typeArguments.size(); i++)
+            {
+                substitutionMap.put(executableType.getTypeVariables().get(i), typeArguments.get(i));
+            }
+        } else
+        {
+            substitutionMap = Collections.emptyMap();
+            typeArguments = Collections.emptyList();
         }
-        return genericMethodDataMap;
+
+        return new GenericMethodData(substitutionMap, typeArguments);
     }
 
     /**
