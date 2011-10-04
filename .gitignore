@@ -1,1 +1,6 @@
 workspace
+bin
+dist
+*.tokens
+compiler/parser/src/edu/jhu/cs/bsj/compiler/impl/tool/parser/antlr/BsjAntlrLexer.java
+compiler/parser/src/edu/jhu/cs/bsj/compiler/impl/tool/parser/antlr/BsjAntlrParser.java
