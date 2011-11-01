@@ -95,4 +95,10 @@ public class UnmodifiableBag<T> implements Bag<T>
 	{
 		throw new UnsupportedOperationException();
 	}
+
+    @Override
+    public int count(T element)
+    {
+        return this.backingBag.count(element);
+    }
 }

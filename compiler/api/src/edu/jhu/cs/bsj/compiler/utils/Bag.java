@@ -35,4 +35,11 @@ public interface Bag<T> extends Collection<T>
 	public boolean equals(Object obj);
 
 	public int hashCode();
+	
+	/**
+	 * Returns the number of occurrences of a given element which appear in this bag.
+	 * @param element The element for which a count is required.
+	 * @return The number of occurrences of that element in this bag.
+	 */
+	public int count(T element);
 }

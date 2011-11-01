@@ -288,4 +288,17 @@ public class HashBag<T> extends AbstractCollection<T> implements Bag<T>
 			return false;
 		}
 	}
+	
+	@Override
+	public int count(T element)
+	{
+	    Integer i = this.backingMap.get(element);
+	    if (i==null)
+	    {
+	        return 0;
+	    } else
+	    {
+	        return i;
+	    }
+	}
 }
