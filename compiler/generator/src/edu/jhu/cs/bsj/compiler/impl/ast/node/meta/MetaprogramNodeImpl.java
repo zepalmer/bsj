@@ -4,6 +4,7 @@ import java.util.Arrays;
 import java.util.EnumSet;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import javax.annotation.Generated;
@@ -346,6 +347,20 @@ public class MetaprogramNodeImpl extends NodeImpl implements MetaprogramNode
         list.add(getUnionForPreamble());
         list.add(getUnionForBody());
         return list;
+    }
+    
+    /**
+     * Produces a mutable map of this node's children.  Modifying this map will have no
+     * effect on this node.
+     * @return A mapping of the node's children.
+     */
+    @Override
+    public Map<String,Object> getChildMap()
+    {
+        Map<String,Object> map = super.getChildMap();
+        map.put("preamble", getUnionForPreamble());
+        map.put("body", getUnionForBody());
+        return map;
     }
     
     /**

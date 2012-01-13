@@ -4,6 +4,7 @@ import java.util.Arrays;
 import java.util.EnumSet;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import javax.annotation.Generated;
@@ -1137,6 +1138,27 @@ public class MethodDeclarationNodeImpl extends NodeImpl implements MethodDeclara
         list.add(getUnionForJavadoc());
         list.add(getUnionForModifiers());
         return list;
+    }
+    
+    /**
+     * Produces a mutable map of this node's children.  Modifying this map will have no
+     * effect on this node.
+     * @return A mapping of the node's children.
+     */
+    @Override
+    public Map<String,Object> getChildMap()
+    {
+        Map<String,Object> map = super.getChildMap();
+        map.put("body", getUnionForBody());
+        map.put("returnType", getUnionForReturnType());
+        map.put("identifier", getUnionForIdentifier());
+        map.put("parameters", getUnionForParameters());
+        map.put("varargParameter", getUnionForVarargParameter());
+        map.put("throwTypes", getUnionForThrowTypes());
+        map.put("typeParameters", getUnionForTypeParameters());
+        map.put("javadoc", getUnionForJavadoc());
+        map.put("modifiers", getUnionForModifiers());
+        return map;
     }
     
     /**

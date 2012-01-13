@@ -4,6 +4,7 @@ import java.util.Arrays;
 import java.util.EnumSet;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import javax.annotation.Generated;
@@ -604,6 +605,23 @@ public class CompilationUnitNodeImpl extends NodeImpl implements CompilationUnit
         list.add(getUnionForImports());
         list.add(getUnionForTypeDecls());
         return list;
+    }
+    
+    /**
+     * Produces a mutable map of this node's children.  Modifying this map will have no
+     * effect on this node.
+     * @return A mapping of the node's children.
+     */
+    @Override
+    public Map<String,Object> getChildMap()
+    {
+        Map<String,Object> map = super.getChildMap();
+        map.put("name", getName());
+        map.put("packageDeclaration", getUnionForPackageDeclaration());
+        map.put("metaimports", getUnionForMetaimports());
+        map.put("imports", getUnionForImports());
+        map.put("typeDecls", getUnionForTypeDecls());
+        return map;
     }
     
     /**

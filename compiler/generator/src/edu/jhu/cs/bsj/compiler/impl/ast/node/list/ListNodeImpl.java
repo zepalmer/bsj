@@ -200,6 +200,20 @@ public abstract class ListNodeImpl<T extends Node> extends NodeImpl implements L
     }
     */
     /**
+     * Produces a mutable map of this node's children.  Modifying this map will have no
+     * effect on this node.
+     * @return A mapping of the node's children.
+     */
+    /* // (not generating children)
+    @Override
+    public Map<String,Object> getChildMap()
+    {
+        Map<String,Object> map = super.getChildMap();
+        map.put("children", getUnionForChildren());
+        return map;
+    }
+    */
+    /**
      * Obtains a human-readable description of this node.
      * @return A human-readable description of this node.
      */
@@ -539,7 +553,8 @@ public abstract class ListNodeImpl<T extends Node> extends NodeImpl implements L
     {
         return this.getNodeList().filterUnions(filter);
     }
-
+    
+    @Override
     public <U extends T> List<U> filterByType(Class<U> type)
     {
         List<U> ret = new ArrayList<U>();
@@ -550,5 +565,4 @@ public abstract class ListNodeImpl<T extends Node> extends NodeImpl implements L
         }
         return ret;
     }
-    
 }

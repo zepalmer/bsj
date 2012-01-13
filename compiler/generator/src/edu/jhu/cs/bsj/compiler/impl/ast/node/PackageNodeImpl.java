@@ -231,6 +231,19 @@ public class PackageNodeImpl extends NodeImpl implements PackageNode
     }
     
     /**
+     * Produces a mutable map of this node's children.  Modifying this map will have no
+     * effect on this node.
+     * @return A mapping of the node's children.
+     */
+    @Override
+    public Map<String,Object> getChildMap()
+    {
+        Map<String,Object> map = super.getChildMap();
+        map.put("name", getUnionForName());
+        return map;
+    }
+    
+    /**
      * Returns an iterator over the children of this node.
      * @see Node#getChildIterator()
      */

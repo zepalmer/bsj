@@ -2094,6 +2094,44 @@ public class SourceGenerator
                 ps.print("*/"); // nogen logic
             ps.println();
 
+            // add logic for getting map of children
+            ps.println("/**");
+            ps.println(" * Produces a mutable map of this node's children.  Modifying this map will have no");
+            ps.println(" * effect on this node.");
+            ps.println(" * @return A mapping of the node's children.");
+            ps.println(" */");
+            if (!def.isGenChildren())
+                ps.println("/* // (not generating children)"); // nogen logic
+            if (def.getBaseSuperName() != null)
+            {
+                ps.println("@Override");
+            }
+            ps.println("public Map<String,Object> getChildMap()");
+            ps.println("{");
+            ps.println("    Map<String,Object> map = "
+                    + (def.getBaseSuperName() == null ? "new HashMap<String,Object>();" : "super.getChildMap();"));
+            for (ModalPropertyDefinition<?> p : def.getResponsibleProperties(true))
+            {
+                String name = p.getName();
+                if (!p.isHide())
+                {
+                    if (p.isWrappable())
+                    {
+                        ps.println("    map.put(\"" + name + "\", getUnionFor" + Character.toUpperCase(name.charAt(0))
+                                + name.substring(1) + "());");
+                    } else
+                    {
+                        ps.println("    map.put(\"" + name + "\", get" + Character.toUpperCase(name.charAt(0))
+                                + name.substring(1) + "());");
+                    }
+                }
+            }
+            ps.println("    return map;");
+            ps.println("}");
+            if (!def.isGenChildren())
+                ps.print("*/"); // nogen logic
+            ps.println();
+
             // add logic for child iterator
             if (def.getMode() == Mode.CONCRETE)
             {

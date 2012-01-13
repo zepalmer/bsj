@@ -4,6 +4,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
 import javax.annotation.Generated;
 
@@ -114,6 +115,18 @@ public class SimpleNameNodeImpl extends NameNodeImpl implements SimpleNameNode
     {
         List<Object> list = super.getChildObjects();
         return list;
+    }
+    
+    /**
+     * Produces a mutable map of this node's children.  Modifying this map will have no
+     * effect on this node.
+     * @return A mapping of the node's children.
+     */
+    @Override
+    public Map<String,Object> getChildMap()
+    {
+        Map<String,Object> map = super.getChildMap();
+        return map;
     }
     
     /**

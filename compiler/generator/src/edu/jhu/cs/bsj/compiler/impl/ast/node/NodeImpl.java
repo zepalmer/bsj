@@ -4,8 +4,10 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.EnumSet;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.atomic.AtomicLong;
 
@@ -191,6 +193,19 @@ public abstract class NodeImpl implements Node
         List<Object> list = new ArrayList<Object>();
         list.add(getStartLocation().toString() + " - " + getStopLocation().toString());
         return list;
+    }
+    
+    /**
+     * Produces a mutable map of this node's children.  Modifying this map will have no
+     * effect on this node.
+     * @return A mapping of the node's children.
+     */
+    public Map<String,Object> getChildMap()
+    {
+        Map<String,Object> map = new HashMap<String,Object>();
+        map.put("startLocation", getStartLocation());
+        map.put("stopLocation", getStopLocation());
+        return map;
     }
     
     /**

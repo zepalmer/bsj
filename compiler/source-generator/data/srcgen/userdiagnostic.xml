@@ -13,7 +13,7 @@
             </userDiagnostic>
 
             <userDiagnostic name="InvalidMetaAnnotationUseDiagnostic" super="BsjUtilDiagnostic">
-                <prop name="metaAnnotationClass" type="Class&lt;? extends AbstractBsjMetaAnnotationMetaprogram&gt;"
+                <prop name="metaAnnotationClass" type="Class&lt;? extends AbstractBsjMetaprogramMetaAnnotation&gt;"
                     desc="the class of meta-annotation that was used incorrectly" />
                 <doc><![CDATA[
                     A diagnostic indicating that a meta-annotation is used incorrectly.

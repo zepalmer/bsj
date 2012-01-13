@@ -6,11 +6,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import edu.jhu.cs.bsj.compiler.impl.ast.properties.MethodInvocationNodeProperties;
 import edu.jhu.cs.bsj.compiler.impl.tool.typechecker.inference.MethodInvocationConversionConstraint.ConstraintKind;
 import edu.jhu.cs.bsj.compiler.impl.utils.NotImplementedYetException;
 import edu.jhu.cs.bsj.compiler.lang.type.BsjArrayType;
-import edu.jhu.cs.bsj.compiler.lang.type.BsjDeclaredType;
 import edu.jhu.cs.bsj.compiler.lang.type.BsjExplicitlyDeclaredType;
 import edu.jhu.cs.bsj.compiler.lang.type.BsjNullType;
 import edu.jhu.cs.bsj.compiler.lang.type.BsjPrimitiveType;
